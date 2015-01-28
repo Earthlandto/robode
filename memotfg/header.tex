@@ -1,0 +1,93 @@
+\documentclass[a4paper,openright,12pt]{book}
+
+%%%%% Idioma y codificación
+\usepackage[spanish,es-noshorthands]{babel}
+\usepackage{ucs}
+\usepackage[latin1,utf8x]{inputenc}
+
+%%%%% Margins
+% \topmargin=-0.45in
+% \evensidemargin=0in
+% \oddsidemargin=0in
+% \headsep=0.25in
+% \linespread{1.1} % Line spacing
+
+%%%%% Útiles
+\usepackage{url} % para insertar urls
+\usepackage{multirow} % para las tablas
+
+\usepackage{graphicx} % Required to insert images
+\usepackage{listings} % Required for insertion of code
+\usepackage{courier} % Required for the courier font
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template%
+\usepackage[usenames,dvipsnames]{color} % Required for custom colors
+
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{color}
+%\usepackage[all]{hypcap}
+
+
+
+
+% %%%%% Para headers y footers
+\usepackage{fancyhdr} % Required for custom headers
+\usepackage{lastpage} % Required to determine the last page for the footer
+% \usepackage{extramarks} % Required for headers and footers
+
+
+%%%%% Definiciones
+
+\hypersetup{
+    colorlinks=false,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black,
+    linkbordercolor=white
+}% para enlaces.
+
+% distintos colores
+\definecolor{gray97}{gray}{0.97}
+\definecolor{gray75}{gray}{.75}
+\definecolor{gray45}{gray}{.65}
+
+\definecolor{javared}{rgb}{0.25,0.35,0.55} % for strings
+\definecolor{javagreen}{rgb}{0.15,0.6,0.35} % comments
+\definecolor{javapurple}{rgb}{0.5,0,0.35} % keywords
+\definecolor{javadocblue}{rgb}{0.25,0.35,0.75} % javadoc
+
+% listas de código
+\lstset{ %frame=Ltb,
+     framerule=0pt,
+     aboveskip=0.5cm,
+     framextopmargin=3pt,
+     framexbottommargin=3pt,
+     framexleftmargin=0.2cm,
+     framesep=0pt,
+     rulesep=.4pt,
+     backgroundcolor=\color{gray97},
+     rulesepcolor=\color{black},
+     tabsize=2,
+     %
+     stringstyle=\ttfamily,
+     showstringspaces = false,
+     basicstyle=\small\ttfamily,
+     commentstyle=\color{gray45},
+     keywordstyle=\bfseries,
+     %
+     numbers=left,
+     numbersep=10pt,
+     numberstyle=\tiny,
+     numberfirstline = true,
+     firstline=1,
+     stepnumber=2,
+     breaklines=true,
+     %
+     language=Java,
+     %
+     keywords=[2]{export,Monitor},
+	 keywordstyle={[2]\ttfamily\color{black}},
+	 morekeywords={export, Monitor}
+}
+

@@ -1,0 +1,7 @@
+.DS_Store
+/memotfg/*.*
+!/memotfg/*.tex
+!/memotfg/*.pdf
+!/memotfg/images/*.png
+#/memotfg/*.*
+
