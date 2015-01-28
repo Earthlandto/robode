@@ -1,0 +1,100 @@
+<html>
+<head>
+        <meta charset="utf-8">
+<title>Test iJava.js</title>
+<!-- 
+	// http://perishablepress.com/unobtrusive-javascript-remove-link-focus-dotted-border-outlines/
+-->
+<style>
+#dialogo {
+	display:none;
+	position:absolute;
+	z-index:30;
+}	
+</style>
+
+<link rel="stylesheet" href="css/codemirror.css">
+<link rel="stylesheet" href="css/lint.css">
+<link rel="stylesheet" href="css/neat.css">
+<link rel="stylesheet" href="js/vendor/spectrum/spectrum.css">
+
+<script src="js/vendor/jquery-1.11.0.min.js"></script>
+<script src="js/vendor/codemirror/codemirror.js"></script>
+<script src="js/vendor/codemirror/matchbrackets.js"></script>
+<script src="js/vendor/codemirror/active-line.js"></script>
+<script src="js/vendor/codemirror/ijava.js"></script>
+<script src="js/vendor/spectrum/spectrum-1.4.js"></script>
+</head>
+<body>
+	<div id="dialogo">
+	<input type="text" id="colorPicker">
+	</div>
+	</div>
+	<textarea id="editor" rows="5"></textarea>
+<script type="text/javascript">
+var editor = null;
+
+//$(document).ready(function () {
+	var active = false;
+	var editorDOM = document.getElementById("editor")
+    editor = CodeMirror.fromTextArea(editorDOM, {
+	    lineNumbers: true,
+	    matchBrackets: true,
+	    styleActiveLine: true,
+	    tabSize: 2,
+	    indentUnit: 2,
+	    mode: "text/x-ijava",
+	    theme: "neat"
+	});
+	editor.setSize("100%", 478);
+	
+	editor.on("mousedown", function(cm, event) {
+		if (active) {
+		    $('#dialogo').css({
+		        display: "none"
+		    });			
+	    	active = false;
+		} else {
+		    var coords = cm.coordsChar({left:event.pageX, top:event.pageY});
+		    var token = cm.getTokenAt(coords);
+		    if (token.string.indexOf("fill") >= 0) {
+			    $('#dialogo').css({
+			        top: event.pageY,
+			        left: event.pageX,
+			        display: "block"
+			    });
+			    active = true;
+		    }
+		}
+	});	
+
+	$('#colorPicker').spectrum({
+		flat:true,
+	    showInput: false,
+	    showInitial: true,
+	    chooseText: "Elegir",
+	    cancelText: "Cancelar",
+	    showAlpha: true,
+	    show: function(c) {
+	    	console.log("show");
+	    },
+	    hide: function(e) {
+	    	console.log("hide");
+	    },
+	    change: function (c) {
+	        var color = c.toRgb();
+	        var str = "rgb(" + color.r + "," + color.g + "," + color.b + "," + color.a + ")";
+	        console.log(str + '\n');
+		    $('#dialogo').css({
+		        display: "none"
+		    });
+	    	active = false;
+	    }
+	});
+
+//});
+
+
+</script>
+</body>
+</html>

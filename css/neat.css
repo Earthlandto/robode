@@ -1,0 +1,10 @@
+.cm-s-neat span.cm-comment { color: #009900; }
+.cm-s-neat span.cm-keyword { line-height: 1em; font-weight: bold; color: #007; }
+.cm-s-neat span.cm-string { color: #7a00d1; }
+.cm-s-neat span.cm-variable { color: #000; }
+.cm-s-neat span.cm-number, .cm-s-neat span.cm-atom { color: #00a; }
+.cm-s-neat span.cm-meta {color: #555;}
+.cm-s-neat span.cm-link { color: #219; cursor:pointer; }
+
+.cm-s-neat .CodeMirror-activeline-background {background: #e8f2ff !important;}
+.cm-s-neat .ACodeMirror-matchingbracket {color:black; !important;}

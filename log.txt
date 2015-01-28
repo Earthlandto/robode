@@ -1,0 +1,28 @@
+Agosto 2014
+
+iJavaEditor
+-Mejoras: Se crea automáticamente el div necesario para que el colorPicker se enganche dinámicamente. El uso de Spectrum se ha optimizado y sólo ha sido necesario comentar un if en el código original. El problema es que de no hacerlo, el botón de elección no genera el evento 'chose' si el color elegido es el mismo que había inicialmente.
+iJavaParser
+-Bug. En la definición de clases se avanzaba token antes de crear el nuevo Environment con lo que si lo primero que había dentro de la clase era la definición de un constructor (sin usar ningún modificador de visibilidad) este no era reconocido como clase sino como identificador normal por lo que se intentaba parsear como si fuera una invocación a una función.
+
+iJavaSemantic:
+-Bug en la función evalBooleanExpression. Devolvía true y false en lugar de "true" y "false" por lo que la función searchForReturn fallaba al evaluar ciertas condiciones
+-Mejorada la precisión en los mensajes de error relativos a constructores invocados con distinto número de parámetro del adecuado
+-Faltaba por analizar si el operador instanceof se aplicaba correctamente o no
+
+iJava2Javascript:
+-Mejorado para que ahora incluya llamadas a runtime.docall y runtime.doreturn cada vez que se ejecuta una función definida por el usuario. 
+
+iJavaSandbox
+-Añadido a la clase Runtime métodos para guardar llamadas y poder comprobar, en caso de error por stack overflow, cuál es la llamada más realizada e informar de la línea
+
+iJavaParser
+-Bug: Faltaba por definir la función warning en los nodos generados al evaluar un bloque y un return por lo que searchForReturn no funcionaba bien al intentar alertar de warnings
+-Bug: Al declarar una clase dentro de otra fallaba porque no se contemplaba que en el cuerpo de una clase apareciera una sentencia de tipo "datatype"
+
+Octubre 2014
+-iJavaParser: Funciones exit y noLoop desactivadas. Añadida versión con dos parámetros de animate para poder indicar tiempo en milisegundos entre frames.
+-iJavaSandbox: Modificada semántica de animate y noLoop. La primera puede ser invocada varias veces cambiando en cada ejecución la función que va a ser animada a partir de ese momento. noLoop ya no desactiva los manejadores de eventos, esto lo hace stop.
+
+Diciembre 2014
+-JavaSandbox: Error en funciones de gestión de teclas (keyPressed -> keysPressed) y faltaba un new __String para sacar de la pila de teclas pulsadas. También se ha modificado la frecuencia por defecto de la función animate pasando de 25ms a 40ms para tener 25fps.

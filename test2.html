@@ -1,0 +1,194 @@
+<html>
+<head>
+        <meta charset="utf-8">
+<title>Test iJava.js</title>
+<!-- 
+	// http://perishablepress.com/unobtrusive-javascript-remove-link-focus-dotted-border-outlines/
+-->
+<style>
+	body {
+		text-align: center;
+		min-width: 1024px;
+	}
+	#wrapper {
+		text-align: left;
+		
+	}
+	#header {
+		
+	}
+	#content {
+		float: left;
+		width: 100%;
+	}
+	#fluid {		
+		display: block;
+		overflow: hidden;
+		float: left;
+		width: 100%;	
+	}
+	#inner-fluid {
+		margin: 0 322px 0 0px;
+	}
+	#fixed {		
+		float: left;
+		width: 320px;
+		margin-left: -320px !important;
+	}
+	#inner-fixed {
+		border: 5px solid #aaa;
+	}
+	#footer {		
+		
+	}
+	.CodeMirror {
+		float: left;		
+		font-size: 16px;
+		border: 1px solid #aaa;
+	}
+	#mycanvas {
+		background: #eee;		
+		width: 320px;
+		height: 320px;
+		padding: 0px;
+		margin: 0px;	
+			
+		border-top: 1px solid #aaa;
+		border-right: 1px solid #aaa;  
+		border-bottom: 1px solid #aaa;
+	}
+	#output {
+		width: 321px;
+		height: 158px;
+		padding: 0;
+		margin: 0;
+		border: none;
+		background: #eee;
+		border-bottom: 1px solid #aaa;
+		border-right: 1px solid #aaa; 
+		font: 14px Courier New;
+	}
+	
+	#colorPicker {
+		position:absolute;
+		pointer-events:none;
+		z-index: 30;
+	}
+	
+	.estilo {
+		cursor: pointer;
+		text-decoration: underline;
+    color: rgb(0, 0, 192);
+	}
+	#mycanvas:focus { 
+		outline:none;
+	}
+	#mycanvas::-moz-focus-inner { 
+		border: none; 
+		}
+	#output:focus { 
+		outline: none; 
+	}
+	#output::-moz-focus-inner { 
+		border: none; 
+		}
+		
+</style>
+
+<link rel="stylesheet" href="css/codemirror.css">
+<link rel="stylesheet" href="css/lint.css">
+<link rel="stylesheet" href="css/neat.css">
+<link rel="stylesheet" href="js/vendor/spectrum/spectrum.css">
+
+<script src="js/vendor/jquery-1.11.0.min.js"></script>
+<script src="js/vendor/codemirror/codemirror.js"></script>
+<script src="js/vendor/codemirror/matchbrackets.js"></script>
+<script src="js/vendor/codemirror/active-line.js"></script>
+<script src="js/vendor/codemirror/ijava.js"></script>
+<script src="js/vendor/spectrum/spectrum-1.4.js"></script>
+</head>
+<body>
+<div id="wrapper">
+	<div id="header">
+	</div>
+	<div id="content">
+			<div id="colorPicker"></div>
+		<div id ="fluid">
+			<div id="inner-fluid">
+			<textarea id="editor" rows="5"></textarea>
+			</div>
+		</div>
+		<div id="fixed">
+			<div id="canvascontainer">
+				<canvas id="mycanvas" width="320" height="320">Canvas not supported.</canvas>
+			</div>
+			<div>
+				<textarea id="output" rows="5" readonly></textarea>
+			</div>
+		</div>
+	</div>
+	<div>
+		<button id="buttonStart" onclick="run();">run</button>
+		<button id="buttonStop" onclick="stop();">stop</button>
+	</div>
+	<div id="footer">
+	</div>
+	</div>
+<script type="text/javascript">
+var editor = null;
+
+$(document).ready(function () {
+    editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
+        lineNumbers: true,
+        matchBrackets: true,
+        styleActiveLine: true,
+        tabSize: 2,
+        indentUnit: 2
+    });
+
+	function md(event) {
+        console.log("mousedown external", event);
+        var coords = editor.coordsChar({
+            left: event.pageX,
+            top: event.pageY
+        });
+        var token = editor.getTokenAt(coords);
+        if (token.string.indexOf("usted") >= 0) {
+            event.preventDefault();
+            event.stopPropagation();
+	        $('#colorPicker').css({
+	            top: event.pageY,
+	            left: event.pageX
+	        });
+	        $('#colorPicker').spectrum("show");
+            return false;
+        }
+	}
+
+	editor.setSize("100%", 478);
+
+    $('#inner-fluid').bind("mousedown", md);
+    
+    $('#colorPicker').spectrum({
+        showInput: false,
+        showInitial: true,
+        chooseText: "Elegir",
+        cancelText: "Cancelar",
+        showAlpha: true,
+        show: function(e) {
+        	console.log("Show");
+        },
+        hide: function(e) {
+        	console.log("Hide ", e);
+        },
+        change: function (c) {
+            var color = c.toRgbString();
+            console.log(color);
+        }
+    });
+
+});
+
+</script>
+</body>
+</html>
