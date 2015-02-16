@@ -1,20 +1,20 @@
 function iJavaSandbox(canvasid) {
 	var canvas = null;
 	var context = null;
-	
+
 	var runtime = null;
-	
+
 	var outputHandler = null;
 	var errorHandler = null;
-	
+
 	var fillStyle = "rgb(255,255,255)";
 	var fillAlpha = 1;
 	var strokeStyle = "rgb(0,0,0)";
 	var strokeAlpha = 1;
 	var fontStyle = "normal 14pt arial";
-	
+
 	var lineWidth = 1;
-	
+
 	var eventHandlers = [];
 
 	var key = NullObject; // Objeto de tipo String (o null) que contendrá la tecla pulsada
@@ -26,14 +26,14 @@ function iJavaSandbox(canvasid) {
 	// Para que los defina el usuario
 	var onKeyPressed = null;
 	var onKeyReleased = null;
-	
+
 	var mousePressed = false;
 	var mouseButton = 0; // 1 LEFT 2 CENTER 3 RIGHT
 	var mouseX = 0;
 	var mouseY = 0;
-	
+
 	var running = false;
-	
+
 	var startTime = new Date();
 	var intervalStarted = false;
 	var looping = null;
@@ -44,24 +44,24 @@ function iJavaSandbox(canvasid) {
 	var stylePaddingLeft, stylePaddingTop, styleBorderLeft, styleBorderTop;
 
 	// Variables para el precargador de imágenes
-	var imagesCached = {};	
+	var imagesCached = {};
 	var startPrecarga = null;
 	var pendingImages = 0;
 	var totalImages = 0;
-	var pendingCode = null;	
-	
+	var pendingCode = null;
+
 	// Variable autoreferencia
 	var self = this;
-	
+
 	var init = function() {
-		canvas = document.getElementById(canvasid);	
+		canvas = document.getElementById(canvasid);
 		if (!canvas) {
 			console.log("Error canvas");
-		}	
+		}
 		// Setup tabindex in order to set canvas focusable
 		if (!canvas.getAttribute("tabindex")) canvas.setAttribute("tabindex", 0);
 		canvas.focus();
-		context = canvas.getContext("2d");	
+		context = canvas.getContext("2d");
 		if (!context) {
 			console.log("Error context");
 		}
@@ -79,7 +79,7 @@ function iJavaSandbox(canvasid) {
 		  styleBorderTop = parseInt(document.defaultView.getComputedStyle(canvas, null)["borderTopWidth"], 10) || 0;
 		}
 	};
-	
+
 	// Keyboard
 	var isCoded = function(e) {
 		return (e.shiftKey || e.ctrlKey || e.altKey || e.metaKey);
@@ -134,9 +134,9 @@ function iJavaSandbox(canvasid) {
 			case 37: return "left";
 			case 38: return "up";
 			case 39: return "right";
-			case 40: return "down";		
-			case 91: return "left-meta";		
-			case 93: return "right-meta";		
+			case 40: return "down";
+			case 91: return "left-meta";
+			case 93: return "right-meta";
 		}
 		if (code >= 32 && code < 127) return String.fromCharCode(code).toLowerCase();
 	};
@@ -156,7 +156,7 @@ function iJavaSandbox(canvasid) {
 				keys[k] = true;
 				key = new __String(k);
 				keyStack[keysPressed-1] = k;
-				/* Los eventos los genera el canvas por lo que al generarse una excepción no la captura el try 
+				/* Los eventos los genera el canvas por lo que al generarse una excepción no la captura el try
 				del eval que se hace en la función execute. Por eso hay que ponerlo aquí */
 				try {
 					if (onKeyPressed !== null) onKeyPressed(key);
@@ -165,25 +165,25 @@ function iJavaSandbox(canvasid) {
 				}
 			}
 		}
-		return suppressKeyEvent(e);	
+		return suppressKeyEvent(e);
 	};
 
 	var handleKeypress = function(e) {
 		console.log("Keypress " + e);
-		return suppressKeyEvent(e);	
+		return suppressKeyEvent(e);
 	};
-	
+
 	var handleKeyup = function(e) {
 		var k = getKeyCode(e);
 		if (k) {
-			if (keys[k]) { 
+			if (keys[k]) {
 				keysPressed--;
 				keys[k] = false;
 				if (keysPressed === 0) {
 					keyPressed = false;
 					key = NullObject;
 				} else {
-					// Elimino de la pila la tecla soltada que puede no ser la última y 
+					// Elimino de la pila la tecla soltada que puede no ser la última y
 					// actualizo key a la última que haya pulsada de la pila.
 				  for ( var i = 0 ; i < keysPressed ; i++ ) {
 				    if (keyStack[i] == k) {
@@ -195,7 +195,7 @@ function iJavaSandbox(canvasid) {
 				  }
 				  key = new __String(keyStack[keysPressed-1]);
 				}
-				/* Los eventos los genera el canvas por lo que al generarse una excepción no la captura el try 
+				/* Los eventos los genera el canvas por lo que al generarse una excepción no la captura el try
 				del eval que se hace en la función execute. Por eso hay que ponerlo aquí */
 				try {
 					if (onKeyReleased !== null) onKeyReleased(new __String(k)); // Pasamos la tecla que se ha soltado
@@ -204,11 +204,11 @@ function iJavaSandbox(canvasid) {
 				}
 			}
 		}
-		return suppressKeyEvent(e);	
+		return suppressKeyEvent(e);
 	};
-	
+
 	// Mouse
-	
+
 	/*
 	var updateMousePosition = function(curElement, event) {
 		console.log(event);
@@ -222,7 +222,7 @@ function iJavaSandbox(canvasid) {
 	  console.log(mouseX, mouseY);
 	}
 	*/
-	
+
 	function calculateOffset(curElement, event) {
 	  var element = curElement,
 	  offsetX = 0,
@@ -249,13 +249,13 @@ function iJavaSandbox(canvasid) {
 	    "Y": offsetY
 	  };
 	}
-	
+
 	function updateMousePosition(curElement, event) {
 	  var offset = calculateOffset(curElement, event);
 	  mouseX = event.pageX - offset.X;
 	  mouseY = event.pageY - offset.Y;
 	}
-	
+
 	/*
 	// http://www.html5canvastutorials.com/advanced/html5-canvas-mouse-coordinates/
 	function updateMousePosition(element, event) {
@@ -267,14 +267,14 @@ function iJavaSandbox(canvasid) {
 	var handleMouseMove = function(e) {
 	  updateMousePosition(canvas, e);
 	};
-	
+
 	var handleMouseOut = function(e) {
 	};
-	
+
 	var handleMouseOver = function(e) {
 	  updateMousePosition(canvas, e);
 	};
-	
+
 	var handleMouseDown = function(e) {
 	  mousePressed = true;
 	  switch (e.which) {
@@ -289,13 +289,13 @@ function iJavaSandbox(canvasid) {
 	    break;
 	  }
 	};
-	
+
 	var handleMouseup = function(e) {
 	  mousePressed = false;
 	};
-	
+
 	// Event handlers helpers
-	
+
 	var attachEventHandler = function(elem, type, fn) {
       if (elem.addEventListener) elem.addEventListener(type, fn, false);
       else elem.attachEvent("on" + type, fn);
@@ -305,7 +305,7 @@ function iJavaSandbox(canvasid) {
         fn: fn
       });
     };
-    
+
     var detachEventHandler =  function(eventHandler) {
       var elem = eventHandler.elem;
       var type = eventHandler.type;
@@ -313,10 +313,10 @@ function iJavaSandbox(canvasid) {
       if (elem.removeEventListener) elem.removeEventListener(type, fn, false);
       else if (elem.detachEvent) elem.detachEvent("on" + type, fn);
     };
-   
+
 ///////////////////////////// iJava libraries
 	// Constants
-	
+
 	var PI = Math.PI;
 	var E = Math.E;
 	var LEFTBUTTON = 1;
@@ -324,21 +324,21 @@ function iJavaSandbox(canvasid) {
 	var RIGHTBUTTON = 3;
 
 	// RunTime library
-	
+
 	function Runtime() {
 		this.deep = -1;
 		this.timeLimit = [];
 		this.lastUpdate = [];
-		this.nIterations = [];	
+		this.nIterations = [];
 		this.calls = {};
 	}
-	
+
 	Runtime.prototype.startLoop = function() {
 		this.deep++;
 		this.lastUpdate[this.deep] = new Date();
 		this.timeLimit[this.deep] = 8000;
 	};
-	
+
 	Runtime.prototype.updateLoop = function(line) {
 		if (this.deep < 0) return;
 		this.nIterations[this.deep]++;
@@ -348,34 +348,34 @@ function iJavaSandbox(canvasid) {
 			var res = window.confirm("Parece que el programa tarda demasiado. Pulsa 'ok' si crees que es normal. Pulsa 'cancel' para detener el programa si crees que puede ser debido a un bucle infinito generado por un error en el programa.");
 			if (res)	{
 				this.lastUpdate[this.deep] = new Date();
-				this.timeLimit[this.deep] *= 2;					
+				this.timeLimit[this.deep] *= 2;
 			} else {
 				throw {
-					message:"Programa cancelado debido a un posible bucle infinito en la línea " + line + ".", 
+					message:"Programa cancelado debido a un posible bucle infinito en la línea " + line + ".",
 					line: line
 				};
 			}
 		}
 	};
-	
+
 	Runtime.prototype.stopLoop = function() {
 		this.lastUpdate[this.deep] = null;
 		this.nIterations[this.deep] = 0;
 		this.timeLimit[this.deep] = 0;
 		this.deep--;
 	};
-	
+
 	Runtime.prototype.docall = function(fname, line) {
 		if (!this.calls[fname+"__"+line]) {
 			this.calls[fname+"__"+line] = 0;
 		}
 		this.calls[fname+"__"+line]++;
 	};
-	
+
 	Runtime.prototype.doreturn = function(fname, line) {
 		this.calls[fname+"__"+line]--;
 	};
-	
+
 	Runtime.prototype.findMostCalledFunction = function() {
 		var name = null;
 		var line = 0;
@@ -385,7 +385,7 @@ function iJavaSandbox(canvasid) {
 				max = this.calls[key];
 				name = key;
 			}
-		}		
+		}
 		if (name != null) {
 			var n = name.indexOf("__");
 			var str = name.substring(n+2);
@@ -401,11 +401,11 @@ function iJavaSandbox(canvasid) {
 		}
 	};
 	// Arrays y Strings
-	
-	function sizeOf(array, dimension) {	
+
+	function sizeOf(array, dimension) {
 		if (array instanceof __Object && array.isNull()) {
 			throw {
-				message:"Error al intentar usar la función sizeOf sobre 'null'.", 
+				message:"Error al intentar usar la función sizeOf sobre 'null'.",
 				line: 1
 			};
 		}
@@ -416,11 +416,11 @@ function iJavaSandbox(canvasid) {
 			return array.__length__0();
 		}
 	}
-	
+
 	function charArrayToString(array) {
 		return (new __String()).__Constructor__1(array);
 	}
-	
+
 	function stringToCharArray(string) {
 		if (string instanceof __Object && string.isNull()) return string;
 		return string.__toCharArray__0();
@@ -429,7 +429,7 @@ function iJavaSandbox(canvasid) {
 	function charAt(string, index) {
 		if (string instanceof __Object && string.isNull()) {
 			throw {
-				message:"Error al intentar usar la función charAt sobre 'null'.", 
+				message:"Error al intentar usar la función charAt sobre 'null'.",
 				line: 1
 			};
 		}
@@ -439,7 +439,7 @@ function iJavaSandbox(canvasid) {
 	function concat(string1, string2) {
 		if (string1 instanceof __Object && string1.isNull() && string2 instanceof __Object && string2.isNull()) {
 			throw {
-				message:"Error al intentar usar la función concat con dos valores parámetros a 'null'.", 
+				message:"Error al intentar usar la función concat con dos valores parámetros a 'null'.",
 				line: 1
 			};
 		}
@@ -452,7 +452,7 @@ function iJavaSandbox(canvasid) {
 	function compare(string1, string2) {
 		if (string1 instanceof __Object && string1.isNull() || string2 instanceof __Object && string2.isNull()) {
 			throw {
-				message:"Error al intentar usar la función compare cuando alguno de los dos parámetros es igual a 'null'.", 
+				message:"Error al intentar usar la función compare cuando alguno de los dos parámetros es igual a 'null'.",
 				line: 1
 			};
 		}
@@ -462,49 +462,49 @@ function iJavaSandbox(canvasid) {
 	function indexOf(string, character) {
 		if (string instanceof __Object && string.isNull()) {
 			throw {
-				message:"Error al intentar usar la función indexo sobre 'null'.", 
+				message:"Error al intentar usar la función indexo sobre 'null'.",
 				line: 1
 			};
 		}
 		return string.__indexOf__0(character);
 	}
-	
+
 	// Time
-   
+
 	function year() {
 		return new Date().getFullYear();
 	}
-	
+
 	function month() {
 		return new Date().getMonth()+1;
 	}
-	
+
 	function day() {
 		return new Date().getDate();
 	}
-	
+
 	function hour() {
 		return new Date().getHours();
 	}
-	
+
 	function minute() {
 		return new Date().getMinutes();
 	}
-	
+
 	function second() {
 		return new Date().getSeconds();
 	}
-	
+
 	function millis() {
 		return (new Date().getTime()) - startTime.getTime();
 	}
-	
+
 	// Math
-	
+
 	function sqrt(value) {
 		return Math.sqrt(value);
 	}
-	
+
 	function random() {
 		if (arguments.length === 0) return Math.random();
 		if (arguments.length === 1) return Math.random()*arguments[0];
@@ -514,15 +514,15 @@ function iJavaSandbox(canvasid) {
 			return Math.random()*(b-a)+a;
 		}
 	}
-	
+
 	function floor(x) {
 		return Math.floor(x);
 	}
-	
+
 	function ceil(x) {
 		return Math.ceil(x);
 	}
-	
+
 	function round(x) {
 		return Math.round(x);
 	}
@@ -530,35 +530,35 @@ function iJavaSandbox(canvasid) {
 	function sin(x) {
 		return Math.sin(x);
 	}
-	
+
 	function cos(x) {
 		return Math.cos(x);
 	}
-	
+
 	function tan(x) {
 		return Math.tan(x);
 	}
-	
+
 	function asin(x) {
 		return Math.asin(x);
 	}
-	
+
 	function acos(x) {
 		return Math.acos(x);
 	}
-	
+
 	function atan(x) {
 		return Math.atan(x);
 	}
-	
+
 	function sqrt(x) {
 		return Math.sqrt(x);
 	}
-	
+
 	function abs(x) {
 		return Math.abs(x);
 	}
-	
+
 	function log(x) {
 		return Math.log(x);
 	}
@@ -568,7 +568,7 @@ function iJavaSandbox(canvasid) {
 	}
 
 	// Input/Output
-	
+
 	function error(e) {
 		// En principio nos quedamos con el error
 		var err = e;
@@ -600,14 +600,14 @@ function iJavaSandbox(canvasid) {
 		if (msg === undefined) msg = "";
 		if (msg instanceof __Object) {
 			msg = msg.__toString__0();
-		}	
+		}
 		print(msg+"\n");
 	}
-	
+
 	function isInt(n) {
 	   return n % 1 === 0;
-	} 
-	
+	}
+
 	function readInteger(msg) {
 		if (!msg) msg = "Introduce un número entero";
 	  while (true) {
@@ -615,10 +615,10 @@ function iJavaSandbox(canvasid) {
 			if (!n) throw {
 				message: "Programa cancelado a petición del usuario"
 			};
-			if (isFinite(n) && isInt(n)) return parseInt(n);    	
+			if (isFinite(n) && isInt(n)) return parseInt(n);
 		}
 	}
-	
+
 	function readDouble(msg) {
 		if (!msg) msg = "Introduce un número real";
 		while (true) {
@@ -626,10 +626,10 @@ function iJavaSandbox(canvasid) {
 			if (!n) throw {
 				message: "Programa cancelado a petición del usuario"
 			};
-			if (isFinite(n)) return parseFloat(n);    	
+			if (isFinite(n)) return parseFloat(n);
 		}
 	}
-	
+
 	function readString(msg) {
 		if (!msg) msg = "Introduce una cadena de texto";
 		var str = prompt(msg, " ");
@@ -638,7 +638,7 @@ function iJavaSandbox(canvasid) {
 		};
 		return new __String(str);
 	}
-	
+
 	function readChar(msg) {
 		if (!msg) msg = "Introduce un carácter";
 	  var c = null;
@@ -647,11 +647,11 @@ function iJavaSandbox(canvasid) {
 		} while (c.length != 1 );
 		return c[0];
 	}
-	
+
 	function key(id) {
 		return keys[id.toUpperCase()];
 	}
-	
+
 	// Drawing
 	function point(x,y) {
 		if (strokeStyle === null) return;
@@ -668,8 +668,8 @@ function iJavaSandbox(canvasid) {
 		}
 		context.closePath();
 	}
-	
-	// Para evitar antialiasing en líneas con grosores impares 
+
+	// Para evitar antialiasing en líneas con grosores impares
 	// (http://www.mobtowers.com/html5-canvas-crisp-lines-every-time/)
 	function line(x1,y1,x2,y2) {
 		if (lineWidth % 2 == 1) context.translate(0.5,0.5);
@@ -682,7 +682,7 @@ function iJavaSandbox(canvasid) {
 			context.stroke();
 		}
 		if (lineWidth % 2 == 1) context.translate(-0.5,-0.5);
-	}	
+	}
 	// http://stackoverflow.com/questions/2172798/how-to-draw-an-oval-in-html5-canvas
 	function ellipse(x,y,w,h) {
 		w = w >= 0 ? w : 0;
@@ -702,14 +702,14 @@ function iJavaSandbox(canvasid) {
       ye = y + h,           // y-end
       xm = x + w2,       // x-middle
       ym = y + h2;       // y-middle
-			    
+
       context.moveTo(x, ym);
       context.bezierCurveTo(x, ym - oy, xm - ox, y, xm, y);
       context.bezierCurveTo(xm + ox, y, xe, ym - oy, xe, ym);
       context.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
       context.bezierCurveTo(xm - ox, ye, x, ym + oy, x, ym);
-			      
-			      
+
+
 		}
 		context.closePath();
 		context.globalAlpha = 0.5;
@@ -722,7 +722,7 @@ function iJavaSandbox(canvasid) {
 			context.stroke();
 		}
 	}
-	
+
 	function triangle(x1,y1,x2,y2,x3,y3) {
 		if (lineWidth % 2 == 1) context.translate(0.5,0.5);
 		context.beginPath();
@@ -741,8 +741,8 @@ function iJavaSandbox(canvasid) {
 		}
 		if (lineWidth % 2 == 1) context.translate(-0.5,-0.5);
 	}
-	
-	// Para evitar antialiasing en líneas con grosores impares 
+
+	// Para evitar antialiasing en líneas con grosores impares
 	// (http://www.mobtowers.com/html5-canvas-crisp-lines-every-time/)
 	function rect(x,y,w,h) {
 		w = w >= 0 ? w : 0;
@@ -761,39 +761,39 @@ function iJavaSandbox(canvasid) {
 		}
 		if (lineWidth % 2 == 1) context.translate(-0.5,-0.5);
 	}
-	
+
 	function text(msg,x,y) {
 		if (fillStyle !== null) {
 			if (msg === undefined) msg = "";
 			if (msg instanceof __Object) {
 				msg = msg.__toString__0();
-			}		
+			}
 			context.globalAlpha = fillAlpha;
 			context.fillText(msg.toString(),x,y);
 		}
 	}
-	
+
 	function textWidth(msg) {
 		if (msg === undefined) msg = "";
 		if (msg instanceof __Object) {
 			msg = msg.__toString__0();
-		}		
+		}
 		return context.measureText(msg).width;
 	}
-	
+
 	function textSize(h) {
-		h = h >= 0 ? h : 0;		
+		h = h >= 0 ? h : 0;
 		fontStyle = "normal "+h+"pt arial";
 		context.font = fontStyle;
 	}
-	
+
 	function strokeWeight(w) {
 		w = w >= 0 ? w : 0;
 		lineWidth = w;
 		context.lineWidth = lineWidth;
 	}
-	
-	function background(r,g,b,a) {	
+
+	function background(r,g,b,a) {
 		r = r || 0;
 		g = g || 0;
 		b = b || 0;
@@ -802,15 +802,15 @@ function iJavaSandbox(canvasid) {
 			b = g = r;
 		}
 
-		context.fillStyle = "rgb("+r+","+g+","+b+")";		
+		context.fillStyle = "rgb("+r+","+g+","+b+")";
 		context.globalAlpha = parseFloat(a);
 		context.fillRect(0,0,320,320);
 		context.fillStyle = fillStyle;
 		context.globalAlpha = 1;
 	}
-	
+
 	// Color
-	
+
 	function stroke(r,g,b,a) {
 		r = r || 0;
 		g = g || 0;
@@ -822,14 +822,14 @@ function iJavaSandbox(canvasid) {
 		strokeStyle = "rgb("+r+","+g+","+b+")";
 		context.strokeStyle = strokeStyle;
 		strokeAlpha = parseFloat(a);
-		// + ((colorInt >> 16) & 255) + "," + ((colorInt >> 8) & 255) + "," + (colorInt & 255) + "," + ((colorInt >> 24) & 255) / 255 + ")"	
+		// + ((colorInt >> 16) & 255) + "," + ((colorInt >> 8) & 255) + "," + (colorInt & 255) + "," + ((colorInt >> 24) & 255) / 255 + ")"
 	}
-	
+
 	function noStroke() {
 		strokeStyle = null;
 		context.strokeStyle = "none";
 	}
-	
+
 	function fill(r,g,b,a) {
 		r = r || 0;
 		g = g || 0;
@@ -842,12 +842,12 @@ function iJavaSandbox(canvasid) {
 		context.fillStyle = fillStyle;
 		fillAlpha = parseFloat(a);
 	}
-	
+
 	function noFill() {
 		fillStyle = null;
 		context.fillStyle = "none";
 	}
-	
+
 	function getColor(x,y) {
 		x = x || 0;
 		y = y || 0;
@@ -872,7 +872,7 @@ function iJavaSandbox(canvasid) {
 	    return r << 16 & 16711680 | g << 8 & 65280 | b & 255;
 //    return a << 24 & 4278190080 | r << 16 & 16711680 | g << 8 & 65280 | b & 255
 	}
-	
+
 	function red(color) {
 		return color >> 16 & 255;
 	}
@@ -880,19 +880,19 @@ function iJavaSandbox(canvasid) {
 	function green(color) {
 		return color >> 8 & 255;
 	}
-	
+
 	function blue(color) {
 		return color & 255;
 	}
 
 	/*
-	function color(r,g,b,a) {	
+	function color(r,g,b,a) {
 		return a << 24 & 4278190080 | r << 16 & 16711680 | g << 8 & 65280 | b & 255
 	}
 	*/
 	// Images
 	/**
-	  * Las imágenes que se hayan indicado en llamadas a image en el código fuente serán precargadas antes 
+	  * Las imágenes que se hayan indicado en llamadas a image en el código fuente serán precargadas antes
 	  * de ejecutar el programa. Se guardan en el diccionario imagesCached como objetos de tipo Image
 	  * indexadas por su URL. Por lo tanto, lo único que necesita la función image para dibujarlas es la url
 	  * y con ella obtiene el objeto Image que usa en el contexto.
@@ -902,12 +902,23 @@ function iJavaSandbox(canvasid) {
 		h = h >= 0 ? h : 0;
 		var img = imagesCached[str.toString()];
 		if (img && img.ready) {
-			context.drawImage(img, x,y, w,h);	
+			context.drawImage(img, x,y, w,h);
 		}
 	}
-	
+
+	function drawRoboIcon(){
+		//background(0,0,0,0);
+		var img = new Image();
+		var srcImg = 'images/roboicon.gif';
+		img.src = srcImg;
+		img.id = srcImg;
+		img.ready = true;
+		context.drawImage(img,40,40,50,50);
+
+	}
+
 	///////////////////
-	
+
     /**
      * El parámetro t determina los milisegundos a esperar entre frames con un límite inferior de 10ms
     */
@@ -916,13 +927,13 @@ function iJavaSandbox(canvasid) {
         if (t < 10) t = 10;
 		loop(f,t);
 	}
-	
+
 	function exit() {
 		noLoop();
 		removeHandlers();
 		running = false;
 	}
-	
+
 	function loop(draw, t) {
 	  if (intervalStarted === true) noLoop();
 	  timeSinceLastFPS = Date.now();
@@ -944,8 +955,8 @@ function iJavaSandbox(canvasid) {
 	  },
 	  t);
 	  intervalStarted = true;
-	}	
-	
+	}
+
 	function noLoop() {
 		if (intervalStarted) {
 			window.clearInterval(looping);
@@ -953,18 +964,18 @@ function iJavaSandbox(canvasid) {
 			looping = null;
 		}
 	}
-	
+
 	function installHandlers() {
 		if (intervalStarted) noLoop();
 	  	var element = canvas ? canvas :  window;
 		attachEventHandler(element, "keydown", handleKeydown);
 		attachEventHandler(element, "keypress", handleKeypress);
 		attachEventHandler(element, "keyup", handleKeyup);
-		
+
 		attachEventHandler(element, "mousemove", handleMouseMove);
 		attachEventHandler(element, "mouseout", handleMouseOut);
 		attachEventHandler(element, "mouseover", handleMouseOver);
-		
+
 		element.onmousedown = function() {
 		  element.focus();
 		  return false;
@@ -972,22 +983,22 @@ function iJavaSandbox(canvasid) {
 
 		attachEventHandler(element, "mousedown", handleMouseDown);
 		attachEventHandler(element, "mouseup", handleMouseup);
-		
+
 		attachEventHandler(element, "contextmenu", function(e) {
 			e.preventDefault();
 			e.stopPropagation();
 		});
-		
-		runtime = new Runtime();		
+
+		runtime = new Runtime();
 	}
-	
+
 	function removeHandlers() {
 		for ( var i = 0 ; i < eventHandlers.length ; i++ ) {
 			detachEventHandler(eventHandlers[i]);
 		}
 		runtime = null;
 	}
-	
+
 	/**
 	 * Función que chequéa cada 250ms si las imágenes que se necesitan para el programa que se va a ejecutar
 	 * están ya cargadas o no. Cada imagen debe cargarse en menos de 10s o de lo contrario se inicia el
@@ -1006,7 +1017,7 @@ function iJavaSandbox(canvasid) {
 			rect(10,150, 300,20);
 			fill(255,255,255);
 			var percent = ((totalImages-pendingImages)/totalImages)*100;
-			rect(10,150, 3*percent, 20);			
+			rect(10,150, 3*percent, 20);
 			text("Cargando: " + Math.round(percent) + "%", 130,130);
 			window.setTimeout(executeAfterLoadingImages, 250);
 		} else {
@@ -1016,30 +1027,30 @@ function iJavaSandbox(canvasid) {
 			execute(pendingCode);
 		}
 	};
-	
+
 	var execute = function(code) {
 		installHandlers();
-//		console.log("--------------\n");		
+//		console.log("--------------\n");
 		var thecode = "running = true;\nvar __main = null;\nvar __draw = null;\nvar __onKeyPressed = null;\nvar __onKeyReleased = null;\n" + code + "\nonKeyPressed = __onKeyPressed;\nonKeyReleased = __onKeyReleased;\n try {\n  if (__main) __main();\n  else stop();\n} catch (e) {\n  error(e);\n}\n\n"
 		eval(thecode);
 	};
-	
-	// iJava Public Interface 
-	
+
+	// iJava Public Interface
+
 	this.stop = function() {
 		noLoop();
 		removeHandlers();
 		running = false;
-	};	
-	
+	};
+
 	this.setOutputHandler = function(oh) {
 		outputHandler = oh;
 	};
-	
+
 	this.setErrorHandler = function(eh) {
 		errorHandler = eh;
 	};
-	
+
 	this.preloadImage = function(src) {
 		var img = new Image();
 		img.ready = false;
@@ -1055,14 +1066,14 @@ function iJavaSandbox(canvasid) {
 		pendingImages++;
 		totalImages++;
 	};
-	
+
 	this.run = function(code) {
 		if (running) return;
 		pendingCode = code;
 		startPrecarga = new Date();
 		executeAfterLoadingImages();
 	};
-	
+
 	init();
-	
+
 }

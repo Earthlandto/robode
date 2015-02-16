@@ -1,22 +1,22 @@
-// Es neceario incluir comentarios como tokens para añadir al beautify. 
+// Es neceario incluir comentarios como tokens para añadir al beautify.
 // Hacer más inteligente la detección de keywords a medio como for( int a=0 ; y avisar de lo que falta a la estructura
 'use strict';
 function iJavaParser() {
 	var errors = [];
-	
+
 	var warnings = [];
-	
+
 	var usedFunctions = [];
-	
+
 	var declaredFuncions = [];
-	
+
 	var usedImages = [];
 
 	var keypoints = {
 		useLiteral:false,
 		hasArithmeticExpression:false,
 		hasBooleanExpression:false,
-		
+
 		hasDeclaration:false,
 		hasConstant:false,
 		hasAssignment:false,
@@ -36,27 +36,27 @@ function iJavaParser() {
 		useArray:false,
 		useArrayAsParameter:false,
 		returnArray:false,
-		
+
 		createObjects:false,
 		defineClasses:false,
 		defineMethods:false
 	};
-	
+
 	var source;
-	
+
 	var globalScope;
 	var currentScope;
-	
+
 	var symbols = {};
 
-	var tokens;	
-	var nextToken;	
+	var tokens;
+	var nextToken;
 	var token;
-	
+
 	/*
 	{
 		id: void, byte, short, int, long, float, double, boolean, char, string, MiTipo
-		category: none, numeric, boolean, alphanumeric, array, function, composite		
+		category: none, numeric, boolean, alphanumeric, array, function, composite
 		// para arrays
 		dimensions: numero de dimensiones
 		celltype: tipo de dato de cada celda
@@ -66,7 +66,7 @@ function iJavaParser() {
 		// para composite
 		properties: lista de datatypes
 	}
-*/	
+*/
 	var original_symbol = {
 		error: function (message) {
 			var t = {
@@ -89,13 +89,13 @@ function iJavaParser() {
 			warnings.push(t);
 		}
 	};
-	
-/*	
+
+/*
 	token type: identifier, number, string, char, operator
 	symbol type: identifier, datatype, operator, literal, keyword
 	element type: identifier
 	node type: declaration, statement, identifier, value
-*/	
+*/
 
 	var symbol = function(id, nud, lbp, led) {
 		var sym = symbols[id];
@@ -109,7 +109,7 @@ function iJavaParser() {
 		sym.led = sym.led || led;
 		return sym;
 	};
-	
+
 	var interpretToken = function (token) {
 		var sym;
 		// Primero analizamos si son números, cadenas o caracteres para no confundirlas
@@ -119,7 +119,7 @@ function iJavaParser() {
 			sym.id = token.value;
 			sym.type = "literal";
 			sym.datatype = IntegerDatatype;
-		} else		
+		} else
 		if (token.type === "real") {
 			sym = Object.create(symbols["(literal)"]);
 			sym.id = token.value;
@@ -147,14 +147,14 @@ function iJavaParser() {
 		if (token.type === "operator") {
 			var template = symbols[token.value];
 			if (!template) {
-				token.error("Símbolo '"+token.value+"' no reconocido.");				
+				token.error("Símbolo '"+token.value+"' no reconocido.");
 			}
 			sym = Object.create(template);
 			sym.type = sym.stm ? "keyword" : "operator";
 			sym.id = token.value;
 		} else
 		if (token.type === "identifier") {
-			// Ahora busco si es un tipo de dato registrado. 
+			// Ahora busco si es un tipo de dato registrado.
 			// Busco con find que devuelve null si hay múltiples declaraciones porque eso no puede pasar con un tipo propio, es decir, una clase sólo puede estar definida una vez.
 			var element = currentScope.find(token.value);
 			if (element) {
@@ -196,31 +196,31 @@ function iJavaParser() {
 		sym.to = token.to;
 		return sym;
 	};
-	
+
 	var start = function() {
 		nextToken = 0;
 		token = interpretToken(tokens[0]);
 	};
-	
-	var advance = function (expected, explanation) { 
+
+	var advance = function (expected, explanation) {
 		explanation = explanation || "";
 		if (expected && token.id !== expected) token.error("Se esperaba '" + expected + "' pero se encontró '" + token.id + "'. " + explanation);
-		nextToken++; 
+		nextToken++;
 		if (nextToken >= tokens.length) return token.error("Se ha alcanzado el final del programa a mitad de su análisis.");
-		token = interpretToken(tokens[nextToken]);	
-		return token; 
+		token = interpretToken(tokens[nextToken]);
+		return token;
 	};
-	
+
 	var lookahead = function (d) {
 		if (nextToken+d >= tokens.length) return token.error("Se ha alcanzado el final del programa a mitad de su análisis.");
 		return interpretToken(tokens[nextToken+d]);
 	};
-	
+
 	var expression = function (rbp) {
-		var left, t = token;		
+		var left, t = token;
 		advance();
 		if (!t.nud) t.error("Se ha encontrado el símbolo '" + t.id + "' pero no parece tener sentido donde está escrito.");
-		left = t.nud(t);	 
+		left = t.nud(t);
 		while (rbp < token.lbp) {
 		t = token;	// t tiene el operador y token el segundo operando si lo hay
 		advance();
@@ -229,11 +229,11 @@ function iJavaParser() {
 		}
 		return left;
 	};
-	
+
 	var infix = function (id, lbp, rbp, led) {
 		rbp = rbp || lbp;
 		symbol(id, null, lbp, led || function (left) {
-			var right = expression(rbp);	
+			var right = expression(rbp);
 			if (id == "||" || id == "&&" || id == "==" || id == "!=" || id == ">" || id == "<" || id == ">=" || id == "<=") keypoints.hasBooleanExpression = true;
 			else keypoints.hasArithmeticExpression = true;
 			var node = {
@@ -251,14 +251,14 @@ function iJavaParser() {
 			return node;
 		});
 	};
-	
+
 	var assignment = function (id) {
 		infix(id, 10, 9, function(left) {
 			var right = expression(9);
 			keypoints.hasAssignment = true;
 			var node = {
 				id: id,
-				type: "value", 
+				type: "value",
 				statement: true,
 				left: left,
 				right: right,
@@ -295,7 +295,7 @@ function iJavaParser() {
 		});
 	};
 
-	var constant = function (id, datatype, value) {	
+	var constant = function (id, datatype, value) {
 		var identifier = {};//Object.create(symbols["(identifier)"]);
 		identifier.id = id;
 		identifier.type = "constant";
@@ -309,8 +309,8 @@ function iJavaParser() {
 		identifier.colFirstAssignment = 0;
 		currentScope.define(identifier);
 	};
-	
-	var system_variable = function (id, datatype, value) {	
+
+	var system_variable = function (id, datatype, value) {
 		var identifier = {};//Object.create(symbols["(identifier)"]);
 		identifier.id = id;
 		identifier.type = "variable";
@@ -324,7 +324,7 @@ function iJavaParser() {
 		identifier.colFirstAssignment = 0;
 		currentScope.define(identifier);
 	};
-	
+
 	var library_function = function(id, datatype) {
 		var identifier = {};//Object.create(symbols["(identifier)"]);
 		identifier.id = id;
@@ -336,22 +336,22 @@ function iJavaParser() {
 		identifier.to = 0;
 		currentScope.define(identifier);
 	};
-	
+
 	var library_class = function(id) {
 		var identifier = Object.create(symbols["(identifier)"]);
 		identifier.id = id;
-		identifier.line = 0;		
+		identifier.line = 0;
 		identifier.col = 0;
 		identifier.from = 0;
 		identifier.to = 0;
-		var element = new ClassDatatype(identifier);		
+		var element = new ClassDatatype(identifier);
 		element.body = [];
 		element.internalScope = new Environment(currentScope, element);
-		element.statment = true;	
+		element.statment = true;
 		currentScope.define(element);
-		return element;		
+		return element;
 	};
-	
+
 	var keyword = function(id, stm) {
 		var sym = symbol(id);
 		sym.lbp = 0;
@@ -359,7 +359,7 @@ function iJavaParser() {
 			token.error("No se ha definido ninguna acción para la palabra reservada '" + id + "'.");
 		};
 	};
-	
+
 	var statement = function() {
 		var t = token;
 		if (t.type === "keyword") {
@@ -388,7 +388,7 @@ function iJavaParser() {
 			t.error("La expresión '" + source.substring(node.from, node.to) + "' no es una asignación, ni una invocación a función.");
 		}
 	};
-	
+
 	var statements = function () {
 		var a = [], s;
 		while (true) {
@@ -398,13 +398,13 @@ function iJavaParser() {
 		}
 		return a;
 	};
-	
-	
+
+
 	var init = function() {
 		// Creamos el ámbito global
 		globalScope = new Environment();
 		currentScope = globalScope;
-	
+
 		infix("(", 100, 99, function (left) {
 			var args = [];
 			if (left.type !== "identifier") token.error("Sólo se pueden invocar identificadores");
@@ -415,7 +415,7 @@ function iJavaParser() {
 				if (arg.type !== "value" && arg.type !== "identifier") left.error("Al invocar a una función se deben pasar los valores que se desea usar como parámetro. No hay que indicar el tipo de los mismos, eso se hace en la declaración de la función.");
 				i++;
 				args.push(arg);
-				if (token.id !== ",") break;				
+				if (token.id !== ",") break;
 				advance(",", "La invocación de una función debe incluir la lista de argumentos separados por comas y encerrados entre paréntesis");
 			}
 			to = token.to;
@@ -448,12 +448,12 @@ function iJavaParser() {
 			}
 			return node;
 		});
-		
+
 		infix("[", 100, 99, function (left) {
 			var to;
 			var indices = [];
-			
-			if (left.type !== "identifier") token.error("No se puede usar '" + left.id + "' como si fuera un array.");								
+
+			if (left.type !== "identifier") token.error("No se puede usar '" + left.id + "' como si fuera un array.");
 			while (token.id !== "]") {
 				var arg = expression(0);
 				indices.push(arg);
@@ -463,14 +463,14 @@ function iJavaParser() {
 				if (token.id != "[") break;
 				advance("[");
 			}
-			
+
 			var node = { // Object.create(left);
 					id: this.id,
 					type: "identifier", // Sintácticamente siempre correcto, semánticamente depende del tipo de dato devuelto
 					left: left,
-					right: indices,	
+					right: indices,
 					line: left.line,
-					col: left.col,				
+					col: left.col,
 					from: left.from,
 					to: to,
 					scope: left.scope,
@@ -478,21 +478,21 @@ function iJavaParser() {
 			};
 			return node;
 		});
-		
+
 //		symbol(".");
-	
+
 		infix(".", 100,99, function (left) {
 			var to = token.to;
 			if (left.type !== "identifier" && left.type !== "datatype" && !(left.datatype instanceof ClassDatatype)) {
 				left.error("Sólo se puede acceder a atribunos o invocar métodos sobre variables que contengan objetos o sobre sus clases para métodos y miembros estáticos.");
 			}
 			if (left.type === "datatype" && !(left.datatype instanceof ClassDatatype)) left.error("Sólo se puede acceder a atribunos o invocar métodos sobre variables que contengan objetos o sobre sus clases para métodos y miembros estáticos.");
-			
+
 			var right = token;
 			if (right.type !== "identifier") left.error("Detrás del punto debes poner el nombre de un miembro o de un método y '" + right.id + "' no es ninguna de esas dos cosas.");
 			var args = null;
-			advance();			
-			if (token.id === "(") {				
+			advance();
+			if (token.id === "(") {
 				args = [];
 				advance();
 				while (token.id !== ")") {
@@ -535,10 +535,10 @@ function iJavaParser() {
 				line: left.line,
 				col: left.col,
 				error: this.error
-			};		
-			return node;	
+			};
+			return node;
 		});
-		
+
 		infix("--", 90, 89, function(left) {
 			if (left.type !== "identifier") this.error("El operador " + this.id + " sólo se puede aplicar a variables.");
 			keypoints.hasAssignment = true;
@@ -553,12 +553,12 @@ function iJavaParser() {
 				line: left.line,
 				col: left.col,
 				error: this.error
-			};			
-			return node;	
+			};
+			return node;
 		});
-		
+
 		/*
-		// Esto es casi equivalente a lo de abajo pero con lo de abajo puedo personalizar la comprobación de que lo que se incrementa sea una variable y no un valor		
+		// Esto es casi equivalente a lo de abajo pero con lo de abajo puedo personalizar la comprobación de que lo que se incrementa sea una variable y no un valor
 		prefix("++", 80);
 		prefix("--", 80);
 		*/
@@ -579,10 +579,10 @@ function iJavaParser() {
 				line: this.line,
 				col: this.col,
 				error: this.error
-			};			
-			return node;			
+			};
+			return node;
 		}, 80);
-		
+
 		symbol("--", function(itself) {
 			var right = expression(80);
 			if (right.type !== "identifier") this.error("El operador " + this.id + " sólo se puede aplicar a variables.");
@@ -598,8 +598,8 @@ function iJavaParser() {
 				line: this.line,
 				col: this.col,
 				error: this.error
-			};			
-			return node;			
+			};
+			return node;
 		}, 80);
 		*/
 		prefix("-", 70);
@@ -609,30 +609,30 @@ function iJavaParser() {
 			var to;
 			var basetype = token.id;
 			var args = [];
-			var datatype = null; 			
+			var datatype = null;
 			advance();
 			if (token.id !== "[" && token.id !== "(") token.error("Se esperaba tamaño de la primera dimensión o parámetros del constructor");
 			if (token.id === "[") {
 				datatype = new ArrayDatatype(0); //Object.create(datatypes["(array)"]);
-				while(token.id === "[") {				
+				while(token.id === "[") {
 					datatype.dimensions++;
 					advance("[", "Al crear un array se debe especificar su tamaño de cada dimensión como un entero encerrado entre corchetes '[' y ']'.");
-					var node = expression(0); 
+					var node = expression(0);
 					args.push(node);
 					to = token.to;
 					advance("]");
-				}		
+				}
 				to = token.from;
 			} else {
 				datatype = null;//new ClassDatatype(basetype);
 				advance("(");
-				while(token.id !== ")") {				
-					var node = expression(0); 
+				while(token.id !== ")") {
+					var node = expression(0);
 					args.push(node);
 					to = token.to;
 					if (token.id !== ",") break;
 					advance(",");
-				}		
+				}
 				advance(")");
 				to = token.from;
 				keypoints.createObjects = true;
@@ -641,7 +641,7 @@ function iJavaParser() {
 				id: "new",
 				type: "identifier",
 				basetype: basetype,
-				datatype: datatype, 
+				datatype: datatype,
 				statement: true,
 				scope: currentScope,
 				from: this.from,
@@ -651,20 +651,20 @@ function iJavaParser() {
 				col: this.col,
 				error: this.error
 			};
-		});				
+		});
 
-		infix("*", 60); 
+		infix("*", 60);
 		infix("/", 60); // Aseguramos que parseInt se aplica a las divisiones exclusivamente
 		infix("%", 60);
-		
+
 		infix("+", 50);
 		infix("-", 50);
 
 		infix("<", 45, 44);
-		infix(">", 45, 44); 
+		infix(">", 45, 44);
 		infix("<=", 45, 44);
 		infix(">=", 45, 44);
-		
+
 		infix("instanceof", 45, 44, function(left) {
 			var right = token;
 			// TODO: Detectar si es una clase, o al menos un identificador aquí y también en semantic
@@ -679,15 +679,15 @@ function iJavaParser() {
 				col: this.col,
 				from: left.from,
 				to: right.to,
-				error: this.error			
+				error: this.error
 			}
-		}); 
+		});
 
-		infix("==", 40, 39); 
+		infix("==", 40, 39);
 		infix("!=", 40, 39);
 
 		infix("&&", 35, 34);
-		infix("||", 30, 29); 
+		infix("||", 30, 29);
 
 		assignment("="); // 10
 		assignment("+=");
@@ -695,7 +695,7 @@ function iJavaParser() {
 		assignment("*=");
 		assignment("/=");
 		assignment("%=");
-		
+
 		symbol(",");
 		symbol(":");
 		symbol(")");
@@ -708,7 +708,7 @@ function iJavaParser() {
 		keyword("try", function(itself) {
 			itself.error("La palabra '" + itself.id + "' está reservada y no puede utilizarse en ninguna parte del programa.");
 		});
-		
+
 		keyword(";", function(itself) {
 			return null;
 		});
@@ -735,7 +735,7 @@ function iJavaParser() {
 				col: itself.col,
 				error: this.error,
 				warning: this.warning
-			};	
+			};
 		});
 
 		infix("?", 20, 19, function (left) {
@@ -771,11 +771,11 @@ function iJavaParser() {
 				error: this.error
 			};
 		});
-		
+
 		symbol("(identifier)", function (itself) {
 			// Si estamos usando un tipo aún sin definir para hacer una declaración usamos la función que se encarga de ello
 			// Aquí nunca puede aparecer un constructor pues, al haber definido primero la clase, se trata en la regla para tipos
-			if ((token.type === "identifier") || 
+			if ((token.type === "identifier") ||
 			    (token.id === "[" && lookahead(1).id === "]")) {
 				var f = symbols["(type)"];
 				var node = f.nud(itself);
@@ -797,7 +797,7 @@ function iJavaParser() {
 			};
 			return node;
 		});
-		
+
 		var parseCurlies = function(datatype) {
 			var values = [];
 			advance("{");
@@ -810,17 +810,17 @@ function iJavaParser() {
 					node = expression(0);
 				}
 				values.push(node);
-				if (token.id === ",") advance(",");	
+				if (token.id === ",") advance(",");
 				else if (token.id != "}") token.error("Se esperaba '}' o ',' en lugar de '" + token.id + "'.");
 			}
 			advance("}");
 			return values;
 		};
-		
+
 		var parseInitializer = function() {
 			var right = null;
 			var itself = token;
-			var datatype = new ArrayDatatype(0);//Object.create(datatypes["(array)"]);			
+			var datatype = new ArrayDatatype(0);//Object.create(datatypes["(array)"]);
 			var from = token.from;
 			var line = token.line;
 			var col = token.col;
@@ -837,13 +837,13 @@ function iJavaParser() {
 				error: token.error
 			};
 		};
-		
+
 		symbol("(type)", function(itself) {
 			var identifier = null;
 			var entry = null;
 			var basetype = null;
 			var datatype = null;
-			
+
 			// Invocación de método estático
 			if (token.id === "." && lookahead(1).type === "identifier") {
 				advance();
@@ -851,7 +851,7 @@ function iJavaParser() {
 				/**
 					* Para que el nombre de una clase, que fue reconocida por interpretToken, se use como receptor de un método
 					* es necesario cambiar el tipo del token a identifier si no sería datatype
-					*/					
+					*/
 				itself.type = "identifier";
 				itself.scope = currentScope;
 				itself.error = this.error;
@@ -876,7 +876,7 @@ function iJavaParser() {
 			var initialValue = null;
 			var isArray = false;
 			var badArrayFunction = false;
-				
+
 			if (token.type === "identifier" && lookahead(1).id === "[" && lookahead(2).id === "]") {
 				// Declaración de arrays tipo: DataType name[]
 				if (basetype === "void") {
@@ -890,7 +890,7 @@ function iJavaParser() {
 					advance("["); advance("]");
 				}
 				datatype = new ArrayDatatype(dims, datatype);
-				entry = new Declaration(token, basetype, datatype);				
+				entry = new Declaration(token, basetype, datatype);
 				isArray = true;
 				badArrayFunction = true;
 				keypoints.useArray = true;
@@ -917,8 +917,8 @@ function iJavaParser() {
 					token.error("Es necesario especificar el nombre de la variable a continuación de su tipo. La palabra '" + token.id + "' no es un nombre válido" + anex + ".", itself.line, itself.col, itself.from, itself.to);
 				}
 				identifier = token;
-				datatype = new ArrayDatatype(dims, datatype);		
-				entry = new Declaration(identifier, basetype, datatype);		
+				datatype = new ArrayDatatype(dims, datatype);
+				entry = new Declaration(identifier, basetype, datatype);
 				isArray = true;
 				advance();
 				keypoints.useArray = true;
@@ -935,10 +935,10 @@ function iJavaParser() {
 						var anex = "";
 						if (itself.type === "datatype") anex = " ya que es el nombre de un tipo de dato";
 						itself.error("Es necesario especificar el nombre de la variable o función a continuación de su tipo. La palabra '" + token.id + "' no es un nombre válido" + anex + ".");
-					}				
+					}
 					identifier = token;
 					advance();
-				}				
+				}
 			}
 			if ( token.id === "(" ) {
 				if (badArrayFunction) {
@@ -953,7 +953,7 @@ function iJavaParser() {
 				var other = currentScope.find(identifier.id, currentScope.context);
 				if (other && (!method || other.type !== "function")) {
 					identifier.error("El identificador '" + other.id + "' ya está siendo usado en la declaración de la línea " + other.line + ".");
-				}			
+				}
 
 				// Registrar en el scope la nueva función
 				var datatype = new FunctionDatatype(datatype);
@@ -962,16 +962,16 @@ function iJavaParser() {
 				currentScope.define(entry);
 				currentScope = new Environment(currentScope, entry);
 				entry.body = [];
-				entry.datatype.params = [];				
+				entry.datatype.params = [];
 				advance("(");
 				while (token.id !== ")") {
-					var param = expression(0);						
-					if (param.type !== "variable") { 
+					var param = expression(0);
+					if (param.type !== "variable") {
 						identifier.error("Error al declarar la función " + identifier.id + ". Cada parámetro debe consiste en un tipo de dato seguido de un nombre.");
 					}
 					param.lineFirstAssignment = param.line;
 					param.colFirstAssignment = param.col;
-					entry.datatype.params.push(param);						
+					entry.datatype.params.push(param);
 					if (param.datatype instanceof ArrayDatatype) {
 						keypoints.useArrayAsParameter = true;
 					}
@@ -980,7 +980,7 @@ function iJavaParser() {
 				advance(")", "Es necesario terminar la lista de parámetros de la función '" + identifier.id + "' con un ) y darle cuerpo.");
 				if (itself.id === "void" && identifier.id == "main" && !method) {
 					if (isArray || entry.datatype.params.length > 0) {
-						identifier.error("La función principal se declara así 'void  main().'");						
+						identifier.error("La función principal se declara así 'void  main().'");
 					}
 				}
 				entry.body = statement();
@@ -991,7 +991,7 @@ function iJavaParser() {
 				var to = token.to;
 
 				currentScope = currentScope.getParent();
-					
+
 				// Devolver el nodo del árbol de parseo
 				if (identifier.id !== "main") keypoints.createFunction = true;
 				if (!method) declaredFuncions.push(identifier.id);
@@ -1001,8 +1001,8 @@ function iJavaParser() {
 				entry.statemet = true;
 				entry.from = itself.from;
 				entry.to = to;
-				entry.error = identifier.error;			
-				entry.warning = identifier.warning;			
+				entry.error = identifier.error;
+				entry.warning = identifier.warning;
 				return entry;
 			} else
 			if ( token.id === "=" ) {
@@ -1024,7 +1024,7 @@ function iJavaParser() {
 			var other = currentScope.find(identifier.id, currentScope.context);
 			if (other) {
 				identifier.error("El nombre '" + other.id + "' ya está siendo usado en la declaración de la línea " + other.line + ".");
-			}			
+			}
 			// Registrar en el scope la nueva variable
 			entry = new Declaration(identifier, basetype, datatype);
 			entry.type = "variable";
@@ -1040,8 +1040,8 @@ function iJavaParser() {
 			entry.initialValue = initialValue;
 			entry.from = itself.from;
 			entry.to = token.from;
-			entry.error = identifier.error;			
-			entry.warning = identifier.warning;			
+			entry.error = identifier.error;
+			entry.warning = identifier.warning;
 			currentScope.define(entry);
 			keypoints.hasDeclaration = true;
 			// Hay más variables en la misma declaración?
@@ -1055,7 +1055,7 @@ function iJavaParser() {
 			if (token.id !== ";" && token.id !== "," && token.id !== ")") identifier.error("Es necesario terminar la declaración de '" + identifier.id + "' con un ';'.");
 			return entry;
 		});
-		
+
 		// Casting o expresiones anidadas
 		symbol("(", function (itself) {
 			var node;
@@ -1063,12 +1063,12 @@ function iJavaParser() {
 			var basetype = null;
 			var datatype = null;
 			if (token.type === "identifier" || token.type === "datatype") {
-				if (lookahead(1).id === ")" && 
-				     ( (lookahead(2).type === "operator" && lookahead(2).id === "(") || 
-				       (lookahead(2).type === "operator" && lookahead(2).id === "-") || 
-				       (lookahead(2).type === "operator" && lookahead(2).id === "!") || 
-				       (lookahead(2).type !== "operator" && lookahead(2).id !== ";") 
-				     ) 
+				if (lookahead(1).id === ")" &&
+				     ( (lookahead(2).type === "operator" && lookahead(2).id === "(") ||
+				       (lookahead(2).type === "operator" && lookahead(2).id === "-") ||
+				       (lookahead(2).type === "operator" && lookahead(2).id === "!") ||
+				       (lookahead(2).type !== "operator" && lookahead(2).id !== ";")
+				     )
 				   ) {
 					basetype = token.id;
 					advance();
@@ -1102,14 +1102,14 @@ function iJavaParser() {
 					to: to,
 					right: node,
 					error: this.error
-				};				
+				};
 			} else {
 				node = expression(0);
 				to = token.to;
 				advance(")", "Se esperaba cierre de paréntesis ligado con el que está en la línea " + itself.line + " columna " + itself.col + ".");
 				node.parentesis = true;
 				node.to = to;
-				return node;				
+				return node;
 			}
 		});
 
@@ -1123,7 +1123,7 @@ function iJavaParser() {
 			node.from = itself.from;
 			return node;
 		});
-						
+
 		keyword("if", function(itself) {
 			advance("(");
 			if (token.id === ")") itself.error("En la sentencia 'if' necesario incluir una expresión de tipo 'booleano' entre paréntesis.");
@@ -1151,11 +1151,11 @@ function iJavaParser() {
 			};
 			return node;
 		});
-		
+
 		keyword("else", function(itself) {
 			itself.error("La palabra reservada 'else' sólo se puede utilizar para especificar qué hacer cuando no se cumple la condición de un 'if'.");
 		});
-		
+
 		keyword("for", function(itself) {
 			var to;
 			advance("(");//, "La sentencia for tiene la forma for ( a ; b ; c ) { instrucciones } siendo obligatorio poner los paréntesis y los puntos y coma. La parte a se utiliza para inicializar variables que se usarán en el bucle. La parte b debe ser una expresión de tipo booleano. La parte c debe ser una expresión cualquiera." );
@@ -1194,8 +1194,8 @@ function iJavaParser() {
 			};
 			return node;
 		});
-		
-		keyword("while", function(itself) {			
+
+		keyword("while", function(itself) {
 			var to;
 			advance("(");// "La sentencia while tiene la forma while ( a ) { instrucciones } siendo obligatorio poner los paréntesis . La parte a debe ser una expresión de tipo booleano." );
 			if (token.id === ")") token.error("En la sentencia 'while' es necesario incluir una expresión de tipo 'booleano' entre paréntesis.");
@@ -1218,8 +1218,8 @@ function iJavaParser() {
 			return node;
 		});
 
-		keyword("do", function(itself) {	
-			var to;		
+		keyword("do", function(itself) {
+			var to;
 			var body = statement();
 			advance("while");
 			advance("(");//, "La sentencia while tiene la forma while ( a ) { instrucciones } siendo obligatorio poner los paréntesis . La parte a debe ser una expresión de tipo booleano." );
@@ -1241,7 +1241,7 @@ function iJavaParser() {
 			};
 			return node;
 		});
-		
+
 		keyword("continue", function(itself) {
 			return {
 				id: itself.id,
@@ -1263,8 +1263,8 @@ function iJavaParser() {
 				error: this.error
 			};
 		});
-		
-		keyword("return", function(itself) {	
+
+		keyword("return", function(itself) {
 			var to;
 			if (token.id === ";") {
 				to = token.to;
@@ -1284,7 +1284,7 @@ function iJavaParser() {
 			} else {
 				var rvalue = expression(0);
 				if (rvalue) {
-					to = rvalue.to;				
+					to = rvalue.to;
 				}
 				var node = {
 					id: itself.id,
@@ -1299,16 +1299,16 @@ function iJavaParser() {
 					warning: this.warning
 				};
 				return node;
-			}			
+			}
 		});
-		
+
 		keyword("switch", function(itself) {
 			var to;
 			advance("(", "La sentencia 'switch' tiene la forma 'switch ( expresión ) { instrucciones }' siendo obligatorio poner los paréntesis . La expresión entre paréntesis debe ser de tipo 'int' o 'char'." );
 			var condition = expression(0);
 			advance(")");
 			var body = statement();
-			if (body.id !== "(block)") itself.error("Es necesario añadir un cuerpo en el 'switch'.");			
+			if (body.id !== "(block)") itself.error("Es necesario añadir un cuerpo en el 'switch'.");
 			var sentences = body.right;
 			if (sentences.length === 0) itself.error("Es necesario incluir algún caso dentro del cuerpo del 'switch'");
 			if (sentences[0].id !== "case" && sentences[0].id !== "default") itself.error("No se pueden incluir instrucciones fuera de etiquetas.");
@@ -1323,7 +1323,7 @@ function iJavaParser() {
 				line: itself.line,
 				error: this.error
 			};
-			return node;		
+			return node;
 		});
 
 		keyword("case", function(itself) {
@@ -1344,9 +1344,9 @@ function iJavaParser() {
 				label: label,
 				line: itself.line,
 				error: this.error
-			}; 
+			};
 		});
-		
+
 		keyword("default", function(itself) {
 			var to = token.to;
 			advance(":", "La etiqueta 'default' debe ir seguida del símbolo ':'.");
@@ -1359,7 +1359,7 @@ function iJavaParser() {
 				error: this.error
 			};
 		});
-		
+
 		symbol("public", function(itself) {
 			var node = expression(0);
 			if (node.type !== "variable" && node.type !== "const" && node.type !== "function") itself.error("Se esperaban una declaración de miembro o método.");
@@ -1368,7 +1368,7 @@ function iJavaParser() {
 			node.visibility = "public";
 			return node;
 		});
-						
+
 		symbol("private", function(itself) {
 			var node = expression(0);
 			if (node.type !== "variable" && node.type !== "const" && node.type !== "function") itself.error("Se esperaban una declaración de miembro o método.");
@@ -1377,7 +1377,7 @@ function iJavaParser() {
 			node.visibility = "private";
 			return node;
 		});
-						
+
 		symbol("static", function(itself) {
 			var node = expression(0);
 			if (node.type !== "variable" && node.type !== "const" && node.type !== "function") itself.error("Se esperaban una declaración de miembro o método.");
@@ -1386,12 +1386,12 @@ function iJavaParser() {
 			node.static = true;
 			return node;
 		});
-				
-		keyword("class", function(itself) {		
-		  // TODO: Hacer esto en semantic check	
+
+		keyword("class", function(itself) {
+		  // TODO: Hacer esto en semantic check
 			if (token.type === "datatype") {
 				itself.error("El nombre '" + token.id + "' ya está siendo usado por otro tipo de dato.");
-			}	
+			}
 			if (token.type !== "identifier") {
 				itself.error("Es necesario dar un nombre a la clase y es aconsejable que empiece por mayúsculas.");
 			}
@@ -1419,7 +1419,7 @@ function iJavaParser() {
 				}
 			}
 			*/
-			
+
 			// De momento se hereda siempre de Object
 			var element = new ClassDatatype(identifier, ObjectDatatype);
 			currentScope.define(element);
@@ -1430,7 +1430,7 @@ function iJavaParser() {
 			// De momento se hereda siempre de Object
 			currentScope = new Environment(ObjectDatatype.internalScope, element);
 			element.internalScope = currentScope;
-			
+
 			advance("{");
 
 			while (token.id !== "}" && token.id !== "(end)") {
@@ -1446,16 +1446,16 @@ function iJavaParser() {
 				}
 			}
 			currentScope = tmpScope;
-			
+
 			element.to = token.to;
 			element.error = this.error;
 			element.statment = true;
-			
+
 			advance("}");
-			
+
 			return element;
 		});
-		
+
 		symbol("this", function(itself) {
 			if (!currentScope.context || currentScope.context.type !== "function" || !currentScope.context.scope || !currentScope.context.scope.context || currentScope.context.scope.context.type !== "datatype") {
 				itself.error("La palabra 'this' sólo se puede usar dentro de un método de instancia.");
@@ -1477,14 +1477,14 @@ function iJavaParser() {
 			};
 			return node;
 		});
-		
+
 		currentScope.define(IntegerDatatype);
 		currentScope.define(DoubleDatatype);
 		currentScope.define(CharDatatype);
 		currentScope.define(BooleanDatatype);
 		currentScope.define(VoidDatatype);
 		currentScope.define(ObjectDatatype);
-		currentScope.define(StringDatatype);		
+		currentScope.define(StringDatatype);
 
 		constant("true", BooleanDatatype, true);
 		constant("false", BooleanDatatype, false);
@@ -1505,7 +1505,7 @@ function iJavaParser() {
 
 		library_function("sizeOf", new FunctionDatatype(IntegerDatatype, [{datatype:GenericArrayDatatype}]));
 		library_function("sizeOf", new FunctionDatatype(IntegerDatatype, [{datatype:StringDatatype}]));
-		
+
 		library_function("sizeOf", new FunctionDatatype(IntegerDatatype, [{datatype:GenericArrayDatatype}, {datatype:IntegerDatatype}]));
 
 		library_function("readInteger", new FunctionDatatype(IntegerDatatype, []));
@@ -1516,7 +1516,7 @@ function iJavaParser() {
 		library_function("readString", new FunctionDatatype(StringDatatype, [{datatype:StringDatatype}]));
 		library_function("readChar", new FunctionDatatype(CharDatatype, []));
 		library_function("readChar", new FunctionDatatype(CharDatatype, [{datatype:StringDatatype}]));
-		
+
 		library_function("charArrayToString", new FunctionDatatype(StringDatatype, [{datatype:new ArrayDatatype(1,CharDatatype)}]));
 		library_function("stringToCharArray", new FunctionDatatype(new ArrayDatatype(1,CharDatatype), [{datatype:StringDatatype}]));
 //		library_function("largo", new FunctionDatatype(IntegerDatatype, [{datatype:StringDatatype}]));
@@ -1524,7 +1524,7 @@ function iJavaParser() {
 		library_function("concat", new FunctionDatatype(StringDatatype, [{datatype:StringDatatype}, {datatype:StringDatatype}]));
 		library_function("compare", new FunctionDatatype(IntegerDatatype, [{datatype:StringDatatype}, {datatype:StringDatatype}]));
 		library_function("indexOf", new FunctionDatatype(IntegerDatatype, [{datatype:StringDatatype}, {datatype:CharDatatype}]));
-		
+
 		library_function("loop", new FunctionDatatype(VoidDatatype, [{datatype:new FunctionDatatype(VoidDatatype, [])}]));
 		library_function("animate", new FunctionDatatype(VoidDatatype, [{datatype:new FunctionDatatype(VoidDatatype, [])}]));
 		library_function("animate", new FunctionDatatype(VoidDatatype, [{datatype:new FunctionDatatype(VoidDatatype, [])}, {datatype:IntegerDatatype}]));
@@ -1548,7 +1548,7 @@ function iJavaParser() {
 		library_function("floor", new FunctionDatatype(IntegerDatatype, [{datatype:DoubleDatatype}]));
 		library_function("ceil", new FunctionDatatype(IntegerDatatype, [{datatype:DoubleDatatype}]));
 		library_function("round", new FunctionDatatype(IntegerDatatype, [{datatype:DoubleDatatype}]));
-		
+
 		library_function("print", new FunctionDatatype(VoidDatatype, []));
 		library_function("println", new FunctionDatatype(VoidDatatype, []));
 		library_function("print", new FunctionDatatype(VoidDatatype, [{datatype:IntegerDatatype}]));
@@ -1609,86 +1609,89 @@ function iJavaParser() {
 		system_variable("key", StringDatatype, "");//new StringDatatype(), 0);
 		system_variable("keyPressed", BooleanDatatype, false);
 
+		///// Funciones de la libreria del simulador MOWAY
+		library_function("drawRoboIcon", new FunctionDatatype(VoidDatatype,[]));
+
 	};
-	
+
 	init();
 
 	this.parse = function(s) {
-		
+
 		warnings = [];
-		usedFunctions = [];			
-		declaredFuncions = [];			
+		usedFunctions = [];
+		declaredFuncions = [];
 		usedImages = [];
 		keypoints = {
 				useLiteral:false,
 				hasArithmeticExpression:false,
 				hasBooleanExpression:false,
-				
+
 				hasDeclaration:false,
 				hasConstant:false,
 				hasAssignment:false,
-		
+
 				useFunction:false,
 				createFunction:false,
 				hasRecursiveFunction:false,
-		
+
 				hasFor:false,
 				hasWhile:false,
 				hasDoWhile:false,
-		
+
 				hasIf:false,
 				hasElse:false,
 				hasSwitch:false,
-		
+
 				useArray:false,
 				useArrayAsParameter:false,
 				returnArray:false,
-				
+
 				createObjects:false,
 				defineClasses:false,
 				defineMethods:false
 			};
-		
+
 		source = s;
 		tokens = createTokens(source);
 		currentScope = new Environment(globalScope);
-		// El environment interno de Object debe ser hijo de aquel en el que se vayan a definir las clases propias, no del global donde están las constantes y funciones de librería. 
+		// El environment interno de Object debe ser hijo de aquel en el que se vayan a definir las clases propias, no del global donde están las constantes y funciones de librería.
 		// Si no se hace así, al declarar un método no se puede encontrar la clase subiendo por el árbol.
 		// Tampoco se puede encontrar la clase en interpreta token
 		ObjectDatatype.internalScope.parent = currentScope;
-		
+
 		var parseTree = [];
-		
+
 		start();
 		parseTree = statements();
 		new SemanticChecker(source, parseTree);
-		
+
 		currentScope = currentScope.getParent();
 		return parseTree;
 	}
-	
+
 	this.getErrors = function() {
 		return errors;
 	}
-	
+
 	this.getWarnings = function() {
 		return warnings;
 	}
-	
+
 	this.getUsedFunctions = function() {
 		return usedFunctions;
 	}
-	
+
 	this.getDeclaredFunctions = function() {
 		return declaredFunctions;
 	}
-	
+
 	this.getKeyPoints = function() {
 		return keypoints;
 	}
-	
+
 	this.getUsedImages = function() {
 		return usedImages;
 	}
 }
-	
+
