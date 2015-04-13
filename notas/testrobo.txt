@@ -1,0 +1,28 @@
+void main (){
+
+  initSimuRobo();
+
+  animate(draw);
+}
+
+int cont = 0;
+
+void draw (){
+
+  if (cont > 10){
+        mueveRobot();
+    cont = 0;
+  }
+  else cont++;
+}
+
+void mueveRobot(){
+
+    int rand = millis() % 4;
+    switch (rand){
+        case 0: moveN(); break;
+    case 1: moveE(); break;
+    case 2: moveS(); break;
+    case 3: moveW(); break;
+  }
+}

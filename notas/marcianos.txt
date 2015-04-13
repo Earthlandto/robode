@@ -1,0 +1,326 @@
+// Declaramos la posición inicial de la Nave
+double posXNave = 169;
+double posYNave = 295;
+boolean naveViva = true;
+
+
+// Almacena true si el marciano está vivo y False en caso de que haya sido destruido.
+boolean vivos[];
+// Variable que almacena la posición X de la esquina superior izquierda del marciano (imagen)
+double marcianosX[];
+double marcianosY = 10; // Posición Y de la primera fila de marcianos. La segunda se calcula en función de esta.
+final int NUM_MARCIANOS = 7; //Numero de marcianos inicialmente. Constante
+int numMarcianosVivos = NUM_MARCIANOS;
+
+final double DESPLAZAMIENTO_MAX = 317;
+
+/*  Variable que indica el siguiente movimiento de los marcianos.
+    Inicialmente tiene un valor que situa a los marcianos en el centro de la pantalla,
+    más adelante, la función que dibuja los marcianos modificará este valor para que
+    se vayan moviendo horizontalmente. */
+double sigMovMarcianos = 27.5;
+// Variable para saber en que dirección se mueven los marcianos. "1" derecha, "-1" izquierda.
+int direccion = 1;
+
+/*  Variables que almacenan la posición (superior) de los disparos. Si el valor
+    es negativo, significa que no se ha disparado o que el disparo ha salido de
+    la pantalla y no se dibuja. */
+double posXDisp[];
+double posYDisp[];
+final int NUM_DISPAROS = 3;
+
+/*  La función draw se llama 25 veces por segundo, esta variable asegura que no se cuente
+    la presión del ratón más veces de lo necesario, (esperaDisparo/25) es el número de
+    disparos al segundo. */
+int esperaDisparo = 9;
+
+
+
+// METODO PRINCIPAL
+void main () {
+
+    println("Bienvenido a \"Marcianos!\".");
+    println("La nave se mueve siguiendo al ratón y para disparar, ¡pulsa el ratón!.");
+
+    /*  Creamos los marcianos, los inicializamos como vivos y le asignamos una posición
+        inicial, al borde izquierdo de la pantalla. */
+    vivos = new boolean[NUM_MARCIANOS];
+    marcianosX = new double[NUM_MARCIANOS];
+    for (int i = 0; i < NUM_MARCIANOS - 3; i++) {
+        vivos[i] = true;
+        marcianosX[i] = 0 + (i * 75);
+    }
+    for (int i = 0; i < NUM_MARCIANOS - 4; i++) {
+        vivos[i + 4] = true;
+        marcianosX[i + 4] = 35 + (i * 80);
+    }
+
+
+    // Cremaos e inicialiazamos los disparos
+    posXDisp = new double [NUM_DISPAROS];
+    posYDisp = new double [NUM_DISPAROS];
+    for (int i = 0; i < NUM_DISPAROS; i++) {
+        posXDisp[i] = -1;
+        posYDisp[i] = -1;
+    }
+
+
+    // Creamos la animación
+    animate(draw);
+}
+
+
+void draw () {
+
+    if (numMarcianosVivos > 0 && !pierdeNave() ) {
+
+        background(0);
+
+        dibujaNave();
+
+        dibujaMarcianos(sigMovMarcianos);
+
+        esperaDisparo--;
+        if (mousePressed && esperaDisparo < 1) {
+            creaDisparo();
+            esperaDisparo = 9;
+        }
+        dibujaDisparos();
+
+        golpeaMarciano();
+
+    } else {
+
+
+        if (numMarcianosVivos == 0) {
+            background(0);
+            dibujaNave();
+            text("YOU WIN !", 100, 110);
+        } else {
+            text("LOOOSER !", 100, 110);
+            image("http://img3.wikia.nocookie.net/__cb20050528232132/tibia/en/images/a/a5/Ultimate_Explosion.gif", posXNave - 16, posYNave - 16, 32, 32);
+        }
+    }
+}
+
+
+
+void dibujaNave() {
+    /*  Primero desplazamos la nave en la dirección en la
+      que se encuentra el puntero. */
+
+    if (posXNave < mouseX && posXNave < DESPLAZAMIENTO_MAX - 27) {
+        posXNave = posXNave + 5.5;
+    }
+    if (posXNave > mouseX && posXNave > 27) {
+        posXNave = posXNave - 5.5;
+    }
+
+    stroke(39, 37, 37, 1);
+    fill(251, 245, 245, 1);
+    rect(posXNave - 20, posYNave + 3.6, 40, 10);
+
+    fill(238, 133, 133, 1);
+    ellipse(posXNave - 20, posYNave + 3.6, 5, 25);
+    ellipse(posXNave + 20, posYNave + 3.6, 5, 25);
+
+    fill(238, 82, 82, 1);
+    ellipse(posXNave, posYNave, 10, 40);
+
+    strokeWeight(2);
+    line(posXNave, posYNave + 5, posXNave, posYNave + 15);
+}
+
+
+void dibujaMarcianos(double sumPosicion) {
+    /*  Función que a la posición actual de un marciano, le suma un valor
+        que lo moverá lateralmente y luego lo dibujará. Posteriormente
+        decidirá la siguiente posición a la que se moverán los marcianos.
+            Nota: Valores positivos a la derecha, valores negativos, a
+            la izquierda. */
+    for (int i = 0; i < NUM_MARCIANOS - 3; i++) {
+        marcianosX[i] += sumPosicion;
+        if (vivos[i]) {
+            image("http://static.tumblr.com/hanlmir/FHZmcxg5k/space_invaders.jpg", marcianosX[i], marcianosY, 40, 40);
+        }
+    }
+    for (int i = 4; i < NUM_MARCIANOS; i++) {
+        marcianosX[i] += sumPosicion;
+        if (vivos[i]) {
+            image("http://static.tumblr.com/hanlmir/FHZmcxg5k/space_invaders.jpg", marcianosX[i], marcianosY + 60, 40, 40);
+        }
+    }
+
+    /*  Calcularemos el siguiente movimiento en función del primer marciano.
+        Da igual si está muerto. */
+    double posXMar = marcianosX[0];
+    if (direccion > 0) {
+        if (posXMar < DESPLAZAMIENTO_MAX - 265) {
+            sigMovMarcianos = 3;
+        } else {
+            direccion *= -1;
+            marcianosY += 10;
+        }
+    }
+    if (direccion < 0) {
+        if (posXMar > 3) {
+            sigMovMarcianos = -3;
+        } else {
+            direccion *= -1;
+            marcianosY += 10;
+        }
+    }
+}
+
+
+void creaDisparo() {
+    /*  Función que crea un disparo si no se ha llegado al máximo de disparos disponibles
+        que se pueden disparar a la vez (NUM_DISPAROS). Le da una posición inicial y
+        lo deja preparado para que se vaya desplazando hacía arriba. */
+
+    // Primero buscamos que haya al menos un disparo libre...
+    int disparo = -1;
+    for (int i = 0; i < NUM_DISPAROS; i++) {
+        if (posYDisp[i] < 0) {
+            disparo = i;
+        }
+    }
+
+
+    if (disparo != -1) { //... y si existe, lo inicializamos con los valores por defecto.
+        posXDisp[disparo] = posXNave;
+        posYDisp[disparo] = posYNave - 35;
+    }
+}
+
+
+void dibujaDisparos() {
+
+    for (int i = 0; i < NUM_DISPAROS; i++) {
+        if (posYDisp[i] >= 0) {
+            stroke(232, 29, 29, 1);
+            line(posXDisp[i], posYDisp[i], posXDisp[i], posYDisp[i] + 10);
+
+            // Ahora desplazamos los disparos para la próxima iteración
+            posYDisp[i] += -7;
+        }
+    }
+}
+
+
+void golpeaMarciano() {
+    // Función que comprueba si un disparo golpea a algún marciano y si es así, lo elimina.
+
+    for (int i = 0; i < NUM_DISPAROS; i++) {
+        if (posYDisp[i] >= 0) {
+            // Comprueba los marcianos de la fila superior
+            for (int j = 0; j < NUM_MARCIANOS - 3; j++) {
+                if (vivos[j]) {
+                    /*  Comprueba si se produce una colisión entre el disparo y el marciano.
+                    Si es así, se eliminan ambos. */
+                    if (disparoColision(posXDisp[i], posYDisp[i], marcianosX[j], marcianosY)) {
+                        vivos[j] = false;
+                        numMarcianosVivos--;
+                        posYDisp[i] = -1;
+                    }
+                }
+            }
+            // Hacemos lo mismo con los marcianos de la segunda fila.
+            for (int j = 4; j < NUM_MARCIANOS; j++) {
+                if (vivos[j]) {
+                    if (disparoColision(posXDisp[i], posYDisp[i], marcianosX[j], marcianosY + 60)) {
+                        vivos[j] = false;
+                        numMarcianosVivos--;
+                        posYDisp[i] = -1;
+                    }
+                }
+
+            }
+        }
+
+    }
+}
+
+
+boolean disparoColision(double dispX, double dispY, double marcX, double marcY) {
+    /*  Función que dadas las coordenadas superiores izquierdas de un disparo
+        y de un marciano, calcula si se he producido una colisión (disparo golpea
+        al marciano) y devuelve TRUE, o FALSE en caso contrario. */
+
+    if (marcX <= dispX && dispX <= marcX + 40) {
+        if (marcY <= dispY && dispY <= marcY + 30) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
+boolean pierdeNave() {
+    /*  Esta función comprueba si la nave pierde o porque los Marcianos la golpeen, o porque
+        los marcianos hayan llegado a la linea inferior. Devolverá (con la orden return)
+        true en caso de que haya perdido y false en caso contrario.
+        El criterio para decir si un marciano golpea a la nave es suponiendo que la distancia
+        entre sus centros es menor o igual a la suma de las distancias desde el centro de
+        la nave/marciano a una de sus esquinas, respectivamente.
+        Tanto los marcianos como la nave son de 40x40 así que su distancia (centro-esquina)
+        es la misma.
+        Se utiliza el Teorema de pitágoras y la distancia entre 2 puntos (los centros)
+
+        NOTA: Se asume el error de que el marciano y la nave esten uno al lado del otro
+        (lateralmente). En ese caso, la distancia entre centros es mayor sin llegar a
+        producirse colisión. Se asume unas areas circulares en los objetos para detectar
+        colisiones por simplicidad.*/
+
+    // PRIMERO COMPROBAMOS SI LOS MARCIANOS LLEGAN AL LÍMITE INFERIOR DE LA PANTALLA
+
+    if (marcianosY + 30 > 320) {
+        return true; // Los marcianos de la primera fila han llegado al límite
+    }
+
+    boolean navePierde = false; // Para saber si la nave ha perdido y terminar la función.
+
+    // La hipotenusa es la distancia del centro del objeto a una de sus esquinas.
+    double hipotenusa = sqrt(pow(20, 2) + pow(20, 2));
+
+    for (int i = 0; i < NUM_MARCIANOS - 3 && !navePierde; i++) { // Primera fila de marcianos
+        if (vivos[i]) {
+            double x1 = posXNave;
+            double y1 = posYNave;
+            double x2 = marcianosX[i] + 20;
+            double y2 = marcianosY + 20;
+
+            double distanciaCentros = abs( sqrt( pow(x2 - x1, 2) + pow(y2 - y1, 2)));
+
+            if (distanciaCentros <= 2 * hipotenusa) { // Detecta colisión
+                navePierde = true;
+            }
+        }
+    }
+
+    // Si la nave ha sido golpeada por la primera fila de marcianos...
+    if (navePierde || (marcianosY + 60) + 30 > 320) {
+        return true;
+    }
+
+
+    for (int i = 4; i < NUM_MARCIANOS && !navePierde; i++) { // Segunda fila de marcianos
+        if (vivos[i]) {
+            double x1 = posXNave;
+            double y1 = posYNave;
+            double x2 = marcianosX[i] + 20;
+            double y2 = (marcianosY + 60) + 20;
+
+            double distanciaCentros = abs( sqrt( pow(x2 - x1, 2) + pow(y2 - y1, 2)));
+
+            if (distanciaCentros <= 2 * hipotenusa - 20) { // Detecta colisión
+                navePierde = true;
+            }
+
+        }
+    }
+
+    // Si la nave ha sido golpeada por los marcianos, devolverá true, sino, false.
+    return navePierde;
+
+}
