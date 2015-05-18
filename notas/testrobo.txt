@@ -1,6 +1,10 @@
 void main (){
 
   initSimuRobo();
+  
+  // shift to center
+  moveS(); moveS(); moveS(); moveS(); 
+  moveE(); moveE(); moveE(); moveE(); 
 
   animate(draw);
 }

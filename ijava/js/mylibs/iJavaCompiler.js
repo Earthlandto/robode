@@ -3,8 +3,8 @@ function iJavaCompiler() {
 	var sandbox = null;
 	var errorHandler = null;
 	var outputHandler = null;
-	
-	this.parse = function(source) {
+
+	this.parse = function (source) {
 		var tree;
 		var errors = [];
 		try {
@@ -15,14 +15,14 @@ function iJavaCompiler() {
 		}
 		return parser.getWarnings();
 	}
-	
-	this.getKeyPoints = function(source) {	  
-	  this.parse(source);
+
+	this.getKeyPoints = function (source) {
+		this.parse(source);
 		return parser.getKeyPoints();
 	}
-	
-	this.getIcon = function(source) {
-	  this.parse(source);
+
+	this.getIcon = function (source) {
+		this.parse(source);
 		var io = ['print', 'println', 'readInteger', 'readDouble', 'readString', 'readChar'];
 		var animation = ['loop', 'noLoop', 'redraw'];
 		var math = ['sin', 'cos', 'tan', 'asin', 'acos', 'atan', 'sqrt', 'abs', 'log'];
@@ -34,29 +34,29 @@ function iJavaCompiler() {
 			math: 0
 		};
 		var functions = parser.getUsedFunctions();
-		tags.animation = (functions.indexOf('loop') >= 0 || (functions.indexOf('animate') >= 0));		
-		for ( var i = 0 ; i < io.length ; i++ ) {
+		tags.animation = (functions.indexOf('loop') >= 0 || (functions.indexOf('animate') >= 0));
+		for (var i = 0; i < io.length; i++) {
 			if (functions.indexOf(io[i]) >= 0) {
 				tags.io = 1;
 				break;
 			}
 		}
-		for ( var i = 0 ; i < math.length ; i++ ) {
+		for (var i = 0; i < math.length; i++) {
 			if (functions.indexOf(math[i]) >= 0) {
 				tags.math = 1;
 				break;
 			}
 		}
-		for ( var i = 0 ; i < graph.length ; i++ ) {
+		for (var i = 0; i < graph.length; i++) {
 			if (functions.indexOf(graph[i]) >= 0) {
 				tags.graph = 1;
 				break;
 			}
 		}
-		return tags.graph + tags.animation*2 + tags.io*4 + tags.math*8;		
+		return tags.graph + tags.animation * 2 + tags.io * 4 + tags.math * 8;
 	}
-	
-	this.run = function(source, canvasid) {
+
+	this.run = function (source, canvasid) {
 		var tree;
 		try {
 			tree = parser.parse(source);
@@ -71,24 +71,24 @@ function iJavaCompiler() {
 		sandbox.setOutputHandler(outputHandler);
 		sandbox.setErrorHandler(errorHandler);
 		var usedImages = parser.getUsedImages();
-		for ( var i = 0 ; i < usedImages.length ; i++ ) {
+		for (var i = 0; i < usedImages.length; i++) {
 			sandbox.preloadImage(usedImages[i]);
 		}
 		outputHandler.clear();
 		sandbox.run(code);
 		var functions = parser.getUsedFunctions();
-		return (functions.indexOf('loop') >= 0 || (functions.indexOf('animate') >= 0));		
+		return (functions.indexOf('loop') >= 0 || (functions.indexOf('animate') >= 0));
 	}
-	
-	this.stop = function() {
+
+	this.stop = function () {
 		if (sandbox) sandbox.stop();
 	}
-	
-	this.setOutputHandler = function(oh) {
+
+	this.setOutputHandler = function (oh) {
 		outputHandler = oh;
 	}
-	
-	this.setErrorHandler = function(eh) {
+
+	this.setErrorHandler = function (eh) {
 		errorHandler = eh;
 	}
 }

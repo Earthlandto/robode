@@ -1,6 +1,7 @@
 // Es neceario incluir comentarios como tokens para añadir al beautify.
 // Hacer más inteligente la detección de keywords a medio como for( int a=0 ; y avisar de lo que falta a la estructura
 'use strict';
+
 function iJavaParser() {
 	var errors = [];
 
@@ -13,33 +14,33 @@ function iJavaParser() {
 	var usedImages = [];
 
 	var keypoints = {
-		useLiteral:false,
-		hasArithmeticExpression:false,
-		hasBooleanExpression:false,
+		useLiteral: false,
+		hasArithmeticExpression: false,
+		hasBooleanExpression: false,
 
-		hasDeclaration:false,
-		hasConstant:false,
-		hasAssignment:false,
+		hasDeclaration: false,
+		hasConstant: false,
+		hasAssignment: false,
 
-		useFunction:false,
-		createFunction:false,
-		hasRecursiveFunction:false,
+		useFunction: false,
+		createFunction: false,
+		hasRecursiveFunction: false,
 
-		hasFor:false,
-		hasWhile:false,
-		hasDoWhile:false,
+		hasFor: false,
+		hasWhile: false,
+		hasDoWhile: false,
 
-		hasIf:false,
-		hasElse:false,
-		hasSwitch:false,
+		hasIf: false,
+		hasElse: false,
+		hasSwitch: false,
 
-		useArray:false,
-		useArrayAsParameter:false,
-		returnArray:false,
+		useArray: false,
+		useArrayAsParameter: false,
+		returnArray: false,
 
-		createObjects:false,
-		defineClasses:false,
-		defineMethods:false
+		createObjects: false,
+		defineClasses: false,
+		defineMethods: false
 	};
 
 	var source;
@@ -71,17 +72,17 @@ function iJavaParser() {
 		error: function (message) {
 			var t = {
 				id: this.id,
-				message : message.replace("'(end)'", "el final del programa"),
+				message: message.replace("'(end)'", "el final del programa"),
 				line: this.line,
 				col: this.col,
 				severity: "error"
 			};
 			throw t;
 		},
-		warning: function(message) {
+		warning: function (message) {
 			var t = {
 				id: this.id,
-				message : message.replace("'(end)'", "el final del programa"),
+				message: message.replace("'(end)'", "el final del programa"),
 				line: this.line,
 				col: this.col,
 				severity: "warning"
@@ -90,14 +91,14 @@ function iJavaParser() {
 		}
 	};
 
-/*
-	token type: identifier, number, string, char, operator
-	symbol type: identifier, datatype, operator, literal, keyword
-	element type: identifier
-	node type: declaration, statement, identifier, value
-*/
+	/*
+		token type: identifier, number, string, char, operator
+		symbol type: identifier, datatype, operator, literal, keyword
+		element type: identifier
+		node type: declaration, statement, identifier, value
+	*/
 
-	var symbol = function(id, nud, lbp, led) {
+	var symbol = function (id, nud, lbp, led) {
 		var sym = symbols[id];
 		if (!sym) {
 			sym = Object.create(original_symbol);
@@ -130,13 +131,13 @@ function iJavaParser() {
 			sym = Object.create(symbols["(literal)"]);
 			sym.id = token.value;
 			sym.type = "literal";
-			sym.datatype = StringDatatype;//new StringDatatype();//Object.create(datatypes[datatype]);
+			sym.datatype = StringDatatype; //new StringDatatype();//Object.create(datatypes[datatype]);
 		} else
 		if (token.type === "char") {
 			sym = Object.create(symbols["(literal)"]);
 			sym.id = token.value;
 			sym.type = "literal";
-			sym.datatype = CharDatatype;//Object.create(datatypes[datatype]);
+			sym.datatype = CharDatatype; //Object.create(datatypes[datatype]);
 		} else
 		if (token.type === "(end)") {
 			//EOF
@@ -147,7 +148,7 @@ function iJavaParser() {
 		if (token.type === "operator") {
 			var template = symbols[token.value];
 			if (!template) {
-				token.error("Símbolo '"+token.value+"' no reconocido.");
+				token.error("Símbolo '" + token.value + "' no reconocido.");
 			}
 			sym = Object.create(template);
 			sym.type = sym.stm ? "keyword" : "operator";
@@ -197,7 +198,7 @@ function iJavaParser() {
 		return sym;
 	};
 
-	var start = function() {
+	var start = function () {
 		nextToken = 0;
 		token = interpretToken(tokens[0]);
 	};
@@ -212,8 +213,8 @@ function iJavaParser() {
 	};
 
 	var lookahead = function (d) {
-		if (nextToken+d >= tokens.length) return token.error("Se ha alcanzado el final del programa a mitad de su análisis.");
-		return interpretToken(tokens[nextToken+d]);
+		if (nextToken + d >= tokens.length) return token.error("Se ha alcanzado el final del programa a mitad de su análisis.");
+		return interpretToken(tokens[nextToken + d]);
 	};
 
 	var expression = function (rbp) {
@@ -222,9 +223,9 @@ function iJavaParser() {
 		if (!t.nud) t.error("Se ha encontrado el símbolo '" + t.id + "' pero no parece tener sentido donde está escrito.");
 		left = t.nud(t);
 		while (rbp < token.lbp) {
-		t = token;	// t tiene el operador y token el segundo operando si lo hay
-		advance();
-		if (!t.led) t.error("Se ha encontrado el símbolo '" + t.id + "' pero no parece tener sentido donde está escrito.");
+			t = token; // t tiene el operador y token el segundo operando si lo hay
+			advance();
+			if (!t.led) t.error("Se ha encontrado el símbolo '" + t.id + "' pero no parece tener sentido donde está escrito.");
 			left = t.led(left);
 		}
 		return left;
@@ -253,7 +254,7 @@ function iJavaParser() {
 	};
 
 	var assignment = function (id) {
-		infix(id, 10, 9, function(left) {
+		infix(id, 10, 9, function (left) {
 			var right = expression(9);
 			keypoints.hasAssignment = true;
 			var node = {
@@ -265,7 +266,7 @@ function iJavaParser() {
 				from: left.from,
 				to: right.to,
 				line: this.line,
-				col:this.col,
+				col: this.col,
 				error: this.error,
 				warning: this.warning
 			};
@@ -277,7 +278,7 @@ function iJavaParser() {
 		symbol(id, function () {
 			var from = token.from;
 			var right = expression(rbp);
-			if (id == "!" ) keypoints.hasBooleanExpression = true;
+			if (id == "!") keypoints.hasBooleanExpression = true;
 			else keypoints.hasArithmeticExpression = true;
 			var node = {
 				id: id,
@@ -296,10 +297,10 @@ function iJavaParser() {
 	};
 
 	var constant = function (id, datatype, value) {
-		var identifier = {};//Object.create(symbols["(identifier)"]);
+		var identifier = {}; //Object.create(symbols["(identifier)"]);
 		identifier.id = id;
 		identifier.type = "constant";
-		identifier.datatype = datatype;//Object.create(datatypes[datatype]);
+		identifier.datatype = datatype; //Object.create(datatypes[datatype]);
 		identifier.value = value;
 		identifier.line = 0;
 		identifier.col = 0;
@@ -311,10 +312,10 @@ function iJavaParser() {
 	};
 
 	var system_variable = function (id, datatype, value) {
-		var identifier = {};//Object.create(symbols["(identifier)"]);
+		var identifier = {}; //Object.create(symbols["(identifier)"]);
 		identifier.id = id;
 		identifier.type = "variable";
-		identifier.datatype = datatype;//Object.create(datatypes[datatype]);
+		identifier.datatype = datatype; //Object.create(datatypes[datatype]);
 		identifier.value = value;
 		identifier.line = 0;
 		identifier.col = 0;
@@ -325,11 +326,11 @@ function iJavaParser() {
 		currentScope.define(identifier);
 	};
 
-	var library_function = function(id, datatype) {
-		var identifier = {};//Object.create(symbols["(identifier)"]);
+	var library_function = function (id, datatype) {
+		var identifier = {}; //Object.create(symbols["(identifier)"]);
 		identifier.id = id;
 		identifier.type = "function";
-		identifier.datatype = datatype;//Object.create(datatypes["(function)"]);
+		identifier.datatype = datatype; //Object.create(datatypes["(function)"]);
 		identifier.line = 0;
 		identifier.col = 0;
 		identifier.from = 0;
@@ -337,7 +338,7 @@ function iJavaParser() {
 		currentScope.define(identifier);
 	};
 
-	var library_class = function(id) {
+	var library_class = function (id) {
 		var identifier = Object.create(symbols["(identifier)"]);
 		identifier.id = id;
 		identifier.line = 0;
@@ -352,15 +353,15 @@ function iJavaParser() {
 		return element;
 	};
 
-	var keyword = function(id, stm) {
+	var keyword = function (id, stm) {
 		var sym = symbol(id);
 		sym.lbp = 0;
-		sym.stm = stm || function(itself) {
+		sym.stm = stm || function (itself) {
 			token.error("No se ha definido ninguna acción para la palabra reservada '" + id + "'.");
 		};
 	};
 
-	var statement = function() {
+	var statement = function () {
 		var t = token;
 		if (t.type === "keyword") {
 			advance();
@@ -390,7 +391,8 @@ function iJavaParser() {
 	};
 
 	var statements = function () {
-		var a = [], s;
+		var a = [],
+			s;
 		while (true) {
 			if (token.id === "(end)") break;
 			s = statement();
@@ -400,7 +402,7 @@ function iJavaParser() {
 	};
 
 
-	var init = function() {
+	var init = function () {
 		// Creamos el ámbito global
 		globalScope = new Environment();
 		currentScope = globalScope;
@@ -444,7 +446,7 @@ function iJavaParser() {
 				if (img.id !== "(literal)") {
 					node.error("Indica la imagen escribiendo entre comillas dobles su localización.");
 				}
-				if (usedImages.indexOf(node.args[0].value) < 0 ) usedImages.push(node.args[0].value);
+				if (usedImages.indexOf(node.args[0].value) < 0) usedImages.push(node.args[0].value);
 			}
 			return node;
 		});
@@ -465,23 +467,23 @@ function iJavaParser() {
 			}
 
 			var node = { // Object.create(left);
-					id: this.id,
-					type: "identifier", // Sintácticamente siempre correcto, semánticamente depende del tipo de dato devuelto
-					left: left,
-					right: indices,
-					line: left.line,
-					col: left.col,
-					from: left.from,
-					to: to,
-					scope: left.scope,
-					error: left.error
+				id: this.id,
+				type: "identifier", // Sintácticamente siempre correcto, semánticamente depende del tipo de dato devuelto
+				left: left,
+				right: indices,
+				line: left.line,
+				col: left.col,
+				from: left.from,
+				to: to,
+				scope: left.scope,
+				error: left.error
 			};
 			return node;
 		});
 
-//		symbol(".");
+		//		symbol(".");
 
-		infix(".", 100,99, function (left) {
+		infix(".", 100, 99, function (left) {
 			var to = token.to;
 			if (left.type !== "identifier" && left.type !== "datatype" && !(left.datatype instanceof ClassDatatype)) {
 				left.error("Sólo se puede acceder a atribunos o invocar métodos sobre variables que contengan objetos o sobre sus clases para métodos y miembros estáticos.");
@@ -520,7 +522,7 @@ function iJavaParser() {
 			return node;
 		});
 
-		infix("++", 90, 89, function(left) {
+		infix("++", 90, 89, function (left) {
 			// No es necesario buscar left.id porque ya lo habrá hecho (identifier)
 			if (left.type !== "identifier") this.error("El operador " + this.id + " sólo se puede aplicar a variables.");
 			keypoints.hasAssignment = true;
@@ -539,7 +541,7 @@ function iJavaParser() {
 			return node;
 		});
 
-		infix("--", 90, 89, function(left) {
+		infix("--", 90, 89, function (left) {
 			if (left.type !== "identifier") this.error("El operador " + this.id + " sólo se puede aplicar a variables.");
 			keypoints.hasAssignment = true;
 			var node = {
@@ -605,7 +607,7 @@ function iJavaParser() {
 		prefix("-", 70);
 		prefix("!", 70);
 
-		symbol("new", function(itself) {
+		symbol("new", function (itself) {
 			var to;
 			var basetype = token.id;
 			var args = [];
@@ -614,7 +616,7 @@ function iJavaParser() {
 			if (token.id !== "[" && token.id !== "(") token.error("Se esperaba tamaño de la primera dimensión o parámetros del constructor");
 			if (token.id === "[") {
 				datatype = new ArrayDatatype(0); //Object.create(datatypes["(array)"]);
-				while(token.id === "[") {
+				while (token.id === "[") {
 					datatype.dimensions++;
 					advance("[", "Al crear un array se debe especificar su tamaño de cada dimensión como un entero encerrado entre corchetes '[' y ']'.");
 					var node = expression(0);
@@ -624,9 +626,9 @@ function iJavaParser() {
 				}
 				to = token.from;
 			} else {
-				datatype = null;//new ClassDatatype(basetype);
+				datatype = null; //new ClassDatatype(basetype);
 				advance("(");
-				while(token.id !== ")") {
+				while (token.id !== ")") {
 					var node = expression(0);
 					args.push(node);
 					to = token.to;
@@ -665,7 +667,7 @@ function iJavaParser() {
 		infix("<=", 45, 44);
 		infix(">=", 45, 44);
 
-		infix("instanceof", 45, 44, function(left) {
+		infix("instanceof", 45, 44, function (left) {
 			var right = token;
 			// TODO: Detectar si es una clase, o al menos un identificador aquí y también en semantic
 			advance();
@@ -705,15 +707,15 @@ function iJavaParser() {
 		symbol("(end)");
 
 		// ; es una palabra reservada pues se considera statement
-		keyword("try", function(itself) {
+		keyword("try", function (itself) {
 			itself.error("La palabra '" + itself.id + "' está reservada y no puede utilizarse en ninguna parte del programa.");
 		});
 
-		keyword(";", function(itself) {
+		keyword(";", function (itself) {
 			return null;
 		});
 
-		keyword("{", function(itself) {
+		keyword("{", function (itself) {
 			var body = [];
 			var from = token.from;
 			currentScope = new Environment(currentScope);
@@ -751,13 +753,13 @@ function iJavaParser() {
 				from: left.from,
 				to: no.to,
 				line: this.line,
-				col:this.col,
+				col: this.col,
 				error: this.error
 			};
 			return node;
 		});
 
-		symbol("(literal)", function(itself) {
+		symbol("(literal)", function (itself) {
 			keypoints.useLiteral = true;
 			return {
 				id: "(literal)",
@@ -766,8 +768,8 @@ function iJavaParser() {
 				value: this.id,
 				from: this.from,
 				to: this.to,
-				line:this.line,
-				col:this.col,
+				line: this.line,
+				col: this.col,
 				error: this.error
 			};
 		});
@@ -776,7 +778,7 @@ function iJavaParser() {
 			// Si estamos usando un tipo aún sin definir para hacer una declaración usamos la función que se encarga de ello
 			// Aquí nunca puede aparecer un constructor pues, al haber definido primero la clase, se trata en la regla para tipos
 			if ((token.type === "identifier") ||
-			    (token.id === "[" && lookahead(1).id === "]")) {
+				(token.id === "[" && lookahead(1).id === "]")) {
 				var f = symbols["(type)"];
 				var node = f.nud(itself);
 				if (node.type !== "variable" && node.type !== "constant" && node.type !== "function") {
@@ -798,7 +800,7 @@ function iJavaParser() {
 			return node;
 		});
 
-		var parseCurlies = function(datatype) {
+		var parseCurlies = function (datatype) {
 			var values = [];
 			advance("{");
 			while (token.id !== "}") {
@@ -817,15 +819,15 @@ function iJavaParser() {
 			return values;
 		};
 
-		var parseInitializer = function() {
+		var parseInitializer = function () {
 			var right = null;
 			var itself = token;
-			var datatype = new ArrayDatatype(0);//Object.create(datatypes["(array)"]);
+			var datatype = new ArrayDatatype(0); //Object.create(datatypes["(array)"]);
 			var from = token.from;
 			var line = token.line;
 			var col = token.col;
 			right = parseCurlies(datatype);
-			var to = token.to-1;
+			var to = token.to - 1;
 			return {
 				id: "{...}",
 				type: "value",
@@ -838,7 +840,7 @@ function iJavaParser() {
 			};
 		};
 
-		symbol("(type)", function(itself) {
+		symbol("(type)", function (itself) {
 			var identifier = null;
 			var entry = null;
 			var basetype = null;
@@ -849,9 +851,9 @@ function iJavaParser() {
 				advance();
 				var f = symbols["."];
 				/**
-					* Para que el nombre de una clase, que fue reconocida por interpretToken, se use como receptor de un método
-					* es necesario cambiar el tipo del token a identifier si no sería datatype
-					*/
+				 * Para que el nombre de una clase, que fue reconocida por interpretToken, se use como receptor de un método
+				 * es necesario cambiar el tipo del token a identifier si no sería datatype
+				 */
 				itself.type = "identifier";
 				itself.scope = currentScope;
 				itself.error = this.error;
@@ -887,7 +889,8 @@ function iJavaParser() {
 				advance();
 				while (token.id === "[" && lookahead(1).id === "]") {
 					dims++;
-					advance("["); advance("]");
+					advance("[");
+					advance("]");
 				}
 				datatype = new ArrayDatatype(dims, datatype);
 				entry = new Declaration(token, basetype, datatype);
@@ -895,7 +898,7 @@ function iJavaParser() {
 				badArrayFunction = true;
 				keypoints.useArray = true;
 			}
-			if (token.type=== "identifier" && lookahead(1).id === "[" && lookahead(2).type === "(literal)" && lookahead(3).id === "]") {
+			if (token.type === "identifier" && lookahead(1).id === "[" && lookahead(2).type === "(literal)" && lookahead(3).id === "]") {
 				token.error("Los arrays se declaran sin indicar su tamaño. Eso se hace al crearlos con 'new'.");
 			}
 			if (token.id === "[" && lookahead(1).type === "(literal)" && lookahead(2).id === "]") {
@@ -909,7 +912,8 @@ function iJavaParser() {
 				var dims = 0;
 				while (token.id === "[" && lookahead(1).id === "]") {
 					dims++;
-					advance("["); advance("]");
+					advance("[");
+					advance("]");
 				}
 				if (token.type !== "identifier") {
 					var anex = "";
@@ -940,12 +944,12 @@ function iJavaParser() {
 					advance();
 				}
 			}
-			if ( token.id === "(" ) {
+			if (token.id === "(") {
 				if (badArrayFunction) {
 					identifier.error("Para declarar una función que devuelve un array se deben colocar las parejas de corchetes a la izquierda del nombre de la función.");
 				}
 				if (!method && currentScope.context) {
-					 identifier.error("No se pueden definir funciones dentro de funciones.");
+					identifier.error("No se pueden definir funciones dentro de funciones.");
 				}
 				if (datatype && datatype instanceof ArrayDatatype) keypoints.returnArray = true;
 				// Comprobar si ya exise otro elemento con el mismo id en el mismo contexto.
@@ -1005,7 +1009,7 @@ function iJavaParser() {
 				entry.warning = identifier.warning;
 				return entry;
 			} else
-			if ( token.id === "=" ) {
+			if (token.id === "=") {
 				advance("=");
 				var node = null;
 				if (token.id === "{") {
@@ -1031,7 +1035,7 @@ function iJavaParser() {
 			entry.lineFirstAssignment = initialValue ? identifier.line : null;
 			entry.colFirstAssignment = initialValue ? identifier.col : null;
 			if (currentScope.context && currentScope.context.id === identifier.id) {
-					identifier.error("Error al tratar de declarar una variable con el nombre de la función donde se encuentra.");
+				identifier.error("Error al tratar de declarar una variable con el nombre de la función donde se encuentra.");
 			}
 			entry.member = currentScope.context && currentScope.context.type === "datatype";
 			entry.visibility = "public";
@@ -1046,12 +1050,12 @@ function iJavaParser() {
 			keypoints.hasDeclaration = true;
 			// Hay más variables en la misma declaración?
 
-/*
-			if (token.id === "," && lookahead(1).type !== "datatype" && (lookahead(1).type === "identifier" || lookahead(1).id === "[") ) {
-				console.log(token, lookahead(1));
-				identifier.error("Declara una variable en cada renglón.");
-			}
-		*/
+			/*
+						if (token.id === "," && lookahead(1).type !== "datatype" && (lookahead(1).type === "identifier" || lookahead(1).id === "[") ) {
+							console.log(token, lookahead(1));
+							identifier.error("Declara una variable en cada renglón.");
+						}
+					*/
 			if (token.id !== ";" && token.id !== "," && token.id !== ")") identifier.error("Es necesario terminar la declaración de '" + identifier.id + "' con un ';'.");
 			return entry;
 		});
@@ -1064,12 +1068,12 @@ function iJavaParser() {
 			var datatype = null;
 			if (token.type === "identifier" || token.type === "datatype") {
 				if (lookahead(1).id === ")" &&
-				     ( (lookahead(2).type === "operator" && lookahead(2).id === "(") ||
-				       (lookahead(2).type === "operator" && lookahead(2).id === "-") ||
-				       (lookahead(2).type === "operator" && lookahead(2).id === "!") ||
-				       (lookahead(2).type !== "operator" && lookahead(2).id !== ";")
-				     )
-				   ) {
+					((lookahead(2).type === "operator" && lookahead(2).id === "(") ||
+						(lookahead(2).type === "operator" && lookahead(2).id === "-") ||
+						(lookahead(2).type === "operator" && lookahead(2).id === "!") ||
+						(lookahead(2).type !== "operator" && lookahead(2).id !== ";")
+					)
+				) {
 					basetype = token.id;
 					advance();
 					advance();
@@ -1078,10 +1082,10 @@ function iJavaParser() {
 				} else
 				if (lookahead(1).id === "[" && lookahead(2).id === "]") {
 					var i = 1;
-					while (lookahead(i).id === "[" && lookahead(i+1).id === "]") i = i + 2;
+					while (lookahead(i).id === "[" && lookahead(i + 1).id === "]") i = i + 2;
 					if (lookahead(i).id === ")") {
 						basetype = token.id;
-						datatype = new ArrayDatatype((i-1)/2);
+						datatype = new ArrayDatatype((i - 1) / 2);
 						nextToken += i;
 						advance();
 						node = expression(0);
@@ -1113,8 +1117,8 @@ function iJavaParser() {
 			}
 		});
 
-		symbol("final", function(itself) {
-//			if (!datatypes[token.id]) itself.error("Para declarar una constante debes especificar su tipo tras la palabra reservada 'final'. En su lugar se ha encontrado '" + token.id + "'.");
+		symbol("final", function (itself) {
+			//			if (!datatypes[token.id]) itself.error("Para declarar una constante debes especificar su tipo tras la palabra reservada 'final'. En su lugar se ha encontrado '" + token.id + "'.");
 			var node = expression(0);
 			if (node.type !== "variable") itself.error("Se esperaban una declaración de variable.");
 			if (!node.initialValue) itself.error("Es necesario dar un valor a la constante '" + node.id + "'.");
@@ -1124,7 +1128,7 @@ function iJavaParser() {
 			return node;
 		});
 
-		keyword("if", function(itself) {
+		keyword("if", function (itself) {
 			advance("(");
 			if (token.id === ")") itself.error("En la sentencia 'if' necesario incluir una expresión de tipo 'booleano' entre paréntesis.");
 			var condition = expression(0);
@@ -1152,13 +1156,13 @@ function iJavaParser() {
 			return node;
 		});
 
-		keyword("else", function(itself) {
+		keyword("else", function (itself) {
 			itself.error("La palabra reservada 'else' sólo se puede utilizar para especificar qué hacer cuando no se cumple la condición de un 'if'.");
 		});
 
-		keyword("for", function(itself) {
+		keyword("for", function (itself) {
 			var to;
-			advance("(");//, "La sentencia for tiene la forma for ( a ; b ; c ) { instrucciones } siendo obligatorio poner los paréntesis y los puntos y coma. La parte a se utiliza para inicializar variables que se usarán en el bucle. La parte b debe ser una expresión de tipo booleano. La parte c debe ser una expresión cualquiera." );
+			advance("("); //, "La sentencia for tiene la forma for ( a ; b ; c ) { instrucciones } siendo obligatorio poner los paréntesis y los puntos y coma. La parte a se utiliza para inicializar variables que se usarán en el bucle. La parte b debe ser una expresión de tipo booleano. La parte c debe ser una expresión cualquiera." );
 			var initializers = null;
 			currentScope = new Environment(currentScope);
 			if (token.id !== ";") {
@@ -1195,9 +1199,9 @@ function iJavaParser() {
 			return node;
 		});
 
-		keyword("while", function(itself) {
+		keyword("while", function (itself) {
 			var to;
-			advance("(");// "La sentencia while tiene la forma while ( a ) { instrucciones } siendo obligatorio poner los paréntesis . La parte a debe ser una expresión de tipo booleano." );
+			advance("("); // "La sentencia while tiene la forma while ( a ) { instrucciones } siendo obligatorio poner los paréntesis . La parte a debe ser una expresión de tipo booleano." );
 			if (token.id === ")") token.error("En la sentencia 'while' es necesario incluir una expresión de tipo 'booleano' entre paréntesis.");
 			var condition = expression(0);
 			advance(")");
@@ -1218,11 +1222,11 @@ function iJavaParser() {
 			return node;
 		});
 
-		keyword("do", function(itself) {
+		keyword("do", function (itself) {
 			var to;
 			var body = statement();
 			advance("while");
-			advance("(");//, "La sentencia while tiene la forma while ( a ) { instrucciones } siendo obligatorio poner los paréntesis . La parte a debe ser una expresión de tipo booleano." );
+			advance("("); //, "La sentencia while tiene la forma while ( a ) { instrucciones } siendo obligatorio poner los paréntesis . La parte a debe ser una expresión de tipo booleano." );
 			if (token.id === ")") token.error("En la sentencia 'do-while' es necesario incluir una expresión de tipo 'booleano' entre paréntesis.");
 			var condition = expression(0);
 			to = token.to;
@@ -1242,7 +1246,7 @@ function iJavaParser() {
 			return node;
 		});
 
-		keyword("continue", function(itself) {
+		keyword("continue", function (itself) {
 			return {
 				id: itself.id,
 				type: "statement",
@@ -1253,7 +1257,7 @@ function iJavaParser() {
 			};
 		});
 
-		keyword("break", function(itself) {
+		keyword("break", function (itself) {
 			return {
 				id: itself.id,
 				type: "statement",
@@ -1264,7 +1268,7 @@ function iJavaParser() {
 			};
 		});
 
-		keyword("return", function(itself) {
+		keyword("return", function (itself) {
 			var to;
 			if (token.id === ";") {
 				to = token.to;
@@ -1302,9 +1306,9 @@ function iJavaParser() {
 			}
 		});
 
-		keyword("switch", function(itself) {
+		keyword("switch", function (itself) {
 			var to;
-			advance("(", "La sentencia 'switch' tiene la forma 'switch ( expresión ) { instrucciones }' siendo obligatorio poner los paréntesis . La expresión entre paréntesis debe ser de tipo 'int' o 'char'." );
+			advance("(", "La sentencia 'switch' tiene la forma 'switch ( expresión ) { instrucciones }' siendo obligatorio poner los paréntesis . La expresión entre paréntesis debe ser de tipo 'int' o 'char'.");
 			var condition = expression(0);
 			advance(")");
 			var body = statement();
@@ -1326,7 +1330,7 @@ function iJavaParser() {
 			return node;
 		});
 
-		keyword("case", function(itself) {
+		keyword("case", function (itself) {
 			var to;
 			if (token.type !== "literal" && !token.constant) token.error("La etiqueta debe ser un valor literal de tipo 'int', 'char' o 'String'.");
 			if (token.datatype.id !== "int" && token.datatype.id !== "char" && token.datatype.id !== "String") token.error("La etiqueta debe ser de tipo 'int', 'char' o 'String'.");
@@ -1347,7 +1351,7 @@ function iJavaParser() {
 			};
 		});
 
-		keyword("default", function(itself) {
+		keyword("default", function (itself) {
 			var to = token.to;
 			advance(":", "La etiqueta 'default' debe ir seguida del símbolo ':'.");
 			return {
@@ -1360,7 +1364,7 @@ function iJavaParser() {
 			};
 		});
 
-		symbol("public", function(itself) {
+		symbol("public", function (itself) {
 			var node = expression(0);
 			if (node.type !== "variable" && node.type !== "const" && node.type !== "function") itself.error("Se esperaban una declaración de miembro o método.");
 			if (!node.member && !node.method) itself.error("Sólo se pueden declarar como públicos los miembros y métodos de una clase.");
@@ -1369,7 +1373,7 @@ function iJavaParser() {
 			return node;
 		});
 
-		symbol("private", function(itself) {
+		symbol("private", function (itself) {
 			var node = expression(0);
 			if (node.type !== "variable" && node.type !== "const" && node.type !== "function") itself.error("Se esperaban una declaración de miembro o método.");
 			if (!node.member && !node.method) itself.error("Sólo se pueden declarar como privados los miembros y métodos de una clase.");
@@ -1378,7 +1382,7 @@ function iJavaParser() {
 			return node;
 		});
 
-		symbol("static", function(itself) {
+		symbol("static", function (itself) {
 			var node = expression(0);
 			if (node.type !== "variable" && node.type !== "const" && node.type !== "function") itself.error("Se esperaban una declaración de miembro o método.");
 			if (!node.member && !node.method) itself.error("Sólo se pueden declarar como estáticos los miembros y métodos de una clase.");
@@ -1387,8 +1391,8 @@ function iJavaParser() {
 			return node;
 		});
 
-		keyword("class", function(itself) {
-		  // TODO: Hacer esto en semantic check
+		keyword("class", function (itself) {
+			// TODO: Hacer esto en semantic check
 			if (token.type === "datatype") {
 				itself.error("El nombre '" + token.id + "' ya está siendo usado por otro tipo de dato.");
 			}
@@ -1402,7 +1406,7 @@ function iJavaParser() {
 				itself.error("El nombre '" + identifier.id + "' ya está utilizado.");
 			}
 			keypoints.defineClasses = true;
-//			if (currentScope.context && currentScope.context.type === "function")
+			//			if (currentScope.context && currentScope.context.type === "function")
 
 			advance();
 			// TODO: Para hacer esto bien hay que tener en cuenta que se puede heredar de algo aún no declarado y habrá que resolverlo en semantic
@@ -1456,7 +1460,7 @@ function iJavaParser() {
 			return element;
 		});
 
-		symbol("this", function(itself) {
+		symbol("this", function (itself) {
 			if (!currentScope.context || currentScope.context.type !== "function" || !currentScope.context.scope || !currentScope.context.scope.context || currentScope.context.scope.context.type !== "datatype") {
 				itself.error("La palabra 'this' sólo se puede usar dentro de un método de instancia.");
 			}
@@ -1503,158 +1507,424 @@ function iJavaParser() {
 		library_function("month", new FunctionDatatype(IntegerDatatype, []));
 		library_function("year", new FunctionDatatype(IntegerDatatype, []));
 
-		library_function("sizeOf", new FunctionDatatype(IntegerDatatype, [{datatype:GenericArrayDatatype}]));
-		library_function("sizeOf", new FunctionDatatype(IntegerDatatype, [{datatype:StringDatatype}]));
+		library_function("sizeOf", new FunctionDatatype(IntegerDatatype, [{
+			datatype: GenericArrayDatatype
+		}]));
+		library_function("sizeOf", new FunctionDatatype(IntegerDatatype, [{
+			datatype: StringDatatype
+		}]));
 
-		library_function("sizeOf", new FunctionDatatype(IntegerDatatype, [{datatype:GenericArrayDatatype}, {datatype:IntegerDatatype}]));
+		library_function("sizeOf", new FunctionDatatype(IntegerDatatype, [{
+			datatype: GenericArrayDatatype
+		}, {
+			datatype: IntegerDatatype
+		}]));
 
 		library_function("readInteger", new FunctionDatatype(IntegerDatatype, []));
-		library_function("readInteger", new FunctionDatatype(IntegerDatatype, [{datatype:StringDatatype}]));
+		library_function("readInteger", new FunctionDatatype(IntegerDatatype, [{
+			datatype: StringDatatype
+		}]));
 		library_function("readDouble", new FunctionDatatype(DoubleDatatype, []));
-		library_function("readDouble", new FunctionDatatype(DoubleDatatype, [{datatype:StringDatatype}]));
+		library_function("readDouble", new FunctionDatatype(DoubleDatatype, [{
+			datatype: StringDatatype
+		}]));
 		library_function("readString", new FunctionDatatype(StringDatatype, []));
-		library_function("readString", new FunctionDatatype(StringDatatype, [{datatype:StringDatatype}]));
+		library_function("readString", new FunctionDatatype(StringDatatype, [{
+			datatype: StringDatatype
+		}]));
 		library_function("readChar", new FunctionDatatype(CharDatatype, []));
-		library_function("readChar", new FunctionDatatype(CharDatatype, [{datatype:StringDatatype}]));
+		library_function("readChar", new FunctionDatatype(CharDatatype, [{
+			datatype: StringDatatype
+		}]));
 
-		library_function("charArrayToString", new FunctionDatatype(StringDatatype, [{datatype:new ArrayDatatype(1,CharDatatype)}]));
-		library_function("stringToCharArray", new FunctionDatatype(new ArrayDatatype(1,CharDatatype), [{datatype:StringDatatype}]));
-//		library_function("largo", new FunctionDatatype(IntegerDatatype, [{datatype:StringDatatype}]));
-		library_function("charAt", new FunctionDatatype(CharDatatype, [{datatype:StringDatatype}, {datatype:IntegerDatatype}]));
-		library_function("concat", new FunctionDatatype(StringDatatype, [{datatype:StringDatatype}, {datatype:StringDatatype}]));
-		library_function("compare", new FunctionDatatype(IntegerDatatype, [{datatype:StringDatatype}, {datatype:StringDatatype}]));
-		library_function("indexOf", new FunctionDatatype(IntegerDatatype, [{datatype:StringDatatype}, {datatype:CharDatatype}]));
+		library_function("charArrayToString", new FunctionDatatype(StringDatatype, [{
+			datatype: new ArrayDatatype(1, CharDatatype)
+		}]));
+		library_function("stringToCharArray", new FunctionDatatype(new ArrayDatatype(1, CharDatatype), [{
+			datatype: StringDatatype
+		}]));
+		//		library_function("largo", new FunctionDatatype(IntegerDatatype, [{datatype:StringDatatype}]));
+		library_function("charAt", new FunctionDatatype(CharDatatype, [{
+			datatype: StringDatatype
+		}, {
+			datatype: IntegerDatatype
+		}]));
+		library_function("concat", new FunctionDatatype(StringDatatype, [{
+			datatype: StringDatatype
+		}, {
+			datatype: StringDatatype
+		}]));
+		library_function("compare", new FunctionDatatype(IntegerDatatype, [{
+			datatype: StringDatatype
+		}, {
+			datatype: StringDatatype
+		}]));
+		library_function("indexOf", new FunctionDatatype(IntegerDatatype, [{
+			datatype: StringDatatype
+		}, {
+			datatype: CharDatatype
+		}]));
 
-		library_function("loop", new FunctionDatatype(VoidDatatype, [{datatype:new FunctionDatatype(VoidDatatype, [])}]));
-		library_function("animate", new FunctionDatatype(VoidDatatype, [{datatype:new FunctionDatatype(VoidDatatype, [])}]));
-		library_function("animate", new FunctionDatatype(VoidDatatype, [{datatype:new FunctionDatatype(VoidDatatype, [])}, {datatype:IntegerDatatype}]));
-//		library_function("exit", new FunctionDatatype(VoidDatatype, []));
-//		library_function("noLoop", new FunctionDatatype(VoidDatatype, []));
-//		library_function("redraw", new FunctionDatatype(VoidDatatype));
-// TODO: poner función exit
+		library_function("loop", new FunctionDatatype(VoidDatatype, [{
+			datatype: new FunctionDatatype(VoidDatatype, [])
+		}]));
+		library_function("animate", new FunctionDatatype(VoidDatatype, [{
+			datatype: new FunctionDatatype(VoidDatatype, [])
+		}]));
+		library_function("animate", new FunctionDatatype(VoidDatatype, [{
+			datatype: new FunctionDatatype(VoidDatatype, [])
+		}, {
+			datatype: IntegerDatatype
+		}]));
+		//		library_function("exit", new FunctionDatatype(VoidDatatype, []));
+		//		library_function("noLoop", new FunctionDatatype(VoidDatatype, []));
+		//		library_function("redraw", new FunctionDatatype(VoidDatatype));
+		// TODO: poner función exit
 		library_function("random", new FunctionDatatype(DoubleDatatype, []));
-		library_function("random", new FunctionDatatype(DoubleDatatype, [{datatype:DoubleDatatype}]));
-		library_function("random", new FunctionDatatype(DoubleDatatype, [{datatype:DoubleDatatype}, {datatype:DoubleDatatype}]));
-		library_function("sin", new FunctionDatatype(DoubleDatatype, [{datatype:DoubleDatatype}]));
-		library_function("cos", new FunctionDatatype(DoubleDatatype, [{datatype:DoubleDatatype}]));
-		library_function("tan", new FunctionDatatype(DoubleDatatype, [{datatype:DoubleDatatype}]));
-		library_function("asin", new FunctionDatatype(DoubleDatatype, [{datatype:DoubleDatatype}]));
-		library_function("acos", new FunctionDatatype(DoubleDatatype, [{datatype:DoubleDatatype}]));
-		library_function("atan", new FunctionDatatype(DoubleDatatype, [{datatype:DoubleDatatype}]));
-		library_function("sqrt", new FunctionDatatype(DoubleDatatype, [{datatype:DoubleDatatype}]));
-		library_function("pow", new FunctionDatatype(DoubleDatatype, [{datatype:DoubleDatatype}, {datatype:DoubleDatatype}]));
-		library_function("abs", new FunctionDatatype(DoubleDatatype, [{datatype:DoubleDatatype}]));
-		library_function("log", new FunctionDatatype(DoubleDatatype, [{datatype:DoubleDatatype}]));
-		library_function("floor", new FunctionDatatype(IntegerDatatype, [{datatype:DoubleDatatype}]));
-		library_function("ceil", new FunctionDatatype(IntegerDatatype, [{datatype:DoubleDatatype}]));
-		library_function("round", new FunctionDatatype(IntegerDatatype, [{datatype:DoubleDatatype}]));
+		library_function("random", new FunctionDatatype(DoubleDatatype, [{
+			datatype: DoubleDatatype
+		}]));
+		library_function("random", new FunctionDatatype(DoubleDatatype, [{
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}]));
+		library_function("sin", new FunctionDatatype(DoubleDatatype, [{
+			datatype: DoubleDatatype
+		}]));
+		library_function("cos", new FunctionDatatype(DoubleDatatype, [{
+			datatype: DoubleDatatype
+		}]));
+		library_function("tan", new FunctionDatatype(DoubleDatatype, [{
+			datatype: DoubleDatatype
+		}]));
+		library_function("asin", new FunctionDatatype(DoubleDatatype, [{
+			datatype: DoubleDatatype
+		}]));
+		library_function("acos", new FunctionDatatype(DoubleDatatype, [{
+			datatype: DoubleDatatype
+		}]));
+		library_function("atan", new FunctionDatatype(DoubleDatatype, [{
+			datatype: DoubleDatatype
+		}]));
+		library_function("sqrt", new FunctionDatatype(DoubleDatatype, [{
+			datatype: DoubleDatatype
+		}]));
+		library_function("pow", new FunctionDatatype(DoubleDatatype, [{
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}]));
+		library_function("abs", new FunctionDatatype(DoubleDatatype, [{
+			datatype: DoubleDatatype
+		}]));
+		library_function("log", new FunctionDatatype(DoubleDatatype, [{
+			datatype: DoubleDatatype
+		}]));
+		library_function("floor", new FunctionDatatype(IntegerDatatype, [{
+			datatype: DoubleDatatype
+		}]));
+		library_function("ceil", new FunctionDatatype(IntegerDatatype, [{
+			datatype: DoubleDatatype
+		}]));
+		library_function("round", new FunctionDatatype(IntegerDatatype, [{
+			datatype: DoubleDatatype
+		}]));
 
 		library_function("print", new FunctionDatatype(VoidDatatype, []));
 		library_function("println", new FunctionDatatype(VoidDatatype, []));
-		library_function("print", new FunctionDatatype(VoidDatatype, [{datatype:IntegerDatatype}]));
-		library_function("print", new FunctionDatatype(VoidDatatype, [{datatype:DoubleDatatype}]));
-		library_function("print", new FunctionDatatype(VoidDatatype, [{datatype:CharDatatype}]));
-		library_function("print", new FunctionDatatype(VoidDatatype, [{datatype:BooleanDatatype}]));
-		library_function("print", new FunctionDatatype(VoidDatatype, [{datatype:ObjectDatatype}]));
-		library_function("println", new FunctionDatatype(VoidDatatype, [{datatype:IntegerDatatype}]));
-		library_function("println", new FunctionDatatype(VoidDatatype, [{datatype:DoubleDatatype}]));
-		library_function("println", new FunctionDatatype(VoidDatatype, [{datatype:CharDatatype}]));
-		library_function("println", new FunctionDatatype(VoidDatatype, [{datatype:BooleanDatatype}]));
-		library_function("println", new FunctionDatatype(VoidDatatype, [{datatype:ObjectDatatype}]));
+		library_function("print", new FunctionDatatype(VoidDatatype, [{
+			datatype: IntegerDatatype
+		}]));
+		library_function("print", new FunctionDatatype(VoidDatatype, [{
+			datatype: DoubleDatatype
+		}]));
+		library_function("print", new FunctionDatatype(VoidDatatype, [{
+			datatype: CharDatatype
+		}]));
+		library_function("print", new FunctionDatatype(VoidDatatype, [{
+			datatype: BooleanDatatype
+		}]));
+		library_function("print", new FunctionDatatype(VoidDatatype, [{
+			datatype: ObjectDatatype
+		}]));
+		library_function("println", new FunctionDatatype(VoidDatatype, [{
+			datatype: IntegerDatatype
+		}]));
+		library_function("println", new FunctionDatatype(VoidDatatype, [{
+			datatype: DoubleDatatype
+		}]));
+		library_function("println", new FunctionDatatype(VoidDatatype, [{
+			datatype: CharDatatype
+		}]));
+		library_function("println", new FunctionDatatype(VoidDatatype, [{
+			datatype: BooleanDatatype
+		}]));
+		library_function("println", new FunctionDatatype(VoidDatatype, [{
+			datatype: ObjectDatatype
+		}]));
 
-		library_function("stroke", new FunctionDatatype(VoidDatatype, [{datatype:DoubleDatatype}]));
-		library_function("stroke", new FunctionDatatype(VoidDatatype, [{datatype:DoubleDatatype},{datatype:DoubleDatatype},{datatype:DoubleDatatype}]));
-		library_function("stroke", new FunctionDatatype(VoidDatatype, [{datatype:DoubleDatatype},{datatype:DoubleDatatype},{datatype:DoubleDatatype},{datatype:DoubleDatatype}]));
-		library_function("strokeWeight", new FunctionDatatype(VoidDatatype, [{datatype:IntegerDatatype}]));
+		library_function("stroke", new FunctionDatatype(VoidDatatype, [{
+			datatype: DoubleDatatype
+		}]));
+		library_function("stroke", new FunctionDatatype(VoidDatatype, [{
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}]));
+		library_function("stroke", new FunctionDatatype(VoidDatatype, [{
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}]));
+		library_function("strokeWeight", new FunctionDatatype(VoidDatatype, [{
+			datatype: IntegerDatatype
+		}]));
 		library_function("noStroke", new FunctionDatatype(VoidDatatype, []));
-		library_function("fill", new FunctionDatatype(VoidDatatype, [{datatype:DoubleDatatype}]));
-		library_function("fill", new FunctionDatatype(VoidDatatype, [{datatype:DoubleDatatype},{datatype:DoubleDatatype},{datatype:DoubleDatatype}]));
-		library_function("fill", new FunctionDatatype(VoidDatatype, [{datatype:DoubleDatatype},{datatype:DoubleDatatype},{datatype:DoubleDatatype},{datatype:DoubleDatatype}]));
+		library_function("fill", new FunctionDatatype(VoidDatatype, [{
+			datatype: DoubleDatatype
+		}]));
+		library_function("fill", new FunctionDatatype(VoidDatatype, [{
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}]));
+		library_function("fill", new FunctionDatatype(VoidDatatype, [{
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}]));
 		library_function("noFill", new FunctionDatatype(VoidDatatype, []));
-		library_function("background", new FunctionDatatype(VoidDatatype, [{datatype:DoubleDatatype}]));
-		library_function("background", new FunctionDatatype(VoidDatatype, [{datatype:DoubleDatatype},{datatype:DoubleDatatype},{datatype:DoubleDatatype}]));
-		library_function("background", new FunctionDatatype(VoidDatatype, [{datatype:DoubleDatatype},{datatype:DoubleDatatype},{datatype:DoubleDatatype},{datatype:DoubleDatatype}]));
+		library_function("background", new FunctionDatatype(VoidDatatype, [{
+			datatype: DoubleDatatype
+		}]));
+		library_function("background", new FunctionDatatype(VoidDatatype, [{
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}]));
+		library_function("background", new FunctionDatatype(VoidDatatype, [{
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}]));
 
-		library_function("line", new FunctionDatatype(VoidDatatype, [{datatype:DoubleDatatype},{datatype:DoubleDatatype},{datatype:DoubleDatatype},{datatype:DoubleDatatype}]));
-		library_function("ellipse", new FunctionDatatype(VoidDatatype, [{datatype:DoubleDatatype},{datatype:DoubleDatatype},{datatype:DoubleDatatype},{datatype:DoubleDatatype}]));
-		library_function("point", new FunctionDatatype(VoidDatatype, [{datatype:DoubleDatatype},{datatype:DoubleDatatype}]));
-		library_function("triangle", new FunctionDatatype(VoidDatatype, [{datatype:DoubleDatatype},{datatype:DoubleDatatype},{datatype:DoubleDatatype},{datatype:DoubleDatatype},{datatype:DoubleDatatype},{datatype:DoubleDatatype}]));
-		library_function("rect", new FunctionDatatype(VoidDatatype, [{datatype:DoubleDatatype},{datatype:DoubleDatatype},{datatype:DoubleDatatype},{datatype:DoubleDatatype}]));
-		library_function("text", new FunctionDatatype(VoidDatatype, [{datatype:IntegerDatatype}, {datatype:DoubleDatatype},{datatype:DoubleDatatype}]));
-		library_function("text", new FunctionDatatype(VoidDatatype, [{datatype:DoubleDatatype}, {datatype:DoubleDatatype},{datatype:DoubleDatatype}]));
-		library_function("text", new FunctionDatatype(VoidDatatype, [{datatype:CharDatatype}, {datatype:DoubleDatatype},{datatype:DoubleDatatype}]));
-		library_function("text", new FunctionDatatype(VoidDatatype, [{datatype:BooleanDatatype}, {datatype:DoubleDatatype},{datatype:DoubleDatatype}]));
-		library_function("text", new FunctionDatatype(VoidDatatype, [{datatype:ObjectDatatype}, {datatype:DoubleDatatype},{datatype:DoubleDatatype}]));
-		library_function("textWidth", new FunctionDatatype(IntegerDatatype, [{datatype:IntegerDatatype}]));
-		library_function("textWidth", new FunctionDatatype(IntegerDatatype, [{datatype:DoubleDatatype}]));
-		library_function("textWidth", new FunctionDatatype(IntegerDatatype, [{datatype:CharDatatype}]));
-		library_function("textWidth", new FunctionDatatype(IntegerDatatype, [{datatype:BooleanDatatype}]));
-		library_function("textWidth", new FunctionDatatype(IntegerDatatype, [{datatype:ObjectDatatype}]));
-		library_function("textSize", new FunctionDatatype(VoidDatatype, [{datatype:IntegerDatatype}]));
+		library_function("line", new FunctionDatatype(VoidDatatype, [{
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}]));
+		library_function("ellipse", new FunctionDatatype(VoidDatatype, [{
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}]));
+		library_function("point", new FunctionDatatype(VoidDatatype, [{
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}]));
+		library_function("triangle", new FunctionDatatype(VoidDatatype, [{
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}]));
+		library_function("rect", new FunctionDatatype(VoidDatatype, [{
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}]));
+		library_function("text", new FunctionDatatype(VoidDatatype, [{
+			datatype: IntegerDatatype
+		}, {
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}]));
+		library_function("text", new FunctionDatatype(VoidDatatype, [{
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}]));
+		library_function("text", new FunctionDatatype(VoidDatatype, [{
+			datatype: CharDatatype
+		}, {
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}]));
+		library_function("text", new FunctionDatatype(VoidDatatype, [{
+			datatype: BooleanDatatype
+		}, {
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}]));
+		library_function("text", new FunctionDatatype(VoidDatatype, [{
+			datatype: ObjectDatatype
+		}, {
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}]));
+		library_function("textWidth", new FunctionDatatype(IntegerDatatype, [{
+			datatype: IntegerDatatype
+		}]));
+		library_function("textWidth", new FunctionDatatype(IntegerDatatype, [{
+			datatype: DoubleDatatype
+		}]));
+		library_function("textWidth", new FunctionDatatype(IntegerDatatype, [{
+			datatype: CharDatatype
+		}]));
+		library_function("textWidth", new FunctionDatatype(IntegerDatatype, [{
+			datatype: BooleanDatatype
+		}]));
+		library_function("textWidth", new FunctionDatatype(IntegerDatatype, [{
+			datatype: ObjectDatatype
+		}]));
+		library_function("textSize", new FunctionDatatype(VoidDatatype, [{
+			datatype: IntegerDatatype
+		}]));
 
-//		library_function("loadImage", new FunctionDatatype(classImage));
-		library_function("image", new FunctionDatatype(VoidDatatype, [{datatype:StringDatatype}, {datatype:DoubleDatatype}, {datatype:DoubleDatatype}]));
-		library_function("image", new FunctionDatatype(VoidDatatype, [{datatype:StringDatatype}, {datatype:DoubleDatatype}, {datatype:DoubleDatatype}, {datatype:DoubleDatatype}, {datatype:DoubleDatatype}]));
-//		library_function("snapshot", "void");
-// TODO: Crear clase Color para manejar esto
-		library_function("getColor", new FunctionDatatype(IntegerDatatype, [{datatype:DoubleDatatype},{datatype:DoubleDatatype}]));
-		library_function("red", new FunctionDatatype(IntegerDatatype, [{datatype:IntegerDatatype}]));
-		library_function("green", new FunctionDatatype(IntegerDatatype, [{datatype:IntegerDatatype}]));
-		library_function("blue", new FunctionDatatype(IntegerDatatype, [{datatype:IntegerDatatype}]));
+		//		library_function("loadImage", new FunctionDatatype(classImage));
+		library_function("image", new FunctionDatatype(VoidDatatype, [{
+			datatype: StringDatatype
+		}, {
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}]));
+		library_function("image", new FunctionDatatype(VoidDatatype, [{
+			datatype: StringDatatype
+		}, {
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}]));
+		//		library_function("snapshot", "void");
+		// TODO: Crear clase Color para manejar esto
+		library_function("getColor", new FunctionDatatype(IntegerDatatype, [{
+			datatype: DoubleDatatype
+		}, {
+			datatype: DoubleDatatype
+		}]));
+		library_function("red", new FunctionDatatype(IntegerDatatype, [{
+			datatype: IntegerDatatype
+		}]));
+		library_function("green", new FunctionDatatype(IntegerDatatype, [{
+			datatype: IntegerDatatype
+		}]));
+		library_function("blue", new FunctionDatatype(IntegerDatatype, [{
+			datatype: IntegerDatatype
+		}]));
 		system_variable("mouseX", IntegerDatatype, 0);
 		system_variable("mouseY", IntegerDatatype, 0);
 		system_variable("mousePressed", BooleanDatatype, false);
 		system_variable("mouseButton", IntegerDatatype, false);
 
-		system_variable("key", StringDatatype, "");//new StringDatatype(), 0);
+		system_variable("key", StringDatatype, ""); //new StringDatatype(), 0);
 		system_variable("keyPressed", BooleanDatatype, false);
 
 		///// Funciones de la libreria del simulador MOWAY
-		library_function("initSimuRobo", new FunctionDatatype(VoidDatatype,[]));
-		library_function("moveS", new FunctionDatatype(VoidDatatype,[]));
-		library_function("moveN", new FunctionDatatype(VoidDatatype,[]));
-		library_function("moveW", new FunctionDatatype(VoidDatatype,[]));
-		library_function("moveE", new FunctionDatatype(VoidDatatype,[]));
 
+		var module = new iJavaMowayModule();
+		var functionsLibrary = module.getFunctionsLibrary();
+
+		for (var i = 0; i < functionsLibrary.length; i++) {
+			var finfo = functionsLibrary[i];
+			var paramTypes = [];
+			if (finfo.paramTypes !== null) {
+				for (var j = 0; finfo.paramTypes.length; i++) {
+					paramTypes[j] = {
+						datatype: finfo.paramTypes
+					};
+				}
+			}
+			library_function(finfo.nameFunction, new FunctionDatatype(finfo.returnType, []));
+		}
 	};
 
 	init();
 
-	this.parse = function(s) {
+	this.parse = function (s) {
 
 		warnings = [];
 		usedFunctions = [];
 		declaredFuncions = [];
 		usedImages = [];
 		keypoints = {
-				useLiteral:false,
-				hasArithmeticExpression:false,
-				hasBooleanExpression:false,
+			useLiteral: false,
+			hasArithmeticExpression: false,
+			hasBooleanExpression: false,
 
-				hasDeclaration:false,
-				hasConstant:false,
-				hasAssignment:false,
+			hasDeclaration: false,
+			hasConstant: false,
+			hasAssignment: false,
 
-				useFunction:false,
-				createFunction:false,
-				hasRecursiveFunction:false,
+			useFunction: false,
+			createFunction: false,
+			hasRecursiveFunction: false,
 
-				hasFor:false,
-				hasWhile:false,
-				hasDoWhile:false,
+			hasFor: false,
+			hasWhile: false,
+			hasDoWhile: false,
 
-				hasIf:false,
-				hasElse:false,
-				hasSwitch:false,
+			hasIf: false,
+			hasElse: false,
+			hasSwitch: false,
 
-				useArray:false,
-				useArrayAsParameter:false,
-				returnArray:false,
+			useArray: false,
+			useArrayAsParameter: false,
+			returnArray: false,
 
-				createObjects:false,
-				defineClasses:false,
-				defineMethods:false
-			};
+			createObjects: false,
+			defineClasses: false,
+			defineMethods: false
+		};
 
 		source = s;
 		tokens = createTokens(source);
@@ -1674,28 +1944,27 @@ function iJavaParser() {
 		return parseTree;
 	}
 
-	this.getErrors = function() {
+	this.getErrors = function () {
 		return errors;
 	}
 
-	this.getWarnings = function() {
+	this.getWarnings = function () {
 		return warnings;
 	}
 
-	this.getUsedFunctions = function() {
+	this.getUsedFunctions = function () {
 		return usedFunctions;
 	}
 
-	this.getDeclaredFunctions = function() {
+	this.getDeclaredFunctions = function () {
 		return declaredFunctions;
 	}
 
-	this.getKeyPoints = function() {
+	this.getKeyPoints = function () {
 		return keypoints;
 	}
 
-	this.getUsedImages = function() {
+	this.getUsedImages = function () {
 		return usedImages;
 	}
 }
-
