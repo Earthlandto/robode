@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+
+<style>
+	text {
+		font: 14px sans-serif;
+		fill: green;
+	}
+	
+	div {
+		border-radius: 0px;
+		border: 1px solid #0099CC;
+		padding: 0px;
+	}
+	
+	circle {
+		<!--fill: purple;
+		-->
+	}
+</style>
+
+<body>
+	<script src="./lib/d3.min.js"></script>
+	<script src="./lib/mathlib.js"></script>
+	<script src="./lib/bezier.js"></script>
+	<script src="./lib/bezierDistance.js"></script>
+
+	<div id="ourgoatgod" style="border: 0px">
+		<h1> We pray to Goat God!</h1>
+	</div>
+	<div id="bezier-curve-test" onmousemove=drawDistance(event)></div>
+
+
+
+
+	<script>
+		var points = [100, 25, 10, 90, 110, 100, 150, 195];
+		var bezierDistance = new BezierDistance();
+
+		var bezierSVG;
+		/* =d3.select("#bezier-curve-test")
+					.append("svg")
+					.attr("width", "100%")
+					.attr("height", "420");
+		*/
+		drawCurve();
+
+
+		function drawCurve() {
+
+			bezierSVG = d3.select("#bezier-curve-test")
+				.append("svg")
+				.attr("width", "100%")
+				.attr("height", "400");
+
+			var curve = new Bezier(points);
+
+			var myCurve = bezierSVG.append("path")
+				.attr("d", curve.toSVG())
+				.attr("stroke", "blue")
+				.attr("stroke-width", 2)
+				.attr("fill", "none");
+
+
+			for (var i = 0; i < points.length / 2; i++) {
+
+				bezierSVG.append("circle")
+					.attr("cx", points[i * 2])
+					.attr("cy", points[i * 2 + 1])
+					.attr("r", 2)
+					.attr("fill", "purple");
+
+			}
+
+		}
+
+
+		function drawDistance(event) {
+			bezierSVG.remove();
+			drawCurve();
+
+			// Punto que queremos proyectar en la curva de bezier
+			var myPoint = {
+				x: event.clientX - 10,
+				y: event.clientY - 80
+			};
+			// Punto resultante: punto en la curva de Bezier más cercano a myPoint
+
+			var bezPoints = [];
+			for (var i = 0; i < points.length / 2; i++) {
+				bezPoints[i] = {
+					x: points[i * 2],
+					y: points[i * 2 + 1]
+				}
+			}
+
+			var pointResult = bezierDistance.nearestPoint(myPoint, bezPoints);
+
+			// console.log('myPoint:', myPoint); 
+			// console.log('pointResult:', pointResult);  
+			// console.log(" ");
+
+			// Dibujamos nuestro punto, en VERDE
+			bezierSVG.append("circle")
+				.attr("cx", myPoint.x)
+				.attr("cy", myPoint.y)
+				.attr("r", 4)
+				.attr("fill", "green");
+
+			// Dibujamos el punto resultante, en ROJO
+			bezierSVG.append("circle")
+				.attr("cx", pointResult.x)
+				.attr("cy", pointResult.y)
+				.attr("r", 4)
+				.attr("fill", "red");
+
+			// Dibujamos la line que une ambos puntos
+			bezierSVG.append("line")
+				.attr("x1", pointResult.x)
+				.attr("y1", pointResult.y)
+				.attr("x2", myPoint.x)
+				.attr("y2", myPoint.y)
+				.attr("stroke", "gray");
+
+		}
+	</script>

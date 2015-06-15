@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<style>
+	text {
+		font: 14px sans-serif;
+		fill: green;
+	}
+	
+	canvas {
+		border-radius: 0px;
+		border: 1px solid #ADCF12;
+		padding: 0px;
+	}
+	
+	circle {
+		<!--fill: purple;
+		-->
+	}
+</style>
+
+<body>
+	<script src="./lib/bezier.js"></script>
+	<script src="./lib/draw.js"></script>
+
+	<h1> We pray to Goat God!</h1>
+
+	<canvas id="mycanvas" width="480" height="320" onmousemove="isInPath(event)">Your browser does not support the HTML5 canvas tag.</canvas>
+
+	<script>
+		var points = [100, 25, 10, 90, 110, 100, 150, 195];
+		var curve = new Bezier(points);
+
+		var canvas = document.getElementById("mycanvas");
+		var ctx = canvas.getContext("2d");
+
+		var draw = new Draw();
+		var offset = {
+			x: 100,
+			y: 0
+		};
+		//draw.drawCurve(curve, offset);
+		//draw.setColor("rgb(255,255,0)");
+		draw.drawCurve(curve);
+
+		function isInPath(event) {
+
+			var point = {
+				x: event.clientX - 10,
+				y: event.clientY - 85
+			};
+
+			var inPath = ctx.isPointInPath(point.x, point.y);
+			console.log('inPath:', inPath);
+			if (inPath) {
+				draw.setFill("red");
+			}
+
+			//draw.drawCircle(point, 2);
+			//draw.noFill();
+
+
+
+
+		}
+	</script>
+
+</body>

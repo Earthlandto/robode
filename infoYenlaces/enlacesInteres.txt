@@ -1,2 +1,28 @@
+JDEROBOT: http://jderobot.org/Main_Page
+
+D3: http://d3js.org
+
 Página con info sobre un CANVAS en HTML5:  http://www.html5canvastutorials.com
+
 Cheat Sheet de CANVAS en HTML5: http://cheatsheetworld.com/programming/html5-canvas-cheat-sheet/
+
+canvas html5 curvas bezier: http://www.html5canvastutorials.com/tutorials/html5-canvas-bezier-curves/
+
+librería chula para hacer cosas con curvas: http://paperjs.org
+
+librería para curvas de bezier: bezier.js
+
+box2dweb (físicas): https://code.google.com/p/box2dweb/#Overview
+
+curvas de bezier:
+ - http://www.randygaul.net/2015/05/20/interactive-cubic-bezier-splines/ PROGRAMA C
+ - http://pomax.github.io/bezierinfo/ TEORÍA DE CURVAS DE BEZIER
+ - GraphicsGems: LIBRERÍA EN C matemátics https://github.com/erich666/GraphicsGems
+ - https://www.dashingd3js.com/svg-paths-and-d3js PATH CON D3
+ - ANIMACIONES SVG: http://blog.visual.ly/creating-animations-and-transitions-with-d3-js/
+
+
+FÍSICAS:
+ - http://threejs.org
+ - http://www.babylonjs.com
+ - 
