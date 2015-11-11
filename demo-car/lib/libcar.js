@@ -14,7 +14,7 @@ function createCar() {
 
     var bodyDef = new b2BodyDef;
     bodyDef.type = b2Body.b2_dynamicBody;
-    bodyDef.position.Set(35, 50);
+    bodyDef.position.Set(12.5,10);
     var fixDef = new b2FixtureDef;
     fixDef.density = 30;
     fixDef.friction = .8;
