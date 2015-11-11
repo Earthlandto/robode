@@ -152,7 +152,7 @@ function createCar() {
 
 function createCircuit(){
 
-    //===BORDERS============
+    //===BORDERS===================================================================
     var bodyDef = new b2BodyDef;
     bodyDef.type = b2Body.b2_staticBody;
     var fixDef = new b2FixtureDef;
@@ -179,7 +179,7 @@ function createCircuit(){
     world.CreateBody(bodyDef).CreateFixture(fixDef);
 
 
-    // CREATE FORMS
+    // CREATE RESTRINGED AREAS ===================================================================
     bodyDef.position.Set(0,0);
 
     // top-left semi-circle
@@ -204,8 +204,6 @@ function createCircuit(){
         world.CreateBody(bodyDef).CreateFixture(fixDef);
     }
 
-
-
     // lower bezier curves
     var lower_bezier = new Bezier(10,50,  40,20,  40,70, 70,50);
     vecs = [];
@@ -216,6 +214,24 @@ function createCircuit(){
         world.CreateBody(bodyDef).CreateFixture(fixDef);
     }
 
+    // CREATE OBSTACLES ===================================================================
+
+    bodyDef.type = b2Body.b2_dynamicBody;
+    fixDef.shape = new b2CircleShape(1);
+    fixDef.density = 100;
+    fixDef.friction = 50000;
+    fixDef.restitution = 0.2;
+    var xCircle = 0;
+    for(var i=0; i<5; i++){
+        xCircle += 10;
+        bodyDef.position.Set(xCircle, 25);
+        world.CreateBody(bodyDef).CreateFixture(fixDef);
+    }
+
+
+
+
+    // FUNCTIONS===================================================================
 
     function getVecsBezier(curve, step){
         var step = step | 100;
