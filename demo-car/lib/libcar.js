@@ -43,6 +43,7 @@ function createCar() {
     var mspeed;
     var sf, sb = false;
     var ENGINE_SPEED = 300;
+
     $(window).keydown(function(e) {
         var code = e.keyCode;
         if (code == 65) //LEFT
@@ -56,13 +57,13 @@ function createCar() {
     });
     $(window).keyup(function(e) {
         var code2 = e.keyCode;
-        if (code2 == 68)
+        if (code2 == 68) //RIGHT
             steeringAngle = 0;
-        if (code2 == 65)
+        if (code2 == 65) //LEFT
             steeringAngle = 0;
-        if (code2 == 87)
+        if (code2 == 87) // BACKWARD
             sb = false;
-        if (code2 == 83)
+        if (code2 == 83) // FORWARD
             sf = false;
     });
 
@@ -115,6 +116,7 @@ function createCar() {
         p2r = fr.GetWorldPoint(new b2Vec2(0, 1));
         p3r.x = (p2r.x - p1r.x) * ENGINE_SPEED;
         p3r.y = (p2r.y - p1r.y) * ENGINE_SPEED;
+
         p1l = fl.GetWorldCenter();
         p2l = fl.GetWorldPoint(new b2Vec2(0, 1));
         p3l.x = (p2l.x - p1l.x) * ENGINE_SPEED;

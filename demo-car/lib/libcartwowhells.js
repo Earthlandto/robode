@@ -20,50 +20,71 @@ function createCar() {
     fixDef.friction = .8;
     fixDef.restitution = 0.1;
     fixDef.shape = new b2PolygonShape;
-    fixDef.shape.SetAsBox(.5, 1.5);
+    fixDef.shape.SetAsBox(.5, .75);
     //CAR BODY
     var car = world.CreateBody(bodyDef);
     car.CreateFixture(fixDef);
     //WHEELS
     var xx = car.GetWorldCenter().x;
     var yy = car.GetWorldCenter().y;
-    var fr = wheel(xx + .5, yy - 1); //front right wheel
-    var fl = wheel(xx - .5, yy - 1); //front left wheel
-    var rr = wheel(xx + .5, yy + 1); //rear right wheel
-    var rl = wheel(xx - .5, yy + 1); //rear left wheel
+    var fr = wheel(xx + .5, yy); //front right wheel
+    var fl = wheel(xx - .5, yy); //front left wheel
+    // var rr = wheel(xx + .5, yy + 1); //rear right wheel
+    // var rl = wheel(xx - .5, yy + 1); //rear left wheel
 
     var jfr = revJoint(car, fr); // Joint between car body and front right wheel
     var jfl = revJoint(car, fl); // Joint between car body and front left wheel
-    var jrr = revJoint(car, rr); // Joint between car body and rear right wheel
-    var jrl = revJoint(car, rl); // Joint between car body and rear left wheel
+    // var jrr = revJoint(car, rr); // Joint between car body and rear right wheel
+    // var jrl = revJoint(car, rl); // Joint between car body and rear left wheel
 
-    var maxSteeringAngle = 1;
-    var steeringAngle = 0;
-    var STEER_SPEED = 3;
-    var mspeed;
-    var sf, sb = false;
+    // var maxSteeringAngle = 0;
+    // var steeringAngle = 0;
+    // var STEER_SPEED = 3;
+
+    var rspeed = 0;
+    var lspeed = 0;
+    var WHEEL_SPEED = 40;
+
+    // var sf, sb = false;
     var ENGINE_SPEED = 300;
     $(window).keydown(function(e) {
         var code = e.keyCode;
-        if (code == 65) //LEFT
-            steeringAngle = -maxSteeringAngle;
-        if (code == 68) //RIGHT
-            steeringAngle = maxSteeringAngle;
-        if (code == 83) //FORWARD
-            sf = true;
-        if (code == 87) //BACKWARD
-            sb = true;
+
+        if (code == 87) //LEFT WHEEL (front) -> key W
+            lspeed = -WHEEL_SPEED;
+        if (code == 69) // RIGHT WHEEL (front) -> key E
+            rspeed = -WHEEL_SPEED;
+        if (code ==  83) // LEFT WHELL (back) -> key S
+            lspeed = WHEEL_SPEED;
+        if (code == 68 ) // RIGHT WHELL (back) -> key X
+            rspeed = WHEEL_SPEED;
+        // if (code == 65) //LEFT
+        //     steeringAngle = -maxSteeringAngle;
+        // if (code == 68) //RIGHT
+        //     steeringAngle = maxSteeringAngle;
+        // if (code == 83) //FORWARD
+        //     sf = true;
+        // if (code == 87) //BACKWARD
+        //     sb = true;
     });
     $(window).keyup(function(e) {
         var code2 = e.keyCode;
-        if (code2 == 68)
-            steeringAngle = 0;
-        if (code2 == 65)
-            steeringAngle = 0;
-        if (code2 == 87)
-            sb = false;
-        if (code2 == 83)
-            sf = false;
+        if (code2 == 87) //LEFT WHEEL (front) -> key W
+            lspeed = 0;
+        if (code2 == 69) // RIGHT WHEEL (front) -> key E
+            rspeed = 0;
+        if (code2 ==  83) // LEFT WHELL (back) -> key S
+            lspeed = 0;
+        if (code2 == 68) // RIGHT WHELL (back) -> key X
+            rspeed = 0;
+        // if (code2 == 68)
+        //     steeringAngle = 0;
+        // if (code2 == 65)
+        //     steeringAngle = 0;
+        // if (code2 == 87) //BACKWARD
+        //     sb = false;
+        // if (code2 == 83) //FORWARD
+        //     sf = false;
     });
 
     var p1r = new b2Vec2();
@@ -96,22 +117,22 @@ function createCar() {
         var revoluteJointDef = new b2RevoluteJointDef();
         revoluteJointDef.Initialize(body1, wheel, wheel.GetWorldCenter());
         revoluteJointDef.motorSpeed = 0;
-        revoluteJointDef.maxMotorTorque = 1000;
+        revoluteJointDef.maxMotorTorque = 100;
         revoluteJointDef.enableMotor = true;
         revoluteJoint = world.CreateJoint(revoluteJointDef);
         return revoluteJoint;
     }
 
     this.updateMovement = function() {
-        mspeed = steeringAngle - jfl.GetJointAngle();
-        jfl.SetMotorSpeed(mspeed * STEER_SPEED);
-        mspeed = steeringAngle - jfr.GetJointAngle();
-        jfr.SetMotorSpeed(mspeed * STEER_SPEED);
+        // mspeed = steeringAngle - jfl.GetJointAngle();
+        // jfl.SetMotorSpeed(mspeed * STEER_SPEED);
+        // mspeed = steeringAngle - jfr.GetJointAngle();
+        // jfr.SetMotorSpeed(mspeed * STEER_SPEED);
 
         cancelVel(fr);
         cancelVel(fl);
-        cancelVel(rr);
-        cancelVel(rl);
+        // cancelVel(rr);
+        // cancelVel(rl);
         p1r = fr.GetWorldCenter();
         p2r = fr.GetWorldPoint(new b2Vec2(0, 1));
         p3r.x = (p2r.x - p1r.x) * ENGINE_SPEED;
@@ -121,23 +142,48 @@ function createCar() {
         p2l = fl.GetWorldPoint(new b2Vec2(0, 1));
         p3l.x = (p2l.x - p1l.x) * ENGINE_SPEED;
         p3l.y = (p2l.y - p1l.y) * ENGINE_SPEED;
-        if (sf == true)
-            steerforward();
-        if (sb == true)
-            steerbackward();
+
+        // console.log("p1l:", p1l);
+        // console.log("p2l:", p2l);
+        // console.log("p3l:", p3l);
+
+        // if (sf == true)
+        //     steerforward();
+        // if (sb == true)
+        //     steerbackward();
+
+        applyLeftForce();
+        applyRightForce();
     }
 
-    function steerforward() {
-        fr.ApplyForce(new b2Vec2(p3r.x, p3r.y), fr.GetWorldPoint(new b2Vec2(0, 0)));
-        fl.ApplyForce(new b2Vec2(p3l.x, p3l.y), fl.GetWorldPoint(new b2Vec2(0, 0)));
+    function applyLeftForce(){
+        if (lspeed > 0) { // forward
+            fl.ApplyForce(new b2Vec2(p3l.x, p3l.y), fl.GetPosition());
+        } else if (lspeed < 0) { // backward
+            fl.ApplyForce(new b2Vec2(-p3l.x, -p3l.y), fl.GetPosition());
+        }
     }
 
-    function steerbackward() {
-        fr.ApplyForce(new b2Vec2(-p3r.x, -p3r.y), fr.GetWorldPoint(new b2Vec2(0, 0)));
-        fl.ApplyForce(new b2Vec2(-p3l.x, -p3l.y), fl.GetWorldPoint(new b2Vec2(0, 0)));
+    function applyRightForce(){
+        if (rspeed > 0) { //forward
+            fr.ApplyForce(new b2Vec2(p3r.x, p3r.y), fr.GetPosition());
+        } else if (rspeed < 0) { // backward
+            fr.ApplyForce(new b2Vec2(-p3r.x, -p3r.y), fr.GetPosition());
+        }
     }
+
+    // function steerforward() {
+    //     fr.ApplyForce(new b2Vec2(p3r.x, p3r.y), fr.GetWorldPoint(new b2Vec2(0, 0)));
+    //     fl.ApplyForce(new b2Vec2(p3l.x, p3l.y), fl.GetWorldPoint(new b2Vec2(0, 0)));
+    // }
+
+    // function steerbackward() {
+    //     fr.ApplyForce(new b2Vec2(-p3r.x, -p3r.y), fr.GetWorldPoint(new b2Vec2(0, 0)));
+    //     fl.ApplyForce(new b2Vec2(-p3l.x, -p3l.y), fl.GetWorldPoint(new b2Vec2(0, 0)));
+    // }
 
     function cancelVel(wheel) {
+
         var aaaa = new b2Vec2();
         var bbbb = new b2Vec2();
         var newlocal = new b2Vec2();
