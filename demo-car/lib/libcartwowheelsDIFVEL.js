@@ -39,34 +39,38 @@ function createCar() {
 
     var rspeed = 0;
     var lspeed = 0;
-    var WHEEL_SPEED = 50;
+    var WHEEL_SPEED = 20;
 
     var ENGINE_SPEED = 500;
     $(window).keydown(function(e) {
         var code = e.keyCode;
 
-        if (code == 87) //LEFT WHEEL (front) -> key W
-            lspeed = WHEEL_SPEED;
-        if (code == 69) // RIGHT WHEEL (front) -> key E
-            rspeed = WHEEL_SPEED;
-        if (code == 83) // LEFT WHELL (back) -> key S
-            lspeed = -WHEEL_SPEED;
-        if (code == 68) // RIGHT WHELL (back) -> key X
-            rspeed = -WHEEL_SPEED;
+        if (code == 87) { //LEFT WHEEL (front) -> key W
+            lspeed += WHEEL_SPEED;
+        }
+        if (code == 69) { // RIGHT WHEEL (front) -> key E
+            rspeed += WHEEL_SPEED;
+        }
+        if (code == 83) { // LEFT WHELL (back) -> key S
+            lspeed += -WHEEL_SPEED;
+        }
+        if (code == 68) { // RIGHT WHELL (back) -> key X
+            rspeed += -WHEEL_SPEED;
+        }
         // if (code == 70) // STOP -> key F
         //     stopMovement();
     });
 
     $(window).keyup(function(e) {
         var code2 = e.keyCode;
-        if (code2 == 87) //LEFT WHEEL (front) -> key W
-            lspeed = 0;
-        if (code2 == 69) // RIGHT WHEEL (front) -> key E
-            rspeed = 0;
-        if (code2 == 83) // LEFT WHELL (back) -> key S
-            lspeed = 0;
-        if (code2 == 68) // RIGHT WHELL (back) -> key X
-            rspeed = 0;
+        // if (code2 == 87) //LEFT WHEEL (front) -> key W
+        //     lspeed = 0;
+        // if (code2 == 69) // RIGHT WHEEL (front) -> key E
+        //     rspeed = 0;
+        // if (code2 == 83) // LEFT WHELL (back) -> key S
+        //     lspeed = 0;
+        // if (code2 == 68) // RIGHT WHELL (back) -> key X
+        //     rspeed = 0;
         if (code2 == 70) // STOP -> key F
             stopMovement();
     });
@@ -109,77 +113,71 @@ function createCar() {
 
     this.updateMovement = function() {
 
-        cancelVel(fr);
-        cancelVel(fl);
+        // cancelVel(fr);
+        // cancelVel(fl);
 
-        if (rspeed != 0) {
+        p1r = fr.GetWorldCenter();
+        p2r = fr.GetWorldPoint(new b2Vec2(0, 1));
+        p3r.x = (p2r.x - p1r.x) * rspeed;
+        p3r.y = (p2r.y - p1r.y) * rspeed;
 
-            p1r = fr.GetWorldCenter();
-            p2r = fr.GetWorldPoint(new b2Vec2(0, 1));
-            p3r.x = (p2r.x - p1r.x) * ENGINE_SPEED;
-            p3r.y = (p2r.y - p1r.y) * ENGINE_SPEED;
-        } else {
-            p3r = new b2Vec2(0, 0);
-        }
-
-        if (lspeed != 0) {
-            p1l = fl.GetWorldCenter();
-            p2l = fl.GetWorldPoint(new b2Vec2(0, 1));
-            p3l.x = (p2l.x - p1l.x) * ENGINE_SPEED;
-            p3l.y = (p2l.y - p1l.y) * ENGINE_SPEED;
-        } else {
-            p3l = new b2Vec2(0, 0);
-        }
+        p1l = fl.GetWorldCenter();
+        p2l = fl.GetWorldPoint(new b2Vec2(0, 1));
+        p3l.x = (p2l.x - p1l.x) * lspeed;
+        p3l.y = (p2l.y - p1l.y) * lspeed;
 
         applyForces();
 
-}
-
-function stopMovement() {
-    console.log("STOP");
-
-    car.SetLinearVelocity(new b2Vec2(0, 0));
-    car.SetAngularVelocity(0);
-    car.SetAwake(false);
-
-
-}
-
-
-function applyForces() {
-
-    // forward
-    if (lspeed > 0) {
-        fl.ApplyForce(new b2Vec2(-p3l.x, -p3l.y), fl.GetPosition());
     }
 
-    if (rspeed > 0) {
-        fr.ApplyForce(new b2Vec2(-p3r.x, -p3r.y), fr.GetPosition());
+    function stopMovement() {
+        console.log("STOP");
+
+        lspeed = 0;
+        rspeed = 0;
+
+        car.SetLinearVelocity(new b2Vec2(0, 0));
+        car.SetAngularVelocity(0);
+        car.SetAwake(false);
+
+
     }
 
-    // backward
-    if (lspeed < 0) {
-        fl.ApplyForce(new b2Vec2(p3l.x, p3l.y), fl.GetPosition());
+
+    function applyForces() {
+
+        // forward
+        if (lspeed > 0) {
+            fl.ApplyForce(new b2Vec2(-p3l.x, -p3l.y), fl.GetPosition());
+        }
+
+        if (rspeed > 0) {
+            fr.ApplyForce(new b2Vec2(-p3r.x, -p3r.y), fr.GetPosition());
+        }
+
+        // backward
+        if (lspeed < 0) {
+            fl.ApplyForce(new b2Vec2(-p3l.x, -p3l.y), fl.GetPosition());
+        }
+
+        if (rspeed < 0) {
+            fr.ApplyForce(new b2Vec2(-p3r.x, -p3r.y), fr.GetPosition());
+        }
     }
 
-    if (rspeed < 0) {
-        fr.ApplyForce(new b2Vec2(p3r.x, p3r.y), fr.GetPosition());
+    function cancelVel(wheel) {
+
+        var aaaa = new b2Vec2();
+        var bbbb = new b2Vec2();
+        var newlocal = new b2Vec2();
+        var newworld = new b2Vec2();
+        aaaa = wheel.GetLinearVelocityFromLocalPoint(new b2Vec2(0, 0));
+        bbbb = wheel.GetLocalVector(aaaa);
+        newlocal.x = -bbbb.x;
+        newlocal.y = bbbb.y;
+        newworld = wheel.GetWorldVector(newlocal);
+        wheel.SetLinearVelocity(newworld);
     }
-}
-
-function cancelVel(wheel) {
-
-    var aaaa = new b2Vec2();
-    var bbbb = new b2Vec2();
-    var newlocal = new b2Vec2();
-    var newworld = new b2Vec2();
-    aaaa = wheel.GetLinearVelocityFromLocalPoint(new b2Vec2(0, 0));
-    bbbb = wheel.GetLocalVector(aaaa);
-    newlocal.x = -bbbb.x;
-    newlocal.y = bbbb.y;
-    newworld = wheel.GetWorldVector(newlocal);
-    wheel.SetLinearVelocity(newworld);
-}
 };
 
 
