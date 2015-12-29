@@ -1,0 +1,77 @@
+<html>
+
+<head>
+    <title>DEMO CAR three wheels, different velocity and sensors w\ CIRCUIT</title>
+</head>
+
+<body onload="init();">
+    <div>
+        <canvas id="canvas" width="750" height="600" style="background-color:#333333;"></canvas>
+    </div>
+    <button id="button-debug" onclick="setPrintDebug();">DEBUG?</button>
+</body>
+<script type="text/javascript" src="lib/Box2d.min.js"></script>
+<script type="text/javascript" src="lib/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="lib/bezier.js"></script>
+
+<script type="text/javascript" src="lib/libcar-v4.js"></script>
+<script type="text/javascript" src="lib/libcircuit.js"></script>
+
+<script type="text/javascript">
+
+var DEBUG = true;
+var world;
+var myDemoCar;
+
+function init() {
+
+    //create the world
+    world = new b2World(
+        new b2Vec2(0, 0) //gravity
+        , true //allow sleep
+    );
+
+    //setup debug draw
+    var debugDraw = new b2DebugDraw();
+    setDebugDraw(debugDraw, world, "canvas");
+
+    window.setInterval(update, 1000 / 60);
+
+    //create the car
+    myDemoCar = new demoCar();
+
+    createCircuit();
+
+};
+
+
+function setDebugDraw(myDebugDraw, myWorld, myCanvas) {
+
+    myDebugDraw.SetSprite(document.getElementById(myCanvas).getContext("2d"));
+    myDebugDraw.SetDrawScale(10.0);
+    myDebugDraw.SetFillAlpha(0.3);
+    myDebugDraw.SetLineThickness(1.0);
+    myDebugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit);
+    myWorld.SetDebugDraw(myDebugDraw);
+}
+
+function update() {
+    world.Step(
+        1 / 60 //frame-rate
+        , 10 //velocity iterations
+        , 10 //position iterations
+    );
+    if (DEBUG)
+        world.DrawDebugData();
+    world.ClearForces();
+
+    myDemoCar.updateMovement();
+
+};
+
+function setPrintDebug() {
+    DEBUG = !DEBUG;
+}
+</script>
+
+</html>
