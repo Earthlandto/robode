@@ -46,7 +46,144 @@ function demoCar() {
     var s = createSensors(car);
     var sLinetLeft, sLineRight = createSensorLine(car);
 
-    ///
+    var contactListener = new b2ContactListener();
+
+    var carparts = ['wheel', 'car'];
+
+
+    function isCarPart(bodySensedUserData, avoid_elems) {
+
+        for (var elem in avoid_elems) {
+            if (avoid_elems[elem] == bodySensedUserData)
+                return true;
+        }
+        return false;
+
+    }
+
+    contactListener.PreSolve = function(contact, oldManifold) {
+
+
+        var udA = contact.GetFixtureA().GetBody().GetUserData();
+        var udB = contact.GetFixtureB().GetBody().GetUserData();
+
+        if (udA == 'line' || udB == 'line') {
+            // console.log(contact);
+            // console.log(oldManifold);
+            contact.SetEnabled(false);
+        }
+    };
+
+    /*  The sensoring begins when a particular sensor perceive a body through
+    one of its parts (fixtures). Then, beginContact function counts the aparitions
+    of this body's fixtures. A contact begins when the aparitions number increments
+    for zero to one and ends when the aparitions decrements to zero.
+        All of this is implements in beginContact and EndContact functions. */
+
+
+    /*  The bodiesSensed variable stores the bodies sensed by each sensor.
+    For each body, stores the number the fixtures that the sensor has sensed
+    using maps:   map {k, map{k', v}}
+    example:      map {sensor0, map{ body1, 10}} */
+    var bodiesSensed = {};
+
+    contactListener.BeginContact = function(contact) {
+
+        var isSensorA = contact.GetFixtureA().IsSensor();
+        var isSensorB = contact.GetFixtureB().IsSensor();
+
+        if (isSensorA != isSensorB) { // a XOR b
+
+            var bodySensed, bodySensor;
+
+            if (isSensorA) {
+                bodySensor = contact.GetFixtureA().GetBody();
+                bodySensed = contact.GetFixtureB().GetBody();
+            } else {
+                bodySensor = contact.GetFixtureB().GetBody();
+                bodySensed = contact.GetFixtureA().GetBody();
+            }
+
+            // if it's a car part, do nothing
+            if (isCarPart(bodySensed.GetUserData(), carparts))
+                return;
+
+            var bodySensorUD = bodySensor.GetUserData();
+            var bodySensedUD = bodySensed.GetUserData();
+
+            // Had the body sensed the body previously?
+            if (bodiesSensed.hasOwnProperty(bodySensorUD)) {
+                var listSensed = bodiesSensed[bodySensorUD];
+                var sensedIndex = listSensed.findIndex(function(elem) {
+                    return elem.hasOwnProperty(bodySensedUD);
+                });
+
+                //if the body is already sensed
+                if (sensedIndex > -1) {
+                    (listSensed[sensedIndex])[bodySensedUD] += 1;
+                    if ((listSensed[sensedIndex])[bodySensedUD] === 1)
+                                            console.log("BEGIN contact", bodySensorUD, bodySensed.GetUserData());
+
+                } else {
+                    // it's first time this sensor sensed this body
+                    var newBodySensed = {};
+                    newBodySensed[bodySensedUD] = 1;
+                    listSensed.push(newBodySensed);
+                    console.log("BEGIN contact", bodySensorUD, bodySensed.GetUserData());
+
+                }
+            } else { // if it's the first time that the sensor perceive any body...
+                bodiesSensed[bodySensorUD] = [];
+                var newBodySensed = {};
+                newBodySensed[bodySensedUD] = 1;
+                bodiesSensed[bodySensorUD].push(newBodySensed);
+
+                console.log("BEGIN contact", bodySensorUD, bodySensed.GetUserData());
+            }
+
+        }
+    };
+
+    contactListener.EndContact = function(contact) {
+
+        var isSensorA = contact.GetFixtureA().IsSensor();
+        var isSensorB = contact.GetFixtureB().IsSensor();
+
+        if (isSensorA != isSensorB) { // a XOR b
+
+            var bodySensed, bodySensor;
+
+            if (isSensorA) {
+                bodySensor = contact.GetFixtureA().GetBody();
+                bodySensed = contact.GetFixtureB().GetBody();
+            } else {
+                bodySensor = contact.GetFixtureB().GetBody();
+                bodySensed = contact.GetFixtureA().GetBody();
+            }
+
+            // if it's a car part, do nothing
+            if (isCarPart(bodySensed.GetUserData(), carparts))
+                return;
+
+            var bodySensorUD = bodySensor.GetUserData();
+            var bodySensedUD = bodySensed.GetUserData();
+
+            // The body has already been sensed previously
+            var listSensed = bodiesSensed[bodySensorUD];
+            var sensedIndex = listSensed.findIndex(function(elem) {
+                    return elem.hasOwnProperty(bodySensedUD);
+                });
+
+
+
+            (listSensed[sensedIndex])[bodySensedUD] -=1;
+            if ( (listSensed[sensedIndex])[bodySensedUD] <1) {
+                console.log("END contact", bodySensorUD, bodySensed.GetUserData());
+            }
+        }
+    };
+
+    world.SetContactListener(contactListener);
 
     var rspeed = 0;
     var lspeed = 0;
