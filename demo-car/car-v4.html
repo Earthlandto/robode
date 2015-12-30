@@ -6,6 +6,7 @@ td {
     padding-left: 6px;
     padding-right: 6px;
 }
+
 td#colempty {
     border: none;
 }
@@ -21,7 +22,7 @@ td#colempty {
             <tr>
                 <td rowspan="2" id="sline-right">SenLine L</td>
                 <td rowspan="2" id="sline-left">SenLine R</td>
-                <td rowspan="2" id="colempty" ></td>
+                <td rowspan="2" id="colempty"></td>
                 <td id="sentl">Sensor TL</td>
                 <td id="sentr">Sensor TR</td>
             </tr>
@@ -41,7 +42,6 @@ td#colempty {
 <script type="text/javascript" src="lib/libcar-v4.js"></script>
 <script type="text/javascript" src="lib/libcircuit.js"></script>
 <script type="text/javascript">
-var DEBUG = true;
 var world;
 var myDemoCar;
 
@@ -54,20 +54,18 @@ function init() {
     );
 
     //setup debug draw
-    var debugDraw = new b2DebugDraw();
-    setDebugDraw(debugDraw, world, "canvas");
-
+    setDraw(new b2DebugDraw(), world, "canvas");
     window.setInterval(update, 1000 / 60);
+
+    //create the circuit
+    createCircuit();
 
     //create the car
     myDemoCar = new demoCar();
-
-    createCircuit();
-
 };
 
 
-function setDebugDraw(myDebugDraw, myWorld, myCanvas) {
+function setDraw(myDebugDraw, myWorld, myCanvas) {
 
     myDebugDraw.SetSprite(document.getElementById(myCanvas).getContext("2d"));
     myDebugDraw.SetDrawScale(10.0);
@@ -83,8 +81,8 @@ function update() {
         , 10 //velocity iterations
         , 10 //position iterations
     );
-    if (DEBUG)
-        world.DrawDebugData();
+
+    world.DrawDebugData();
     world.ClearForces();
 
     myDemoCar.updateMovement();
