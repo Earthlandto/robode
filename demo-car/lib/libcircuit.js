@@ -89,8 +89,8 @@ function createCircuit() {
     fixDef.shape = new b2PolygonShape();
 
 
-    // straight line
-    makeBezierLine(new Bezier(35, 38, 35, 20, 35, 20), mylines, fixDef);
+    // straight line to up
+    makeBezierLine(new Bezier(35, 38, 35, 29, 35, 20), mylines, fixDef);
 
     // curve line to up
     makeBezierLine(new Bezier(30, 20, 32.5, 10, 35, 20), mylines, fixDef);
