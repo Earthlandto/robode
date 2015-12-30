@@ -48,6 +48,88 @@ function demoCar() {
     var jfl = revJoint(car, fl); // Joint between car body and front left wheel
 
 
+    ///////// CAR BEHAVIOUR
+
+
+    var rspeed = 0;
+    var lspeed = 0;
+
+    var stop = false;
+
+    var WHEEL_SPEED = 50;
+    var ENGINE_SPEED = 300;
+
+
+
+    var p1r = new b2Vec2();
+    var p2r = new b2Vec2();
+    var p3r = new b2Vec2();
+
+    var p1l = new b2Vec2();
+    var p2l = new b2Vec2();
+    var p3l = new b2Vec2();
+
+
+
+    $(window).keyup(function(e) {
+        var code = e.keyCode;
+
+        if (code == 87) { //LEFT WHEEL (front) -> key W
+            lspeed += WHEEL_SPEED;
+            console.log(lspeed, " : ", rspeed);
+        }
+        if (code == 69) { // RIGHT WHEEL (front) -> key E
+            rspeed += WHEEL_SPEED;
+            console.log(lspeed, " : ", rspeed);
+        }
+        if (code == 83) { // LEFT WHELL (back) -> key S
+            lspeed += -WHEEL_SPEED;
+            console.log(lspeed, " : ", rspeed);
+        }
+        if (code == 68) { // RIGHT WHELL (back) -> key X
+            rspeed += -WHEEL_SPEED;
+            console.log(lspeed, " : ", rspeed);
+        }
+
+        if (code == 70) { // STOP right wheel -> key F
+            rspeed = 0;
+            console.log(lspeed, " : ", rspeed);
+        }
+        if (code == 65) { // STOP left wheel -> key A
+            lspeed = 0;
+            console.log(lspeed, " : ", rspeed);
+        }
+        if (code == 32) // STOP car -> key SPACE
+            stop = true;
+    });
+
+
+
+    this.updateMovement = function() {
+
+        cancelVel(fr);
+        cancelVel(fl);
+        // fr.SetAngularVelocity(car.GetAngularVelocity());
+        // fl.SetAngularVelocity(car.GetAngularVelocity());
+
+        if (stop) {
+            stopMovement();
+        } else {
+
+            p1r = fr.GetWorldCenter();
+            p2r = fr.GetWorldPoint(new b2Vec2(0, 1));
+            p3r.x = (p2r.x - p1r.x) * rspeed;
+            p3r.y = (p2r.y - p1r.y) * rspeed;
+
+            p1l = fl.GetWorldCenter();
+            p2l = fl.GetWorldPoint(new b2Vec2(0, 1));
+            p3l.x = (p2l.x - p1l.x) * lspeed;
+            p3l.y = (p2l.y - p1l.y) * lspeed;
+
+            applyForces();
+        }
+    };
+
 
     ///////// CREATE SENSORS
 
@@ -239,6 +321,10 @@ function demoCar() {
         }
     };
 
+
+
+    /////////// FUNCTIONS
+
     function isCarPart(bodySensedUserData, avoid_elems) {
 
         for (var elem in avoid_elems) {
@@ -248,92 +334,6 @@ function demoCar() {
         return false;
 
     }
-
-
-    ///////// CAR BEHAVIOUR
-
-
-    var rspeed = 0;
-    var lspeed = 0;
-
-    var stop = false;
-
-    var WHEEL_SPEED = 50;
-    var ENGINE_SPEED = 300;
-
-
-
-    var p1r = new b2Vec2();
-    var p2r = new b2Vec2();
-    var p3r = new b2Vec2();
-
-    var p1l = new b2Vec2();
-    var p2l = new b2Vec2();
-    var p3l = new b2Vec2();
-
-
-
-    $(window).keyup(function(e) {
-        var code = e.keyCode;
-
-        if (code == 87) { //LEFT WHEEL (front) -> key W
-            lspeed += WHEEL_SPEED;
-            console.log(lspeed, " : ", rspeed);
-        }
-        if (code == 69) { // RIGHT WHEEL (front) -> key E
-            rspeed += WHEEL_SPEED;
-            console.log(lspeed, " : ", rspeed);
-        }
-        if (code == 83) { // LEFT WHELL (back) -> key S
-            lspeed += -WHEEL_SPEED;
-            console.log(lspeed, " : ", rspeed);
-        }
-        if (code == 68) { // RIGHT WHELL (back) -> key X
-            rspeed += -WHEEL_SPEED;
-            console.log(lspeed, " : ", rspeed);
-        }
-
-        if (code == 70) { // STOP right wheel -> key F
-            rspeed = 0;
-            console.log(lspeed, " : ", rspeed);
-        }
-        if (code == 65) { // STOP left wheel -> key A
-            lspeed = 0;
-            console.log(lspeed, " : ", rspeed);
-        }
-        if (code == 32) // STOP car -> key SPACE
-            stop = true;
-    });
-
-
-
-    this.updateMovement = function() {
-
-        cancelVel(fr);
-        cancelVel(fl);
-        // fr.SetAngularVelocity(car.GetAngularVelocity());
-        // fl.SetAngularVelocity(car.GetAngularVelocity());
-
-        if (stop) {
-            stopMovement();
-        } else {
-
-            p1r = fr.GetWorldCenter();
-            p2r = fr.GetWorldPoint(new b2Vec2(0, 1));
-            p3r.x = (p2r.x - p1r.x) * rspeed;
-            p3r.y = (p2r.y - p1r.y) * rspeed;
-
-            p1l = fl.GetWorldCenter();
-            p2l = fl.GetWorldPoint(new b2Vec2(0, 1));
-            p3l.x = (p2l.x - p1l.x) * lspeed;
-            p3l.y = (p2l.y - p1l.y) * lspeed;
-
-            applyForces();
-        }
-    };
-
-
-
 
     function wheel(x, y) {
 
