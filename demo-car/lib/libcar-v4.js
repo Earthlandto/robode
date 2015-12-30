@@ -67,7 +67,7 @@ function demoCar() {
         var udA = contact.GetFixtureA().GetBody().GetUserData();
         var udB = contact.GetFixtureB().GetBody().GetUserData();
 
-        if (udA == 'line' || udB == 'line') {
+        if (udA.substr(0,4) == 'line' || udB.substr(0,4) == 'line') {
             // console.log(contact);
             // console.log(oldManifold);
             contact.SetEnabled(false);
@@ -321,7 +321,7 @@ function demoCar() {
         var sensorLeft = world.CreateBody(bodyDef);
         jointdef.Initialize(car, sensorLeft, car.GetWorldCenter());
         sensorLeft.CreateFixture(fixDef);
-        sensorLeft.SetUserData("sensor-line-left");
+        sensorLeft.SetUserData("sline-left");
         world.CreateJoint(jointdef);
 
         // right sensonr line
@@ -329,7 +329,7 @@ function demoCar() {
         var sensorRight = world.CreateBody(bodyDef);
         jointdef.Initialize(car, sensorRight, car.GetWorldCenter());
         sensorRight.CreateFixture(fixDef);
-        sensorRight.SetUserData("sensor-line-right");
+        sensorRight.SetUserData("sline-right");
         world.CreateJoint(jointdef);
 
         return sensorLeft, sensorRight;

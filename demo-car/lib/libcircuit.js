@@ -4,7 +4,7 @@ function createCircuit() {
     //===BORDERS===================================================================
     var bodyDef = new b2BodyDef();
     bodyDef.type = b2Body.b2_staticBody;
-    bodyDef.userData = "border";
+    bodyDef.userData = createNewUserData("border");
     var fixDef = new b2FixtureDef();
     fixDef.shape = new b2PolygonShape();
 
@@ -33,7 +33,7 @@ function createCircuit() {
     fixDef = new b2FixtureDef();
 
     bodyDef.position.Set(0, 0);
-    bodyDef.userData = "wall";
+    // bodyDef.userData = "wall";
     fixDef.shape = new b2PolygonShape();
 
     // top-left semi-circle
@@ -42,6 +42,7 @@ function createCircuit() {
     vecs.push(vecs[0]);
 
     var wall = world.CreateBody(bodyDef);
+    wall.SetUserData(createNewUserData("wall"))
     for (var i = 0; i < vecs.length - 1; i++) {
         fixDef.shape.SetAsEdge(vecs[i], vecs[i + 1]);
         wall.CreateFixture(fixDef);
@@ -57,6 +58,7 @@ function createCircuit() {
     });
 
     wall = world.CreateBody(bodyDef);
+    wall.SetUserData(createNewUserData("wall"))
     for (i = 0; i < vecs.length - 1; i++) {
         fixDef.shape.SetAsEdge(vecs[i], vecs[i + 1]);
         wall.CreateFixture(fixDef);
@@ -68,6 +70,7 @@ function createCircuit() {
     vecs = getVecsBezier(lower_bezier);
 
     wall = world.CreateBody(bodyDef);
+    wall.SetUserData(createNewUserData("wall"))
     for (i = 0; i < vecs.length - 1; i++) {
         fixDef.shape.SetAsEdge(vecs[i], vecs[i + 1]);
         wall.CreateFixture(fixDef);
@@ -76,7 +79,7 @@ function createCircuit() {
     // CREATE OBSTACLES ===================================================================
 
     bodyDef.type = b2Body.b2_dynamicBody;
-    bodyDef.userData = "obstacles";
+    bodyDef.userData = createNewUserData("obstacles");
     bodyDef.linearDamping = 1;
     bodyDef.angularDamping = 1;
     fixDef.shape = new b2CircleShape(1);
@@ -98,7 +101,7 @@ function createCircuit() {
     bodyDef = new b2BodyDef();
     bodyDef.position.Set(0,0);
     bodyDef.type = b2Body.b2_dynamicBody;
-    bodyDef.userData = "line";
+    bodyDef.userData = createNewUserData("line");
     var mylines = world.CreateBody(bodyDef);
 
     fixDef = new b2FixtureDef();
@@ -125,6 +128,10 @@ function createCircuit() {
             vecs.push(vec);
         });
         return vecs;
+    }
+
+    function createNewUserData(bodyType){
+        return bodyType + Math.floor(Math.random()*1000);
     }
 
 
