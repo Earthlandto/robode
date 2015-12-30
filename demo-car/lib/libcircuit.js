@@ -42,7 +42,7 @@ function createCircuit() {
     vecs.push(vecs[0]);
 
     var wall = world.CreateBody(bodyDef);
-    wall.SetUserData(createNewUserData("wall"))
+    wall.SetUserData(createNewUserData("wall"));
     for (var i = 0; i < vecs.length - 1; i++) {
         fixDef.shape.SetAsEdge(vecs[i], vecs[i + 1]);
         wall.CreateFixture(fixDef);
@@ -58,7 +58,7 @@ function createCircuit() {
     });
 
     wall = world.CreateBody(bodyDef);
-    wall.SetUserData(createNewUserData("wall"))
+    wall.SetUserData(createNewUserData("wall"));
     for (i = 0; i < vecs.length - 1; i++) {
         fixDef.shape.SetAsEdge(vecs[i], vecs[i + 1]);
         wall.CreateFixture(fixDef);
@@ -70,7 +70,7 @@ function createCircuit() {
     vecs = getVecsBezier(lower_bezier);
 
     wall = world.CreateBody(bodyDef);
-    wall.SetUserData(createNewUserData("wall"))
+    wall.SetUserData(createNewUserData("wall"));
     for (i = 0; i < vecs.length - 1; i++) {
         fixDef.shape.SetAsEdge(vecs[i], vecs[i + 1]);
         wall.CreateFixture(fixDef);
