@@ -17,6 +17,9 @@ var b2ContactListener = Box2D.Dynamics.b2ContactListener;
 
 function demoCar() {
 
+
+    ////////// CREATE CAR
+
     var bodyDef = new b2BodyDef();
     bodyDef.type = b2Body.b2_dynamicBody;
     bodyDef.position.Set(35, 40);
@@ -30,10 +33,11 @@ function demoCar() {
     fixDef.restitution = 0;
     fixDef.shape = new b2PolygonShape();
     fixDef.shape.SetAsBox(0.6, 1);
+
     //CAR BODY
     var car = world.CreateBody(bodyDef);
     car.CreateFixture(fixDef);
-    car.SetUserData("car");
+    car.SetUserData("robot");
     //WHEELS
     var xx = car.GetWorldCenter().x;
     var yy = car.GetWorldCenter().y;
@@ -43,23 +47,81 @@ function demoCar() {
     var jfr = revJoint(car, fr); // Joint between car body and front right wheel
     var jfl = revJoint(car, fl); // Joint between car body and front left wheel
 
-    var s = createSensors(car);
+
+
+    ///////// CREATE SENSORS
+
+    // external sensors
+    var pointsBR = [{
+        x: 0.1,
+        y: 0.1
+    }, {
+        x: 0.5,
+        y: 1.6
+    }, {
+        x: 1.5,
+        y: 0.8
+    }];
+
+
+    var pointsBL = [{
+        x: -0.1,
+        y: 0.1
+    }, {
+        x: -0.5,
+        y: 1.6
+    }, {
+        x: -1.5,
+        y: 0.8
+    }];
+
+
+    var pointsTR = [{
+        x: 0.1,
+        y: -0.1
+    }, {
+        x: 0.5,
+        y: -1.6
+    }, {
+        x: 1.5,
+        y: -0.8
+    }];
+
+
+    var pointsTL = [{
+        x: -0.1,
+        y: -0.1
+    }, {
+        x: -0.5,
+        y: -1.6
+    }, {
+        x: -1.5,
+        y: -0.8
+    }];
+
+    var sensorBR = createExternalSensors(pointsBR, "sensorBR", car);
+    var sensorBL = createExternalSensors(pointsBL, "sensorBL", car);
+    var sensorTR = createExternalSensors(pointsTR, "sensorTR", car);
+    var sensorTL = createExternalSensors(pointsTL, "sensorTL", car);
+
+    console.log(sensorBR, sensorBL, sensorTR, sensorTL);
+
+
+    // line sensors
     var sLinetLeft, sLineRight = createSensorLine(car);
 
+
+    ////////// Contact CONTROL
     var contactListener = new b2ContactListener();
 
-    var carparts = ['wheel', 'car'];
+    var carparts = ['wheel', 'robot'];
+    /*  The bodiesSensed variable stores the bodies sensed by each sensor.
+    For each body, stores the number the fixtures that the sensor has sensed
+    using maps:   map {k, map{k', v}}
+    example:      map {sensor0, map{ body1, 10}} */
+    var bodiesSensed = {};
 
-
-    function isCarPart(bodySensedUserData, avoid_elems) {
-
-        for (var elem in avoid_elems) {
-            if (avoid_elems[elem] == bodySensedUserData)
-                return true;
-        }
-        return false;
-
-    }
+    world.SetContactListener(contactListener);
 
     contactListener.PreSolve = function(contact, oldManifold) {
 
@@ -79,13 +141,6 @@ function demoCar() {
     of this body's fixtures. A contact begins when the aparitions number increments
     for zero to one and ends when the aparitions decrements to zero.
         All of this is implements in beginContact and EndContact functions. */
-
-
-    /*  The bodiesSensed variable stores the bodies sensed by each sensor.
-    For each body, stores the number the fixtures that the sensor has sensed
-    using maps:   map {k, map{k', v}}
-    example:      map {sensor0, map{ body1, 10}} */
-    var bodiesSensed = {};
 
     contactListener.BeginContact = function(contact) {
 
@@ -187,7 +242,19 @@ function demoCar() {
         }
     };
 
-    world.SetContactListener(contactListener);
+    function isCarPart(bodySensedUserData, avoid_elems) {
+
+        for (var elem in avoid_elems) {
+            if (avoid_elems[elem] == bodySensedUserData)
+                return true;
+        }
+        return false;
+
+    }
+
+
+    ///////// CAR BEHAVIOUR
+
 
     var rspeed = 0;
     var lspeed = 0;
@@ -196,6 +263,19 @@ function demoCar() {
 
     var WHEEL_SPEED = 50;
     var ENGINE_SPEED = 300;
+
+
+
+    var p1r = new b2Vec2();
+    var p2r = new b2Vec2();
+    var p3r = new b2Vec2();
+
+    var p1l = new b2Vec2();
+    var p2l = new b2Vec2();
+    var p3l = new b2Vec2();
+
+
+
     $(window).keyup(function(e) {
         var code = e.keyCode;
 
@@ -228,132 +308,7 @@ function demoCar() {
             stop = true;
     });
 
-    var p1r = new b2Vec2();
-    var p2r = new b2Vec2();
-    var p3r = new b2Vec2();
 
-    var p1l = new b2Vec2();
-    var p2l = new b2Vec2();
-    var p3l = new b2Vec2();
-
-    function wheel(x, y) {
-
-        var bodyDef = new b2BodyDef();
-        bodyDef.type = b2Body.b2_dynamicBody;
-        bodyDef.position.Set(x, y);
-        var fixDef = new b2FixtureDef();
-        fixDef.density = 40;
-        fixDef.friction = 1;
-        fixDef.restitution = 0;
-        fixDef.shape = new b2PolygonShape();
-        fixDef.shape.SetAsBox(0.2, 0.4);
-        fixDef.isSensor = false;
-        var wheelBody = world.CreateBody(bodyDef);
-        wheelBody.CreateFixture(fixDef);
-        wheelBody.SetUserData("wheel");
-        return wheelBody;
-    }
-
-    function createSensors(car) {
-
-        var bodyDef = new b2BodyDef();
-        bodyDef.type = b2Body.b2_dynamicBody;
-        bodyDef.position.Set(car.GetWorldCenter().x, car.GetWorldCenter().y);
-        var fixDef = new b2FixtureDef();
-        fixDef.density = 40;
-        fixDef.friction = 1;
-        fixDef.restitution = 0;
-        fixDef.shape = new b2PolygonShape();
-
-        var points = [{
-            x: 0,
-            y: 0
-        }, {
-            x: 1,
-            y: 2
-        }, {
-            x: 2,
-            y: 2
-        }];
-
-        for (var i = 0; i < points.length; i++) {
-            var vec = new b2Vec2();
-            vec.Set(points[i].x, points[i].y);
-            points[i] = vec;
-        }
-
-        fixDef.shape.SetAsArray(points, points.length);
-        fixDef.isSensor = true;
-        var sensor = world.CreateBody(bodyDef);
-        sensor.CreateFixture(fixDef);
-        sensor.SetUserData("sensor");
-
-        // make the joint
-        var jointdef = new b2RevoluteJointDef();
-        jointdef.Initialize(car, sensor, car.GetWorldCenter());
-        jointdef.collideConnected = false;
-        jointdef.enableMotor = false;
-        // jointdef.enableLimit=true;
-        jointdef.maxMotorTorque = Number.MAX_SAFE_INTEGER;
-        sensorjoint = world.CreateJoint(jointdef);
-
-        return sensor;
-    }
-
-    function createSensorLine(car) {
-
-        var radius = 0.2;
-
-
-        var bodyDef = new b2BodyDef();
-        bodyDef.type = b2Body.b2_dynamicBody;
-
-        var fixDef = new b2FixtureDef();
-        fixDef.density = 40;
-        fixDef.friction = 1;
-        fixDef.restitution = 0;
-        fixDef.shape = new b2CircleShape(radius);
-        fixDef.isSensor = true;
-
-
-        // make the joint
-        var jointdef = new b2RevoluteJointDef();
-        jointdef.collideConnected = false;
-        jointdef.enableMotor = false;
-        jointdef.enableLimit = true;
-        //jointdef.maxMotorTorque = Number.MAX_SAFE_INTEGER;
-
-        // left Sensor line
-        bodyDef.position.Set(car.GetWorldCenter().x - radius+0.01, car.GetWorldCenter().y - 0.2);
-        var sensorLeft = world.CreateBody(bodyDef);
-        jointdef.Initialize(car, sensorLeft, car.GetWorldCenter());
-        sensorLeft.CreateFixture(fixDef);
-        sensorLeft.SetUserData("sline-left");
-        world.CreateJoint(jointdef);
-
-        // right sensonr line
-        bodyDef.position.Set(car.GetWorldCenter().x + radius-0.01, car.GetWorldCenter().y - 0.2);
-        var sensorRight = world.CreateBody(bodyDef);
-        jointdef.Initialize(car, sensorRight, car.GetWorldCenter());
-        sensorRight.CreateFixture(fixDef);
-        sensorRight.SetUserData("sline-right");
-        world.CreateJoint(jointdef);
-
-        return sensorLeft, sensorRight;
-
-    }
-
-    // Revolute Joints
-    function revJoint(body1, wheel) {
-        var revoluteJointDef = new b2RevoluteJointDef();
-        revoluteJointDef.Initialize(body1, wheel, wheel.GetWorldCenter());
-        revoluteJointDef.motorSpeed = 0;
-        revoluteJointDef.enableLimit = true;
-        revoluteJointDef.maxMotorTorque = Number.MAX_SAFE_INTEGER;
-        revoluteJointDef.enableMotor = true;
-        revoluteJoint = world.CreateJoint(revoluteJointDef);
-        return revoluteJoint;
-    }
 
     this.updateMovement = function() {
 
@@ -380,6 +335,125 @@ function demoCar() {
         }
     };
 
+
+
+
+    function wheel(x, y) {
+
+        var bodyDef = new b2BodyDef();
+        bodyDef.type = b2Body.b2_dynamicBody;
+        bodyDef.position.Set(x, y);
+        var fixDef = new b2FixtureDef();
+        fixDef.density = 40;
+        fixDef.friction = 1;
+        fixDef.restitution = 0;
+        fixDef.shape = new b2PolygonShape();
+        fixDef.shape.SetAsBox(0.2, 0.4);
+        fixDef.isSensor = false;
+        var wheelBody = world.CreateBody(bodyDef);
+        wheelBody.CreateFixture(fixDef);
+        wheelBody.SetUserData("wheel");
+        return wheelBody;
+    }
+
+
+    function createExternalSensors(points, name, car) {
+
+        var carPos = car.GetWorldCenter();
+
+        var bodyDef = new b2BodyDef();
+        bodyDef.type = b2Body.b2_dynamicBody;
+        bodyDef.position.Set(carPos.x, carPos.y);
+        var fixDef = new b2FixtureDef();
+        fixDef.density = 40;
+        fixDef.friction = 1;
+        fixDef.restitution = 0;
+        fixDef.shape = new b2PolygonShape();
+
+        for (var i = 0; i < points.length; i++) {
+            var vec = new b2Vec2();
+            vec.Set(points[i].x, points[i].y);
+            points[i] = vec;
+        }
+
+        fixDef.shape.SetAsArray(points, points.length);
+        fixDef.isSensor = true;
+
+        var sensor = world.CreateBody(bodyDef);
+        sensor.CreateFixture(fixDef);
+        sensor.SetUserData(name);
+
+        // make the joint
+        var jointdef = new b2RevoluteJointDef();
+        jointdef.Initialize(car, sensor, carPos);
+        jointdef.collideConnected = false;
+        jointdef.enableMotor = false;
+        // jointdef.enableLimit=true;
+        jointdef.maxMotorTorque = Number.MAX_SAFE_INTEGER;
+        world.CreateJoint(jointdef);
+
+
+        return sensor;
+    }
+
+
+    function createSensorLine(car) {
+
+        var radius = 0.2;
+
+
+        var bodyDef = new b2BodyDef();
+        bodyDef.type = b2Body.b2_dynamicBody;
+
+        var fixDef = new b2FixtureDef();
+        fixDef.density = 40;
+        fixDef.friction = 1;
+        fixDef.restitution = 0;
+        fixDef.shape = new b2CircleShape(radius);
+        fixDef.isSensor = true;
+
+
+        // make the joint
+        var jointdef = new b2RevoluteJointDef();
+        jointdef.collideConnected = false;
+        jointdef.enableMotor = false;
+        jointdef.enableLimit = true;
+        //jointdef.maxMotorTorque = Number.MAX_SAFE_INTEGER;
+
+        // left Sensor line
+        bodyDef.position.Set(car.GetWorldCenter().x - radius + 0.01, car.GetWorldCenter().y - 0.2);
+        var sensorLeft = world.CreateBody(bodyDef);
+        jointdef.Initialize(car, sensorLeft, car.GetWorldCenter());
+        sensorLeft.CreateFixture(fixDef);
+        sensorLeft.SetUserData("sline-left");
+        world.CreateJoint(jointdef);
+
+        // right sensonr line
+        bodyDef.position.Set(car.GetWorldCenter().x + radius - 0.01, car.GetWorldCenter().y - 0.2);
+        var sensorRight = world.CreateBody(bodyDef);
+        jointdef.Initialize(car, sensorRight, car.GetWorldCenter());
+        sensorRight.CreateFixture(fixDef);
+        sensorRight.SetUserData("sline-right");
+        world.CreateJoint(jointdef);
+
+        return sensorLeft, sensorRight;
+
+    }
+
+    // Revolute Joints
+    function revJoint(body, wheel) {
+        var revoluteJointDef = new b2RevoluteJointDef();
+        revoluteJointDef.Initialize(body, wheel, wheel.GetWorldCenter());
+        revoluteJointDef.motorSpeed = 0;
+        revoluteJointDef.enableLimit = true;
+        revoluteJointDef.maxMotorTorque = Number.MAX_SAFE_INTEGER;
+        revoluteJointDef.enableMotor = true;
+        revoluteJoint = world.CreateJoint(revoluteJointDef);
+        return revoluteJoint;
+    }
+
+
+
     function stopMovement() {
         console.log("STOP");
 
@@ -388,8 +462,11 @@ function demoCar() {
 
         car.SetLinearVelocity(new b2Vec2(0, 0));
         car.SetAngularVelocity(0);
-        s.SetAngularVelocity(0);
-        //s_line.SetAngularVelocity(0);
+
+        sensorTL.SetAngularVelocity(0);
+        sensorTR.SetAngularVelocity(0);
+        sensorBL.SetAngularVelocity(0);
+        sensorBR.SetAngularVelocity(0);
 
         if (!car.IsAwake()) {
             stop = false;
@@ -418,10 +495,15 @@ function demoCar() {
             fr.ApplyForce(new b2Vec2(-p3r.x, -p3r.y), fr.GetPosition());
         }
 
-        fr.SetAngularVelocity(car.GetAngularVelocity());
-        fl.SetAngularVelocity(car.GetAngularVelocity());
-        s.SetAngularVelocity(car.GetAngularVelocity());
-        //s_line.SetAngularVelocity(car.GetAngularVelocity());
+        var carAV = car.GetAngularVelocity();
+
+        fr.SetAngularVelocity(carAV);
+        fl.SetAngularVelocity(carAV);
+
+        sensorTL.SetAngularVelocity(carAV);
+        sensorTR.SetAngularVelocity(carAV);
+        sensorBL.SetAngularVelocity(carAV);
+        sensorBR.SetAngularVelocity(carAV);
     }
 
     function cancelVel(wheel) {

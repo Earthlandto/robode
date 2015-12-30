@@ -1,4 +1,3 @@
-
 function createCircuit() {
 
     //===BORDERS===================================================================
@@ -10,7 +9,7 @@ function createCircuit() {
 
     // lower border
     fixDef.shape.SetAsBox(50, 0.01);
-    bodyDef.position.Set(30, 60);
+    bodyDef.position.Set(30, 55);
     world.CreateBody(bodyDef).CreateFixture(fixDef);
 
     // top border
@@ -33,12 +32,10 @@ function createCircuit() {
     fixDef = new b2FixtureDef();
 
     bodyDef.position.Set(0, 0);
-    // bodyDef.userData = "wall";
     fixDef.shape = new b2PolygonShape();
 
     // top-left semi-circle
-    var top_left = new Bezier(10, 20, 10, 10, 20, 10);
-    var vecs = getVecsBezier(top_left);
+    var vecs = getVecsBezier(new Bezier(10, 20, 10, 10, 20, 10));
     vecs.push(vecs[0]);
 
     var wall = world.CreateBody(bodyDef);
@@ -49,30 +46,18 @@ function createCircuit() {
     }
 
     // top-right moon
-    var top_moon = new Bezier(33, 9, 70, 0, 70, 30);
-    vecs = getVecsBezier(top_moon);
-    var lower_moon = new Bezier(70, 30, 60, 15, 33, 9);
-    getVecsBezier(lower_moon).forEach(function(p) {
-        vecs.push(p);
-    });
-
     wall = world.CreateBody(bodyDef);
     wall.SetUserData(createNewUserData("wall"));
-    for (i = 0; i < vecs.length - 1; i++) {
-        fixDef.shape.SetAsEdge(vecs[i], vecs[i + 1]);
-        wall.CreateFixture(fixDef);
-    }
 
-    // lower bezier curves
-    var lower_bezier = new Bezier(10, 50, 40, 20, 40, 70, 70, 50);
-    vecs = getVecsBezier(lower_bezier);
+    makeBezierLine(new Bezier(33, 9,  70, 0,  70, 30), wall, fixDef);
+    makeBezierLine(new Bezier(70, 30,  60, 15,  33, 9), wall, fixDef);
 
+    // lower bezier curve
     wall = world.CreateBody(bodyDef);
     wall.SetUserData(createNewUserData("wall"));
-    for (i = 0; i < vecs.length - 1; i++) {
-        fixDef.shape.SetAsEdge(vecs[i], vecs[i + 1]);
-        wall.CreateFixture(fixDef);
-    }
+
+    makeBezierLine(new Bezier(10, 50, 40, 20, 40, 70, 70, 50), wall, fixDef);
+
 
     // CREATE OBSTACLES ===================================================================
 
@@ -85,7 +70,7 @@ function createCircuit() {
     fixDef.friction = 50000;
     fixDef.restitution = 0.2;
     var xCircle = 0;
-    for (i=0; i < 5; i++) {
+    for (i = 0; i < 5; i++) {
         xCircle += 10;
         bodyDef.position.Set(xCircle, 25);
         world.CreateBody(bodyDef).CreateFixture(fixDef);
@@ -95,7 +80,7 @@ function createCircuit() {
 
 
     bodyDef = new b2BodyDef();
-    bodyDef.position.Set(0,0);
+    bodyDef.position.Set(0, 0);
     bodyDef.type = b2Body.b2_dynamicBody;
     bodyDef.userData = createNewUserData("line");
     var mylines = world.CreateBody(bodyDef);
@@ -103,38 +88,31 @@ function createCircuit() {
     fixDef = new b2FixtureDef();
     fixDef.shape = new b2PolygonShape();
 
+
     // straight line
-    vecs = getVecsBezier(new Bezier(35,38,  35,20, 35,20));
-    for (i = 0; i < vecs.length - 1; i++) {
-        fixDef.shape.SetAsEdge(vecs[i], vecs[i + 1]);
-        mylines.CreateFixture(fixDef);
-    }
+    makeBezierLine(new Bezier(35, 38, 35, 20, 35, 20), mylines, fixDef);
 
     // curve line to up
-    vecs = getVecsBezier(new Bezier(30,20,  32.5,10,  35,20));
-    for (i = 0; i < vecs.length - 1; i++) {
-        fixDef.shape.SetAsEdge(vecs[i], vecs[i + 1]);
-        mylines.CreateFixture(fixDef);
-    }
+    makeBezierLine(new Bezier(30, 20, 32.5, 10, 35, 20), mylines, fixDef);
 
     // curve line to down
-    vecs = getVecsBezier(new Bezier(20,20,  25,30,  30,20));
-    for (i = 0; i < vecs.length - 1; i++) {
-        fixDef.shape.SetAsEdge(vecs[i], vecs[i + 1]);
-        mylines.CreateFixture(fixDef);
-    }
+    makeBezierLine(new Bezier(20, 20, 25, 30, 30, 20), mylines, fixDef);
 
     // great curve line to down
-    vecs = getVecsBezier(new Bezier(20,20,  10,30,  35,38));
-    for (i = 0; i < vecs.length - 1; i++) {
-        fixDef.shape.SetAsEdge(vecs[i], vecs[i + 1]);
-        mylines.CreateFixture(fixDef);
-    }
-
+    makeBezierLine(new Bezier(20, 20, 10, 30, 35, 38), mylines, fixDef);
 
 
 
     // FUNCTIONS===================================================================
+
+    function makeBezierLine(bezier, mybody, myFixDef) {
+        var vecs = getVecsBezier(bezier);
+        for (i = 0; i < vecs.length - 1; i++) {
+            myFixDef.shape.SetAsEdge(vecs[i], vecs[i + 1]);
+            mybody.CreateFixture(myFixDef);
+        }
+    }
+
 
     function getVecsBezier(curve, step) {
         step = step | 100;
@@ -148,8 +126,8 @@ function createCircuit() {
         return vecs;
     }
 
-    function createNewUserData(bodyType){
-        return bodyType + Math.floor(Math.random()*1000);
+    function createNewUserData(bodyType) {
+        return bodyType + Math.floor(Math.random() * 1000);
     }
 
 
