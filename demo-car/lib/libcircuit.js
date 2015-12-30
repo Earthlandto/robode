@@ -56,7 +56,7 @@ function createCircuit() {
     wall = world.CreateBody(bodyDef);
     wall.SetUserData(createNewUserData("wall"));
 
-    makeBezierLine(new Bezier(10, 50, 40, 20, 40, 70, 70, 50), wall, fixDef);
+    makeBezierLine(new Bezier(30, 50, 40, 35, 40, 50, 70, 40), wall, fixDef);
 
 
     // CREATE OBSTACLES ===================================================================
