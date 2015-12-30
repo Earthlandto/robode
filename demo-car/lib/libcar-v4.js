@@ -189,8 +189,8 @@ function demoCar() {
 
     world.SetContactListener(contactListener);
 
-    var rspeed = 0;
-    var lspeed = 0;
+    var rspeed = 200;
+    var lspeed = 200;
 
     var stop = false;
 
@@ -324,7 +324,7 @@ function demoCar() {
         //jointdef.maxMotorTorque = Number.MAX_SAFE_INTEGER;
 
         // left Sensor line
-        bodyDef.position.Set(car.GetWorldCenter().x - radius, car.GetWorldCenter().y - 0.2);
+        bodyDef.position.Set(car.GetWorldCenter().x - radius+0.01, car.GetWorldCenter().y - 0.2);
         var sensorLeft = world.CreateBody(bodyDef);
         jointdef.Initialize(car, sensorLeft, car.GetWorldCenter());
         sensorLeft.CreateFixture(fixDef);
@@ -332,7 +332,7 @@ function demoCar() {
         world.CreateJoint(jointdef);
 
         // right sensonr line
-        bodyDef.position.Set(car.GetWorldCenter().x + radius, car.GetWorldCenter().y - 0.2);
+        bodyDef.position.Set(car.GetWorldCenter().x + radius-0.01, car.GetWorldCenter().y - 0.2);
         var sensorRight = world.CreateBody(bodyDef);
         jointdef.Initialize(car, sensorRight, car.GetWorldCenter());
         sensorRight.CreateFixture(fixDef);

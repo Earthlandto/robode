@@ -9,6 +9,9 @@ td {
 td#colempty {
     border: none;
 }
+span {
+    font-family: monospace;
+}
 </style>
 
 <head>
@@ -32,7 +35,13 @@ td#colempty {
         </table>
     </div>
     <div>
-        <canvas id="canvas" width="750" height="600" style="background-color:#333333;"></canvas>
+        <canvas id="canvas" width="750" height="550" style="background-color:#333333;"></canvas>
+    </div>
+    <div>
+        Tecla <span>W</span>, <span>E</span>: Aumentar velocidad ruedas izq, der (+50). <br>
+        Tecla <span>S</span>, <span>D</span>: Disminuir velocidad ruedas izq, der (-50). Valores negativos -> movimiento de la rueda hacia atras.<br>
+        Tecla <span>A</span>, <span>F</span>: Frenar rueda izq o derecha. <br>
+        Tecla <span>SPACIO</span>: Frenar completamente el robot.
     </div>
 </body>
 <script type="text/javascript" src="lib/Box2d.min.js"></script>

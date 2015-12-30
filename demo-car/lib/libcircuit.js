@@ -50,7 +50,6 @@ function createCircuit() {
 
     // top-right moon
     var top_moon = new Bezier(33, 9, 70, 0, 70, 30);
-    vecs = [];
     vecs = getVecsBezier(top_moon);
     var lower_moon = new Bezier(70, 30, 60, 15, 33, 9);
     getVecsBezier(lower_moon).forEach(function(p) {
@@ -66,7 +65,6 @@ function createCircuit() {
 
     // lower bezier curves
     var lower_bezier = new Bezier(10, 50, 40, 20, 40, 70, 70, 50);
-    vecs = [];
     vecs = getVecsBezier(lower_bezier);
 
     wall = world.CreateBody(bodyDef);
@@ -95,8 +93,6 @@ function createCircuit() {
 
     // CREATE LINES ====================================================================
 
-    vecs = [];
-    vecs = getVecsBezier(new Bezier(35,38,  35,20, 35,10));
 
     bodyDef = new b2BodyDef();
     bodyDef.position.Set(0,0);
@@ -107,7 +103,29 @@ function createCircuit() {
     fixDef = new b2FixtureDef();
     fixDef.shape = new b2PolygonShape();
 
-    var line = world.CreateBody(bodyDef);
+    // straight line
+    vecs = getVecsBezier(new Bezier(35,38,  35,20, 35,20));
+    for (i = 0; i < vecs.length - 1; i++) {
+        fixDef.shape.SetAsEdge(vecs[i], vecs[i + 1]);
+        mylines.CreateFixture(fixDef);
+    }
+
+    // curve line to up
+    vecs = getVecsBezier(new Bezier(30,20,  32.5,10,  35,20));
+    for (i = 0; i < vecs.length - 1; i++) {
+        fixDef.shape.SetAsEdge(vecs[i], vecs[i + 1]);
+        mylines.CreateFixture(fixDef);
+    }
+
+    // curve line to down
+    vecs = getVecsBezier(new Bezier(20,20,  25,30,  30,20));
+    for (i = 0; i < vecs.length - 1; i++) {
+        fixDef.shape.SetAsEdge(vecs[i], vecs[i + 1]);
+        mylines.CreateFixture(fixDef);
+    }
+
+    // great curve line to down
+    vecs = getVecsBezier(new Bezier(20,20,  10,30,  35,38));
     for (i = 0; i < vecs.length - 1; i++) {
         fixDef.shape.SetAsEdge(vecs[i], vecs[i + 1]);
         mylines.CreateFixture(fixDef);
