@@ -96,7 +96,7 @@ function createCircuit() {
     // CREATE LINES ====================================================================
 
     vecs = [];
-    vecs = getVecsBezier(new Bezier(35,28,  35,20, 35,10));
+    vecs = getVecsBezier(new Bezier(35,38,  35,20, 35,10));
 
     bodyDef = new b2BodyDef();
     bodyDef.position.Set(0,0);

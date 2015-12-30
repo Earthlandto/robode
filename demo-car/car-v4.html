@@ -1,24 +1,44 @@
 <html>
+<style>
+td {
+    background-color: white;
+    border: 1px solid black;
+}
+td#colempty {
+    border: none;
+}
+</style>
 
 <head>
     <title>DEMO CAR three wheels, different velocity and sensors w\ CIRCUIT</title>
 </head>
 
 <body onload="init();">
+    <div id="led-sensors">
+        <table>
+            <tr>
+                <td rowspan="2" id="sline-right">SenLine L</td>
+                <td rowspan="2" id="sline-left">SenLine R</td>
+                <td rowspan="2" id="colempty" ></td>
+                <td id="sentl">Sensor TL</td>
+                <td id="sentr">Sensor TR</td>
+            </tr>
+            <tr>
+                <td id="senbl">Sensor BL</td>
+                <td id="sensor">Sensor BR</td>
+            </tr>
+        </table>
+    </div>
     <div>
         <canvas id="canvas" width="750" height="600" style="background-color:#333333;"></canvas>
     </div>
-    <button id="button-debug" onclick="setPrintDebug();">DEBUG?</button>
 </body>
 <script type="text/javascript" src="lib/Box2d.min.js"></script>
 <script type="text/javascript" src="lib/jquery-1.11.3.min.js"></script>
 <script type="text/javascript" src="lib/bezier.js"></script>
-
 <script type="text/javascript" src="lib/libcar-v4.js"></script>
 <script type="text/javascript" src="lib/libcircuit.js"></script>
-
 <script type="text/javascript">
-
 var DEBUG = true;
 var world;
 var myDemoCar;
@@ -68,10 +88,6 @@ function update() {
     myDemoCar.updateMovement();
 
 };
-
-function setPrintDebug() {
-    DEBUG = !DEBUG;
-}
 </script>
 
 </html>
