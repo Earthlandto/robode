@@ -104,9 +104,6 @@ function demoCar() {
     var sensorTR = createExternalSensors(pointsTR, "sensorTR", car);
     var sensorTL = createExternalSensors(pointsTL, "sensorTL", car);
 
-    console.log(sensorBR, sensorBL, sensorTR, sensorTL);
-
-
     // line sensors
     var sLinetLeft, sLineRight = createSensorLine(car);
 
