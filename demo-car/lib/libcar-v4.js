@@ -19,7 +19,7 @@ function demoCar() {
 
     var bodyDef = new b2BodyDef();
     bodyDef.type = b2Body.b2_dynamicBody;
-    bodyDef.position.Set(35, 30);
+    bodyDef.position.Set(35, 40);
     bodyDef.linearDamping = 8;
     bodyDef.angularDamping = 8;
     // bodyDef.allowSleep = true; // by default
@@ -67,7 +67,7 @@ function demoCar() {
         var udA = contact.GetFixtureA().GetBody().GetUserData();
         var udB = contact.GetFixtureB().GetBody().GetUserData();
 
-        if (udA.substr(0,4) == 'line' || udB.substr(0,4) == 'line') {
+        if (udA.substr(0, 4) == 'line' || udB.substr(0, 4) == 'line') {
             // console.log(contact);
             // console.log(oldManifold);
             contact.SetEnabled(false);
@@ -121,8 +121,10 @@ function demoCar() {
                 //if the body is already sensed
                 if (sensedIndex > -1) {
                     (listSensed[sensedIndex])[bodySensedUD] += 1;
-                    if ((listSensed[sensedIndex])[bodySensedUD] === 1)
-                                            console.log("BEGIN contact", bodySensorUD, bodySensed.GetUserData());
+                    if ((listSensed[sensedIndex])[bodySensedUD] === 1) {
+                        console.log("BEGIN contact", bodySensorUD, bodySensed.GetUserData());
+                        document.getElementById(bodySensorUD).style.backgroundColor = 'grey';
+                    }
 
                 } else {
                     // it's first time this sensor sensed this body
@@ -130,7 +132,7 @@ function demoCar() {
                     newBodySensed[bodySensedUD] = 1;
                     listSensed.push(newBodySensed);
                     console.log("BEGIN contact", bodySensorUD, bodySensed.GetUserData());
-
+                    document.getElementById(bodySensorUD).style.backgroundColor = 'grey';
                 }
             } else { // if it's the first time that the sensor perceive any body...
                 bodiesSensed[bodySensorUD] = [];
@@ -139,6 +141,7 @@ function demoCar() {
                 bodiesSensed[bodySensorUD].push(newBodySensed);
 
                 console.log("BEGIN contact", bodySensorUD, bodySensed.GetUserData());
+                document.getElementById(bodySensorUD).style.backgroundColor = 'grey';
             }
 
         }
@@ -171,14 +174,15 @@ function demoCar() {
             // The body has already been sensed previously
             var listSensed = bodiesSensed[bodySensorUD];
             var sensedIndex = listSensed.findIndex(function(elem) {
-                    return elem.hasOwnProperty(bodySensedUD);
-                });
+                return elem.hasOwnProperty(bodySensedUD);
+            });
 
 
 
-            (listSensed[sensedIndex])[bodySensedUD] -=1;
-            if ( (listSensed[sensedIndex])[bodySensedUD] <1) {
+            (listSensed[sensedIndex])[bodySensedUD] -= 1;
+            if ((listSensed[sensedIndex])[bodySensedUD] < 1) {
                 console.log("END contact", bodySensorUD, bodySensed.GetUserData());
+                document.getElementById(bodySensorUD).style.backgroundColor = '';
             }
         }
     };
@@ -298,6 +302,9 @@ function demoCar() {
 
     function createSensorLine(car) {
 
+        var radius = 0.2;
+
+
         var bodyDef = new b2BodyDef();
         bodyDef.type = b2Body.b2_dynamicBody;
 
@@ -305,7 +312,7 @@ function demoCar() {
         fixDef.density = 40;
         fixDef.friction = 1;
         fixDef.restitution = 0;
-        fixDef.shape = new b2CircleShape(0.2);
+        fixDef.shape = new b2CircleShape(radius);
         fixDef.isSensor = true;
 
 
@@ -317,7 +324,7 @@ function demoCar() {
         //jointdef.maxMotorTorque = Number.MAX_SAFE_INTEGER;
 
         // left Sensor line
-        bodyDef.position.Set(car.GetWorldCenter().x - 0.3, car.GetWorldCenter().y - 0.1);
+        bodyDef.position.Set(car.GetWorldCenter().x - radius, car.GetWorldCenter().y - 0.2);
         var sensorLeft = world.CreateBody(bodyDef);
         jointdef.Initialize(car, sensorLeft, car.GetWorldCenter());
         sensorLeft.CreateFixture(fixDef);
@@ -325,7 +332,7 @@ function demoCar() {
         world.CreateJoint(jointdef);
 
         // right sensonr line
-        bodyDef.position.Set(car.GetWorldCenter().x + 0.3, car.GetWorldCenter().y - 0.1);
+        bodyDef.position.Set(car.GetWorldCenter().x + radius, car.GetWorldCenter().y - 0.2);
         var sensorRight = world.CreateBody(bodyDef);
         jointdef.Initialize(car, sensorRight, car.GetWorldCenter());
         sensorRight.CreateFixture(fixDef);
