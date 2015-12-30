@@ -189,8 +189,8 @@ function demoCar() {
 
     world.SetContactListener(contactListener);
 
-    var rspeed = 200;
-    var lspeed = 200;
+    var rspeed = 0;
+    var lspeed = 0;
 
     var stop = false;
 
