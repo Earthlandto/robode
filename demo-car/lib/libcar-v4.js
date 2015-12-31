@@ -51,11 +51,13 @@ function demoCar() {
     ///////// CAR BEHAVIOUR
 
 
-    var rspeed = 0;
-    var lspeed = 0;
+    //initial speed
+    var rspeed = 300;
+    var lspeed = 300;
 
     var stop = false;
 
+    // increment speed
     var WHEEL_SPEED = 50;
     var ENGINE_SPEED = 300;
 
@@ -362,6 +364,7 @@ function demoCar() {
 
         var carPos = car.GetWorldCenter();
 
+
         var bodyDef = new b2BodyDef();
         bodyDef.type = b2Body.b2_dynamicBody;
         bodyDef.position.Set(carPos.x, carPos.y);
@@ -378,24 +381,25 @@ function demoCar() {
             vPoints[index] = vec;
         });
 
+
         fixDef.shape.SetAsArray(vPoints, vPoints.length);
         fixDef.isSensor = true;
 
         var sensor = world.CreateBody(bodyDef);
+
         sensor.CreateFixture(fixDef);
         sensor.SetUserData('sensor' + name);
+
+        //console.log(carPos, sensor.GetWorldCenter());
 
         // make the joint
         var jointdef = new b2RevoluteJointDef();
         jointdef.Initialize(car, sensor, carPos);
         jointdef.collideConnected = false;
         jointdef.enableMotor = false;
-        // jointdef.enableLimit=true;
+        jointdef.enableLimit=false;
         jointdef.maxMotorTorque = Number.MAX_SAFE_INTEGER;
-        var joint = world.CreateJoint(jointdef);
-
-        // console.log(joint);
-
+        world.CreateJoint(jointdef);
 
         return sensor;
     }
@@ -508,9 +512,13 @@ function demoCar() {
         fr.SetAngularVelocity(carAV);
         fl.SetAngularVelocity(carAV);
 
+
+
         extSensors.forEach(function(elem) {
-            elem.SetLinearVelocity(carLV);
-            elem.SetAngularVelocity(carAV);
+            // elem.SetLinearVelocity(carLV);
+            // elem.SetAngularVelocity(carAV);
+            // elem.SetAngularVelocity(carAV);
+            elem.SetAngle(car.GetAngle());
         });
     }
 
