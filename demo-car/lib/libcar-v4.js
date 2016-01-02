@@ -477,7 +477,11 @@ function demoCar() {
         extSensors.forEach(function(elem) {
             elem.SetLinearVelocity(new b2Vec2(0, 0));
             elem.SetAngularVelocity(0);
+            // elem.SetAngle(0);
         });
+
+        // car.SetAwake(false);
+        // stop = false;
 
         if (!car.IsAwake()) {
             stop = false;
@@ -516,8 +520,7 @@ function demoCar() {
 
         extSensors.forEach(function(elem) {
             // elem.SetLinearVelocity(carLV);
-            // elem.SetAngularVelocity(carAV);
-            // elem.SetAngularVelocity(carAV);
+            elem.SetAngularVelocity(carAV);
             elem.SetAngle(car.GetAngle());
         });
     }
