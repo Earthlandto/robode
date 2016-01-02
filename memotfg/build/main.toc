@@ -1,6 +1,0 @@
-\contentsline {chapter}{Agradecimientos}{III}{Doc-Start}
-\contentsline {chapter}{Resumen}{III}{Doc-Start}
-\contentsline {chapter}{Abstract}{III}{Doc-Start}
-\contentsline {chapter}{Lista de figuras}{V}{section*.1}
-\contentsline {chapter}{Lista de tablas}{VI}{section*.2}
-\select@language {spanish}
