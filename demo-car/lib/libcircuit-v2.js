@@ -79,28 +79,28 @@ function createCircuit() {
     // CREATE LINES ====================================================================
 
 
-    // bodyDef = new b2BodyDef();
-    // bodyDef.position.Set(0, 0);
-    // bodyDef.type = b2Body.b2_dynamicBody;
-    // bodyDef.userData = createNewUserData("line");
-    // var mylines = world.CreateBody(bodyDef);
+    bodyDef = new b2BodyDef();
+    bodyDef.position.Set(0, 0);
+    bodyDef.type = b2Body.b2_dynamicBody;
+    bodyDef.userData = createNewUserData("line");
+    var mylines = world.CreateBody(bodyDef);
 
-    // fixDef = new b2FixtureDef();
-    // fixDef.shape = new b2PolygonShape();
+    fixDef = new b2FixtureDef();
+    fixDef.shape = new b2PolygonShape();
 
 
-    // // straight line to up
-    // makeBezierLine(new Bezier(35, 38, 35, 29, 35, 20), mylines, fixDef);
-    // // makeBezierLine(new Bezier(35.1, 38, 35.1, 29, 35.1, 20), mylines, fixDef);
+    // straight line to up
+    makeBezierLine(new Bezier(35, 38, 35, 29, 35, 20), mylines, fixDef);
+    // makeBezierLine(new Bezier(35.1, 38, 35.1, 29, 35.1, 20), mylines, fixDef);
 
-    // // curve line to up
-    // makeBezierLine(new Bezier(30, 20, 32.5, 10, 35, 20), mylines, fixDef);
+    // curve line to up
+    makeBezierLine(new Bezier(30, 20, 32.5, 10, 35, 20), mylines, fixDef);
 
-    // // curve line to down
-    // makeBezierLine(new Bezier(20, 20, 25, 30, 30, 20), mylines, fixDef);
+    // curve line to down
+    makeBezierLine(new Bezier(20, 20, 25, 30, 30, 20), mylines, fixDef);
 
-    // // great curve line to down
-    // // makeBezierLine(new Bezier(20, 20, 10, 30, 35, 38), mylines, fixDef);
+    // great curve line to down
+    // makeBezierLine(new Bezier(20, 20, 10, 30, 35, 38), mylines, fixDef);
 
 
 
