@@ -56,6 +56,8 @@ var myDemoCar;
 
 function init() {
 
+    var worldScale = 10.0;
+
     //create the world
     world = new b2World(
         new b2Vec2(0, 0) //gravity
@@ -63,7 +65,7 @@ function init() {
     );
 
     //setup debug draw
-    setDraw(new b2DebugDraw(), world, "canvas");
+    setDraw(new b2DebugDraw(), world, "canvas", worldScale);
     window.setInterval(update, 1000 / 60);
 
     //create the circuit
@@ -74,10 +76,10 @@ function init() {
 };
 
 
-function setDraw(myDebugDraw, myWorld, myCanvas) {
+function setDraw(myDebugDraw, myWorld, myCanvas, myWorldScale) {
 
     myDebugDraw.SetSprite(document.getElementById(myCanvas).getContext("2d"));
-    myDebugDraw.SetDrawScale(10.0);
+    myDebugDraw.SetDrawScale(myWorldScale);
     myDebugDraw.SetFillAlpha(0.3);
     myDebugDraw.SetLineThickness(1.0);
     myDebugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit);
