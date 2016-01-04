@@ -1869,13 +1869,6 @@ function iJavaParser() {
         system_variable("key", StringDatatype, ""); //new StringDatatype(), 0);
         system_variable("keyPressed", BooleanDatatype, false);
 
-        ///// Funciones de la libreria del simulador MOWAY
-        library_function("initSimuRobo", new FunctionDatatype(VoidDatatype, []));
-        library_function("moveS", new FunctionDatatype(VoidDatatype, []));
-        library_function("moveN", new FunctionDatatype(VoidDatatype, []));
-        library_function("moveW", new FunctionDatatype(VoidDatatype, []));
-        library_function("moveE", new FunctionDatatype(VoidDatatype, []));
-
     };
 
     init();

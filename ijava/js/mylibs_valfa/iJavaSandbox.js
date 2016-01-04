@@ -1010,6 +1010,7 @@ function iJavaSandbox(canvasid) {
 
     ///////////////////////////// ROBOT MOWAY
 
+
     function square(width, height) {
         /* Sería conveniente comprobar que el canvas es cuadrado
         y realizar una medida del canvas dinámica a casi cualquier tamaño.
@@ -1110,6 +1111,8 @@ function iJavaSandbox(canvasid) {
         drawRobot();
     }
 
+
+    /////////////////////////////
 
 
     /**

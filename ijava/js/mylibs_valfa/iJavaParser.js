@@ -1869,6 +1869,23 @@ function iJavaParser() {
         system_variable("key", StringDatatype, ""); //new StringDatatype(), 0);
         system_variable("keyPressed", BooleanDatatype, false);
 
+        ///// Funciones de la libreria del simulador MOWAY
+
+        var module = new iJavaMowayModule();
+        var functionsLibrary = module.getFunctionsLibrary();
+
+        for (var i = 0; i < functionsLibrary.length; i++) {
+            var finfo = functionsLibrary[i];
+            var paramTypes = [];
+            if (finfo.paramTypes !== null) {
+                for (var j = 0; finfo.paramTypes.length; i++) {
+                    paramTypes[j] = {
+                        datatype: finfo.paramTypes
+                    };
+                }
+            }
+            library_function(finfo.nameFunction, new FunctionDatatype(finfo.returnType, []));
+        }
     };
 
     init();
