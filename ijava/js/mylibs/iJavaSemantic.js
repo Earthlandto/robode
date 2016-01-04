@@ -209,11 +209,14 @@ function SemanticChecker(source, tree) {
                 secondPass(node.right);
                 try {
                     node.datatype = datatypeOf(node.right);
-                    if (node.datatype === null) {
-                        node.error("Todos los valores a incluir en el array deben ser del mismo tipo.");
-                    }
                 } catch (e) {
                     node.error("Todos los elementos de una misma dimensión deben tener el mismo tamaño. " + e.msg);
+                }
+                if (node.datatype === null) {
+                    node.error("Todos los valores a incluir en el array deben ser del mismo tipo.");
+                }
+                if (node.datatype.celltype === null) {
+                    node.error("Debes incluir algún valor para inicializar el array.");
                 }
             } else
             if (node.id === "(cast)") {
@@ -625,6 +628,7 @@ function SemanticChecker(source, tree) {
                     } else {
                         if (node.datatype.dimensions != node.initialValue.datatype.dimensions || node.datatype.celltype.gcd(node.initialValue.datatype.celltype) != node.datatype.celltype) {
                             node.error("Error de tipos al intentar inicializar '" + node.id + "' de tipo '" + node.datatype + "' con el resultado de la expresión '" + source.substring(node.initialValue.from, node.initialValue.to) + "' que es de tipo '" + node.initialValue.datatype + "'. ");
+                            console.log("Va");
                         }
                     }
                 }
@@ -731,7 +735,7 @@ function SemanticChecker(source, tree) {
             if (node.id === "(block)") {
                 for (var i = 0; i < node.right.length; i++) {
                     if (searchForReturn(node.right[i], datatype)) {
-                        if (i < node.right.length - 1) {
+                        if (i < node.right.length) {
                             node.warning("Las instrucciones a partir de la línea " + (node.right[i].line + 1) + " no se ejecutarán ya que 'return' termina la ejecución de la función en la línea anterior.", "warning");
                         }
                         return true;

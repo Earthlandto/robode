@@ -53,6 +53,11 @@ function iJavaSandbox(canvasid) {
     // Variable autoreferencia
     var self = this;
 
+    // Variable para simular entrada de texto desde BBDD
+    self.standardInput = null;
+    self.sipointer = 0;
+    internalPrompt = window.prompt;
+
     var init = function() {
         canvas = document.getElementById(canvasid);
         if (!canvas) {
@@ -189,7 +194,6 @@ function iJavaSandbox(canvasid) {
     };
 
     var handleKeypress = function(e) {
-        console.log("Keypress " + e);
         return suppressKeyEvent(e);
     };
 
@@ -593,7 +597,7 @@ function iJavaSandbox(canvasid) {
         var err = e;
         // Buscar dentro de runtime si hay alguna función muy llamada
         var mcf = runtime.findMostCalledFunction();
-        if (mcf) {
+        if (mcf && mcf.times > 100) {
             err = {
                 message: "Se ha producido un error durante la ejecución del programa. Probablemente se deba a que la función '" + mcf.name + "' es recursiva y no tiene bien definido su caso base por lo que se está llamando a sí misma desde la línea " + mcf.line + " sin parar.",
                 line: mcf.line
@@ -630,29 +634,29 @@ function iJavaSandbox(canvasid) {
     function readInteger(msg) {
         if (!msg) msg = "Introduce un número entero";
         while (true) {
-            var n = prompt(msg, 0);
-            if (!n) throw {
+            var n = internalPrompt(msg, 0);
+            if (n == null) throw {
                 message: "Programa cancelado a petición del usuario"
             };
-            if (isFinite(n) && isInt(n)) return parseInt(n);
+            if ((n !== "") && isFinite(n) && isInt(n)) return parseInt(n);
         }
     }
 
     function readDouble(msg) {
         if (!msg) msg = "Introduce un número real";
         while (true) {
-            var n = prompt(msg, 0.0);
-            if (!n) throw {
+            var n = internalPrompt(msg, 0.0);
+            if (n == null) throw {
                 message: "Programa cancelado a petición del usuario"
             };
-            if (isFinite(n)) return parseFloat(n);
+            if ((n !== "") && isFinite(n)) return parseFloat(n);
         }
     }
 
     function readString(msg) {
         if (!msg) msg = "Introduce una cadena de texto";
-        var str = prompt(msg, " ");
-        if (!str) throw {
+        var str = internalPrompt(msg, "");
+        if (str == null) throw {
             message: "Programa cancelado a petición del usuario"
         };
         return new __String(str);
@@ -662,7 +666,10 @@ function iJavaSandbox(canvasid) {
         if (!msg) msg = "Introduce un carácter";
         var c = null;
         do {
-            c = prompt(msg); //readString(msg);
+            c = internalPrompt(msg); //readString(msg);
+            if (c == null) throw {
+                message: "Programa cancelado a petición del usuario"
+            };
         } while (c.length != 1);
         return c[0];
     }
@@ -1007,114 +1014,6 @@ function iJavaSandbox(canvasid) {
         runtime = null;
     }
 
-
-    ///////////////////////////// ROBOT MOWAY
-
-
-    function square(width, height) {
-        /* Sería conveniente comprobar que el canvas es cuadrado
-        y realizar una medida del canvas dinámica a casi cualquier tamaño.
-        Iría aquí. */
-
-        var NUM_SQUARE = 8;
-        var width = canvas.getAttribute("width"); //ancho
-        var height = canvas.getAttribute("height"); //alto
-
-        return { // info relativa a las casillas
-            total: NUM_SQUARE,
-            width: width / NUM_SQUARE,
-            height: height / NUM_SQUARE
-        }
-    }
-
-    function getRelPos() {
-        coordX = coordX || 0;
-        coordY = coordY || 0;
-
-        return {
-            X: coordX * square().width,
-            Y: coordY * square().height
-        }
-    }
-
-    function drawStage() {
-        var totalSquare = square().total;
-        var widthSquare = square().width;
-        var heightSquare = square().height;
-
-        background(248, 248, 248); //beige
-
-        for (var i = 0; i < totalSquare; i++) {
-            line(i * widthSquare, 0, i * widthSquare, heightSquare * totalSquare);
-            line(0, i * heightSquare, widthSquare * totalSquare, i * heightSquare);
-        }
-        // draw botton and right borders
-        line(widthSquare * totalSquare - 1, 0, widthSquare * totalSquare - 1, heightSquare * totalSquare - 1);
-        line(0, heightSquare * totalSquare - 1, widthSquare * totalSquare - 1, heightSquare * totalSquare - 1);
-    }
-
-
-    function drawRobot() {
-        var srcImg = 'images/roboicon.png';
-
-        var img = new Image();
-        img.src = srcImg;
-        img.id = srcImg;
-        // img.ready = false;
-
-        // img.onload = function() {
-        // 	// Cada vez que se carga una imagen reseteo el contador de tiempo máximo para la siguiente
-        // 	startPrecarga = new Date();
-        // 	this.ready = true;
-        // 	pendingImages--;
-        // };
-        // imagesCached[img.id] = img;
-        // pendingImages++;
-        // totalImages++;
-
-        posX = getRelPos().X;
-        posY = getRelPos().Y;
-
-        // Primero limpiamos el escenario y luego pintamos el robot
-        drawStage();
-        context.drawImage(img, posX, posY, square().width, square().height);
-
-        //self.preloadImage(srcImg);
-        //image(srcImg,320/2-20,320/2-20,40,40);
-
-    }
-
-    function moveS() {
-        coordY += 1;
-        drawRobot(); //Redibujamos el robot
-    }
-
-    function moveN() {
-        coordY -= 1;
-        drawRobot(); //Redibujamos el robot
-    }
-
-    function moveW() {
-        coordX -= 1;
-        drawRobot(); //Redibujamos el robot
-    }
-
-    function moveE() {
-        coordX += 1;
-        drawRobot(); //Redibujamos el robot
-    }
-
-    var coordX, coordY;
-
-
-    function initSimuRobo() {
-        drawRobot();
-    }
-
-
-    /////////////////////////////
-
-
     /**
      * Función que chequéa cada 250ms si las imágenes que se necesitan para el programa que se va a ejecutar
      * están ya cargadas o no. Cada imagen debe cargarse en menos de 10s o de lo contrario se inicia el
@@ -1188,6 +1087,29 @@ function iJavaSandbox(canvasid) {
         pendingCode = code;
         startPrecarga = new Date();
         executeAfterLoadingImages();
+    };
+
+    /**
+    Define una nueva función para leer datos a través de las funciones
+    read*() para evitar que se pregunten al usuario.
+    */
+    this.setInputStream = function(iostream) {
+        self.standardInput = iostream;
+        if (iostream == null) {
+            internalPrompt = window.prompt;
+        } else {
+            internalPrompt = function(msg, initial) {
+                var strs = self.standardInput.split("\n");
+                if (self.sipointer >= strs.length) {
+                    throw {
+                        message: "Se ha llegado al final de los datos de entrada sin encontrar el tipo de dato buscado."
+                    };
+                }
+                var str = strs[self.sipointer];
+                self.sipointer++;
+                return str;
+            };
+        }
     };
 
     init();
