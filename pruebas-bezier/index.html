@@ -1,210 +1,198 @@
 <!DOCTYPE html>
-
 <meta charset="utf-8">
 <style>
-	text {
-		font: 14px sans-serif;
-		fill: green;
-	}
-	
-	div {
-		border-radius: 0px;
-		border: 1px solid #0099CC;
-		padding: 0px;
-		width: 100%;
-		height: 100%;
-	}
-	
-	circle {
-		fill: purple;
-	}
+text {
+    font: 14px sans-serif;
+    fill: green;
+}
+
+div {
+    border-radius: 0px;
+    border: 1px solid #0099CC;
+    padding: 0px;
+    width: 100%;
+    height: 100%;
+}
+
+circle {
+    fill: purple;
+}
 </style>
 
 <body>
-	<script src="./d3/d3.js"></script>
-
-	<div id="function-test"></div>
-	<div id="bezier-curve-test"></div>
-	<div id="square-test">
-		<button onclick="animateSquare()">Test!</button>
-	</div>
-
-	<script>
-		var mySquare;
-		var myCurve;
+    <script src="./d3/d3.js"></script>
+    <div id="function-test"></div>
+    <div id="bezier-curve-test"></div>
+    <div id="square-test">
+        <button onclick="animateSquare()">Test!</button>
+    </div>
+    <script>
+    var mySquare;
+    var myCurve;
 
 
-		function createSquare() {
-			// Creamos el cuadrado
-			var squareSVG = d3.select("#square-test").append("svg").attr("width", "100%").attr("height", "500");
-			mySquare = squareSVG.append("rect")
-				.attr("x", 30)
-				.attr("y", 30)
-				.attr("width", 100)
-				.attr("height", 100);
+    function createSquare() {
+        // Creamos el cuadrado
+        var squareSVG = d3.select("#square-test").append("svg").attr("width", "100%").attr("height", "500");
+        mySquare = squareSVG.append("rect")
+            .attr("x", 30)
+            .attr("y", 30)
+            .attr("width", 100)
+            .attr("height", 100);
 
-			mySquare.style("fill", "none")
-				.style("stroke-width", 1)
-				.style("stroke", "rgb(42, 192, 247)");
+        mySquare.style("fill", "none")
+            .style("stroke-width", 1)
+            .style("stroke", "rgb(42, 192, 247)");
 
-		}
+    }
 
-		function createBezierLine() {
-			// Creamos la curva de bezier
-			var lineData = [
-				{
-					"x": 18,
-					"y": 100
-				},
-				{
-					"x": 7,
-					"y": 10
-				},
-				{
-					"x": 100,
-					"y": 10
-				},
-				{
-					"x": 115,
-					"y": 100
-				},
-				{
-					"x": 140,
-					"y": 40
-				}];
+    function createBezierLine() {
+        // Creamos la curva de bezier
+        var lineData = [{
+            "x": 18,
+            "y": 100
+        }, {
+            "x": 7,
+            "y": 10
+        }, {
+            "x": 100,
+            "y": 10
+        }, {
+            "x": 115,
+            "y": 100
+        }, {
+            "x": 140,
+            "y": 40
+        }];
 
-			var lineFunction = d3.svg.line()
-				.x(function (d) {
-					return d.x;
-				})
-				.y(function (d) {
-					return d.y;
-				}).interpolate("basis");
+        var lineFunction = d3.svg.line()
+            .x(function(d) {
+                return d.x;
+            })
+            .y(function(d) {
+                return d.y;
+            }).interpolate("basis");
 
-			//console.log('lineFunction:', lineFunction);
+        //console.log('lineFunction:', lineFunction);
 
-			var bezierSVG = d3.select("#bezier-curve-test").append("svg").attr("width", "100%").attr("height", "100%");
-			myCurve = bezierSVG.append("path")
-				.attr("d", lineFunction(lineData))
-				.attr("stroke", "blue")
-				.attr("stroke-width", 2)
-				.attr("fill", "none");
+        var bezierSVG = d3.select("#bezier-curve-test").append("svg").attr("width", "100%").attr("height", "100%");
+        myCurve = bezierSVG.append("path")
+            .attr("d", lineFunction(lineData))
+            .attr("stroke", "blue")
+            .attr("stroke-width", 2)
+            .attr("fill", "none");
 
-			myCurve.transition()
-				.duration(2000)
-				.attrTween("stroke-dasharray", function () {
-					var len = this.getTotalLength();
-					return function (t) {
-						return (d3.interpolateString("0," + len, len + ",0"))(t)
-					};
-				});
+        myCurve.transition()
+            .duration(2000)
+            .attrTween("stroke-dasharray", function() {
+                var len = this.getTotalLength();
+                return function(t) {
+                    return (d3.interpolateString("0," + len, len + ",0"))(t)
+                };
+            });
 
-			lineFunction = d3.svg.line()
-				.x(function (d) {
-					return d.x;
-				})
-				.y(function (d) {
-					return d.y;
-				}).interpolate("bundle");
+        lineFunction = d3.svg.line()
+            .x(function(d) {
+                return d.x;
+            })
+            .y(function(d) {
+                return d.y;
+            }).interpolate("bundle");
 
-			console.log('lineData:', lineData);
-			for (key in lineData) {
-				console.log('x, y:', lineData[key].x, lineData[key].y);
-				bezierSVG.append("circle")
-					.attr("cx", lineData[key].x)
-					.attr("cy", lineData[key].y)
-					.attr("r", 2);
-			}
+        console.log('lineData:', lineData);
+        for (key in lineData) {
+            console.log('x, y:', lineData[key].x, lineData[key].y);
+            bezierSVG.append("circle")
+                .attr("cx", lineData[key].x)
+                .attr("cy", lineData[key].y)
+                .attr("r", 2);
+        }
 
-			bezierSVG = d3.select("#bezier-curve-test").append("svg").attr("width", "100%").attr("height", "100%");
-			myCurve = bezierSVG.append("path")
-				.attr("d", lineFunction(lineData))
-				.attr("stroke", "blue")
-				.attr("stroke-width", 2)
-				.attr("fill", "none");
+        bezierSVG = d3.select("#bezier-curve-test").append("svg").attr("width", "100%").attr("height", "100%");
+        myCurve = bezierSVG.append("path")
+            .attr("d", lineFunction(lineData))
+            .attr("stroke", "blue")
+            .attr("stroke-width", 2)
+            .attr("fill", "none");
 
-			myCurve.transition()
-				.duration(2000)
-				.attrTween("stroke-dasharray", function () {
-					var len = this.getTotalLength();
-					return function (t) {
-						return (d3.interpolateString("0," + len, len + ",0"))(t)
-					};
-				});
+        myCurve.transition()
+            .duration(2000)
+            .attrTween("stroke-dasharray", function() {
+                var len = this.getTotalLength();
+                return function(t) {
+                    return (d3.interpolateString("0," + len, len + ",0"))(t)
+                };
+            });
 
 
-			console.log('lineData:', lineData);
-			for (key in lineData) {
-				console.log('x, y:', lineData[key].x, lineData[key].y);
-				bezierSVG.append("circle")
-					.attr("cx", lineData[key].x)
-					.attr("cy", lineData[key].y)
-					.attr("r", 2);
-			}
+        console.log('lineData:', lineData);
+        for (key in lineData) {
+            console.log('x, y:', lineData[key].x, lineData[key].y);
+            bezierSVG.append("circle")
+                .attr("cx", lineData[key].x)
+                .attr("cy", lineData[key].y)
+                .attr("r", 2);
+        }
 
-		}
-
-
-		function testFunction() {
-
-			var functionSVG = d3.select("#function-test").append("svg").attr("width", "100%").attr("height", "100%");
-
-			var lineData = [
-				{
-					"x": 1,
-					"y": 50
-				},
-				{
-					"x": 20,
-					"y": 20
-				},
-				{
-					"x": 40,
-					"y": 10
-				},
-				{
-					"x": 100,
-					"y": 60
-				}];
+    }
 
 
-			
+    function testFunction() {
 
+        var functionSVG = d3.select("#function-test").append("svg").attr("width", "100%").attr("height", "100%");
 
-			var text = functionSVG.append("text")
-				.attr("x", 10)
-				.attr("y", 10);
-
-
-			var lineFunction = d3.svg.line()
-				.x(function (d) {
-					return d.x;
-				})
-				.y(function (d) {
-					return d.y;
-				}).interpolate("basis");
-
-			console.log(lineFunction(lineData));
-		}
+        var lineData = [{
+            "x": 1,
+            "y": 50
+        }, {
+            "x": 20,
+            "y": 20
+        }, {
+            "x": 40,
+            "y": 10
+        }, {
+            "x": 100,
+            "y": 60
+        }];
 
 
 
 
 
-		/////////////
-		// MOSTRAMOS
+        var text = functionSVG.append("text")
+            .attr("x", 10)
+            .attr("y", 10);
 
 
-		window.onload = function () {
+        var lineFunction = d3.svg.line()
+            .x(function(d) {
+                return d.x;
+            })
+            .y(function(d) {
+                return d.y;
+            }).interpolate("basis");
 
-			createSquare();
-			createBezierLine();
-			testFunction();
-		}
+        console.log(lineFunction(lineData));
+    }
 
-		function animateSquare() {
-			mySquare
-				.transition().attr("x", 320)
-				.transition().attr("y", 320);
-		}
-	</script>
+
+
+
+
+    /////////////
+    // MOSTRAMOS
+
+
+    window.onload = function() {
+
+        createSquare();
+        createBezierLine();
+        testFunction();
+    }
+
+    function animateSquare() {
+        mySquare
+            .transition().attr("x", 320)
+            .transition().attr("y", 320);
+    }
+    </script>
