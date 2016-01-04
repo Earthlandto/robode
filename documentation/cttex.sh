@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 #Script to clean tex trash in this woorking folder (aux, bak, loc... files)
 
