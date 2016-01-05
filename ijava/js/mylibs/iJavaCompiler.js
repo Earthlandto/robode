@@ -21,12 +21,12 @@ function iJavaCompiler() {
             return errors;
         }
         return parser.getWarnings();
-    }
+    };
 
     this.getKeyPoints = function(source) {
         this.parse(source);
         return parser.getKeyPoints();
-    }
+    };
 
     this.getIcon = function(source) {
         this.parse(source);
@@ -48,20 +48,20 @@ function iJavaCompiler() {
                 break;
             }
         }
-        for (var i = 0; i < math.length; i++) {
+        for (i = 0; i < math.length; i++) {
             if (functions.indexOf(math[i]) >= 0) {
                 tags.math = 1;
                 break;
             }
         }
-        for (var i = 0; i < graph.length; i++) {
+        for (i = 0; i < graph.length; i++) {
             if (functions.indexOf(graph[i]) >= 0) {
                 tags.graph = 1;
                 break;
             }
         }
         return tags.graph + tags.animation * 2 + tags.io * 4 + tags.math * 8;
-    }
+    };
 
     this.run = function(source, canvasid) {
 
@@ -86,17 +86,17 @@ function iJavaCompiler() {
         sandbox.run(code);
         var functions = parser.getUsedFunctions();
         return (functions.indexOf('loop') >= 0 || (functions.indexOf('animate') >= 0));
-    }
+    };
 
     this.stop = function() {
         if (sandbox) sandbox.stop();
-    }
+    };
 
     this.setOutputHandler = function(oh) {
         outputHandler = oh;
-    }
+    };
 
     this.setErrorHandler = function(eh) {
         errorHandler = eh;
-    }
+    };
 }

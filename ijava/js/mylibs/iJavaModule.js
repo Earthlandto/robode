@@ -111,8 +111,6 @@ function iJavaModule(name, description) {
 
     function make_function(returnTypeStr, typeStrParams) {
 
-        console.log(typeStrParams);
-
         var rtype = returnTypeStr || 'void';
         var params = [];
 
@@ -123,16 +121,12 @@ function iJavaModule(name, description) {
         if ((typeof typeStrParams) !== "undefined") {
 
             typeStrParams.forEach(function(elem) {
-                console.log('elem', elem);
-
                 params.push({
                     datatype: make_variable_type(elem)
                 });
             });
 
         }
-        console.log(params);
-        //if rtype or params is undefined then the function has no return type and/or params
         return new FunctionDatatype(rtype, params);
 
 

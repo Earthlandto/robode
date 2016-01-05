@@ -685,7 +685,7 @@ function iJavaParser(myElementModules) {
                 from: left.from,
                 to: right.to,
                 error: this.error
-            }
+            };
         });
 
         infix("==", 40, 39);
@@ -1931,7 +1931,7 @@ function iJavaParser(myElementModules) {
 
         currentScope = currentScope.getParent();
         return parseTree;
-    }
+    };
 
     function addModulesElements() {
         elementModules.forEach(function(elem) {
@@ -1941,8 +1941,6 @@ function iJavaParser(myElementModules) {
                     constant(elem.id, elem.datatype, elem.value);
                     break;
                 case "function":
-                    console.log(elem);
-
                     library_function(elem.id, elem.datatype);
                     break;
                 case "systemvariable":
@@ -1960,25 +1958,25 @@ function iJavaParser(myElementModules) {
 
     this.getErrors = function() {
         return errors;
-    }
+    };
 
     this.getWarnings = function() {
         return warnings;
-    }
+    };
 
     this.getUsedFunctions = function() {
         return usedFunctions;
-    }
+    };
 
     this.getDeclaredFunctions = function() {
         return declaredFunctions;
-    }
+    };
 
     this.getKeyPoints = function() {
         return keypoints;
-    }
+    };
 
     this.getUsedImages = function() {
         return usedImages;
-    }
+    };
 }
