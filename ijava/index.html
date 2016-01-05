@@ -2,10 +2,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Test iJava.js</title>
-    <!--
-    // http://perishablepress.com/unobtrusive-javascript-remove-link-focus-dotted-border-outlines/
--->
+    <title>ROBODE: a robot simulator to learning code</title>
     <style>
     body {
         text-align: center;
@@ -153,6 +150,8 @@ function init() {
 
     //create the car
     myDemoCar = new demoCar();
+
+    console.log('robode ready');
 };
 
 
@@ -183,7 +182,7 @@ function update() {
 
 </head>
 
-<body onload="init();">
+<body>
     <div id="wrapper">
         <div id="header">
         </div>
@@ -450,6 +449,7 @@ function update() {
         function run() {
             stop();
             compiler.run(editor.getValue(), "mycanvas");
+            init();
         }
 
         function stop() {

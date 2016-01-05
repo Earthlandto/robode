@@ -22,7 +22,7 @@ function demoCar() {
 
     var bodyDef = new b2BodyDef();
     bodyDef.type = b2Body.b2_dynamicBody;
-    bodyDef.position.Set(5, 10);
+    bodyDef.position.Set(16, 16);
     bodyDef.linearDamping = 8;
     bodyDef.angularDamping = 8;
     // bodyDef.allowSleep = true; // by default
