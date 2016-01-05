@@ -2,7 +2,10 @@
 // Hacer más inteligente la detección de keywords a medio como for( int a=0 ; y avisar de lo que falta a la estructura
 'use strict';
 
-function iJavaParser() {
+function iJavaParser(myElementModules) {
+
+    var elementModules = myElementModules ||  [];
+
     var errors = [];
 
     var warnings = [];
@@ -55,18 +58,18 @@ function iJavaParser() {
     var token;
 
     /*
-	{
-		id: void, byte, short, int, long, float, double, boolean, char, string, MiTipo
-		category: none, numeric, boolean, alphanumeric, array, function, composite
-		// para arrays
-		dimensions: numero de dimensiones
-		celltype: tipo de dato de cada celda
-		// para funciones además
-		params: lista de datatypes
-		rtype: tipo de dato que devuelve la función
-		// para composite
-		properties: lista de datatypes
-	}
+    {
+        id: void, byte, short, int, long, float, double, boolean, char, string, MiTipo
+        category: none, numeric, boolean, alphanumeric, array, function, composite
+        // para arrays
+        dimensions: numero de dimensiones
+        celltype: tipo de dato de cada celda
+        // para funciones además
+        params: lista de datatypes
+        rtype: tipo de dato que devuelve la función
+        // para composite
+        properties: lista de datatypes
+    }
 */
     var original_symbol = {
         error: function(message) {
@@ -92,10 +95,10 @@ function iJavaParser() {
     };
 
     /*
-    	token type: identifier, number, string, char, operator
-    	symbol type: identifier, datatype, operator, literal, keyword
-    	element type: identifier
-    	node type: declaration, statement, identifier, value
+        token type: identifier, number, string, char, operator
+        symbol type: identifier, datatype, operator, literal, keyword
+        element type: identifier
+        node type: declaration, statement, identifier, value
     */
 
     var symbol = function(id, nud, lbp, led) {
@@ -481,7 +484,7 @@ function iJavaParser() {
             return node;
         });
 
-        //		symbol(".");
+        //      symbol(".");
 
         infix(".", 100, 99, function(left) {
             var to = token.to;
@@ -567,41 +570,41 @@ function iJavaParser() {
         /*
         Eliminados porque sólo causan confusión y problemas
         symbol("++", function(itself) {
-        	var right = expression(80);
-        	if (right.type !== "identifier") this.error("El operador " + this.id + " sólo se puede aplicar a variables.");
-        	keypoints.hasAssignment = true;
-        	var node = {
-        		id: this.id,
-        		type: "value",
-        		statement: true,
-        		left: null,
-        		right: right,
-        		from: itself.from,
-        		to: right.to,
-        		line: this.line,
-        		col: this.col,
-        		error: this.error
-        	};
-        	return node;
+            var right = expression(80);
+            if (right.type !== "identifier") this.error("El operador " + this.id + " sólo se puede aplicar a variables.");
+            keypoints.hasAssignment = true;
+            var node = {
+                id: this.id,
+                type: "value",
+                statement: true,
+                left: null,
+                right: right,
+                from: itself.from,
+                to: right.to,
+                line: this.line,
+                col: this.col,
+                error: this.error
+            };
+            return node;
         }, 80);
 
         symbol("--", function(itself) {
-        	var right = expression(80);
-        	if (right.type !== "identifier") this.error("El operador " + this.id + " sólo se puede aplicar a variables.");
-        	keypoints.hasAssignment = true;
-        	var node = {
-        		id: this.id,
-        		type: "value",
-        		statement: true,
-        		left: null,
-        		right: right,
-        		from: itself.from,
-        		to: right.to,
-        		line: this.line,
-        		col: this.col,
-        		error: this.error
-        	};
-        	return node;
+            var right = expression(80);
+            if (right.type !== "identifier") this.error("El operador " + this.id + " sólo se puede aplicar a variables.");
+            keypoints.hasAssignment = true;
+            var node = {
+                id: this.id,
+                type: "value",
+                statement: true,
+                left: null,
+                right: right,
+                from: itself.from,
+                to: right.to,
+                line: this.line,
+                col: this.col,
+                error: this.error
+            };
+            return node;
         }, 80);
         */
         prefix("-", 70);
@@ -1051,11 +1054,11 @@ function iJavaParser() {
             // Hay más variables en la misma declaración?
 
             /*
-            			if (token.id === "," && lookahead(1).type !== "datatype" && (lookahead(1).type === "identifier" || lookahead(1).id === "[") ) {
-            				console.log(token, lookahead(1));
-            				identifier.error("Declara una variable en cada renglón.");
-            			}
-            		*/
+                        if (token.id === "," && lookahead(1).type !== "datatype" && (lookahead(1).type === "identifier" || lookahead(1).id === "[") ) {
+                            console.log(token, lookahead(1));
+                            identifier.error("Declara una variable en cada renglón.");
+                        }
+                    */
             if (token.id !== ";" && token.id !== "," && token.id !== ")") identifier.error("Es necesario terminar la declaración de '" + identifier.id + "' con un ';'.");
             return entry;
         });
@@ -1118,7 +1121,7 @@ function iJavaParser() {
         });
 
         symbol("final", function(itself) {
-            //			if (!datatypes[token.id]) itself.error("Para declarar una constante debes especificar su tipo tras la palabra reservada 'final'. En su lugar se ha encontrado '" + token.id + "'.");
+            //          if (!datatypes[token.id]) itself.error("Para declarar una constante debes especificar su tipo tras la palabra reservada 'final'. En su lugar se ha encontrado '" + token.id + "'.");
             var node = expression(0);
             if (node.type !== "variable") itself.error("Se esperaban una declaración de variable.");
             if (!node.initialValue) itself.error("Es necesario dar un valor a la constante '" + node.id + "'.");
@@ -1406,7 +1409,7 @@ function iJavaParser() {
                 itself.error("El nombre '" + identifier.id + "' ya está utilizado.");
             }
             keypoints.defineClasses = true;
-            //			if (currentScope.context && currentScope.context.type === "function")
+            //          if (currentScope.context && currentScope.context.type === "function")
 
             advance();
             // TODO: Para hacer esto bien hay que tener en cuenta que se puede heredar de algo aún no declarado y habrá que resolverlo en semantic
@@ -1415,12 +1418,12 @@ function iJavaParser() {
             // De momento se cablea el .length, .equals() y .toString en semantic pero no mola
             /*
             if (token.id === "extends") {
-            	advance();
-            	if (token.type === "identifier" || (token.type === "datatype" && token.datatype instanceof ClassDatatype)) {
-            		console.log("Intentando heredar de " + token.id);
-            		var fatherBase = token;
-            		advance();
-            	}
+                advance();
+                if (token.type === "identifier" || (token.type === "datatype" && token.datatype instanceof ClassDatatype)) {
+                    console.log("Intentando heredar de " + token.id);
+                    var fatherBase = token;
+                    advance();
+                }
             }
             */
 
@@ -1543,7 +1546,7 @@ function iJavaParser() {
         library_function("stringToCharArray", new FunctionDatatype(new ArrayDatatype(1, CharDatatype), [{
             datatype: StringDatatype
         }]));
-        //		library_function("largo", new FunctionDatatype(IntegerDatatype, [{datatype:StringDatatype}]));
+        //      library_function("largo", new FunctionDatatype(IntegerDatatype, [{datatype:StringDatatype}]));
         library_function("charAt", new FunctionDatatype(CharDatatype, [{
             datatype: StringDatatype
         }, {
@@ -1576,9 +1579,9 @@ function iJavaParser() {
         }, {
             datatype: IntegerDatatype
         }]));
-        //		library_function("exit", new FunctionDatatype(VoidDatatype, []));
-        //		library_function("noLoop", new FunctionDatatype(VoidDatatype, []));
-        //		library_function("redraw", new FunctionDatatype(VoidDatatype));
+        //      library_function("exit", new FunctionDatatype(VoidDatatype, []));
+        //      library_function("noLoop", new FunctionDatatype(VoidDatatype, []));
+        //      library_function("redraw", new FunctionDatatype(VoidDatatype));
         // TODO: poner función exit
         library_function("random", new FunctionDatatype(DoubleDatatype, []));
         library_function("random", new FunctionDatatype(DoubleDatatype, [{
@@ -1826,7 +1829,7 @@ function iJavaParser() {
             datatype: IntegerDatatype
         }]));
 
-        //		library_function("loadImage", new FunctionDatatype(classImage));
+        //      library_function("loadImage", new FunctionDatatype(classImage));
         library_function("image", new FunctionDatatype(VoidDatatype, [{
             datatype: StringDatatype
         }, {
@@ -1845,7 +1848,7 @@ function iJavaParser() {
         }, {
             datatype: DoubleDatatype
         }]));
-        //		library_function("snapshot", "void");
+        //      library_function("snapshot", "void");
         // TODO: Crear clase Color para manejar esto
         library_function("getColor", new FunctionDatatype(IntegerDatatype, [{
             datatype: DoubleDatatype
@@ -1868,6 +1871,9 @@ function iJavaParser() {
 
         system_variable("key", StringDatatype, ""); //new StringDatatype(), 0);
         system_variable("keyPressed", BooleanDatatype, false);
+
+        // Add modules's functions, constants, variables...
+        addModulesElements();
 
     };
 
@@ -1925,6 +1931,31 @@ function iJavaParser() {
 
         currentScope = currentScope.getParent();
         return parseTree;
+    }
+
+    function addModulesElements() {
+        elementModules.forEach(function(elem) {
+
+            switch (elem.type) {
+                case "constant":
+                    constant(elem.id, elem.datatype, elem.value);
+                    break;
+                case "function":
+                    console.log(elem);
+
+                    library_function(elem.id, elem.datatype);
+                    break;
+                case "systemvariable":
+                    system_variable(elem.id, elem.datatype, elem.value);
+                    break;
+                case "class":
+                    library_class(elem.id);
+                    break;
+                case "keyword":
+                    keyword(elem.id, elem.stm);
+                    break;
+            }
+        });
     }
 
     this.getErrors = function() {

@@ -235,7 +235,7 @@ function iJavaSandbox(canvasid) {
 
     /*
     var updateMousePosition = function(curElement, event) {
-    	console.log(event);
+        console.log(event);
       if (event.layerX || event.layerX == 0) { // Firefox
         mouseX = event.layerX;
         mouseY = event.layerY;
@@ -283,9 +283,9 @@ function iJavaSandbox(canvasid) {
     /*
     // http://www.html5canvastutorials.com/advanced/html5-canvas-mouse-coordinates/
     function updateMousePosition(element, event) {
-    	var rect = element.getBoundingClientRect();
-    	mouseX = event.clientX - rect.left,
-    	mouseY = event.clientY - rect.top
+        var rect = element.getBoundingClientRect();
+        mouseX = event.clientX - rect.left,
+        mouseY = event.clientY - rect.top
     }
     */
     var handleMouseMove = function(e) {
@@ -339,6 +339,15 @@ function iJavaSandbox(canvasid) {
 
     ///////////////////////////// iJava libraries
     // Constants
+
+    var test = "--test--"; //test constant
+
+    // test function
+    function testf(arg1, arg2) {
+        print("funcion testf ");
+        print(arg1);
+        print(arg2);
+    }
 
     var PI = Math.PI;
     var E = Math.E;
@@ -913,7 +922,7 @@ function iJavaSandbox(canvasid) {
 
     /*
     function color(r,g,b,a) {
-    	return a << 24 & 4278190080 | r << 16 & 16711680 | g << 8 & 65280 | b & 255
+        return a << 24 & 4278190080 | r << 16 & 16711680 | g << 8 & 65280 | b & 255
     }
     */
     // Images
@@ -1045,7 +1054,7 @@ function iJavaSandbox(canvasid) {
 
     var execute = function(code) {
         installHandlers();
-        //		console.log("--------------\n");
+        //      console.log("--------------\n");
         var thecode = "running = true;\nvar __main = null;\nvar __draw = null;\nvar __onKeyPressed = null;\nvar __onKeyReleased = null;\n" + code + "\nonKeyPressed = __onKeyPressed;\nonKeyReleased = __onKeyReleased;\n try {\n  if (__main) __main();\n  else stop();\n} catch (e) {\n  error(e);\n}\n\n"
         eval(thecode);
     };

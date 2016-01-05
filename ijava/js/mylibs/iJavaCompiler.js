@@ -1,6 +1,13 @@
 function iJavaCompiler() {
-    var parser = new iJavaParser();
+
+    var elems2insert = [];
+
+    var robode = new iJavaRobodeModule();
+    elems2insert = elems2insert.concat(robode.getElems2export());
+
+    var parser = new iJavaParser(elems2insert);
     var sandbox = null;
+
     var errorHandler = null;
     var outputHandler = null;
 
@@ -57,6 +64,7 @@ function iJavaCompiler() {
     }
 
     this.run = function(source, canvasid) {
+
         var tree;
         try {
             tree = parser.parse(source);
