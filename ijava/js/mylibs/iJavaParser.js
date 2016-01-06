@@ -2,9 +2,9 @@
 // Hacer más inteligente la detección de keywords a medio como for( int a=0 ; y avisar de lo que falta a la estructura
 'use strict';
 
-function iJavaParser(myElementModules) {
+function iJavaParser(myModulesElems) {
 
-    var elementModules = myElementModules ||  [];
+    var elementsModules = myModulesElems ||  [];
 
     var errors = [];
 
@@ -1934,7 +1934,7 @@ function iJavaParser(myElementModules) {
     };
 
     function addModulesElements() {
-        elementModules.forEach(function(elem) {
+        elementsModules.forEach(function(elem) {
 
             switch (elem.type) {
                 case "constant":

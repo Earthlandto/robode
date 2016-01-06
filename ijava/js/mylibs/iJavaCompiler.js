@@ -12,7 +12,6 @@ function iJavaCompiler() {
     elems2parser = elems2parser.concat(robode.getElems2parser());
     elems2sandbox = elems2sandbox.concat(robode.getElems2sandbox());
 
-
     //--- end MODULES section
 
     var parser = new iJavaParser(elems2parser);
@@ -85,7 +84,7 @@ function iJavaCompiler() {
         var traductor = new iJava2Javascript(tree);
         var code = traductor.doIt();
         console.log(code);
-        sandbox = new iJavaSandbox(canvasid);
+        sandbox = new iJavaSandbox(canvasid, elems2sandbox);
         sandbox.setOutputHandler(outputHandler);
         sandbox.setErrorHandler(errorHandler);
         var usedImages = parser.getUsedImages();

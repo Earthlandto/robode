@@ -1,4 +1,7 @@
-function iJavaSandbox(canvasid) {
+function iJavaSandbox(canvasid, myModulesElems) {
+
+    var elementsModules = myModulesElems ||  [];
+
     var canvas = null;
     var context = null;
 
@@ -340,14 +343,14 @@ function iJavaSandbox(canvasid) {
     ///////////////////////////// iJava libraries
     // Constants
 
-    var rb_test = "--test--"; //test constant
+    // var rb_test = "--test--"; //test constant
 
-    // test function
-    var rb_testf = function (arg1, arg2) {
-        print("funcion testf ");
-        print(arg1);
-        print(arg2);
-    };
+    // // test function
+    // var rb_testf = function (arg1, arg2) {
+    //     print("funcion testf ");
+    //     print(arg1);
+    //     print(arg2);
+    // };
 
     var PI = Math.PI;
     var E = Math.E;
@@ -1121,6 +1124,14 @@ function iJavaSandbox(canvasid) {
         }
     };
 
+
+    var addModulesElements = function() {
+        elementsModules.forEach(function(elem) {
+            this[elem.id] = elem.value;
+        });
+    };
+
+    addModulesElements();
     init();
 
 }

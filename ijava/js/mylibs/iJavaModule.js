@@ -20,17 +20,6 @@ function iJavaModule(name, description) {
     };
 
 
-    this.addSandboxFunction = function(name, fun) {
-        elems2sandbox.push({
-            name,
-            fun
-        });
-    };
-
-
-
-
-
     this.makeDatatype = function(typestr, returnTypeStr, typeStrParams) {
         if (typestr === "function") {
             return make_function(returnTypeStr, typeStrParams);
@@ -39,47 +28,71 @@ function iJavaModule(name, description) {
         }
     };
 
-    this.add_function = function(id, datatype) {
+    this.add_function = function(id, fun, datatype) {
         var tok = make_token(id, "function", [{
-            datatype
+            datatype: datatype
         }]);
         elems2parser.push(tok);
+        elems2sandbox.push({
+            id: id,
+            value: fun
+        });
     };
 
-    this.add_class = function(id) {
+    this.add_class = function(id, obj) {
         elems2parser.push(make_token(id, "class"));
+        elems2sandbox.push({
+            id: id,
+            value: obj
+        });
     };
 
     this.add_keyword = function(id, stm) {
         elems2parser.push(make_token(id, "keyword", [{
-            stm
+            stm: stm
         }]));
+        elems2sandbox.push({
+            id: id,
+            value: stm
+        });
+
     };
 
 
     this.add_systemvariable = function(id, datatype, value) {
         var tok = make_token(id, "systemvariable", [{
-            datatype
+            datatype: datatype
         }, {
-            value
+            value: value
         }]);
         elems2parser.push(tok);
+        elems2sandbox.push({
+            id: id,
+            value: value
+        });
+
     };
 
     this.add_constant = function(id, datatype, value) {
         var tok = make_token(id, "constant", [{
-            datatype
+            datatype: datatype
         }, {
-            value
+            value: value
         }]);
         elems2parser.push(tok);
+        elems2sandbox.push({
+            id: id,
+            value: value
+        });
+
     };
 
 
     // Make a language element (function, constant...) by its identifier and type
     function make_token(id, type, args) {
         var token = {
-            id, type
+            id: id,
+            type: type
         };
         args = args ||  [];
         args.forEach(function(elem) {
