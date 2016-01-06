@@ -20,6 +20,17 @@ function iJavaModule(name, description) {
     };
 
 
+    this.addSandboxFunction = function(name, fun) {
+        elems2sandbox.push({
+            name,
+            fun
+        });
+    };
+
+
+
+
+
     this.makeDatatype = function(typestr, returnTypeStr, typeStrParams) {
         if (typestr === "function") {
             return make_function(returnTypeStr, typeStrParams);
@@ -29,9 +40,10 @@ function iJavaModule(name, description) {
     };
 
     this.add_function = function(id, datatype) {
-        elems2parser.push(make_token(id, "function", [{
-            datatype: datatype
-        }]));
+        var tok = make_token(id, "function", [{
+            datatype
+        }]);
+        elems2parser.push(tok);
     };
 
     this.add_class = function(id) {
@@ -40,35 +52,34 @@ function iJavaModule(name, description) {
 
     this.add_keyword = function(id, stm) {
         elems2parser.push(make_token(id, "keyword", [{
-            stm: stm
+            stm
         }]));
     };
 
 
     this.add_systemvariable = function(id, datatype, value) {
-        elems2parser.push(make_token(id, "systemvariable", [{
-            datatype: datatype
+        var tok = make_token(id, "systemvariable", [{
+            datatype
         }, {
-            value: value
-        }]));
+            value
+        }]);
+        elems2parser.push(tok);
     };
 
     this.add_constant = function(id, datatype, value) {
-
-        elems2parser.push(make_token(id, "constant", [{
-            datatype: datatype
+        var tok = make_token(id, "constant", [{
+            datatype
         }, {
-            value: value
-        }]));
-
+            value
+        }]);
+        elems2parser.push(tok);
     };
 
 
     // Make a language element (function, constant...) by its identifier and type
     function make_token(id, type, args) {
         var token = {
-            id: id,
-            type: type,
+            id, type
         };
         args = args ||  [];
         args.forEach(function(elem) {
