@@ -340,14 +340,14 @@ function iJavaSandbox(canvasid) {
     ///////////////////////////// iJava libraries
     // Constants
 
-    var test = "--test--"; //test constant
+    var rb_test = "--test--"; //test constant
 
     // test function
-    function testf(arg1, arg2) {
+    var rb_testf = function (arg1, arg2) {
         print("funcion testf ");
         print(arg1);
         print(arg2);
-    }
+    };
 
     var PI = Math.PI;
     var E = Math.E;

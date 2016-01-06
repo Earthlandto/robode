@@ -11,9 +11,9 @@ function iJavaRobodeModule() {
 
 
     var dt = module.makeDatatype('int');
-    module.add_constant('test', dt, "-test-");
+    module.add_constant('rb_test', dt, "");
 
     var dt1 = module.makeDatatype('function', 'void',['int','int']);
-    module.add_function('testf', dt1);
+    module.add_function('rb_testf', dt1);
 
 }
