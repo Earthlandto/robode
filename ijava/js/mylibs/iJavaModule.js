@@ -3,8 +3,16 @@ function iJavaModule(name, description) {
     this.name = name;
     this.description = description;
 
+    // parser elems list
     var elems2parser = [];
+    // sandbox elems list
+    var elems2sandbox = [];
 
+
+
+    this.getElems2sandbox = function() {
+        return elems2sandbox;
+    };
 
 
     this.getElems2parser = function() {

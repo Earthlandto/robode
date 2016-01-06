@@ -1,14 +1,20 @@
 function iJavaCompiler() {
 
-    var elems2parser = []; // list of elements for add the parser (functions, constant...)
+    var elems2parser = []; // list of elements for add the parser (functions definition, constants definition...)
+    var elems2sandbox = []; // list of elements for add the sandbox(functions implementation, constants implementation...)
 
-    // Create modules
+    //--- begin MODULES section
+
+    // Create ROBODE module
     var robode = new iJavaRobodeModule();
 
-    // Add elems (functions definition, constant definion... to parser)
+    // Add elems to parser list and sandbox list
     elems2parser = elems2parser.concat(robode.getElems2parser());
+    elems2sandbox = elems2sandbox.concat(robode.getElems2sandbox());
 
-    // Create parser
+
+    //--- end MODULES section
+
     var parser = new iJavaParser(elems2parser);
     var sandbox = null;
 
