@@ -22,21 +22,27 @@ function iJavaRobodeModule() {
     var rb_test = "--test--"; //test constant
 
     function rb_testf(arg1, arg2) {
-
-        function print(msg) {
-            if (msg === undefined) msg = "";
-            if (msg instanceof __Object) {
-                msg = msg.__toString__0();
-            }
-            if (outputHandler) outputHandler.print(msg);
-            else console.log(msg);
-        }
-        print('fun: rb_testf; arg1: '+ arg1 + '; arg2: ' + arg2);
+        print('fun: rb_testf; arg1: ' + arg1 + '; arg2: ' + arg2);
         print('\n');
-    };
+    }
 
     // --- add elements
     module.add_constant('rb_test', dt_rb_test, rb_test);
     module.add_function('rb_testf', rb_testf, dt_rb_testf);
+
+
+    ////////////////////////////////////
+    // OTHER FUNCTIONS
+
+
+    function print(msg) {
+        if (msg === undefined) msg = "";
+        if (msg instanceof __Object) {
+            msg = msg.__toString__0();
+        }
+        if (outputHandler) outputHandler.print(msg);
+        else console.log(msg);
+    }
+
 
 }
