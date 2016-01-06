@@ -5,7 +5,7 @@ function iJavaRobodeModule() {
     var descriptionModule = "MODULE DESCRIPTION";
 
     var module = new iJavaModule(nameModule, descriptionModule);
-    this.getElems2export = module.getElems2export; //TODO to use inheritance by iJavaModule()
+    this.getElems2parser = module.getElems2parser; //TODO to use inheritance by iJavaModule()
 
 
 

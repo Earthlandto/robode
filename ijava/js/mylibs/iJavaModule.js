@@ -3,12 +3,12 @@ function iJavaModule(name, description) {
     this.name = name;
     this.description = description;
 
-    var elems2export = [];
+    var elems2parser = [];
 
 
 
-    this.getElems2export = function() {
-        return elems2export;
+    this.getElems2parser = function() {
+        return elems2parser;
     };
 
 
@@ -21,24 +21,24 @@ function iJavaModule(name, description) {
     };
 
     this.add_function = function(id, datatype) {
-        elems2export.push(make_token(id, "function", [{
+        elems2parser.push(make_token(id, "function", [{
             datatype: datatype
         }]));
     };
 
     this.add_class = function(id) {
-        elems2export.push(make_token(id, "class"));
+        elems2parser.push(make_token(id, "class"));
     };
 
     this.add_keyword = function(id, stm) {
-        elems2export.push(make_token(id, "keyword", [{
+        elems2parser.push(make_token(id, "keyword", [{
             stm: stm
         }]));
     };
 
 
     this.add_systemvariable = function(id, datatype, value) {
-        elems2export.push(make_token(id, "systemvariable", [{
+        elems2parser.push(make_token(id, "systemvariable", [{
             datatype: datatype
         }, {
             value: value
@@ -47,7 +47,7 @@ function iJavaModule(name, description) {
 
     this.add_constant = function(id, datatype, value) {
 
-        elems2export.push(make_token(id, "constant", [{
+        elems2parser.push(make_token(id, "constant", [{
             datatype: datatype
         }, {
             value: value
