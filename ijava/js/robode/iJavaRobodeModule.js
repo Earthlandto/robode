@@ -12,23 +12,24 @@ function iJavaRobodeModule() {
     this.getElems2sandbox = module.getElems2sandbox;
 
 
-    // --- elements DEFINITION
-    var dt_rb_test = module.makeDatatype('int');
+    // --- type elements DEFINITION
+    var dt_rb_CONS = module.makeDatatype('string');
 
-    var dt_rb_testf = module.makeDatatype('function', 'void', ['int', 'int']);
+    var dt_rb_fun = module.makeDatatype('function', 'void', ['int']);
 
 
     // --- elements IMPLEMENTATION
-    var rb_test = "--test--"; //test constant
+    var rb_CONS = "--CONSTANT_RB--"; //test constant
 
-    function rb_testf(arg1, arg2) {
-        print('fun: rb_testf; arg1: ' + arg1 + '; arg2: ' + arg2);
-        print('\n');
+    function rb_fun(arg1) {
+        for (var i = 0; i < arg1; i++) {
+            print("Hello World\n");
+        }
     }
 
     // --- add elements
-    module.add_constant('rb_test', dt_rb_test, rb_test);
-    module.add_function('rb_testf', rb_testf, dt_rb_testf);
+    module.add_constant('rb_CONS', dt_rb_CONS, rb_CONS);
+    module.add_function('rb_fun', rb_fun, dt_rb_fun);
 
 
     ////////////////////////////////////
