@@ -22,7 +22,17 @@ function iJavaRobodeModule() {
     var rb_test = "--test--"; //test constant
 
     function rb_testf(arg1, arg2) {
-        console.log('fun rb_testf');
+
+        function print(msg) {
+            if (msg === undefined) msg = "";
+            if (msg instanceof __Object) {
+                msg = msg.__toString__0();
+            }
+            if (outputHandler) outputHandler.print(msg);
+            else console.log(msg);
+        }
+        print('fun: rb_testf; arg1: '+ arg1 + '; arg2: ' + arg2);
+        print('\n');
     };
 
     // --- add elements
