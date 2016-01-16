@@ -1,4 +1,4 @@
 .DS_Store
-/memotfg/build/*
-!/memotfg/build/*.pdf
-!/memotfg/images/*
+/documentation/build
+!/documentation/build/*.pdf
+!/documentation/images/*
