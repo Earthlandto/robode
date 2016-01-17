@@ -62,6 +62,12 @@ function demoCar() {
     var ENGINE_SPEED = 300;
 
 
+	this.move = function (newLspeed, newRspeed){
+		rspeed = newRspeed;
+		lspeed = newLspeed;
+	};
+
+
 
     var p1r = new b2Vec2();
     var p2r = new b2Vec2();
@@ -479,9 +485,6 @@ function demoCar() {
             elem.SetAngularVelocity(0);
             // elem.SetAngle(0);
         });
-
-        // car.SetAwake(false);
-        // stop = false;
 
         if (!car.IsAwake()) {
             stop = false;
