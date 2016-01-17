@@ -1,0 +1,186 @@
+\documentclass[a4paper,openright,12pt]{book}
+\usepackage[pass]{geometry}
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{graphicx} % graficos
+
+
+% encabezados
+
+% pie de pagina
+\lfoot[]{}
+\cfoot[]{}
+\rfoot[]{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% primera pagina de un capitulo
+\fancypagestyle{plain}{
+	\fancyhead[L]{}
+	\fancyhead[C]{}
+	\fancyhead[R]{\thepage}
+	\fancyfoot[L]{}
+	\fancyfoot[C]{}
+	\fancyfoot[R]{}
+	\renewcommand{\headrulewidth}{0pt}
+	\renewcommand{\footrulewidth}{0pt}
+}
+
+\pagestyle{fancy}
+\setlength{\headheight}{16pt} 
+
+\begin{document}
+
+\begin{titlepage}
+	\newgeometry{margin=2cm}
+	\vspace*{\fill}
+	\begin{center}
+		\vspace*{-1in}
+		\begin{figure}[htb]
+			\begin{center}
+				\includegraphics[width=8cm]{images/logo.png}
+			\end{center}
+		\end{figure}
+		\vspace*{0.15in}
+		Universidad de Murcia\\
+		\vspace*{0.15in}
+		Facultad de Informática \\
+		\vspace*{0.6in}
+		\begin{large}
+			\textbf{Máster en Nuevas Tecnologías Informáticas}\\
+		\end{large}
+		\vspace*{0.1in}
+		\begin{large}
+			Especialidad en Tecnologías Inteligentes y del Conocimiento con Aplicaciones en Medicina\\
+		\end{large}
+		\vspace*{0.1in}
+		\begin{large}
+			Trabajo Fin de Máster:\\
+		\end{large}
+		\vspace*{0.2in}
+		\begin{Large}
+			\textbf{Gestión de Bases de Conocimiento Clínicas Masivas} \\
+		\end{Large}
+		\vspace*{0.3in}
+		\begin{large}
+			Autor: Toni Wang\\
+		\end{large}
+		\vspace*{0.2in}
+		\rule{80mm}{0.1mm}\\
+		\vspace*{0.2in}
+		\begin{large}
+			Supervisado por: \\
+			José Manuel Juárez Herrero \\
+			Manuel Campos Martínez \\
+		\end{large}
+		\vspace*{0.9in}
+		Convocatoria de septiembre 2015
+	\end{center}
+	\vspace*{\fill}
+\end{titlepage}
+
+% DEDICATORIA
+
+
+\chapter*{}
+\lhead[\thepage]{}
+\rhead[]{}
+
+\pagenumbering{Roman} % para comenzar la numeracion de paginas en numeros romanos
+\begin{flushright}
+\textit{Dedicado a \\
+mi familia}
+\end{flushright}
+
+\chapter*{Agradecimientos} % si no queremos que añada la palabra "Capitulo"
+ 
+\chapter*{Resumen} % si no queremos que añada la palabra "Capitulo"
+\addcontentsline{toc}{chapter}{Resumen} % si queremos que aparezca en el índice
+
+\chapter*{Extended abstract} % si no queremos que añada la palabra "Capitulo"
+\addcontentsline{toc}{chapter}{Extended Abstract} % si queremos que aparezca en el índice
+
+\tableofcontents % indice de contenidos
+
+\cleardoublepage
+\addcontentsline{toc}{chapter}{Lista de figuras} % para que aparezca en el indice de contenidos
+\listoffigures % indice de figuras
+
+\cleardoublepage
+\addcontentsline{toc}{chapter}{Lista de tablas} % para que aparezca en el indice de contenidos
+\listoftables % indice de tablas
+
+
+\chapter{Introducción y motivación}\label{cap.intro}
+\renewcommand{\headrulewidth}{0.5pt}
+\pagenumbering{arabic} % para empezar la numeración con números
+
+\lhead[\thepage]{CAPÍTULO \thechapter. \rightmark}
+\rhead[CAPÍTULO \thechapter. \leftmark]{\thepage}
+\markboth{INTRODUCCIÓN}{INTRODUCCIÓN}
+
+\cite{Brewster_CLUK03}
+
+
+\section{Bases de conocimiento}
+\lhead[\thepage]{\thesection. Bases de conocimiento}
+
+\section{Sistemas basados en reglas}
+\lhead[\thepage]{\thesection. Sistemas basados en reglas}
+
+\section{Mantenimiento de bases de conocimiento}
+\lhead[\thepage]{\thesection. Mantenimiento de bases de conocimiento}
+
+\section{Motivación y enfoque del proyecto}
+\lhead[\thepage]{\thesection. Motivación y enfoque del proyecto}
+
+\section{Estado del arte}
+\lhead[\thepage]{\thesection. Estado del arte}
+
+\subsection{Sistemas de mantenimiento de bases de conocimiento}
+\lhead[\thepage]{\thesubsection. Sistemas de mantenimiento de bases de conocimiento}
+
+\subsection{Técnicas de elaboración de reglas clínicas}
+\lhead[\thepage]{\thesubsection. Técnicas de elaboración de reglas clínicas}
+
+\subsection{Técnicas de mantenimiento de reglas clínicas}
+\lhead[\thepage]{\thesubsection. Técnicas de mantenimiento de reglas clínicas}
+
+\chapter{Objetivos}
+\markboth{OBJETIVOS}{OBJETIVOS}
+
+\chapter{Metodologías y herramientas}
+\markboth{METODOLOGÍAS Y HERRAMIENTAS}{METODOLOGÍAS Y HERRAMIENTAS}
+
+\chapter{Diseño y resolución}
+\markboth{DISEÑO Y RESOLUCIÓN}{DISEÑO Y RESOLUCIÓN}
+
+\chapter{Análisis de la solución propuesta}
+\markboth{ANÁLISIS DE LA SOLUCIÓN PROPUESTA}{ANÁLISIS DE LA SOLUCIÓN PROPUESTA}
+
+\chapter{Conclusiones y vías futuras}
+\markboth{CONCLUSIONES Y VÍAS FUTURAS}{CONCLUSIONES Y VÍAS FUTURAS}
+
+%\appendix
+%\chapter{Más cosas}\label{aped.A}
+%\lhead[\thepage]{APÉNDICE \thechapter. \rightmark}
+%\rhead[APÉNDICE \thechapter. \leftmark]{\thepage}
+%\markboth{MÁS COSAS}{MÁS COSAS}
+%Aún faltan cosas por decir.
+%
+%\chapter{Y más cosas aún}\label{aped.B}
+%
+%\markboth{Y MÁS COSAS AÚN}{Y MÁS COSAS AÚN}
+%Y más cosas aún.
+
+\cleardoublepage
+\addcontentsline{toc}{chapter}{Bibliografía}
+
+\lhead[\thepage]{}
+\rhead[]{\thepage}
+
+\bibliographystyle{acm} % estilo de la bibliografía.
+\bibliography{bibliografia.bib} %
+
+\end{document}
