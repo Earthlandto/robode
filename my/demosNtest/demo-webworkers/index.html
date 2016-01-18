@@ -3,20 +3,20 @@
 
 <head>
     <meta charset="utf-8">
-    <title>ROBODE playing with WebWorkers</title>
+    <title>ROBODE using WebWorkers</title>
     <script src="jquery.min.js" type="text/javascript"></script>
-    <script src="parallel.js" type="text/javascript"></script>
-    <script src="bezier.js" type="text/javascript"></script>
-    <script src="Box2d.min.js" type="text/javascript"></script>
-    <script src="robode.js" type="text/javascript"></script>
-    <script src="circuit.js" type="text/javascript"></script>
+    <!-- <script src="parallel.js" type="text/javascript"></script> -->
+    <!-- <script src="bezier.js" type="text/javascript"></script> -->
+    <!-- <script src="Box2d.min.js" type="text/javascript"></script> -->
+    <!-- <script src="robode.js" type="text/javascript"></script> -->
+    <!-- <script src="circuit.js" type="text/javascript"></script> -->
     <script type="text/javascript">
+        /*
         var world;
-        var myDemoCar;
+        var worldScale = 10.0;
+        var mydemocar;
 
         function init() {
-
-            var worldScale = 10.0;
 
             //create the world
             world = new b2World(
@@ -25,27 +25,20 @@
             );
 
             //setup debug draw
-            setDraw(new b2DebugDraw(), world, "mycanvas", worldScale);
-            window.setInterval(update, 1000 / 60);
+            var myDebugDraw = new b2DebugDraw();
+            myDebugDraw.SetSprite(document.getElementById("mycanvas").getContext("2d"));
+            myDebugDraw.SetDrawScale(worldScale);
+            myDebugDraw.SetFillAlpha(0.3);
+            myDebugDraw.SetLineThickness(1.0);
+            myDebugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit);
+            world.SetDebugDraw(myDebugDraw);
+
 
             //create the circuit
             createCircuit();
 
             //create the car
-            myDemoCar = new demoCar();
-
-            console.log('robode ready');
-        };
-
-
-        function setDraw(myDebugDraw, myWorld, myCanvas, myWorldScale) {
-
-            myDebugDraw.SetSprite(document.getElementById(myCanvas).getContext("2d"));
-            myDebugDraw.SetDrawScale(myWorldScale);
-            myDebugDraw.SetFillAlpha(0.3);
-            myDebugDraw.SetLineThickness(1.0);
-            myDebugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit);
-            myWorld.SetDebugDraw(myDebugDraw);
+            mydemocar = new demoCar();
         }
 
         function update() {
@@ -54,16 +47,25 @@
                 , 10 //velocity iterations
                 , 10 //position iterations
             );
-
             world.DrawDebugData();
             world.ClearForces();
 
-            myDemoCar.updateMovement();
+            mydemocar.updateMovement();
+        }
+        */
 
-        };
         $(document).ready(function() {
-            console.log("ready");
-            init();
+            // init();
+            // window.setInterval(update, 1000 / 60);
+            console.log('ready');
+
+
+            var worker = new Worker('workertest.js');
+            worker.onmessage = function(e) {
+                console.log("Received: " + e.data);
+            }
+            worker.postMessage(""); // Start the worker.
+
         });
     </script>
 </head>
