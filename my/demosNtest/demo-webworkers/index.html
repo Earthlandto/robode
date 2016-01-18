@@ -6,12 +6,13 @@
     <title>ROBODE using WebWorkers</title>
     <script src="jquery.min.js" type="text/javascript"></script>
     <!-- <script src="parallel.js" type="text/javascript"></script> -->
-    <!-- <script src="bezier.js" type="text/javascript"></script> -->
-    <!-- <script src="Box2d.min.js" type="text/javascript"></script> -->
-    <!-- <script src="robode.js" type="text/javascript"></script> -->
-    <!-- <script src="circuit.js" type="text/javascript"></script> -->
+    <script src="bezier.js" type="text/javascript"></script>
+    <script src="Box2d.min.js" type="text/javascript"></script>
+    <script src="robode.js" type="text/javascript"></script>
+    <script src="circuit.js" type="text/javascript"></script>
+    <script src="vkthread/worker.js" type="text/javascript"></script>
+    <script src="vkthread/vkthread.js" type="text/javascript"></script>
     <script type="text/javascript">
-        /*
         var world;
         var worldScale = 10.0;
         var mydemocar;
@@ -49,22 +50,28 @@
             );
             world.DrawDebugData();
             world.ClearForces();
-
             mydemocar.updateMovement();
         }
-        */
+
 
         $(document).ready(function() {
-            // init();
-            // window.setInterval(update, 1000 / 60);
+            init();
+            window.setInterval(update, 1000 / 60);
             console.log('ready');
 
 
-            var worker = new Worker('workertest.js');
-            worker.onmessage = function(e) {
-                console.log("Received: " + e.data);
+            function fun1(){
+                console.log(document.getElementById("mycanvas"));
             }
-            worker.postMessage(""); // Start the worker.
+            vkthread.run(fun1, []).then((data)=>{console.log('then');});
+
+            // var worker = new Worker('workertest.js');
+            // worker.onmessage = function(e) {
+            //     console.log("Received: " + e.data);
+            // }
+            // worker.postMessage(""); // Start the worker.
+
+
 
         });
     </script>

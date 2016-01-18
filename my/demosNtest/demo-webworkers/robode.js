@@ -114,7 +114,6 @@ function demoCar() {
 
 
     this.updateMovement = function() {
-
         cancelVel(fr);
         cancelVel(fl);
         // fr.SetAngularVelocity(car.GetAngularVelocity());
