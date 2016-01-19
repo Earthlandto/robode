@@ -1,4 +1,6 @@
-function iJavaSandbox(canvasid) {
+function iJavaSandbox(canvasid, myModulesElems) {
+
+    var elementsModules = myModulesElems ||  [];
 
     var canvas = null;
     var context = null;
@@ -1122,6 +1124,14 @@ function iJavaSandbox(canvasid) {
         }
     };
 
+
+    var addModulesElements = function() {
+        elementsModules.forEach(function(elem) {
+            this[elem.id] = elem.value;
+        });
+    };
+
+    addModulesElements();
     init();
 
 }

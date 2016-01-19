@@ -2,7 +2,9 @@
 // Hacer más inteligente la detección de keywords a medio como for( int a=0 ; y avisar de lo que falta a la estructura
 'use strict';
 
-function iJavaParser() {
+function iJavaParser(myModulesElems) {
+
+    var elementsModules = myModulesElems ||  [];
 
     var errors = [];
 
@@ -1869,6 +1871,10 @@ function iJavaParser() {
 
         system_variable("key", StringDatatype, ""); //new StringDatatype(), 0);
         system_variable("keyPressed", BooleanDatatype, false);
+
+        // Add modules's functions, constants, variables...
+        addModulesElements();
+
     };
 
     init();
@@ -1927,6 +1933,28 @@ function iJavaParser() {
         return parseTree;
     };
 
+    function addModulesElements() {
+        elementsModules.forEach(function(elem) {
+
+            switch (elem.type) {
+                case "constant":
+                    constant(elem.id, elem.datatype, elem.value);
+                    break;
+                case "function":
+                    library_function(elem.id, elem.datatype);
+                    break;
+                case "systemvariable":
+                    system_variable(elem.id, elem.datatype, elem.value);
+                    break;
+                case "class":
+                    library_class(elem.id);
+                    break;
+                case "keyword":
+                    keyword(elem.id, elem.stm);
+                    break;
+            }
+        });
+    }
 
     this.getErrors = function() {
         return errors;

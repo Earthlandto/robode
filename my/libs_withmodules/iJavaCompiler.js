@@ -1,6 +1,20 @@
 function iJavaCompiler() {
 
-    var parser = new iJavaParser();
+    var elems2parser = []; // list of elements for add the parser (functions definition, constants definition...)
+    var elems2sandbox = []; // list of elements for add the sandbox(functions implementation, constants implementation...)
+
+    //--- begin MODULES section
+
+    // Create ROBODE module
+    var robode = new iJavaRobodeModule();
+
+    // Add elems to parser list and sandbox list
+    elems2parser = elems2parser.concat(robode.getElems2parser());
+    elems2sandbox = elems2sandbox.concat(robode.getElems2sandbox());
+
+    //--- end MODULES section
+
+    var parser = new iJavaParser(elems2parser);
     var sandbox = null;
 
     var errorHandler = null;
@@ -70,7 +84,7 @@ function iJavaCompiler() {
         var traductor = new iJava2Javascript(tree);
         var code = traductor.doIt();
         console.log(code);
-        sandbox = new iJavaSandbox(canvasid);
+        sandbox = new iJavaSandbox(canvasid, elems2sandbox);
         sandbox.setOutputHandler(outputHandler);
         sandbox.setErrorHandler(errorHandler);
         var usedImages = parser.getUsedImages();
