@@ -421,7 +421,7 @@ function iJavaSandbox(canvasid, myModulesElems) {
                 name = key;
             }
         }
-        if (name != null) {
+        if (name !== null) {
             var n = name.indexOf("__");
             var str = name.substring(n + 2);
             line = parseInt(str);
@@ -647,7 +647,7 @@ function iJavaSandbox(canvasid, myModulesElems) {
         if (!msg) msg = "Introduce un número entero";
         while (true) {
             var n = internalPrompt(msg, 0);
-            if (n == null) throw {
+            if (n === null) throw {
                 message: "Programa cancelado a petición del usuario"
             };
             if ((n !== "") && isFinite(n) && isInt(n)) return parseInt(n);
@@ -658,7 +658,7 @@ function iJavaSandbox(canvasid, myModulesElems) {
         if (!msg) msg = "Introduce un número real";
         while (true) {
             var n = internalPrompt(msg, 0.0);
-            if (n == null) throw {
+            if (n === null) throw {
                 message: "Programa cancelado a petición del usuario"
             };
             if ((n !== "") && isFinite(n)) return parseFloat(n);
@@ -668,7 +668,7 @@ function iJavaSandbox(canvasid, myModulesElems) {
     function readString(msg) {
         if (!msg) msg = "Introduce una cadena de texto";
         var str = internalPrompt(msg, "");
-        if (str == null) throw {
+        if (str === null) throw {
             message: "Programa cancelado a petición del usuario"
         };
         return new __String(str);
@@ -679,7 +679,7 @@ function iJavaSandbox(canvasid, myModulesElems) {
         var c = null;
         do {
             c = internalPrompt(msg); //readString(msg);
-            if (c == null) throw {
+            if (c === null) throw {
                 message: "Programa cancelado a petición del usuario"
             };
         } while (c.length != 1);
@@ -1058,7 +1058,7 @@ function iJavaSandbox(canvasid, myModulesElems) {
     var execute = function(code) {
         installHandlers();
         //      console.log("--------------\n");
-        var thecode = "running = true;\nvar __main = null;\nvar __draw = null;\nvar __onKeyPressed = null;\nvar __onKeyReleased = null;\n" + code + "\nonKeyPressed = __onKeyPressed;\nonKeyReleased = __onKeyReleased;\n try {\n  if (__main) __main();\n  else stop();\n} catch (e) {\n  error(e);\n}\n\n"
+        var thecode = "running = true;\nvar __main = null;\nvar __draw = null;\nvar __onKeyPressed = null;\nvar __onKeyReleased = null;\n" + code + "\nonKeyPressed = __onKeyPressed;\nonKeyReleased = __onKeyReleased;\n try {\n  if (__main) __main();\n  else stop();\n} catch (e) {\n  error(e);\n}\n\n";
         eval(thecode);
     };
 
@@ -1107,7 +1107,7 @@ function iJavaSandbox(canvasid, myModulesElems) {
     */
     this.setInputStream = function(iostream) {
         self.standardInput = iostream;
-        if (iostream == null) {
+        if (iostream === null) {
             internalPrompt = window.prompt;
         } else {
             internalPrompt = function(msg, initial) {
