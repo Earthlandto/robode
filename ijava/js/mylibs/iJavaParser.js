@@ -1620,6 +1620,16 @@ function iJavaParser() {
             datatype: ObjectDatatype
         }]));
 
+        ///////ROBODE functions
+        library_function("delay", new FunctionDatatype(VoidDatatype, [{
+            datatype: IntegerDatatype
+        }]));
+        library_function("delay", new FunctionDatatype(VoidDatatype, [{
+            datatype: DoubleDatatype
+        }]));
+
+
+
         // system_variable("mouseX", IntegerDatatype, 0);
         // system_variable("mouseY", IntegerDatatype, 0);
         // system_variable("mousePressed", BooleanDatatype, false);
