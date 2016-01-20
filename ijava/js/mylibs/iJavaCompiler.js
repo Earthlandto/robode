@@ -1,7 +1,7 @@
 function iJavaCompiler() {
 
     var parser = new iJavaParser();
-    var sandbox = new Worker('js/mylibs/iJavaSandbox.js'); //path from index to worker file
+    var sandbox = new Worker('js/mylibs/iJavaSandbox.js');
 
     var errorHandler = null;
     var outputHandler = null;
@@ -28,7 +28,7 @@ function iJavaCompiler() {
         var io = ['print', 'println', 'readInteger', 'readDouble', 'readString', 'readChar'];
         var animation = ['loop', 'noLoop', 'redraw'];
         var math = ['sin', 'cos', 'tan', 'asin', 'acos', 'atan', 'sqrt', 'abs', 'log'];
-        var graph = ['stroke', 'strokeWeight', 'noStroke', 'noFill', 'background', 'line', 'ellipse', 'point', 'triangle', 'rect', 'text', 'textSize', 'color', 'alpha', 'red', 'green', 'blue', 'brightness', 'saturation', 'blendColor', 'lerpColor', 'getColor', 'image'];
+        // var graph = ['stroke', 'strokeWeight', 'noStroke', 'noFill', 'background', 'line', 'ellipse', 'point', 'triangle', 'rect', 'text', 'textSize', 'color', 'alpha', 'red', 'green', 'blue', 'brightness', 'saturation', 'blendColor', 'lerpColor', 'getColor', 'image'];
         var tags = {
             graph: 0,
             animation: 0,
@@ -69,10 +69,7 @@ function iJavaCompiler() {
         }
         var traductor = new iJava2Javascript(tree);
         var code = traductor.doIt();
-        console.log(code);
-        // sandbox = new iJavaSandbox("mycanvas");
-        //sandbox.setOutputHandler(outputHandler);
-        // sandbox.setErrorHandler(errorHandler);
+        // console.log(code);
         var usedImages = parser.getUsedImages();
         for (var i = 0; i < usedImages.length; i++) {
             sandbox.postMessage(JSON.stringify({
@@ -83,7 +80,7 @@ function iJavaCompiler() {
         }
         outputHandler.clear();
         sandbox.postMessage(JSON.stringify({
-            order: "run",
+            type: "run",
             msg: code
         }));
         var functions = parser.getUsedFunctions();
@@ -92,7 +89,7 @@ function iJavaCompiler() {
 
     this.stop = function() {
         if (sandbox) sandbox.postMessage(JSON.stringify({
-            id: "stop",
+            type: "stop",
             msg: ""
         }));
     };
@@ -107,7 +104,7 @@ function iJavaCompiler() {
 
     sandbox.onmessage = function(e) {
         var obj = JSON.parse(e.data);
-        switch (obj.id) {
+        switch (obj.type) {
             case "output":
                 outputHandler.print(obj.msg);
                 break;

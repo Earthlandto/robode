@@ -5,7 +5,7 @@ var sandbox = new iJavaSandbox();
 
 self.onmessage = function(e) {
     var obj = JSON.parse(e.data);
-    switch (obj.order) {
+    switch (obj.type) {
         case "run":
             sandbox.run(obj.msg);
             break;
@@ -68,6 +68,7 @@ function iJavaSandbox() {
         var now = new Date();
         var elapsed = now - this.lastUpdate[this.deep];
         if (elapsed > this.timeLimit[this.deep]) {
+
             var res = window.confirm("Parece que el programa tarda demasiado. Pulsa 'ok' si crees que es normal. Pulsa 'cancel' para detener el programa si crees que puede ser debido a un bucle infinito generado por un error en el programa.");
             if (res) {
                 this.lastUpdate[this.deep] = new Date();
@@ -402,7 +403,7 @@ function iJavaSandbox() {
         if (intervalStarted === true) noLoop();
         timeSinceLastFPS = Date.now();
         framesSinceLastFPS = 0;
-        looping = window.setInterval(function() {
+        looping = setInterval(function() {
                 try {
                     var sec = (Date.now() - timeSinceLastFPS) / 1E3;
                     framesSinceLastFPS++;
@@ -423,7 +424,7 @@ function iJavaSandbox() {
 
     function noLoop() {
         if (intervalStarted) {
-            window.clearInterval(looping);
+            clearInterval(looping);
             intervalStarted = false;
             looping = null;
         }
@@ -442,6 +443,7 @@ function iJavaSandbox() {
     var execute = function(code) {
         initRuntime();
         var thecode = "running = true;\nvar __main = null;\nvar __draw = null;\nvar __onKeyPressed = null;\nvar __onKeyReleased = null;\n" + code + "\nonKeyPressed = __onKeyPressed;\nonKeyReleased = __onKeyReleased;\n try {\n  if (__main) __main();\n  else stop();\n} catch (e) {\n  error(e);\n}\n\n";
+        console.log(thecode);
         eval(thecode);
     };
 
@@ -453,26 +455,28 @@ function iJavaSandbox() {
         running = false;
     };
 
-    // Replaced by sending output/errors to compiler
-    outputHandler = function(msg) {
-        postMessage(JSON.stringify({
-            id: "output",
-            msg: msg.__data
-        }));
-    };
-
-    errorHandler = function(msg) {
-        postMessage(JSON.stringify({
-            id: "error",
-            msg: msg.message
-        }));
-    };
-
     this.run = function(code) {
         if (running) return;
         execute(code);
     };
 
+
+    // Replaced by sending output/errors to compiler
+    outputHandler = function(msg) {
+        var data = (typeof msg === "string"? msg : msg.__data);
+        postMessage(JSON.stringify({
+            type: "output",
+            msg: data
+        }));
+    };
+
+    errorHandler = function(msg) {
+        var data = (typeof msg === "string"? msg : msg.message);
+        postMessage(JSON.stringify({
+            type: "error",
+            msg: data
+        }));
+    };
     /**
     Define una nueva función para leer datos a través de las funciones
     read*() para evitar que se pregunten al usuario.
