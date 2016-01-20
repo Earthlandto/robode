@@ -1619,14 +1619,14 @@ function iJavaParser() {
         library_function("println", new FunctionDatatype(VoidDatatype, [{
             datatype: ObjectDatatype
         }]));
-    
-        system_variable("mouseX", IntegerDatatype, 0);
-        system_variable("mouseY", IntegerDatatype, 0);
-        system_variable("mousePressed", BooleanDatatype, false);
-        system_variable("mouseButton", IntegerDatatype, false);
 
-        system_variable("key", StringDatatype, ""); //new StringDatatype(), 0);
-        system_variable("keyPressed", BooleanDatatype, false);
+        // system_variable("mouseX", IntegerDatatype, 0);
+        // system_variable("mouseY", IntegerDatatype, 0);
+        // system_variable("mousePressed", BooleanDatatype, false);
+        // system_variable("mouseButton", IntegerDatatype, false);
+        //
+        // system_variable("key", StringDatatype, ""); //new StringDatatype(), 0);
+        // system_variable("keyPressed", BooleanDatatype, false);
     };
 
     init();
