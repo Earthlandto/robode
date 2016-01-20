@@ -560,51 +560,6 @@ function iJavaParser() {
             return node;
         });
 
-        /*
-        // Esto es casi equivalente a lo de abajo pero con lo de abajo puedo personalizar la comprobación de que lo que se incrementa sea una variable y no un valor
-        prefix("++", 80);
-        prefix("--", 80);
-        */
-        /*
-        Eliminados porque sólo causan confusión y problemas
-        symbol("++", function(itself) {
-            var right = expression(80);
-            if (right.type !== "identifier") this.error("El operador " + this.id + " sólo se puede aplicar a variables.");
-            keypoints.hasAssignment = true;
-            var node = {
-                id: this.id,
-                type: "value",
-                statement: true,
-                left: null,
-                right: right,
-                from: itself.from,
-                to: right.to,
-                line: this.line,
-                col: this.col,
-                error: this.error
-            };
-            return node;
-        }, 80);
-
-        symbol("--", function(itself) {
-            var right = expression(80);
-            if (right.type !== "identifier") this.error("El operador " + this.id + " sólo se puede aplicar a variables.");
-            keypoints.hasAssignment = true;
-            var node = {
-                id: this.id,
-                type: "value",
-                statement: true,
-                left: null,
-                right: right,
-                from: itself.from,
-                to: right.to,
-                line: this.line,
-                col: this.col,
-                error: this.error
-            };
-            return node;
-        }, 80);
-        */
         prefix("-", 70);
         prefix("!", 70);
 
@@ -1495,9 +1450,9 @@ function iJavaParser() {
         constant("false", BooleanDatatype, false);
         constant("PI", DoubleDatatype, Math.PI);
         constant("E", DoubleDatatype, Math.E);
-        constant("LEFTBUTTON", IntegerDatatype, "LEFTBUTTON");
-        constant("MIDDLEBUTTON", IntegerDatatype, "MIDDLEBUTTON");
-        constant("RIGHTBUTTON", IntegerDatatype, "RIGHTBUTTON");
+        // constant("LEFTBUTTON", IntegerDatatype, "LEFTBUTTON");
+        // constant("MIDDLEBUTTON", IntegerDatatype, "MIDDLEBUTTON");
+        // constant("RIGHTBUTTON", IntegerDatatype, "RIGHTBUTTON");
         constant("null", new NullDatatype(), "NullObject");
 
         library_function("millis", new FunctionDatatype(IntegerDatatype, []));
@@ -1521,22 +1476,22 @@ function iJavaParser() {
             datatype: IntegerDatatype
         }]));
 
-        library_function("readInteger", new FunctionDatatype(IntegerDatatype, []));
-        library_function("readInteger", new FunctionDatatype(IntegerDatatype, [{
-            datatype: StringDatatype
-        }]));
-        library_function("readDouble", new FunctionDatatype(DoubleDatatype, []));
-        library_function("readDouble", new FunctionDatatype(DoubleDatatype, [{
-            datatype: StringDatatype
-        }]));
-        library_function("readString", new FunctionDatatype(StringDatatype, []));
-        library_function("readString", new FunctionDatatype(StringDatatype, [{
-            datatype: StringDatatype
-        }]));
-        library_function("readChar", new FunctionDatatype(CharDatatype, []));
-        library_function("readChar", new FunctionDatatype(CharDatatype, [{
-            datatype: StringDatatype
-        }]));
+        // library_function("readInteger", new FunctionDatatype(IntegerDatatype, []));
+        // library_function("readInteger", new FunctionDatatype(IntegerDatatype, [{
+        //     datatype: StringDatatype
+        // }]));
+        // library_function("readDouble", new FunctionDatatype(DoubleDatatype, []));
+        // library_function("readDouble", new FunctionDatatype(DoubleDatatype, [{
+        //     datatype: StringDatatype
+        // }]));
+        // library_function("readString", new FunctionDatatype(StringDatatype, []));
+        // library_function("readString", new FunctionDatatype(StringDatatype, [{
+        //     datatype: StringDatatype
+        // }]));
+        // library_function("readChar", new FunctionDatatype(CharDatatype, []));
+        // library_function("readChar", new FunctionDatatype(CharDatatype, [{
+        //     datatype: StringDatatype
+        // }]));
 
         library_function("charArrayToString", new FunctionDatatype(StringDatatype, [{
             datatype: new ArrayDatatype(1, CharDatatype)
@@ -1664,204 +1619,7 @@ function iJavaParser() {
         library_function("println", new FunctionDatatype(VoidDatatype, [{
             datatype: ObjectDatatype
         }]));
-
-        library_function("stroke", new FunctionDatatype(VoidDatatype, [{
-            datatype: DoubleDatatype
-        }]));
-        library_function("stroke", new FunctionDatatype(VoidDatatype, [{
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }]));
-        library_function("stroke", new FunctionDatatype(VoidDatatype, [{
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }]));
-        library_function("strokeWeight", new FunctionDatatype(VoidDatatype, [{
-            datatype: IntegerDatatype
-        }]));
-        library_function("noStroke", new FunctionDatatype(VoidDatatype, []));
-        library_function("fill", new FunctionDatatype(VoidDatatype, [{
-            datatype: DoubleDatatype
-        }]));
-        library_function("fill", new FunctionDatatype(VoidDatatype, [{
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }]));
-        library_function("fill", new FunctionDatatype(VoidDatatype, [{
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }]));
-        library_function("noFill", new FunctionDatatype(VoidDatatype, []));
-        library_function("background", new FunctionDatatype(VoidDatatype, [{
-            datatype: DoubleDatatype
-        }]));
-        library_function("background", new FunctionDatatype(VoidDatatype, [{
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }]));
-        library_function("background", new FunctionDatatype(VoidDatatype, [{
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }]));
-
-        library_function("line", new FunctionDatatype(VoidDatatype, [{
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }]));
-        library_function("ellipse", new FunctionDatatype(VoidDatatype, [{
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }]));
-        library_function("point", new FunctionDatatype(VoidDatatype, [{
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }]));
-        library_function("triangle", new FunctionDatatype(VoidDatatype, [{
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }]));
-        library_function("rect", new FunctionDatatype(VoidDatatype, [{
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }]));
-        library_function("text", new FunctionDatatype(VoidDatatype, [{
-            datatype: IntegerDatatype
-        }, {
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }]));
-        library_function("text", new FunctionDatatype(VoidDatatype, [{
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }]));
-        library_function("text", new FunctionDatatype(VoidDatatype, [{
-            datatype: CharDatatype
-        }, {
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }]));
-        library_function("text", new FunctionDatatype(VoidDatatype, [{
-            datatype: BooleanDatatype
-        }, {
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }]));
-        library_function("text", new FunctionDatatype(VoidDatatype, [{
-            datatype: ObjectDatatype
-        }, {
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }]));
-        library_function("textWidth", new FunctionDatatype(IntegerDatatype, [{
-            datatype: IntegerDatatype
-        }]));
-        library_function("textWidth", new FunctionDatatype(IntegerDatatype, [{
-            datatype: DoubleDatatype
-        }]));
-        library_function("textWidth", new FunctionDatatype(IntegerDatatype, [{
-            datatype: CharDatatype
-        }]));
-        library_function("textWidth", new FunctionDatatype(IntegerDatatype, [{
-            datatype: BooleanDatatype
-        }]));
-        library_function("textWidth", new FunctionDatatype(IntegerDatatype, [{
-            datatype: ObjectDatatype
-        }]));
-        library_function("textSize", new FunctionDatatype(VoidDatatype, [{
-            datatype: IntegerDatatype
-        }]));
-
-        //      library_function("loadImage", new FunctionDatatype(classImage));
-        library_function("image", new FunctionDatatype(VoidDatatype, [{
-            datatype: StringDatatype
-        }, {
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }]));
-        library_function("image", new FunctionDatatype(VoidDatatype, [{
-            datatype: StringDatatype
-        }, {
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }]));
-        //      library_function("snapshot", "void");
-        // TODO: Crear clase Color para manejar esto
-        library_function("getColor", new FunctionDatatype(IntegerDatatype, [{
-            datatype: DoubleDatatype
-        }, {
-            datatype: DoubleDatatype
-        }]));
-        library_function("red", new FunctionDatatype(IntegerDatatype, [{
-            datatype: IntegerDatatype
-        }]));
-        library_function("green", new FunctionDatatype(IntegerDatatype, [{
-            datatype: IntegerDatatype
-        }]));
-        library_function("blue", new FunctionDatatype(IntegerDatatype, [{
-            datatype: IntegerDatatype
-        }]));
+    
         system_variable("mouseX", IntegerDatatype, 0);
         system_variable("mouseY", IntegerDatatype, 0);
         system_variable("mousePressed", BooleanDatatype, false);
