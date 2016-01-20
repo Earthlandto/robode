@@ -1,7 +1,7 @@
 function iJavaCompiler() {
 
     var parser = new iJavaParser();
-    var sandbox = null;
+    var sandbox = new Worker('js/mylibs/iJavaSandbox.js'); //path from index to worker file
 
     var errorHandler = null;
     var outputHandler = null;
@@ -70,21 +70,31 @@ function iJavaCompiler() {
         var traductor = new iJava2Javascript(tree);
         var code = traductor.doIt();
         console.log(code);
-        sandbox = new iJavaSandbox(canvasid);
-        sandbox.setOutputHandler(outputHandler);
-        sandbox.setErrorHandler(errorHandler);
+        // sandbox = new iJavaSandbox("mycanvas");
+        //sandbox.setOutputHandler(outputHandler);
+        // sandbox.setErrorHandler(errorHandler);
         var usedImages = parser.getUsedImages();
         for (var i = 0; i < usedImages.length; i++) {
-            sandbox.preloadImage(usedImages[i]);
+            sandbox.postMessage(JSON.stringify({
+                image: {
+                    src: usedImages[i]
+                }
+            }));
         }
         outputHandler.clear();
-        sandbox.run(code);
+        sandbox.postMessage(JSON.stringify({
+            order: "run",
+            msg: code
+        }));
         var functions = parser.getUsedFunctions();
         return (functions.indexOf('loop') >= 0 || (functions.indexOf('animate') >= 0));
     };
 
     this.stop = function() {
-        if (sandbox) sandbox.stop();
+        if (sandbox) sandbox.postMessage(JSON.stringify({
+            id: "stop",
+            msg: ""
+        }));
     };
 
     this.setOutputHandler = function(oh) {
@@ -94,4 +104,21 @@ function iJavaCompiler() {
     this.setErrorHandler = function(eh) {
         errorHandler = eh;
     };
+
+    sandbox.onmessage = function(e) {
+        console.log("compiler: msg from worker: ", e.data);
+        var obj = JSON.parse(e.data);
+        switch (obj.id) {
+            case "output":
+                outputHandler.print(obj.msg);
+                break;
+            case "error":
+                errorHandler.manage(obj.msg);
+                break;
+            default:
+                console.log("compiler: msg from worker: ", e.data);
+
+        }
+    };
+
 }
