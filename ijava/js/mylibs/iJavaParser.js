@@ -1450,9 +1450,6 @@ function iJavaParser() {
         constant("false", BooleanDatatype, false);
         constant("PI", DoubleDatatype, Math.PI);
         constant("E", DoubleDatatype, Math.E);
-        // constant("LEFTBUTTON", IntegerDatatype, "LEFTBUTTON");
-        // constant("MIDDLEBUTTON", IntegerDatatype, "MIDDLEBUTTON");
-        // constant("RIGHTBUTTON", IntegerDatatype, "RIGHTBUTTON");
         constant("null", new NullDatatype(), "NullObject");
 
         library_function("millis", new FunctionDatatype(IntegerDatatype, []));
@@ -1627,16 +1624,6 @@ function iJavaParser() {
         library_function("delay", new FunctionDatatype(VoidDatatype, [{
             datatype: DoubleDatatype
         }]));
-
-
-
-        // system_variable("mouseX", IntegerDatatype, 0);
-        // system_variable("mouseY", IntegerDatatype, 0);
-        // system_variable("mousePressed", BooleanDatatype, false);
-        // system_variable("mouseButton", IntegerDatatype, false);
-        //
-        // system_variable("key", StringDatatype, ""); //new StringDatatype(), 0);
-        // system_variable("keyPressed", BooleanDatatype, false);
     };
 
     init();
