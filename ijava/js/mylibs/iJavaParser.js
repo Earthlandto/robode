@@ -1094,7 +1094,7 @@ function iJavaParser() {
                     }
                 }
             }
-            if (basetype != null) {
+            if (basetype !== null) {
                 return {
                     id: "(cast)",
                     type: "value",
