@@ -68,7 +68,7 @@ function iJavaSandbox() {
         var now = new Date();
         var elapsed = now - this.lastUpdate[this.deep];
         if (elapsed > this.timeLimit[this.deep]) {
-
+            //FIXME: delete window.confirm
             var res = window.confirm("Parece que el programa tarda demasiado. Pulsa 'ok' si crees que es normal. Pulsa 'cancel' para detener el programa si crees que puede ser debido a un bucle infinito generado por un error en el programa.");
             if (res) {
                 this.lastUpdate[this.deep] = new Date();
@@ -376,6 +376,14 @@ function iJavaSandbox() {
     /////////////////// ROBODE functions
 
     function delay(millis) {
+
+        //Add delay time to runtime.timeLimit
+        if (runtime) {
+            if (runtime.deep > -1) {
+                runtime.timeLimit[runtime.deep] += millis;
+            }
+        }
+
         var timestamp = (new Date()).getTime() + millis;
         while ((new Date()).getTime() < timestamp) {
             //do nothing
@@ -463,7 +471,7 @@ function iJavaSandbox() {
 
     // Replaced by sending output/errors to compiler
     outputHandler = function(msg) {
-        var data = (typeof msg === "string"? msg : msg.__data);
+        var data = (typeof msg === "string" ? msg : msg.__data);
         postMessage(JSON.stringify({
             type: "output",
             msg: data
@@ -471,10 +479,9 @@ function iJavaSandbox() {
     };
 
     errorHandler = function(msg) {
-        var data = (typeof msg === "string"? msg : msg.message);
         postMessage(JSON.stringify({
             type: "error",
-            msg: data
+            msg: msg.message
         }));
     };
     /**
