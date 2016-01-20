@@ -4,7 +4,6 @@ importScripts('OOSupport.js');
 var sandbox = new iJavaSandbox();
 
 self.onmessage = function(e) {
-    console.log('worker: msg from compiler ', e.data);
     var obj = JSON.parse(e.data);
     switch (obj.order) {
         case "run":
@@ -587,12 +586,10 @@ function iJavaSandbox() {
     }
 
     function print(msg) {
-        console.log(msg,'1----');
         if (msg === undefined) msg = "";
         if (msg instanceof __Object) {
             msg = msg.__toString__0();
         }
-        console.log(msg,'----');
         if (outputHandler) outputHandler(msg);
         else console.log(msg);
     }
@@ -659,7 +656,18 @@ function iJavaSandbox() {
     }
 
 
-    ///////////////////
+    /////////////////// ROBODE functions
+
+    function delay(timeSeconds) {
+        var timestamp =(new Date()).getTime() + timeSeconds * 1000;
+        // console.log('start', new Date());
+        while ((new Date()).getTime() < timestamp) {
+            //do nothing
+        }
+        // console.log('end', new Date());
+    }
+
+    /////////////////// end robode functions
 
     /**
      * El parámetro t determina los milisegundos a esperar entre frames con un límite inferior de 10ms
@@ -743,7 +751,6 @@ function iJavaSandbox() {
 
     var execute = function(code) {
         installHandlers();
-        //      console.log("--------------\n");
         var thecode = "running = true;\nvar __main = null;\nvar __draw = null;\nvar __onKeyPressed = null;\nvar __onKeyReleased = null;\n" + code + "\nonKeyPressed = __onKeyPressed;\nonKeyReleased = __onKeyReleased;\n try {\n  if (__main) __main();\n  else stop();\n} catch (e) {\n  error(e);\n}\n\n";
         eval(thecode);
     };
@@ -758,7 +765,6 @@ function iJavaSandbox() {
 
     // Replaced by sending output/errors to compiler
     outputHandler = function(msg) {
-        console.log('outputHandler', msg);
         postMessage(JSON.stringify({
             id: "output",
             msg: msg.__data

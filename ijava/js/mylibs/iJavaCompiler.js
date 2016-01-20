@@ -106,7 +106,6 @@ function iJavaCompiler() {
     };
 
     sandbox.onmessage = function(e) {
-        console.log("compiler: msg from worker: ", e.data);
         var obj = JSON.parse(e.data);
         switch (obj.id) {
             case "output":
