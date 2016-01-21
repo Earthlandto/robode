@@ -376,9 +376,7 @@ function demoCar() {
 
         var vPoints = [];
         points.forEach(function(elem, index, array) {
-            var vec = new b2Vec2();
-            vec.Set(elem.x, elem.y);
-            vPoints[index] = vec;
+            vPoints[index] = new b2Vec2(elem.x, elem.y);
         });
 
 
