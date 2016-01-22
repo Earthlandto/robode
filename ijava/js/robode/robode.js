@@ -7,13 +7,9 @@ var b2World = Box2D.Dynamics.b2World;
 var b2MassData = Box2D.Collision.Shapes.b2MassData;
 var b2PolygonShape = Box2D.Collision.Shapes.b2PolygonShape;
 var b2CircleShape = Box2D.Collision.Shapes.b2CircleShape;
-// var b2ChainShape = Box2D.Collision.Shapes.b2EdgeChainDef;
 var b2DebugDraw = Box2D.Dynamics.b2DebugDraw;
 var b2RevoluteJointDef = Box2D.Dynamics.Joints.b2RevoluteJointDef;
-// var b2DistanceJointDef = Box2D.Dynamics.Joints.b2DistanceJointDef;
-// var b2WeldJointDef = Box2D.Dynamics.Joints.b2WeldJointDef;
 var b2ContactListener = Box2D.Dynamics.b2ContactListener;
-// var b2ContactFilter = Box2D.Dynamics.b2ContactFilter;
 
 function demoCar() {
 
@@ -25,7 +21,6 @@ function demoCar() {
     bodyDef.position.Set(16, 16);
     bodyDef.linearDamping = 8;
     bodyDef.angularDamping = 8;
-    // bodyDef.allowSleep = true; // by default
 
     var fixDef = new b2FixtureDef();
     fixDef.density = 40;
@@ -111,8 +106,6 @@ function demoCar() {
 
         cancelVel(fr);
         cancelVel(fl);
-        // fr.SetAngularVelocity(car.GetAngularVelocity());
-        // fl.SetAngularVelocity(car.GetAngularVelocity());
 
         if (stop) {
             stopMovement();
@@ -281,7 +274,6 @@ function demoCar() {
                 bodiesSensed[bodySensorUD].push(newBodySensed);
 
                 console.log("BEGIN contact", bodySensorUD, bodySensed.GetUserData());
-                // document.getElementById(bodySensorUD).style.backgroundColor = 'grey';
             }
 
         }
@@ -322,7 +314,6 @@ function demoCar() {
             (listSensed[sensedIndex])[bodySensedUD] -= 1;
             if ((listSensed[sensedIndex])[bodySensedUD] < 1) {
                 console.log("END contact", bodySensorUD, bodySensed.GetUserData());
-                // document.getElementById(bodySensorUD).style.backgroundColor = '';
             }
         }
     };
@@ -388,8 +379,6 @@ function demoCar() {
         sensor.CreateFixture(fixDef);
         sensor.SetUserData('sensor' + name);
 
-        //console.log(carPos, sensor.GetWorldCenter());
-
         // make the joint
         var jointdef = new b2RevoluteJointDef();
         jointdef.Initialize(car, sensor, carPos);
@@ -442,7 +431,6 @@ function demoCar() {
         jointdef.collideConnected = false;
         jointdef.enableMotor = false;
         jointdef.enableLimit = true;
-        //jointdef.maxMotorTorque = Number.MAX_SAFE_INTEGER;
 
         world.CreateJoint(jointdef);
 
@@ -475,16 +463,11 @@ function demoCar() {
         extSensors.forEach(function(elem) {
             elem.SetLinearVelocity(new b2Vec2(0, 0));
             elem.SetAngularVelocity(0);
-            // elem.SetAngle(0);
         });
-
-        // car.SetAwake(false);
-        // stop = false;
 
         if (!car.IsAwake()) {
             stop = false;
         }
-
     }
 
 
@@ -517,7 +500,6 @@ function demoCar() {
 
 
         extSensors.forEach(function(elem) {
-            // elem.SetLinearVelocity(carLV);
             elem.SetAngularVelocity(carAV);
             elem.SetAngle(car.GetAngle());
         });
