@@ -9,10 +9,10 @@
 	<!-- <script src="vkthread/vkthread.js" type="text/javascript"></script> -->
 	<script type="text/javascript">
 		var worker = new Worker('workertest.js');
+		worker.postMessage("message from main thread to worker."); // Start the worker.
 		worker.onmessage = function(e) {
 			console.log("main thread: Received: " + e.data);
 		}
-		worker.postMessage("message from main thread to worker."); // Start the worker.
 	</script>
 </head>
 
