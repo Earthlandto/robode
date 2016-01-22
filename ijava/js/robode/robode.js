@@ -1,46 +1,17 @@
-var b2Vec2 = Box2D.Common.Math.b2Vec2;
-var b2BodyDef = Box2D.Dynamics.b2BodyDef;
-var b2Body = Box2D.Dynamics.b2Body;
-var b2FixtureDef = Box2D.Dynamics.b2FixtureDef;
-var b2Fixture = Box2D.Dynamics.b2Fixture;
-var b2World = Box2D.Dynamics.b2World;
-var b2MassData = Box2D.Collision.Shapes.b2MassData;
-var b2PolygonShape = Box2D.Collision.Shapes.b2PolygonShape;
-var b2CircleShape = Box2D.Collision.Shapes.b2CircleShape;
-var b2DebugDraw = Box2D.Dynamics.b2DebugDraw;
-var b2RevoluteJointDef = Box2D.Dynamics.Joints.b2RevoluteJointDef;
-var b2ContactListener = Box2D.Dynamics.b2ContactListener;
-
-function demoCar() {
-
+function Robode() {
 
     ////////// CREATE CAR
 
-    var bodyDef = new b2BodyDef();
-    bodyDef.type = b2Body.b2_dynamicBody;
-    bodyDef.position.Set(16, 16);
-    bodyDef.linearDamping = 8;
-    bodyDef.angularDamping = 8;
+    var car = createCar(16, 16, 0.6, 1);
 
-    var fixDef = new b2FixtureDef();
-    fixDef.density = 40;
-    fixDef.friction = 1;
-    fixDef.restitution = 0;
-    fixDef.shape = new b2PolygonShape();
-    fixDef.shape.SetAsBox(0.6, 1);
-
-    //CAR BODY
-    var car = world.CreateBody(bodyDef);
-    car.CreateFixture(fixDef);
-    car.SetUserData("robot");
     //WHEELS
-    var xx = car.GetWorldCenter().x;
-    var yy = car.GetWorldCenter().y;
-    var fr = wheel(xx + 0.53, yy + 0.5); //front right wheel
-    var fl = wheel(xx - 0.53, yy + 0.5); //front left wheel
+    var carX = car.GetWorldCenter().x;
+    var carY = car.GetWorldCenter().y;
+    var fr = createWheel(carX + 0.53, carY + 0.5); //front right wheel
+    var fl = createWheel(carX - 0.53, carY + 0.5); //front left wheel
 
-    var jfr = revJoint(car, fr); // Joint between car body and front right wheel
-    var jfl = revJoint(car, fl); // Joint between car body and front left wheel
+    var jfr = addWheelJoint(car, fr); // Joint between car body and front right wheel
+    var jfl = addWheelJoint(car, fl); // Joint between car body and front left wheel
 
 
     ///////// CAR BEHAVIOUR
@@ -332,7 +303,7 @@ function demoCar() {
 
     }
 
-    function wheel(x, y) {
+    function createWheel(x, y) {
 
         var bodyDef = new b2BodyDef();
         bodyDef.type = b2Body.b2_dynamicBody;
@@ -346,7 +317,7 @@ function demoCar() {
         fixDef.isSensor = false;
         var wheelBody = world.CreateBody(bodyDef);
         wheelBody.CreateFixture(fixDef);
-        wheelBody.SetUserData("wheel");
+        wheelBody.setName("wheel");
         return wheelBody;
     }
 
@@ -377,7 +348,7 @@ function demoCar() {
         var sensor = world.CreateBody(bodyDef);
 
         sensor.CreateFixture(fixDef);
-        sensor.SetUserData('sensor' + name);
+        sensor.setName('sensor' + name);
 
         // make the joint
         var jointdef = new b2RevoluteJointDef();
@@ -421,7 +392,7 @@ function demoCar() {
         fixDef.isSensor = true;
 
         var sline = world.CreateBody(bodyDef);
-        sline.SetUserData("sline-" + name);
+        sline.setName("sline-" + name);
 
         sline.CreateFixture(fixDef);
 
@@ -438,15 +409,16 @@ function demoCar() {
     }
 
     // Revolute Joints
-    function revJoint(body, wheel) {
+    function addWheelJoint(mybody, mywheel) {
+
         var revoluteJointDef = new b2RevoluteJointDef();
-        revoluteJointDef.Initialize(body, wheel, wheel.GetWorldCenter());
+        revoluteJointDef.Initialize(mybody, mywheel, mywheel.GetWorldCenter());
         revoluteJointDef.motorSpeed = 0;
         revoluteJointDef.enableLimit = true;
         revoluteJointDef.maxMotorTorque = Number.MAX_SAFE_INTEGER;
         revoluteJointDef.enableMotor = true;
-        revoluteJoint = world.CreateJoint(revoluteJointDef);
-        return revoluteJoint;
+        return world.CreateJoint(revoluteJointDef);
+
     }
 
 
@@ -497,8 +469,6 @@ function demoCar() {
         fr.SetAngularVelocity(carAV);
         fl.SetAngularVelocity(carAV);
 
-
-
         extSensors.forEach(function(elem) {
             elem.SetAngularVelocity(carAV);
             elem.SetAngle(car.GetAngle());
@@ -517,5 +487,28 @@ function demoCar() {
         newlocal.y = bbbb.y;
         newworld = wheel.GetWorldVector(newlocal);
         wheel.SetLinearVelocity(newworld);
+    }
+
+    function createCar(posX, posY, width, height) {
+
+        var bodyDef = new b2BodyDef();
+        bodyDef.type = b2Body.b2_dynamicBody;
+        bodyDef.position.Set(posX, posY);
+        bodyDef.linearDamping = 8;
+        bodyDef.angularDamping = 8;
+
+        var fixDef = new b2FixtureDef();
+        fixDef.density = 40;
+        fixDef.friction = 1;
+        fixDef.restitution = 0;
+        fixDef.shape = new b2PolygonShape();
+        fixDef.shape.SetAsBox(width, height);
+
+        //CAR BODY
+        var car = world.CreateBody(bodyDef);
+        car.setName("robot");
+
+        car.CreateFixture(fixDef);
+        return car;
     }
 }

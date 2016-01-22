@@ -1,13 +1,12 @@
 function createCircuit() {
 
-    var scale = 10;
     var canvasWidth = $('canvas').get(0).width;
     var canvasHeight = $('canvas').get(0).height;
 
     //===BORDERS===================================================================
     var bodyDef = new b2BodyDef();
     bodyDef.type = b2Body.b2_staticBody;
-    bodyDef.userData = createNewUserData("border");
+    bodyDef.setName("border");
     var fixDef = new b2FixtureDef();
     fixDef.shape = new b2PolygonShape();
 
@@ -28,11 +27,5 @@ function createCircuit() {
     // left border
     bodyDef.position.Set(0, (canvasHeight/scale)/2);
     world.CreateBody(bodyDef).CreateFixture(fixDef);
-
-
-
-    function createNewUserData(bodyType) {
-        return bodyType + Math.floor(Math.random() * 1000);
-    }
 
 }
