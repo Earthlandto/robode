@@ -160,7 +160,7 @@ function Robode() {
                 if (sensedIndex > -1) {
                     (listSensed[sensedIndex])[bodySensed] += 1;
                     if ((listSensed[sensedIndex])[bodySensed] === 1) {
-                        
+
                         console.log("BEGIN contact", bodySensor, bodySensed);
                     }
 
@@ -347,10 +347,10 @@ function Robode() {
      ****************************************************************************/
 
 
-    function isRobotPart(bodySensedUserData, avoid_elems) {
+    function isRobotPart(bodySensedName, elems2avoid) {
 
-        for (var elem in avoid_elems) {
-            if (avoid_elems[elem] == bodySensedUserData)
+        for (var elem in elems2avoid) {
+            if (elems2avoid[elem] == bodySensedName)
                 return true;
         }
         return false;
