@@ -97,17 +97,26 @@ function Robode() {
 
     var robotparts = ['wheel', 'robot'];
     /*  The bodiesSensed variable stores the bodies sensed by each sensor.
-    For each body, stores the number the fixtures that the sensor has sensed
-    using maps:   map {k, map{k', v}}
-    example:      map {sensor0, map{ body1, 10}} */
+    For each body, stores the number the fixtures that the sensor has sensed.
+    Format:
+        map {k, map{k', v}}
+    Example:
+        var bodiesSensed = {
+            "sline-left": {
+                line3: 10
+            },
+            "sensorTL": {
+                border2: 3
+            }
+        };
+    */
     var bodiesSensed = {};
 
-
+    // If a sensor detects a line, the contac's enabled.
     contactListener.PreSolve = function(contact, oldManifold) {
 
-
-        var udA = contact.GetFixtureA().GetBody().GetUserData();
-        var udB = contact.GetFixtureB().GetBody().GetUserData();
+        var udA = contact.GetFixtureA().getBodyName();
+        var udB = contact.GetFixtureB().getBodyName();
 
         if (udA.substr(0, 4) == 'line' || udB.substr(0, 4) == 'line') {
             contact.SetEnabled(false);
@@ -117,63 +126,59 @@ function Robode() {
     /*  The sensoring begins when a particular sensor perceive a body through
     one of its parts (fixtures). Then, beginContact function counts the aparitions
     of this body's fixtures. A contact begins when the aparitions number increments
-    for zero to one and ends when the aparitions decrements to zero.
-        All of this is implements in beginContact and EndContact functions. */
-
+    for zero to one and ends when the aparitions decrements to zero (in endContact
+    function). */
     contactListener.BeginContact = function(contact) {
 
         var isSensorA = contact.GetFixtureA().IsSensor();
         var isSensorB = contact.GetFixtureB().IsSensor();
 
-        if (isSensorA != isSensorB) { // a XOR b
+        if (isSensorA != isSensorB) { // a XOR b: is any fixture a sensor?
 
             var bodySensed, bodySensor;
 
             if (isSensorA) {
-                bodySensor = contact.GetFixtureA().GetBody();
-                bodySensed = contact.GetFixtureB().GetBody();
+                bodySensor = contact.GetFixtureA().getBodyName();
+                bodySensed = contact.GetFixtureB().getBodyName();
             } else {
-                bodySensor = contact.GetFixtureB().GetBody();
-                bodySensed = contact.GetFixtureA().GetBody();
+                bodySensor = contact.GetFixtureB().getBodyName();
+                bodySensed = contact.GetFixtureA().getBodyName();
             }
 
             // if it's a robot part, do nothing
-            if (isRobotPart(bodySensed.GetUserData(), robotparts))
+            if (isRobotPart(bodySensed(), robotparts))
                 return;
 
-            var bodySensorUD = bodySensor.GetUserData();
-            var bodySensedUD = bodySensed.GetUserData();
-
             // Had the body sensed the body previously?
-            if (bodiesSensed.hasOwnProperty(bodySensorUD)) {
-                var listSensed = bodiesSensed[bodySensorUD];
+            if (bodiesSensed.hasOwnProperty(bodySensor)) {
+                var listSensed = bodiesSensed[bodySensor];
                 var sensedIndex = listSensed.findIndex(function(elem) {
-                    return elem.hasOwnProperty(bodySensedUD);
+                    return elem.hasOwnProperty(bodySensed);
                 });
 
                 //if the body is already sensed
                 if (sensedIndex > -1) {
-                    (listSensed[sensedIndex])[bodySensedUD] += 1;
-                    if ((listSensed[sensedIndex])[bodySensedUD] === 1) {
-                        console.log("BEGIN contact", bodySensorUD, bodySensed.GetUserData());
-                        // document.getElementById(bodySensorUD).style.backgroundColor = 'grey';
+                    (listSensed[sensedIndex])[bodySensed] += 1;
+                    if ((listSensed[sensedIndex])[bodySensed] === 1) {
+                        
+                        console.log("BEGIN contact", bodySensor, bodySensed);
                     }
 
                 } else {
                     // it's first time this sensor sensed this body
-                    var newBodySensed = {};
-                    newBodySensed[bodySensedUD] = 1;
-                    listSensed.push(newBodySensed);
-                    console.log("BEGIN contact", bodySensorUD, bodySensed.GetUserData());
-                    // document.getElementById(bodySensorUD).style.backgroundColor = 'grey';
+                    var bodysensedAux = {};
+                    bodysensedAux[bodySensed] = 1;
+                    listSensed.push(bodysensedAux);
+
+                    console.log("BEGIN contact", bodySensor, bodySensed);
                 }
             } else { // if it's the first time that the sensor perceive any body...
-                bodiesSensed[bodySensorUD] = [];
+                bodiesSensed[bodySensor] = [];
                 var newBodySensed = {};
-                newBodySensed[bodySensedUD] = 1;
-                bodiesSensed[bodySensorUD].push(newBodySensed);
+                newBodySensed[bodySensed] = 1;
+                bodiesSensed[bodySensor].push(newBodySensed);
 
-                console.log("BEGIN contact", bodySensorUD, bodySensed.GetUserData());
+                console.log("BEGIN contact", bodySensor, bodySensed);
             }
 
         }
@@ -189,31 +194,26 @@ function Robode() {
             var bodySensed, bodySensor;
 
             if (isSensorA) {
-                bodySensor = contact.GetFixtureA().GetBody();
-                bodySensed = contact.GetFixtureB().GetBody();
+                bodySensor = contact.GetFixtureA().getBodyName();
+                bodySensed = contact.GetFixtureB().getBodyName();
             } else {
-                bodySensor = contact.GetFixtureB().GetBody();
-                bodySensed = contact.GetFixtureA().GetBody();
+                bodySensor = contact.GetFixtureB().getBodyName();
+                bodySensed = contact.GetFixtureA().getBodyName();
             }
 
             // if it's a robot part, do nothing
-            if (isRobotPart(bodySensed.GetUserData(), robotparts))
+            if (isRobotPart(bodySensed, robotparts))
                 return;
 
-            var bodySensorUD = bodySensor.GetUserData();
-            var bodySensedUD = bodySensed.GetUserData();
-
             // The body has already been sensed previously
-            var listSensed = bodiesSensed[bodySensorUD];
+            var listSensed = bodiesSensed[bodySensor];
             var sensedIndex = listSensed.findIndex(function(elem) {
-                return elem.hasOwnProperty(bodySensedUD);
+                return elem.hasOwnProperty(bodySensed);
             });
 
-
-
-            (listSensed[sensedIndex])[bodySensedUD] -= 1;
-            if ((listSensed[sensedIndex])[bodySensedUD] < 1) {
-                console.log("END contact", bodySensorUD, bodySensed.GetUserData());
+            (listSensed[sensedIndex])[bodySensed] -= 1;
+            if ((listSensed[sensedIndex])[bodySensed] < 1) {
+                console.log("END contact", bodySensor, bodySensed);
             }
         }
     };
