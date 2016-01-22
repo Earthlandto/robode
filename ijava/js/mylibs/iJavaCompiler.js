@@ -2,6 +2,7 @@ function iJavaCompiler() {
 
     var parser = new iJavaParser();
     var sandbox = new Worker('js/mylibs/iJavaSandbox.js');
+    var robode = new Robode();
 
     var errorHandler = null;
     var outputHandler = null;

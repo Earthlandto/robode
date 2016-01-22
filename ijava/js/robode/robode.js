@@ -4,7 +4,7 @@ function Robode() {
 
     var car = createCar(16, 16, 0.6, 1);
 
-    //WHEELS
+    //create wheels and joints wheels
     var carX = car.GetWorldCenter().x;
     var carY = car.GetWorldCenter().y;
     var fr = createWheel(carX + 0.53, carY + 0.5); //front right wheel
@@ -39,41 +39,41 @@ function Robode() {
 
 
 
-    $(window).keyup(function(e) {
-        var code = e.keyCode;
+    // $(window).keyup(function(e) {
+    //     var code = e.keyCode;
+    //
+    //     if (code == 87) { //LEFT WHEEL (front) -> key W
+    //         lspeed += WHEEL_SPEED;
+    //         console.log(lspeed, " : ", rspeed);
+    //     }
+    //     if (code == 69) { // RIGHT WHEEL (front) -> key E
+    //         rspeed += WHEEL_SPEED;
+    //         console.log(lspeed, " : ", rspeed);
+    //     }
+    //     if (code == 83) { // LEFT WHELL (back) -> key S
+    //         lspeed += -WHEEL_SPEED;
+    //         console.log(lspeed, " : ", rspeed);
+    //     }
+    //     if (code == 68) { // RIGHT WHELL (back) -> key X
+    //         rspeed += -WHEEL_SPEED;
+    //         console.log(lspeed, " : ", rspeed);
+    //     }
+    //
+    //     if (code == 70) { // STOP right wheel -> key F
+    //         rspeed = 0;
+    //         console.log(lspeed, " : ", rspeed);
+    //     }
+    //     if (code == 65) { // STOP left wheel -> key A
+    //         lspeed = 0;
+    //         console.log(lspeed, " : ", rspeed);
+    //     }
+    //     if (code == 32) // STOP car -> key SPACE
+    //         stop = true;
+    // });
 
-        if (code == 87) { //LEFT WHEEL (front) -> key W
-            lspeed += WHEEL_SPEED;
-            console.log(lspeed, " : ", rspeed);
-        }
-        if (code == 69) { // RIGHT WHEEL (front) -> key E
-            rspeed += WHEEL_SPEED;
-            console.log(lspeed, " : ", rspeed);
-        }
-        if (code == 83) { // LEFT WHELL (back) -> key S
-            lspeed += -WHEEL_SPEED;
-            console.log(lspeed, " : ", rspeed);
-        }
-        if (code == 68) { // RIGHT WHELL (back) -> key X
-            rspeed += -WHEEL_SPEED;
-            console.log(lspeed, " : ", rspeed);
-        }
-
-        if (code == 70) { // STOP right wheel -> key F
-            rspeed = 0;
-            console.log(lspeed, " : ", rspeed);
-        }
-        if (code == 65) { // STOP left wheel -> key A
-            lspeed = 0;
-            console.log(lspeed, " : ", rspeed);
-        }
-        if (code == 32) // STOP car -> key SPACE
-            stop = true;
-    });
 
 
-
-    this.updateMovement = function() {
+    function updateMovement() {
 
         cancelVel(fr);
         cancelVel(fl);
@@ -94,7 +94,7 @@ function Robode() {
 
             applyForces();
         }
-    };
+    }
 
 
     ///////// CREATE SENSORS
