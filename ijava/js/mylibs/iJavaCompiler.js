@@ -49,12 +49,12 @@ function iJavaCompiler() {
                 break;
             }
         }
-        for (i = 0; i < graph.length; i++) {
-            if (functions.indexOf(graph[i]) >= 0) {
-                tags.graph = 1;
-                break;
-            }
-        }
+        // for (i = 0; i < graph.length; i++) {
+        //     if (functions.indexOf(graph[i]) >= 0) {
+        //         tags.graph = 1;
+        //         break;
+        //     }
+        // }
         return tags.graph + tags.animation * 2 + tags.io * 4 + tags.math * 8;
     };
 
@@ -70,14 +70,6 @@ function iJavaCompiler() {
         var traductor = new iJava2Javascript(tree);
         var code = traductor.doIt();
         // console.log(code);
-        var usedImages = parser.getUsedImages();
-        for (var i = 0; i < usedImages.length; i++) {
-            sandbox.postMessage(JSON.stringify({
-                image: {
-                    src: usedImages[i]
-                }
-            }));
-        }
         outputHandler.clear();
         sandbox.postMessage(JSON.stringify({
             type: "run",
@@ -112,7 +104,7 @@ function iJavaCompiler() {
                 errorHandler.manage(obj.msg);
                 break;
             default:
-                console.log("compiler: msg from worker: ", e.data);
+                console.log("compiler: msg from sandbox (worker): ", e.data);
 
         }
     };
