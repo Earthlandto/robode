@@ -1,4 +1,4 @@
-function Robode() {
+function Robode(worker) {
 
     /****************************************************************************
      *                                                                           *
@@ -9,14 +9,14 @@ function Robode() {
      *   detections sensors.                                                     *
      *                                                                           *
      ****************************************************************************/
-    var robot = createRobot(16, 16, 0.6, 1);
+    var robot = null;
 
     //create wheels and joints wheels
-    var fr = createWheel(robot.GetWorldCenter().x + 0.53, robot.GetWorldCenter().y + 0.5); //front right wheel
-    var fl = createWheel(robot.GetWorldCenter().x - 0.53, robot.GetWorldCenter().y + 0.5); //front left wheel
+    var fr = null; //front right wheel
+    var fl = null; //front left wheel
 
-    var jfr = addWheelJoint(robot, fr); // Joint between robot body and front right wheel
-    var jfl = addWheelJoint(robot, fl); // Joint between robot body and front left wheel
+    var jfr = null; // Joint between robot body and front right wheel
+    var jfl = null; // Joint between robot body and front left wheel
 
 
     // CREATE SENSORS
@@ -69,16 +69,12 @@ function Robode() {
         y: -0.8
     }];
 
+    // external sensors list
     var extSensors = [];
 
-    extSensors.push(createExternalSensor(pointsTL, "TL", robot));
-    extSensors.push(createExternalSensor(pointsTR, "TR", robot));
-    extSensors.push(createExternalSensor(pointsBL, "BL", robot));
-    extSensors.push(createExternalSensor(pointsBR, "BR", robot));
-
     // line sensors
-    createLineSensor('left', robot); //var sLineLeft = createLineSensor('left', robot);
-    createLineSensor('right', robot); //var sLineRight = createLineSensor('right', robot);
+    var sline_left = null; // line sensor left
+    var sline_right = null; // line sensor right
 
 
     /****************************************************************************
@@ -92,8 +88,7 @@ function Robode() {
      *                                                                           *
      ****************************************************************************/
 
-    var contactListener = new b2ContactListener();
-    world.SetContactListener(contactListener);
+    var contactListener = null;
 
     var robotparts = ['wheel', 'robot'];
     /*  The bodiesSensed variable stores the bodies sensed by each sensor.
@@ -243,6 +238,89 @@ function Robode() {
     var p1l = new b2Vec2();
     var p2l = new b2Vec2();
     var p3l = new b2Vec2();
+
+
+
+    /****************************************************************************
+     *                                                                          *
+     *       ROBODE API                                                         *
+     *                                                                          *
+     ****************************************************************************/
+
+    var sandbox = worker ||  null;
+    var running = false;
+
+    // Init the world, robot, sensors and everuthing
+    this.init = function() {
+
+        running = true;
+
+        world = new b2World(
+            new b2Vec2(0, 0), //gravity
+            true //allow sleep
+        );
+
+        //setup debug draw
+        world.configDraw(new b2DebugDraw(), world, "mycanvas", scale);
+
+        // robot main body
+        robot = createRobot(16, 16, 0.6, 1);
+        // wheels
+        fr = createWheel(robot.GetWorldCenter().x + 0.53, robot.GetWorldCenter().y + 0.5);
+        fl = createWheel(robot.GetWorldCenter().x - 0.53, robot.GetWorldCenter().y + 0.5);
+        // joints wheels
+        jfr = addWheelJoint(robot, fr);
+        jfl = addWheelJoint(robot, fl);
+        // external sensors
+        extSensors.push(createExternalSensor(pointsTL, "TL", robot));
+        extSensors.push(createExternalSensor(pointsTR, "TR", robot));
+        extSensors.push(createExternalSensor(pointsBL, "BL", robot));
+        extSensors.push(createExternalSensor(pointsBR, "BR", robot));
+        //Line sensors
+        sLine_left = createLineSensor('left', robot);
+        sLine_right = createLineSensor('right', robot);
+        // collision listener
+        contactListener = new b2ContactListener();
+        world.SetContactListener(contactListener);
+
+        // Create circuit
+        craftCircuit();
+
+        window.setInterval(function () {
+            world.Step(
+                1 / 60, //frame-rate
+                10, //velocity iterations
+                10 //position iterations
+            );
+
+            world.DrawDebugData();
+            world.ClearForces();
+
+            updateMovement();
+
+        }, 1000/60);
+
+    };
+
+    this.end = function() {
+        running = false;
+    };
+
+    /****************************************************************************
+     *       AUXILIAR ROBODE API FUNCTIONS                                      *
+     ****************************************************************************/
+
+    function sendMessage(type, obj) {
+        if (!sandbox) {
+            console.log("Worker not exits.");
+            return;
+        }
+        var message = {
+            type: type,
+            msg: obj
+        };
+        sandbox.postMessage(JSON.stringify(message));
+    }
 
 
     /****************************************************************************

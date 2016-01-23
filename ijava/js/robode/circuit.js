@@ -1,4 +1,4 @@
-function createCircuit() {
+function craftCircuit() {
 
     var canvasWidth = $('canvas').get(0).width;
     var canvasHeight = $('canvas').get(0).height;

@@ -1,4 +1,7 @@
-var scale = 10; //world scale
+// Box2d World
+var world = null;
+//world scale
+var scale = 10;
 
 
 // Define shorter Box2d names
@@ -23,6 +26,14 @@ b2BodyDef.prototype.setName = function(name) {
 
 b2Body.prototype.setName = function(name) {
     this.m_userData = name + world.m_bodyCount + 1;
+};
+
+b2Body.prototype.getName = function() {
+    return this.GetUserData();
+};
+
+b2Fixture.prototype.getBodyName = function (){
+    return GetBody().getName();
 };
 
 b2World.prototype.configDraw = function(myDebugDraw, myWorld, myCanvas, myWorldScale) {
