@@ -1617,13 +1617,28 @@ function iJavaParser() {
             datatype: ObjectDatatype
         }]));
 
-        ///////ROBODE functions
-        library_function("delay", new FunctionDatatype(VoidDatatype, [{
+
+        /****************************************************************************
+         *                                                                          *
+         *       ROBODE DEFINITION FUNCTIONS                                        *
+         *                                                                          *
+         ****************************************************************************/
+        library_function("esperar", new FunctionDatatype(VoidDatatype, [{
             datatype: IntegerDatatype
         }]));
-        library_function("delay", new FunctionDatatype(VoidDatatype, [{
-            datatype: DoubleDatatype
+
+        library_function("iniciarRobot", new FunctionDatatype(VoidDatatype, []));
+
+        library_function("detenerRobot", new FunctionDatatype(VoidDatatype, []));
+
+        library_function("avanzarRobot", new FunctionDatatype(VoidDatatype, [{
+            datatype: IntegerDatatype
+        }, {
+            datatype: IntegerDatatype
         }]));
+
+
+
     };
 
     init();

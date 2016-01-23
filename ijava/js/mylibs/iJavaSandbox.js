@@ -178,21 +178,12 @@ function iJavaSandbox() {
         noLoop();
         endRuntime();
         running = false;
-        var message = {
-            fn: 'end',
-            params: []
-        };
-        sendMessage("robode", message); // FIXME: temporal
+        terminateRobot();
     };
 
     this.run = function(code) {
         if (running) return;
         execute(code);
-        var message = {
-            fn: "init",
-            params: [canvasID]
-        };
-        sendMessage("robode", message); //FIXME: temporal
     };
 
     this.setCanvas = function(newCanvas) {
@@ -207,7 +198,7 @@ function iJavaSandbox() {
      *                                                                          *
      ****************************************************************************/
 
-    function delay(millis) {
+    function esperar(millis) {
 
         //Add delay time to runtime.timeLimit
         if (runtime) {
@@ -222,6 +213,38 @@ function iJavaSandbox() {
         }
     }
 
+    function iniciarRobot() {
+        var message = {
+            fn: "init",
+            params: [canvasID]
+        };
+        sendMessage("robode", message);
+    }
+
+    // terminate robot execution
+    function terminateRobot() {
+        var message = {
+            fn: 'end',
+            params: []
+        };
+        sendMessage("robode", message);
+    }
+
+    function avanzarRobot(lspeed, rspeed) {
+        var message = {
+            fn: "move",
+            params: [lspeed, rspeed]
+        };
+        sendMessage("robode", message);
+    }
+
+    function detenerRobot() {
+        var message = {
+            fn: "stop",
+            params: []
+        };
+        sendMessage("robode", message);
+    }
 
 
     /****************************************************************************

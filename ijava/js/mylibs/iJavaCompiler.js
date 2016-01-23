@@ -127,11 +127,19 @@ function iJavaCompiler() {
     function manageRobodeMessages(message) {
         switch (message.fn) {
             case "init":
-                robode.init(message.params[0]);
+                var mycanvas = message.params[0];
+                robode.init(mycanvas);
                 break;
             case "end":
                 robode.end();
                 break;
+            case "move":
+                var lspeed = message.params[0];
+                var rspeed = message.params[1];
+                robode.move(lspeed, rspeed);
+                break;
+            case "stop":
+                robode.stop();
         }
     }
 }

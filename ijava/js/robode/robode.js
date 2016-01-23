@@ -228,9 +228,8 @@ function Robode(worker) {
 
     var rspeed = 0;
     var lspeed = 0;
-    var WHEEL_SPEED = 50; // increment speed
-    var ENGINE_SPEED = 300;
 
+    // auxiliar vars to movement control
     var p1r = new b2Vec2();
     var p2r = new b2Vec2();
     var p3r = new b2Vec2();
@@ -304,9 +303,6 @@ function Robode(worker) {
             updateMovement();
 
         }, 1000 / 60);
-
-        console.log('Init Robode');
-
     };
 
     this.end = function() {
@@ -321,9 +317,37 @@ function Robode(worker) {
         //destroy world
         world.destroyAll();
         world = null;
-
-        console.log('End Robode');
     };
+
+
+    this.move = function(myleftspeed, myrightspeed) {
+        if (!running) return;
+
+        lspeed = myleftspeed ||  0;
+        rspeed = myrightspeed ||  0;
+    };
+
+    this.stop = function() {
+
+        if (!running) return;
+
+        lspeed = 0;
+        rspeed = 0;
+
+        robot.SetLinearVelocity(new b2Vec2(0, 0));
+        robot.SetAngularVelocity(0);
+
+        extSensors.forEach(function(elem) {
+            elem.SetLinearVelocity(new b2Vec2(0, 0));
+            elem.SetAngularVelocity(0);
+        });
+
+        if (!robot.IsAwake()) {
+            stop = false;
+        }
+    };
+
+
 
     /****************************************************************************
      *       AUXILIAR ROBODE API FUNCTIONS                                      *
@@ -346,28 +370,16 @@ function Robode(worker) {
      *       ROBOT BEHAVIOR CONTROL FUNCTIONS                                   *
      ****************************************************************************/
 
-    function updateMovement() {
-
+    var updateMovement = function() {
         cancelVel(fr);
         cancelVel(fl);
 
         if (stop) {
-            stopMovement();
+            this.stop();
         } else {
-
-            p1r = fr.GetWorldCenter();
-            p2r = fr.GetWorldPoint(new b2Vec2(0, 1));
-            p3r.x = (p2r.x - p1r.x) * rspeed;
-            p3r.y = (p2r.y - p1r.y) * rspeed;
-
-            p1l = fl.GetWorldCenter();
-            p2l = fl.GetWorldPoint(new b2Vec2(0, 1));
-            p3l.x = (p2l.x - p1l.x) * lspeed;
-            p3l.y = (p2l.y - p1l.y) * lspeed;
-
             applyForces();
         }
-    }
+    };
 
 
     function cancelVel(wheel) {
@@ -384,28 +396,19 @@ function Robode(worker) {
         wheel.SetLinearVelocity(newworld);
     }
 
-
-    function stopMovement() {
-        console.log("STOP");
-
-        lspeed = 0;
-        rspeed = 0;
-
-        robot.SetLinearVelocity(new b2Vec2(0, 0));
-        robot.SetAngularVelocity(0);
-
-        extSensors.forEach(function(elem) {
-            elem.SetLinearVelocity(new b2Vec2(0, 0));
-            elem.SetAngularVelocity(0);
-        });
-
-        if (!robot.IsAwake()) {
-            stop = false;
-        }
-    }
-
-
     function applyForces() {
+
+        // pre-calculations movement
+        p1r = fr.GetWorldCenter();
+        p2r = fr.GetWorldPoint(new b2Vec2(0, 1));
+        p3r.x = (p2r.x - p1r.x) * rspeed;
+        p3r.y = (p2r.y - p1r.y) * rspeed;
+
+        p1l = fl.GetWorldCenter();
+        p2l = fl.GetWorldPoint(new b2Vec2(0, 1));
+        p3l.x = (p2l.x - p1l.x) * lspeed;
+        p3l.y = (p2l.y - p1l.y) * lspeed;
+
 
         // forward
         if (lspeed > 0) {
