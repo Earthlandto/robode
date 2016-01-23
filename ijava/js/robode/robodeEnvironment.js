@@ -24,6 +24,7 @@ var b2PolygonShape = Box2D.Collision.Shapes.b2PolygonShape;
 var b2CircleShape = Box2D.Collision.Shapes.b2CircleShape;
 var b2RevoluteJointDef = Box2D.Dynamics.Joints.b2RevoluteJointDef;
 var b2ContactListener = Box2D.Dynamics.b2ContactListener;
+// var b2DestructionListener = Box2D.Dynamics.b2DestructionListener;
 
 
 // Class redefinitions
@@ -59,4 +60,43 @@ b2World.prototype.setWorldScale = function(newScale) {
 
 b2World.prototype.getWorldScale = function() {
     return this.m_debugDraw;
+};
+
+b2World.prototype.destroyAll = function() {
+    // this.destroyContacts();
+    this.destroyJoints();
+    this.destroyBodies();
+};
+
+// b2World.prototype.destroyContacts = function() {
+//
+//     var contact = this.GetContactList();
+//     var contact_next;
+//     while (contact) {
+//         contact_next = contact.m_next;
+//         contact.Reset();
+//         contact = contact_next;
+//     }
+// };
+
+b2World.prototype.destroyJoints = function() {
+
+    var joint = this.GetJointList();
+    var joint_next;
+    while (joint) {
+        joint_next = joint.m_next;
+        this.DestroyJoint(joint);
+        joint = joint_next;
+    }
+};
+
+b2World.prototype.destroyBodies = function() {
+
+    var body = this.GetBodyList();
+    var body_next;
+    while (body) {
+        body_next = body.GetNext();
+        this.DestroyBody(body);
+        body = body_next;
+    }
 };

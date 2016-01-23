@@ -249,6 +249,8 @@ function Robode(worker) {
 
     var sandbox = worker ||  null;
     var running = false;
+    var idInterval = null;
+
 
     // Init the world, robot, sensors and everuthing
     this.init = function() {
@@ -285,7 +287,7 @@ function Robode(worker) {
         // Create circuit
         craftCircuit();
 
-        window.setInterval(function() {
+        idInterval = window.setInterval(function() {
             world.Step(
                 1 / 60, //frame-rate
                 10, //velocity iterations
@@ -299,10 +301,19 @@ function Robode(worker) {
 
         }, 1000 / 60);
 
+        console.log('Init Robode');
+
     };
 
     this.end = function() {
+        if (!running) return;
+
         running = false;
+        window.clearInterval(idInterval);
+
+        world.destroyAll();
+        // world = null;
+        console.log('End Robode');
     };
 
     /****************************************************************************

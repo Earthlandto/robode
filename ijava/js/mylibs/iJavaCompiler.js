@@ -105,7 +105,9 @@ function iJavaCompiler() {
                 errorHandler.manage(obj.msg);
                 break;
             case "robode":
-                if (obj.msg === "init") robode.init(); //FIXME: is temporal
+                //FIXME: temporal
+                if (obj.msg === "init") robode.init();
+                else if (obj.msg === "end") robode.end();
                 break;
             default:
                 console.log("compiler: msg from sandbox (worker): ", e.data);

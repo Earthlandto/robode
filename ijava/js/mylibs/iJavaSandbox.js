@@ -18,11 +18,11 @@ self.onmessage = function(e) {
 };
 
 function sendMessage(type, obj) {
-	var message = {
-		type: type,
-		msg: obj
-	};
-	postMessage(JSON.stringify(message));
+    var message = {
+        type: type,
+        msg: obj
+    };
+    postMessage(JSON.stringify(message));
 }
 
 
@@ -469,23 +469,24 @@ function iJavaSandbox() {
         noLoop();
         endRuntime();
         running = false;
+        sendMessage("robode", "end"); // FIXME: temporal
     };
 
     this.run = function(code) {
         if (running) return;
         execute(code);
-        sendMessage("robode", "init");//FIXME: is temporal
+        sendMessage("robode", "init"); //FIXME: temporal
     };
 
 
     // Replaced by sending output/errors to compiler
     outputHandler = function(msg) {
         var data = (typeof msg === "string" ? msg : msg.__data);
-		sendMessage("output",data);
+        sendMessage("output", data);
     };
 
     errorHandler = function(msg) {
-		sendMessage("error",msg.message);
+        sendMessage("error", msg.message);
     };
     /**
     Define una nueva función para leer datos a través de las funciones
