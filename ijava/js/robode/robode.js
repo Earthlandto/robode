@@ -141,7 +141,7 @@ function Robode(worker) {
             }
 
             // if it's a robot part, do nothing
-            if (isRobotPart(bodySensed(), robotparts))
+            if (isRobotPart(bodySensed, robotparts))
                 return;
 
             // Had the body sensed the body previously?

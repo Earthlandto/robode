@@ -32,8 +32,8 @@ b2Body.prototype.getName = function() {
     return this.GetUserData();
 };
 
-b2Fixture.prototype.getBodyName = function (){
-    return GetBody().getName();
+b2Fixture.prototype.getBodyName = function() {
+    return this.GetBody().getName();
 };
 
 b2World.prototype.configDraw = function(myDebugDraw, myWorld, myCanvas, myWorldScale) {
