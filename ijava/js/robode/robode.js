@@ -88,7 +88,7 @@ function Robode(worker) {
      *                                                                           *
      ****************************************************************************/
 
-    var contactListener = null;
+    var contactListener = new b2ContactListener();
 
     var robotparts = ['wheel', 'robot'];
     /*  The bodiesSensed variable stores the bodies sensed by each sensor.
@@ -279,14 +279,13 @@ function Robode(worker) {
         //Line sensors
         sLine_left = createLineSensor('left', robot);
         sLine_right = createLineSensor('right', robot);
-        // collision listener
-        contactListener = new b2ContactListener();
+        // add collision listener
         world.SetContactListener(contactListener);
 
         // Create circuit
         craftCircuit();
 
-        window.setInterval(function () {
+        window.setInterval(function() {
             world.Step(
                 1 / 60, //frame-rate
                 10, //velocity iterations
@@ -298,7 +297,7 @@ function Robode(worker) {
 
             updateMovement();
 
-        }, 1000/60);
+        }, 1000 / 60);
 
     };
 
