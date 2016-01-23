@@ -132,8 +132,6 @@ function iJavaCompiler() {
             case "end":
                 robode.end();
                 break;
-                // default:
-
         }
     }
 }

@@ -1,4 +1,9 @@
-// importScripts('Datatype.js');
+/****************************************************************************
+ *                                                                          *
+ *      Worker functions                                                    *
+ *                                                                          *
+ ****************************************************************************/
+
 importScripts('OOSupport.js');
 
 var sandbox = new iJavaSandbox();
@@ -29,6 +34,13 @@ function sendMessage(type, data) {
 }
 
 
+
+/****************************************************************************
+ *                                                                          *
+ *       SANDBOX                                                            *
+ *                                                                          *
+ ****************************************************************************/
+
 function iJavaSandbox() {
 
     var canvasID = null;
@@ -54,12 +66,10 @@ function iJavaSandbox() {
     self.sipointer = 0;
     // internalPrompt = window.prompt; //FIXME: internalPrompt is not working. Is it needed?
 
-    // Library Constants
-    var PI = Math.PI;
-    var E = Math.E;
 
-    // RunTime library
-
+    /****************************************************************************
+     *       Runtime library                                                    *
+     ****************************************************************************/
     function Runtime() {
         this.deep = -1;
         this.timeLimit = [];
@@ -67,6 +77,25 @@ function iJavaSandbox() {
         this.nIterations = [];
         this.calls = {};
     }
+
+
+    var execute = function(code) {
+        initRuntime();
+        var thecode = "running = true;\nvar __main = null;\nvar __draw = null;\nvar __onKeyPressed = null;\nvar __onKeyReleased = null;\n" + code + "\nonKeyPressed = __onKeyPressed;\nonKeyReleased = __onKeyReleased;\n try {\n  if (__main) __main();\n  else stop();\n} catch (e) {\n  error(e);\n}\n\n";
+        console.log(thecode);
+        eval(thecode);
+    };
+
+    function initRuntime() {
+        if (intervalStarted)
+            noLoop();
+        runtime = new Runtime();
+    }
+
+    function endRuntime() {
+        runtime = null;
+    }
+
 
     Runtime.prototype.startLoop = function() {
         this.deep++;
@@ -136,7 +165,181 @@ function iJavaSandbox() {
             return null;
         }
     };
-    // Arrays y Strings //TODO: check. I think i should keep this...
+
+
+
+    /****************************************************************************
+     *                                                                          *
+     *       iJava Public Interface                                             *
+     *                                                                          *
+     ****************************************************************************/
+
+    this.stop = function() {
+        noLoop();
+        endRuntime();
+        running = false;
+        var message = {
+            fn: 'end',
+            params: []
+        };
+        sendMessage("robode", message); // FIXME: temporal
+    };
+
+    this.run = function(code) {
+        if (running) return;
+        execute(code);
+        var message = {
+            fn: "init",
+            params: [canvasID]
+        };
+        sendMessage("robode", message); //FIXME: temporal
+    };
+
+    this.setCanvas = function(newCanvas) {
+        canvasID = newCanvas;
+    };
+
+
+
+    /****************************************************************************
+     *                                                                          *
+     *       ROBODE API                                                         *
+     *                                                                          *
+     ****************************************************************************/
+
+    function delay(millis) {
+
+        //Add delay time to runtime.timeLimit
+        if (runtime) {
+            if (runtime.deep > -1) {
+                runtime.timeLimit[runtime.deep] += millis;
+            }
+        }
+
+        var timestamp = (new Date()).getTime() + millis;
+        while ((new Date()).getTime() < timestamp) {
+            //do nothing
+        }
+    }
+
+
+
+    /****************************************************************************
+     *       Input/Output library                                               *
+     ****************************************************************************/
+
+    function error(e) {
+        // En principio nos quedamos con el error
+        var err = e;
+        // Buscar dentro de runtime si hay alguna función muy llamada
+        var mcf = runtime.findMostCalledFunction();
+        if (mcf && mcf.times > 100) {
+            err = {
+                message: "Se ha producido un error durante la ejecución del programa. Probablemente se deba a que la función '" + mcf.name + "' es recursiva y no tiene bien definido su caso base por lo que se está llamando a sí misma desde la línea " + mcf.line + " sin parar.",
+                line: mcf.line
+            };
+        }
+        if (errorHandler) errorHandler(err);
+        else console.log(err);
+        noLoop();
+        endRuntime();
+        running = false;
+    }
+
+    function print(msg) {
+        if (msg === undefined) msg = "";
+        if (msg instanceof __Object) {
+            msg = msg.__toString__0();
+        }
+        if (outputHandler) outputHandler(msg);
+        else console.log(msg);
+    }
+
+    function println(msg) {
+        if (msg === undefined) msg = "";
+        if (msg instanceof __Object) {
+            msg = msg.__toString__0();
+        }
+        print(msg + "\n");
+    }
+
+
+    /****************************************************************************
+     *       Output and Error Handlers                                          *
+     *          Replaced by sending output/errors to compiler                   *
+     ****************************************************************************/
+    outputHandler = function(msg) {
+        var data = (typeof msg === "string" ? msg : msg.__data);
+        sendMessage("output", data);
+    };
+
+    errorHandler = function(msg) {
+        sendMessage("error", msg.message);
+    };
+
+
+    /****************************************************************************
+     *       Misscellaneous library                                             *
+     ****************************************************************************/
+
+    function isInt(n) {
+        return Number.isInteger(n);
+    }
+
+
+    /****************************************************************************
+     *       ANIMATION library                                                  *
+     ****************************************************************************/
+
+    /**
+     * El parámetro t determina los milisegundos a esperar entre frames con un límite inferior de 10ms
+     */
+    function animate(f, t) {
+        t = t || 40;
+        if (t < 10) t = 10;
+        loop(f, t);
+    }
+
+    function exit() {
+        noLoop();
+        endRuntime();
+        running = false;
+    }
+
+    function loop(draw, t) {
+        if (intervalStarted === true) noLoop();
+        timeSinceLastFPS = Date.now();
+        framesSinceLastFPS = 0;
+        looping = setInterval(function() {
+                try {
+                    var sec = (Date.now() - timeSinceLastFPS) / 1E3;
+                    framesSinceLastFPS++;
+                    var fps = framesSinceLastFPS / sec;
+                    if (sec > 0.5) {
+                        timeSinceLastFPS = Date.now();
+                        framesSinceLastFPS = 0;
+                        frameRate = fps;
+                    }
+                    draw();
+                } catch (e) {
+                    error(e);
+                }
+            },
+            t);
+        intervalStarted = true;
+    }
+
+    function noLoop() {
+        if (intervalStarted) {
+            clearInterval(looping);
+            intervalStarted = false;
+            looping = null;
+        }
+    }
+
+    /****************************************************************************
+     *       Arrays and Strings Library                                         *
+     ****************************************************************************/
 
     function sizeOf(array, dimension) {
         if (array instanceof __Object && array.isNull()) {
@@ -205,7 +408,10 @@ function iJavaSandbox() {
         return string.__indexOf__0(character);
     }
 
-    // Time //TODO: check. Keep it?
+
+    /****************************************************************************
+     *       Time library                                                    *
+     ****************************************************************************/
 
     function year() {
         return new Date().getFullYear();
@@ -235,7 +441,14 @@ function iJavaSandbox() {
         return (new Date().getTime()) - startTime.getTime();
     }
 
-    // Math
+
+    /****************************************************************************
+     *       Math library                                                       *
+     ****************************************************************************/
+
+    var PI = Math.PI;
+    var E = Math.E;
+
 
     function random() {
         if (arguments.length === 0) return Math.random();
@@ -299,46 +512,32 @@ function iJavaSandbox() {
         return Math.pow(b, e);
     }
 
-    // Input/Output
+    /****************************************************************************
+     *       Input Library                                                      *
+     ****************************************************************************/
 
-    function error(e) {
-        // En principio nos quedamos con el error
-        var err = e;
-        // Buscar dentro de runtime si hay alguna función muy llamada
-        var mcf = runtime.findMostCalledFunction();
-        if (mcf && mcf.times > 100) {
-            err = {
-                message: "Se ha producido un error durante la ejecución del programa. Probablemente se deba a que la función '" + mcf.name + "' es recursiva y no tiene bien definido su caso base por lo que se está llamando a sí misma desde la línea " + mcf.line + " sin parar.",
-                line: mcf.line
-            };
-        }
-        if (errorHandler) errorHandler(err);
-        else console.log(err);
-        noLoop();
-        endRuntime();
-        running = false;
-    }
-
-    function print(msg) {
-        if (msg === undefined) msg = "";
-        if (msg instanceof __Object) {
-            msg = msg.__toString__0();
-        }
-        if (outputHandler) outputHandler(msg);
-        else console.log(msg);
-    }
-
-    function println(msg) {
-        if (msg === undefined) msg = "";
-        if (msg instanceof __Object) {
-            msg = msg.__toString__0();
-        }
-        print(msg + "\n");
-    }
-
-    function isInt(n) {
-        return Number.isInteger(n);
-    }
+    /**
+    Define una nueva función para leer datos a través de las funciones
+    read*() para evitar que se pregunten al usuario.
+    */
+    // this.setInputStream = function(iostream) { //TODO: fix: internalPrompt
+    //     self.standardInput = iostream;
+    //     if (iostream === null) {
+    //         internalPrompt = window.prompt;
+    //     } else {
+    //         internalPrompt = function(msg, initial) {
+    //             var strs = self.standardInput.split("\n");
+    //             if (self.sipointer >= strs.length) {
+    //                 throw {
+    //                     message: "Se ha llegado al final de los datos de entrada sin encontrar el tipo de dato buscado."
+    //                 };
+    //             }
+    //             var str = strs[self.sipointer];
+    //             self.sipointer++;
+    //             return str;
+    //         };
+    //     }
+    // };
 
     /* //TODO: fix internalPrompt
     function readInteger(msg) {
@@ -384,148 +583,4 @@ function iJavaSandbox() {
         return c[0];
     }
     */
-
-    /////////////////// ROBODE functions
-
-    function delay(millis) {
-
-        //Add delay time to runtime.timeLimit
-        if (runtime) {
-            if (runtime.deep > -1) {
-                runtime.timeLimit[runtime.deep] += millis;
-            }
-        }
-
-        var timestamp = (new Date()).getTime() + millis;
-        while ((new Date()).getTime() < timestamp) {
-            //do nothing
-        }
-    }
-
-    /////////////////// end robode functions
-
-    /**
-     * El parámetro t determina los milisegundos a esperar entre frames con un límite inferior de 10ms
-     */
-    function animate(f, t) {
-        t = t || 40;
-        if (t < 10) t = 10;
-        loop(f, t);
-    }
-
-    function exit() {
-        noLoop();
-        endRuntime();
-        running = false;
-    }
-
-    function loop(draw, t) {
-        if (intervalStarted === true) noLoop();
-        timeSinceLastFPS = Date.now();
-        framesSinceLastFPS = 0;
-        looping = setInterval(function() {
-                try {
-                    var sec = (Date.now() - timeSinceLastFPS) / 1E3;
-                    framesSinceLastFPS++;
-                    var fps = framesSinceLastFPS / sec;
-                    if (sec > 0.5) {
-                        timeSinceLastFPS = Date.now();
-                        framesSinceLastFPS = 0;
-                        frameRate = fps;
-                    }
-                    draw();
-                } catch (e) {
-                    error(e);
-                }
-            },
-            t);
-        intervalStarted = true;
-    }
-
-    function noLoop() {
-        if (intervalStarted) {
-            clearInterval(looping);
-            intervalStarted = false;
-            looping = null;
-        }
-    }
-
-    function initRuntime() {
-        if (intervalStarted)
-            noLoop();
-        runtime = new Runtime();
-    }
-
-    function endRuntime() {
-        runtime = null;
-    }
-
-    var execute = function(code) {
-        initRuntime();
-        var thecode = "running = true;\nvar __main = null;\nvar __draw = null;\nvar __onKeyPressed = null;\nvar __onKeyReleased = null;\n" + code + "\nonKeyPressed = __onKeyPressed;\nonKeyReleased = __onKeyReleased;\n try {\n  if (__main) __main();\n  else stop();\n} catch (e) {\n  error(e);\n}\n\n";
-        console.log(thecode);
-        eval(thecode);
-    };
-
-    // Replaced by sending output/errors to compiler
-    outputHandler = function(msg) {
-        var data = (typeof msg === "string" ? msg : msg.__data);
-        sendMessage("output", data);
-    };
-
-    errorHandler = function(msg) {
-        sendMessage("error", msg.message);
-    };
-
-
-    // iJava Public Interface
-
-    this.stop = function() {
-        noLoop();
-        endRuntime();
-        running = false;
-        var message = {
-            fn: 'end',
-            params: []
-        };
-        sendMessage("robode", message); // FIXME: temporal
-    };
-
-    this.run = function(code) {
-        if (running) return;
-        execute(code);
-        var message = {
-            fn: "init",
-            params: [canvasID]
-        };
-        sendMessage("robode", message); //FIXME: temporal
-    };
-
-    this.setCanvas = function(newCanvas) {
-        canvasID = newCanvas;
-    };
-
-
-    /**
-    Define una nueva función para leer datos a través de las funciones
-    read*() para evitar que se pregunten al usuario.
-    */
-    // this.setInputStream = function(iostream) { //TODO: fix: internalPrompt
-    //     self.standardInput = iostream;
-    //     if (iostream === null) {
-    //         internalPrompt = window.prompt;
-    //     } else {
-    //         internalPrompt = function(msg, initial) {
-    //             var strs = self.standardInput.split("\n");
-    //             if (self.sipointer >= strs.length) {
-    //                 throw {
-    //                     message: "Se ha llegado al final de los datos de entrada sin encontrar el tipo de dato buscado."
-    //                 };
-    //             }
-    //             var str = strs[self.sipointer];
-    //             self.sipointer++;
-    //             return str;
-    //         };
-    //     }
-    // };
 }
