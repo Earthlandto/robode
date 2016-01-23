@@ -438,11 +438,10 @@ function Robode(worker) {
     function isRobotPart(bodySensedName, elems2avoid) {
 
         for (var elem in elems2avoid) {
-            if (elems2avoid[elem] == bodySensedName)
+            if (bodySensedName.startsWith(elems2avoid[elem]))
                 return true;
         }
         return false;
-
     }
 
 
