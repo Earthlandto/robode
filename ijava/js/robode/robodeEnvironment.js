@@ -101,7 +101,7 @@ b2World.prototype.destroyBodies = function() {
     }
 };
 
-b2World.prototype.clearCanvas = function (){
+b2World.prototype.clearCanvas = function() {
     var ctx = this.m_debugDraw.m_ctx;
     var mycanvas = ctx.canvas;
     ctx.clearRect(0, 0, mycanvas.width, mycanvas.height);

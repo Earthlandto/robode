@@ -484,20 +484,24 @@ function iJavaSandbox() {
         noLoop();
         endRuntime();
         running = false;
-        var message = {fn: 'end', params:[]};
+        var message = {
+            fn: 'end',
+            params: []
+        };
         sendMessage("robode", message); // FIXME: temporal
     };
 
     this.run = function(code) {
         if (running) return;
         execute(code);
-        sendMessage("robode", {
+        var message = {
             fn: "init",
             params: [canvasID]
-        }); //FIXME: temporal
+        };
+        sendMessage("robode", message); //FIXME: temporal
     };
 
-    this.setCanvas = function (newCanvas) {
+    this.setCanvas = function(newCanvas) {
         canvasID = newCanvas;
     };
 
