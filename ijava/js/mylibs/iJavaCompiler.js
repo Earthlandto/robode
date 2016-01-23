@@ -103,12 +103,7 @@ function iJavaCompiler() {
                 errorHandler.manage(data.msg);
                 break;
             case "robode":
-                //FIXME: temporal
-                var message = data.msg;
-                if (message.fn === "init") {
-                    var params = message.params;
-                    robode.init(params[0]);
-                } else if (message.fn === "end") robode.end();
+                manageRobodeMessages(data.msg);
                 break;
             default:
                 console.log("compiler: msg from sandbox (worker): ", e.data);
@@ -129,4 +124,16 @@ function iJavaCompiler() {
     }
 
 
+    function manageRobodeMessages(message) {
+        switch (message.fn) {
+            case "init":
+                robode.init(message.params[0]);
+                break;
+            case "end":
+                robode.end();
+                break;
+                // default:
+
+        }
+    }
 }
