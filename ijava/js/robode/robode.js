@@ -247,15 +247,18 @@ function Robode(worker) {
      *                                                                          *
      ****************************************************************************/
 
+    var canvasID = null;
     var sandbox = worker ||  null;
     var running = false;
     var idInterval = null;
 
 
     // Init the world, robot, sensors and everuthing
-    this.init = function() {
+    this.init = function(canvasID) {
 
-        running = true;
+        canvasID = canvasID ||  null;
+
+        if (!canvasID) return;
 
         world = new b2World(
             new b2Vec2(0, 0), //gravity
@@ -263,7 +266,7 @@ function Robode(worker) {
         );
 
         //setup debug draw
-        world.configDraw(new b2DebugDraw(), world, "mycanvas", scale);
+        world.configDraw(new b2DebugDraw(), world, canvasID, scale);
 
         // robot main body
         robot = createRobot(robodeIni.x, robodeIni.y, robodeIni.width, robodeIni.height);
@@ -287,6 +290,7 @@ function Robode(worker) {
         // Create circuit
         craftCircuit();
 
+        running = true;
         idInterval = window.setInterval(function() {
             world.Step(
                 1 / 60, //frame-rate
@@ -311,8 +315,13 @@ function Robode(worker) {
         running = false;
         window.clearInterval(idInterval);
 
+        // Clear canvas
+        world.clearCanvas();
+
+        //destroy world
         world.destroyAll();
-        // world = null;
+        world = null;
+
         console.log('End Robode');
     };
 

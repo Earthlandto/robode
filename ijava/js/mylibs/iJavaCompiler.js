@@ -60,6 +60,8 @@ function iJavaCompiler() {
     };
 
     this.run = function(source, canvasid) {
+        // send message to sandbox to set canvas
+        sendMessage("canvas", canvasid);
 
         var tree;
         try {
@@ -72,19 +74,15 @@ function iJavaCompiler() {
         var code = traductor.doIt();
         // console.log(code);
         outputHandler.clear();
-        sandbox.postMessage(JSON.stringify({
-            type: "run",
-            msg: code
-        }));
+        // send message to sandbox to run code
+        sendMessage("run", code);
         var functions = parser.getUsedFunctions();
         return (functions.indexOf('loop') >= 0 || (functions.indexOf('animate') >= 0));
     };
 
     this.stop = function() {
-        if (sandbox) sandbox.postMessage(JSON.stringify({
-            type: "stop",
-            msg: ""
-        }));
+        // send message to sandbox to stop execution
+        sendMessage("stop", "");
     };
 
     this.setOutputHandler = function(oh) {
@@ -96,23 +94,39 @@ function iJavaCompiler() {
     };
 
     sandbox.onmessage = function(e) {
-        var obj = JSON.parse(e.data);
-        switch (obj.type) {
+        var data = JSON.parse(e.data);
+        switch (data.type) {
             case "output":
-                outputHandler.print(obj.msg);
+                outputHandler.print(data.msg);
                 break;
             case "error":
-                errorHandler.manage(obj.msg);
+                errorHandler.manage(data.msg);
                 break;
             case "robode":
                 //FIXME: temporal
-                if (obj.msg === "init") robode.init();
-                else if (obj.msg === "end") robode.end();
+                var message = data.msg;
+                if (message.fn === "init") {
+                    var params = message.params;
+                    robode.init(params[0]);
+                } else if (message.fn === "end") robode.end();
                 break;
             default:
                 console.log("compiler: msg from sandbox (worker): ", e.data);
 
         }
     };
+
+    function sendMessage(type, data) {
+        if (!sandbox) {
+            console.log("Worker not exits.");
+            return;
+        }
+        var message = {
+            type: type,
+            msg: data
+        };
+        sandbox.postMessage(JSON.stringify(message));
+    }
+
 
 }

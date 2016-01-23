@@ -4,23 +4,26 @@ importScripts('OOSupport.js');
 var sandbox = new iJavaSandbox();
 
 self.onmessage = function(e) {
-    var obj = JSON.parse(e.data);
-    switch (obj.type) {
+    var data = JSON.parse(e.data);
+    switch (data.type) {
         case "run":
-            sandbox.run(obj.msg);
+            sandbox.run(data.msg);
             break;
         case "stop":
-            sandbox.stop(obj.msg);
+            sandbox.stop(data.msg);
+            break;
+        case "canvas":
+            sandbox.setCanvas(data.msg);
             break;
         default:
-
+            console.log("Message received: ", data);
     }
 };
 
-function sendMessage(type, obj) {
+function sendMessage(type, data) {
     var message = {
         type: type,
-        msg: obj
+        msg: data
     };
     postMessage(JSON.stringify(message));
 }
@@ -28,6 +31,7 @@ function sendMessage(type, obj) {
 
 function iJavaSandbox() {
 
+    var canvasID = null;
     var runtime = null;
 
     var outputHandler = null;
@@ -463,22 +467,6 @@ function iJavaSandbox() {
         eval(thecode);
     };
 
-    // iJava Public Interface
-
-    this.stop = function() {
-        noLoop();
-        endRuntime();
-        running = false;
-        sendMessage("robode", "end"); // FIXME: temporal
-    };
-
-    this.run = function(code) {
-        if (running) return;
-        execute(code);
-        sendMessage("robode", "init"); //FIXME: temporal
-    };
-
-
     // Replaced by sending output/errors to compiler
     outputHandler = function(msg) {
         var data = (typeof msg === "string" ? msg : msg.__data);
@@ -488,6 +476,32 @@ function iJavaSandbox() {
     errorHandler = function(msg) {
         sendMessage("error", msg.message);
     };
+
+
+    // iJava Public Interface
+
+    this.stop = function() {
+        noLoop();
+        endRuntime();
+        running = false;
+        var message = {fn: 'end', params:[]};
+        sendMessage("robode", message); // FIXME: temporal
+    };
+
+    this.run = function(code) {
+        if (running) return;
+        execute(code);
+        sendMessage("robode", {
+            fn: "init",
+            params: [canvasID]
+        }); //FIXME: temporal
+    };
+
+    this.setCanvas = function (newCanvas) {
+        canvasID = newCanvas;
+    };
+
+
     /**
     Define una nueva función para leer datos a través de las funciones
     read*() para evitar que se pregunten al usuario.
