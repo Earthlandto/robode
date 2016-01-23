@@ -264,7 +264,7 @@ function Robode(worker) {
         world.configDraw(new b2DebugDraw(), world, "mycanvas", scale);
 
         // robot main body
-        robot = createRobot(16, 16, 0.6, 1);
+        robot = createRobot(robodeIni.x, robodeIni.y, robodeIni.width, robodeIni.height);
         // wheels
         fr = createWheel(robot.GetWorldCenter().x + 0.53, robot.GetWorldCenter().y + 0.5);
         fl = createWheel(robot.GetWorldCenter().x - 0.53, robot.GetWorldCenter().y + 0.5);

@@ -3,6 +3,13 @@ var world = null;
 //world scale
 var scale = 10;
 
+var robodeIni = {
+    x: 16,
+    y: 16,
+    width: 0.6,
+    height: 1
+};
+
 
 // Define shorter Box2d names
 var b2World = Box2D.Dynamics.b2World;
