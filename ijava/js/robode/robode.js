@@ -194,8 +194,6 @@ function Robode(worker) {
 
     contactListener.EndContact = function(contact) {
 
-        if (!bodySensed) return;
-
         var isSensorA = contact.GetFixtureA().IsSensor();
         var isSensorB = contact.GetFixtureB().IsSensor();
 
@@ -223,7 +221,6 @@ function Robode(worker) {
 
             (listSensed[sensedIndex])[bodySensed] -= 1;
             if ((listSensed[sensedIndex])[bodySensed] < 1) {
-                console.log("END contact", bodySensor, bodySensed);
                 var message = {
                     id: bodySensor,
                     state: "end"
