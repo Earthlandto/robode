@@ -84,7 +84,7 @@ function iJavaSandbox() {
 
     var execute = function(code) {
         initRuntime();
-        var thecode = "running = true;\nvar __main = null;\nvar __draw = null;\nvar __onKeyPressed = null;\nvar __onKeyReleased = null;\n" + code + "\nonKeyPressed = __onKeyPressed;\nonKeyReleased = __onKeyReleased;\n try {\n  if (__main) __main();\n  else stop();\n} catch (e) {\n  error(e);\n}\n\n";
+        var thecode = "running = true;\nvar __main = null;\n" + code + "\ntry {\n  if (__main) __main();\n  else stop();\n} catch (e) {\n  error(e);\n}\n\n";
         console.log(thecode);
         eval(thecode);
     };
