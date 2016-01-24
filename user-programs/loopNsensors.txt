@@ -1,9 +1,8 @@
-void main(){
+void setup(){
   iniciarRobot();
-  animate (myloop);
 }
 
-void myloop(){
+void loop(){
   avanzarRobot(1000,1000);
   // esperar(3000);
   if (sensorNO || sensorNE){
@@ -21,12 +20,11 @@ void myloop(){
 
 ----
 
-void main(){
+void setup(){
   iniciarRobot();
-  animate (myloop);
 }
 
-void myloop(){
+void loop(){
   avanzarRobot(3000,3000);
   if (percibiendo){
     detenerRobot();

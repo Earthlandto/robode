@@ -1,9 +1,8 @@
-void main(){
+void setup(){
   iniciarRobot();
-  animate (myloop);
 }
 
-void myloop(){
+void loop(){
   avanzarRobot(1000,1000);
   esperar(3000);
 	avanzarRobot(-1000,-1000);
