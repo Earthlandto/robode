@@ -29,11 +29,11 @@ var b2ContactListener = Box2D.Dynamics.b2ContactListener;
 
 // Class redefinitions
 b2BodyDef.prototype.setName = function(name) {
-    this.userData = name + world.m_bodyCount + 1;
+    this.userData = name;
 };
 
 b2Body.prototype.setName = function(name) {
-    this.m_userData = name + world.m_bodyCount + 1;
+    this.m_userData = name;
 };
 
 b2Body.prototype.getName = function() {

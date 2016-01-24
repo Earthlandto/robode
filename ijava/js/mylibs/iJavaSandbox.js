@@ -20,6 +20,9 @@ self.onmessage = function(e) {
         case "canvas":
             sandbox.setCanvas(data.msg);
             break;
+        case "sensor":
+            sandbox.manageRobodeMessages(data);
+            break;
         default:
             console.log("Message received: ", data);
     }
@@ -190,6 +193,12 @@ function iJavaSandbox() {
         canvasID = newCanvas;
     };
 
+    this.manageRobodeMessages = function(data) {
+        if (data.type === "sensor") {
+            manageSensors(data.msg);
+        }
+    };
+
 
 
     /****************************************************************************
@@ -198,20 +207,15 @@ function iJavaSandbox() {
      *                                                                          *
      ****************************************************************************/
 
-    function esperar(millis) {
+    // sensors
+    var sensorNE = false,
+        sensorNO = false,
+        sensorSE = false,
+        sensorSO = false;
+    var sensorLD = false,
+        sensorLI = false;
+    var percibiendo = false;
 
-        //Add delay time to runtime.timeLimit
-        if (runtime) {
-            if (runtime.deep > -1) {
-                runtime.timeLimit[runtime.deep] += millis;
-            }
-        }
-
-        var timestamp = (new Date()).getTime() + millis;
-        while ((new Date()).getTime() < timestamp) {
-            //do nothing
-        }
-    }
 
     function iniciarRobot() {
         var message = {
@@ -230,6 +234,21 @@ function iJavaSandbox() {
         sendMessage("robode", message);
     }
 
+    function esperar(millis) {
+
+        //Add delay time to runtime.timeLimit
+        if (runtime) {
+            if (runtime.deep > -1) {
+                runtime.timeLimit[runtime.deep] += millis;
+            }
+        }
+
+        var timestamp = (new Date()).getTime() + millis;
+        while ((new Date()).getTime() < timestamp) {
+            //do nothing
+        }
+    }
+
     function avanzarRobot(lspeed, rspeed) {
         var message = {
             fn: "move",
@@ -244,6 +263,34 @@ function iJavaSandbox() {
             params: []
         };
         sendMessage("robode", message);
+    }
+
+    function manageSensors(message) {
+        switch (message.id) {
+            case "sensorNO":
+                sensorNO = (message.state === "begin" ? true : false);
+                break;
+            case "sensorNE":
+                sensorNE = (message.state === "begin" ? true : false);
+                break;
+            case "sensorSO":
+                sensorSO = (message.state === "begin" ? true : false);
+                break;
+            case "sensorSE":
+                sensorSE = (message.state === "begin" ? true : false);
+                break;
+            case "sensorLD":
+                sensorLD = (message.state === "begin" ? true : false);
+                break;
+            case "sensorLI":
+                sensorLI = (message.state === "begin" ? true : false);
+                break;
+        }
+        percibiendo = anySensorActive();
+    }
+
+    function anySensorActive(){
+        return sensorLI || sensorLD || sensorNO || sensorNE || sensorSO || sensorSE;
     }
 
 

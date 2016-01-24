@@ -155,8 +155,9 @@ function Robode(worker) {
                 if (sensedIndex > -1) {
                     (listSensed[sensedIndex])[bodySensed] += 1;
                     if ((listSensed[sensedIndex])[bodySensed] === 1) {
-
                         console.log("BEGIN contact", bodySensor, bodySensed);
+                        var message = {id: bodySensor, state: "begin"};
+                        sendMessage("sensor", message);
                     }
 
                 } else {
@@ -164,16 +165,18 @@ function Robode(worker) {
                     var bodysensedAux = {};
                     bodysensedAux[bodySensed] = 1;
                     listSensed.push(bodysensedAux);
-
                     console.log("BEGIN contact", bodySensor, bodySensed);
+                    var message = {id: bodySensor, state: "begin"};
+                    sendMessage("sensor", message);
                 }
             } else { // if it's the first time that the sensor perceive any body...
                 bodiesSensed[bodySensor] = [];
                 var newBodySensed = {};
                 newBodySensed[bodySensed] = 1;
                 bodiesSensed[bodySensor].push(newBodySensed);
-
                 console.log("BEGIN contact", bodySensor, bodySensed);
+                var message = {id: bodySensor, state: "begin"};
+                sendMessage("sensor", message);
             }
 
         }
@@ -209,6 +212,8 @@ function Robode(worker) {
             (listSensed[sensedIndex])[bodySensed] -= 1;
             if ((listSensed[sensedIndex])[bodySensed] < 1) {
                 console.log("END contact", bodySensor, bodySensed);
+                var message = {id: bodySensor, state: "end"};
+                sendMessage("sensor", message);
             }
         }
     };
@@ -276,14 +281,15 @@ function Robode(worker) {
         jfr = addWheelJoint(robot, fr);
         jfl = addWheelJoint(robot, fl);
         // external sensors
-        extSensors.push(createExternalSensor(pointsTL, "TL", robot));
-        extSensors.push(createExternalSensor(pointsTR, "TR", robot));
-        extSensors.push(createExternalSensor(pointsBL, "BL", robot));
-        extSensors.push(createExternalSensor(pointsBR, "BR", robot));
+        extSensors.push(createExternalSensor(pointsTL, "NO", robot));
+        extSensors.push(createExternalSensor(pointsTR, "NE", robot));
+        extSensors.push(createExternalSensor(pointsBL, "SO", robot));
+        extSensors.push(createExternalSensor(pointsBR, "SE", robot));
         //Line sensors
         sLine_left = createLineSensor('left', robot);
         sLine_right = createLineSensor('right', robot);
         // add collision listener
+        bodiesSensed = {};
         world.SetContactListener(contactListener);
 
         // Create circuit
@@ -450,7 +456,7 @@ function Robode(worker) {
     function isRobotPart(bodySensedName, elems2avoid) {
 
         for (var elem in elems2avoid) {
-            if (bodySensedName.startsWith(elems2avoid[elem]))
+            if (bodySensedName === elems2avoid[elem])
                 return true;
         }
         return false;
@@ -563,15 +569,10 @@ function Robode(worker) {
         var radius = 0.2;
 
         var position;
-        switch (name) {
-            case 'left':
-                position = robotPos.x - radius + 0.01;
-                break;
-            case 'right':
-                position = robotPos.x + radius - 0.01;
-                break;
-            default:
-                position = robotPos;
+        if (name === 'left') {
+            position = robotPos.x - radius + 0.01;
+        } else { // name === 'right'
+            position = robotPos.x + radius - 0.01;
         }
 
         var bodyDef = new b2BodyDef();
@@ -586,7 +587,7 @@ function Robode(worker) {
         fixDef.isSensor = true;
 
         var sline = world.CreateBody(bodyDef);
-        sline.setName("sline-" + name);
+        sline.setName("sensorL" + (name === 'left' ? 'I' : 'D'));
 
         sline.CreateFixture(fixDef);
 

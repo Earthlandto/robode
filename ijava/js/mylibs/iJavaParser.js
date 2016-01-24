@@ -1620,9 +1620,21 @@ function iJavaParser() {
 
         /****************************************************************************
          *                                                                          *
-         *       ROBODE DEFINITION FUNCTIONS                                        *
+         *       ROBODE DEFINITION                                                  *
          *                                                                          *
          ****************************************************************************/
+
+        system_variable("sensorNE", BooleanDatatype, false);
+        system_variable("sensorNO", BooleanDatatype, false);
+        system_variable("sensorSE", BooleanDatatype, false);
+        system_variable("sensorSO", BooleanDatatype, false);
+
+        system_variable("sensorLD", BooleanDatatype, false);
+        system_variable("sensorLI", BooleanDatatype, false);
+
+        system_variable("percibiendo", BooleanDatatype, false);
+
+
         library_function("esperar", new FunctionDatatype(VoidDatatype, [{
             datatype: IntegerDatatype
         }]));
@@ -1637,7 +1649,9 @@ function iJavaParser() {
             datatype: IntegerDatatype
         }]));
 
-
+        /****************************************************************************
+         *       END ROBODE DEFINITION                                              *
+         ****************************************************************************/
 
     };
 
