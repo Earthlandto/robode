@@ -235,7 +235,6 @@ function iJavaSandbox() {
     }
 
     function esperar(millis) {
-
         //Add delay time to runtime.timeLimit
         if (runtime) {
             if (runtime.deep > -1) {
@@ -289,8 +288,8 @@ function iJavaSandbox() {
         percibiendo = anySensorActive();
     }
 
-    function anySensorActive(){
-        return sensorLI || sensorLD || sensorNO || sensorNE || sensorSO || sensorSE;
+    function anySensorActive() {
+        return sensorLI || sensorLD || sensorNO || sensorNE ||  sensorSO || sensorSE;
     }
 
 
@@ -339,7 +338,7 @@ function iJavaSandbox() {
      *          Replaced by sending output/errors to compiler                   *
      ****************************************************************************/
     outputHandler = function(msg) {
-        var data = (typeof msg === "string" ? msg : msg.__data);
+        var data = (typeof msg === "object" ? msg.__data : msg);
         sendMessage("output", data);
     };
 
