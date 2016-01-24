@@ -1,0 +1,7 @@
+void main(){
+  iniciarRobot();
+  avanzarRobot(1000,1000);
+  esperar(3000);
+  avanzarRobot(-1000,-1000);
+  esperar(3000);
+}
