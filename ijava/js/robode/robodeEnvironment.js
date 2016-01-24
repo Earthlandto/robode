@@ -92,9 +92,14 @@ b2World.prototype.destroyJoints = function() {
 
 b2World.prototype.destroyBodies = function() {
 
-    var body = this.GetBodyList();
-    var body_next;
+    var body_next, body = this.GetBodyList();
     while (body) {
+        var fixture_next, fixture = body.GetFixtureList();
+        while (fixture) {
+            fixture_next = fixture.GetNext();
+            body.DestroyFixture(fixture);
+            fixture = fixture_next;
+        }
         body_next = body.GetNext();
         this.DestroyBody(body);
         body = body_next;

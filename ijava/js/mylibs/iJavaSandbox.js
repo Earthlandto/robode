@@ -85,7 +85,7 @@ function iJavaSandbox() {
     var execute = function(code) {
         initRuntime();
         var thecode = "running = true;\nvar __setup = null;\nvar __loop = null;\n" + code + "\ntry {\n  if (__setup){\n    __setup();\n    if(__loop)\n      animate(__loop);\n  } else stop();\n} catch (e) {\n  error(e);\n}\n\n";
-        console.log(thecode);
+        // console.log(thecode);
         eval(thecode);
     };
 
@@ -232,6 +232,13 @@ function iJavaSandbox() {
             params: []
         };
         sendMessage("robode", message);
+        sensorNE = false;
+        sensorNO = false;
+        sensorSE = false;
+        sensorSO = false;
+        sensorLD = false;
+        sensorLI = false;
+        percibiendo = false;
     }
 
     function esperar(millis) {
@@ -267,22 +274,22 @@ function iJavaSandbox() {
     function manageSensors(message) {
         switch (message.id) {
             case "sensorNO":
-                sensorNO = (message.state === "begin" ? true : false);
+                sensorNO = (message.state === "begin");
                 break;
             case "sensorNE":
-                sensorNE = (message.state === "begin" ? true : false);
+                sensorNE = (message.state === "begin");
                 break;
             case "sensorSO":
-                sensorSO = (message.state === "begin" ? true : false);
+                sensorSO = (message.state === "begin");
                 break;
             case "sensorSE":
-                sensorSE = (message.state === "begin" ? true : false);
+                sensorSE = (message.state === "begin");
                 break;
             case "sensorLD":
-                sensorLD = (message.state === "begin" ? true : false);
+                sensorLD = (message.state === "begin");
                 break;
             case "sensorLI":
-                sensorLI = (message.state === "begin" ? true : false);
+                sensorLI = (message.state === "begin");
                 break;
         }
         percibiendo = anySensorActive();

@@ -105,10 +105,12 @@ function Robode(worker) {
             }
         };
     */
-    var bodiesSensed = {};
+    var bodiesSensed = null;
 
     // If a sensor detects a line, the contac's enabled.
     contactListener.PreSolve = function(contact, oldManifold) {
+
+        if (!bodiesSensed) return;
 
         var udA = contact.GetFixtureA().getBodyName();
         var udB = contact.GetFixtureB().getBodyName();
@@ -124,6 +126,8 @@ function Robode(worker) {
     for zero to one and ends when the aparitions decrements to zero (in endContact
     function). */
     contactListener.BeginContact = function(contact) {
+
+        if (!bodiesSensed) return;
 
         var isSensorA = contact.GetFixtureA().IsSensor();
         var isSensorB = contact.GetFixtureB().IsSensor();
@@ -143,7 +147,7 @@ function Robode(worker) {
             // if it's a robot part, do nothing
             if (isRobotPart(bodySensed, robotparts))
                 return;
-
+            var message;
             // Had the body sensed the body previously?
             if (bodiesSensed.hasOwnProperty(bodySensor)) {
                 var listSensed = bodiesSensed[bodySensor];
@@ -155,8 +159,10 @@ function Robode(worker) {
                 if (sensedIndex > -1) {
                     (listSensed[sensedIndex])[bodySensed] += 1;
                     if ((listSensed[sensedIndex])[bodySensed] === 1) {
-                        console.log("BEGIN contact", bodySensor, bodySensed);
-                        var message = {id: bodySensor, state: "begin"};
+                        message = {
+                            id: bodySensor,
+                            state: "begin"
+                        };
                         sendMessage("sensor", message);
                     }
 
@@ -165,8 +171,10 @@ function Robode(worker) {
                     var bodysensedAux = {};
                     bodysensedAux[bodySensed] = 1;
                     listSensed.push(bodysensedAux);
-                    console.log("BEGIN contact", bodySensor, bodySensed);
-                    var message = {id: bodySensor, state: "begin"};
+                    message = {
+                        id: bodySensor,
+                        state: "begin"
+                    };
                     sendMessage("sensor", message);
                 }
             } else { // if it's the first time that the sensor perceive any body...
@@ -174,8 +182,10 @@ function Robode(worker) {
                 var newBodySensed = {};
                 newBodySensed[bodySensed] = 1;
                 bodiesSensed[bodySensor].push(newBodySensed);
-                console.log("BEGIN contact", bodySensor, bodySensed);
-                var message = {id: bodySensor, state: "begin"};
+                message = {
+                    id: bodySensor,
+                    state: "begin"
+                };
                 sendMessage("sensor", message);
             }
 
@@ -183,6 +193,8 @@ function Robode(worker) {
     };
 
     contactListener.EndContact = function(contact) {
+
+        if (!bodySensed) return;
 
         var isSensorA = contact.GetFixtureA().IsSensor();
         var isSensorB = contact.GetFixtureB().IsSensor();
@@ -212,7 +224,10 @@ function Robode(worker) {
             (listSensed[sensedIndex])[bodySensed] -= 1;
             if ((listSensed[sensedIndex])[bodySensed] < 1) {
                 console.log("END contact", bodySensor, bodySensed);
-                var message = {id: bodySensor, state: "end"};
+                var message = {
+                    id: bodySensor,
+                    state: "end"
+                };
                 sendMessage("sensor", message);
             }
         }
@@ -288,14 +303,16 @@ function Robode(worker) {
         //Line sensors
         sLine_left = createLineSensor('left', robot);
         sLine_right = createLineSensor('right', robot);
-        // add collision listener
-        bodiesSensed = {};
-        world.SetContactListener(contactListener);
 
         // Create circuit
         craftCircuit();
 
         running = true;
+
+        // add collision listener
+        bodiesSensed = {};
+        world.SetContactListener(contactListener);
+
         idInterval = window.setInterval(function() {
             world.Step(
                 1 / 60, //frame-rate
@@ -309,6 +326,7 @@ function Robode(worker) {
             updateMovement();
 
         }, 1000 / 60);
+
     };
 
     this.end = function() {
@@ -320,9 +338,15 @@ function Robode(worker) {
         // Clear canvas
         world.clearCanvas();
 
+        bodiesSensed = null;
         //destroy world
         world.destroyAll();
         world = null;
+
+        //reset speeds
+        rspeed = 0;
+        lspeed = 0;
+
     };
 
 
