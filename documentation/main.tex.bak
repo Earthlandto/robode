@@ -110,8 +110,8 @@ Fusce cursus odio a mattis malesuada. Maecenas \footnote{Se considera modificado
 
 \newpage
 \cleardoublepage
-\bibliography{references}
 \addcontentsline{toc}{chapter}{Bibliografía}
+\bibliography{references}
 \bibliographystyle{plain}
 
 

@@ -1,5 +1,6 @@
 .DS_Store
 /documentation/Memoria-tony.tex
-/documentation/build
-!/documentation/build/*.pdf
+/documentation/*
+!/documentation/*.tex
+!/documentation/*.tex.bak
 !/documentation/images/*
