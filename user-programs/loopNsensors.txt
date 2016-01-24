@@ -4,30 +4,13 @@ void setup(){
 
 void loop(){
   avanzarRobot(1000,1000);
-  // esperar(3000);
+  if (percibiendo){
+    print(".");
+  }
   if (sensorNO || sensorNE){
-    print("norte. ");
     avanzarRobot(-2000,-1000);
-    //esperar(3000);
   }
   if (sensorSO || sensorSE){
-    print("sur. ");
     avanzarRobot(2000,1000);
-    //esperar(3000);
-  }
-}
-
-
-----
-
-void setup(){
-  iniciarRobot();
-}
-
-void loop(){
-  avanzarRobot(3000,3000);
-  if (percibiendo){
-    detenerRobot();
-    avanzarRobot(-4000,-100);
   }
 }
