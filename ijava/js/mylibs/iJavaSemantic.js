@@ -750,7 +750,7 @@ function SemanticChecker(source, tree) {
     function checkDeclaredFunctions() {
         var mainFound = false;
         for (var i = 0; i < declaredFunctions.length; i++) {
-            if (declaredFunctions[i].id === "main") {
+            if (declaredFunctions[i].id === "setup") {
                 mainFound = true;
             }
             if (declaredFunctions[i].id === "draw") {
@@ -777,7 +777,7 @@ function SemanticChecker(source, tree) {
     if (!checkDeclaredFunctions()) {
         throw {
             line: 1,
-            message: "Falta la función principal.",
+            message: "Falta la función principal, se declara así 'void  setup().'",
             severity: "error"
         };
     }

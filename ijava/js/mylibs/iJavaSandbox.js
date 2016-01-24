@@ -84,7 +84,7 @@ function iJavaSandbox() {
 
     var execute = function(code) {
         initRuntime();
-        var thecode = "running = true;\nvar __main = null;\n" + code + "\ntry {\n  if (__main) __main();\n  else stop();\n} catch (e) {\n  error(e);\n}\n\n";
+        var thecode = "running = true;\nvar __setup = null;\nvar __loop = null;\n" + code + "\ntry {\n  if (__setup){\n    __setup();\n    if(__loop)\n      animate(__loop);\n  } else stop();\n} catch (e) {\n  error(e);\n}\n\n";
         console.log(thecode);
         eval(thecode);
     };

@@ -938,9 +938,9 @@ function iJavaParser() {
                     if (token.id === ",") advance(",");
                 }
                 advance(")", "Es necesario terminar la lista de parámetros de la función '" + identifier.id + "' con un ) y darle cuerpo.");
-                if (itself.id === "void" && identifier.id == "main" && !method) {
+                if (itself.id === "void" && identifier.id == "setup" && !method) {
                     if (isArray || entry.datatype.params.length > 0) {
-                        identifier.error("La función principal se declara así 'void  main().'");
+                        identifier.error("La función principal se declara así 'void  setup().'");
                     }
                 }
                 entry.body = statement();
@@ -953,7 +953,7 @@ function iJavaParser() {
                 currentScope = currentScope.getParent();
 
                 // Devolver el nodo del árbol de parseo
-                if (identifier.id !== "main") keypoints.createFunction = true;
+                if (identifier.id !== "setup") keypoints.createFunction = true;
                 if (!method) declaredFuncions.push(identifier.id);
                 entry.method = method;
                 entry.visibility = "public";
@@ -1518,17 +1518,17 @@ function iJavaParser() {
             datatype: CharDatatype
         }]));
 
-        library_function("loop", new FunctionDatatype(VoidDatatype, [{
-            datatype: new FunctionDatatype(VoidDatatype, [])
-        }]));
-        library_function("animate", new FunctionDatatype(VoidDatatype, [{
-            datatype: new FunctionDatatype(VoidDatatype, [])
-        }]));
-        library_function("animate", new FunctionDatatype(VoidDatatype, [{
-            datatype: new FunctionDatatype(VoidDatatype, [])
-        }, {
-            datatype: IntegerDatatype
-        }]));
+        // library_function("loop", new FunctionDatatype(VoidDatatype, [{
+        //     datatype: new FunctionDatatype(VoidDatatype, [])
+        // }]));
+        // library_function("animate", new FunctionDatatype(VoidDatatype, [{
+        //     datatype: new FunctionDatatype(VoidDatatype, [])
+        // }]));
+        // library_function("animate", new FunctionDatatype(VoidDatatype, [{
+        //     datatype: new FunctionDatatype(VoidDatatype, [])
+        // }, {
+        //     datatype: IntegerDatatype
+        // }]));
         //      library_function("exit", new FunctionDatatype(VoidDatatype, []));
         //      library_function("noLoop", new FunctionDatatype(VoidDatatype, []));
         //      library_function("redraw", new FunctionDatatype(VoidDatatype));
