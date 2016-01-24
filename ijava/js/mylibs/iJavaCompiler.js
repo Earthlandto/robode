@@ -100,7 +100,7 @@ function iJavaCompiler() {
                 outputHandler.print(data.msg);
                 break;
             case "error":
-                errorHandler.manage(data.msg);
+                errorHandler.manage(data);
                 break;
             case "robode":
                 manageRobodeMessages(data.msg);

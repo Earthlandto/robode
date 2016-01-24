@@ -207,6 +207,8 @@ function iJavaSandbox() {
      *                                                                          *
      ****************************************************************************/
 
+     var roboderunning = false;
+
     // sensors
     var sensorNE = false,
         sensorNO = false,
@@ -218,6 +220,15 @@ function iJavaSandbox() {
 
 
     function iniciarRobot() {
+
+        if (roboderunning){
+            var msgerr = "Error: El robot ya se ha iniciado.";
+            error(msgerr);
+            return;
+        }
+
+        roboderunning = true;
+
         var message = {
             fn: "init",
             params: [canvasID]
@@ -227,6 +238,11 @@ function iJavaSandbox() {
 
     // terminate robot execution
     function terminateRobot() {
+
+        if (!roboderunning) return;
+
+        roboderunning = false;
+
         var message = {
             fn: 'end',
             params: []
@@ -256,6 +272,15 @@ function iJavaSandbox() {
     }
 
     function avanzarRobot(lspeed, rspeed) {
+
+        if (!roboderunning) {
+            var msg = {
+                message: "Error: Primero es necesario iniciar el robot con la función: 'iniciarRobot()'."
+            };
+            error(msg);
+            return;
+        }
+
         var message = {
             fn: "move",
             params: [lspeed, rspeed]
@@ -264,6 +289,14 @@ function iJavaSandbox() {
     }
 
     function detenerRobot() {
+        if (!roboderunning) {
+            var msg = {
+                message: "Error: Primero es necesario iniciar el robot con la función: 'iniciarRobot()'."
+            };
+            error(msg);
+            return;
+        }
+
         var message = {
             fn: "stop",
             params: []
