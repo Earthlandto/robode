@@ -1,34 +1,3 @@
-\include{header}
-
-\makeglossaries
-\include{def-glossary}
-%\include{def-glossary}
-
-\begin{document}
-
-\include{front}
-
-%\layout
-
-\include{predoc}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% ÍNDICES
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\cleardoublepage
-\tableofcontents % indice de contenidos
-\addcontentsline{toc}{chapter}{Índice} % para que aparezca en el indice de contenidos
-
-\cleardoublepage
-\listoffigures % indice de figuras
-\addcontentsline{toc}{chapter}{Lista de figuras} % para que aparezca en el indice de contenidos
-
-\cleardoublepage
-\listoftables % indice de tablas
-\addcontentsline{toc}{chapter}{Lista de tablas} % para que aparezca en el indice de contenidos
-
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 1: Introducción
@@ -116,36 +85,3 @@ Fusce cursus odio a mattis malesuada. Maecenas \footnote{Se considera modificado
 \chapter{Conclusiones y vías futuras}
 
 
-
-
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% APENDICES
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\include{appendix}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% BIBLIOGRAFÍA
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\newpage
-\cleardoublepage
-\bibliography{references}
-\addcontentsline{toc}{chapter}{Bibliografía}
-\bibliographystyle{acm}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% GLOSARIO
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\cleardoublepage
-\printacronyms
-\printglossary
-
-
-
-
-\end{document}

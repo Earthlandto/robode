@@ -1,0 +1,9 @@
+
+%   https://es.sharelatex.com/learn/Glossaries
+
+\clearpage
+
+\printglossary[type=\acronymtype]
+
+\printglossary
+

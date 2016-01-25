@@ -1,0 +1,14 @@
+#!/bin/sh
+
+#echo "Deleting build folder..."
+rm build/*
+
+#echo "Make main.pdf..."
+
+pdflatex -synctex=1 -interaction=nonstopmode --output-directory=build main.tex > build/log.txt
+bibtex build/main >> build/log.txt
+makeglossaries  -d build main  >> build/log.txt
+pdflatex -synctex=1 -interaction=nonstopmode --output-directory=build main.tex >> build/log.txt
+pdflatex -synctex=1 -interaction=nonstopmode --output-directory=build main.tex >> build/log.txt
+
+#echo "...End."
