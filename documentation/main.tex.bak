@@ -9,7 +9,7 @@
 % 1: Introducción
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \pagenumbering{arabic} % para empezar la numeración con números 
-\chapter{Introducción}
+\chapter{Introducción} 
 
 Lorem ipsum dolor sit amet \cite{robomind-web}, consectetur adipiscing elit. Sed aliquam diam vestibulum commodo pharetra. Nulla sit amet risus eu purus finibus molestie.
 
@@ -110,8 +110,8 @@ Fusce cursus odio a mattis malesuada. Maecenas \footnote{Se considera modificado
 
 \newpage
 \cleardoublepage
-\addcontentsline{toc}{chapter}{Bibliografía}
 \bibliography{references}
+\addcontentsline{toc}{chapter}{Bibliografía}
 \bibliographystyle{plain}
 
 
