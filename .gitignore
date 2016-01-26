@@ -3,5 +3,4 @@
 !/documentation/*.tex
 !/documentation/build/*.pdf
 !/documentation/*.bib
-!/documentation/*.tex.bak
 !/documentation/images/*
