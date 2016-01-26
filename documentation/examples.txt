@@ -1,0 +1,58 @@
+\cite{robomind-web}
+\ref{tab:comparativa-tecnicas}
+
+\gls{formula}
+\acrfull{gcd}
+
+\footnote{Se considera modificado porque utiliza la técnica pero emplea otro algoritmo.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{equation}
+W(t) = C(t-K)^{3} + W_{max}
+\end{equation}
+
+
+\begin{figure}[!ht]
+	\begin{centering}
+		\includegraphics[width=0.6\textwidth]{images/evil-dog.png}
+			\caption{Un perro maléfico como otro cualquiera.}
+				\label{fig:evil-dog}
+	\end{centering}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{table}[!ht]
+	\begin{centering}
+		\begin{tabular}{c|c|c|c}
+ & TCP Reno & TCP NewReno & TCP Vegas \\
+\hline
+Slow-start & Si & Si & No\\
+
+Congestion Avoidance & Si & Si  & No\\
+
+Fast Retransmit & Si & Si & No \\
+
+Fast Recovery & Si & No & No \\
+
+Slow-start mod & No & No & Si  \\
+
+Congestion avoidance mod & No & No & Si \\
+
+Fast Retransmit mod & No & No & Si\\
+
+Fast Recovery mod & No & Si & No \\
+
+Selective ACKs & No & No & No\\
+
+Fast convergence & No & No & No \\
+
+\end{tabular}
+	\caption{Comparativa de técnicas que implementan las diferentes variantes de TCP vistas.}
+		\label{tab:comparativa-tecnicas}
+	\end{centering}
+\end{table}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
