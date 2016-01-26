@@ -5,14 +5,26 @@ then
 	echo "Deleting build folder..."
 	rm build/*
 
-	echo "Make main.pdf..."
+	#echo "Making main.pdf..."
 fi
 
 
-pdflatex -synctex=1 -interaction=nonstopmode --output-directory=build main.tex > build/log.txt
-bibtex build/main >> build/log.txt
-makeglossaries  -d build main  >> build/log.txt
-pdflatex -synctex=1 -interaction=nonstopmode --output-directory=build main.tex >> build/log.txt
+echo "PDFLATEX=============================" > build/logo.txt
 pdflatex -synctex=1 -interaction=nonstopmode --output-directory=build main.tex >> build/log.txt
 
-#echo "...End."
+echo "BIBTEX===============================" >> build/logo.txt
+cd build
+cp ../references.bib . 
+bibtex main.aux >> build/log.txt
+cd ..
+
+echo "MAKEGLOSSARIES=======================" >> build/logo.txt
+makeglossaries  -d build main  >> build/log.txt
+
+echo "PDFLATEX=============================" >> build/logo.txt
+pdflatex -synctex=1 -interaction=nonstopmode --output-directory=build main.tex >> build/log.txt
+
+echo "PDFLATEX=============================" >> build/logo.txt
+pdflatex -synctex=1 -interaction=nonstopmode --output-directory=build main.tex >> build/log.txt
+
+echo "Build."

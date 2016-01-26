@@ -1,6 +1,4 @@
 .DS_Store
 /documentation/build/*
-!/documentation/*.tex
 !/documentation/build/*.pdf
-!/documentation/*.bib
-!/documentation/images/*
+/documentation/*.tex.bak
