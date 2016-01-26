@@ -1,10 +1,42 @@
 %   https://es.sharelatex.com/learn/Glossaries
 
+% \gls{ }
+% To print the term, lowercase. For example, \gls{maths} prints mathematics when used.
+% \Gls{ }
+% The same as \gls but the first letter will be printed in uppercase. Example: \Gls{maths} prints Mathematics
+% \glspl{ }
+% The same as \gls but the term is put in its plural form. For instance, \glspl{formula} will write formulas in your final document.
+% \Glspl{ }
+% The same as \Gls but the term is put in its plural form. For example, \Glspl{formula} renders as Formulas.
+%
+% \acrlong{ }
+% Displays the phrase which the acronyms stands for. Put the label of the acronym inside the braces. In the example, \acrlong{gcd} prints Greatest Common Divisor.
+% \acrshort{ }
+% Prints the acronym whose label is passed as parameter. For instance, \acrshort{gcd} renders as GCD.
+% \acrfull{ }
+% Prints both, the acronym and its definition. In the example the output of \acrfull{lcm} is Least Common Multiple (LCM).
 
-\newglossaryentry{formula}
+\newacronym{js}{JS}{Javascript}
+\newacronym{API}{API}{Application Programming Interface}
+
+
+\newglossaryentry{ijava}
 {
-        name=formula,
-        description={A mathematical expression}
+        name=iJava,
+        description={}
 }
- 
-\newacronym{gcd}{GCD}{Greatest Common Divisor}
+\newglossaryentry{js}
+{
+        name=Javascript,
+        description={}
+}
+\newglossaryentry{descubre}
+{
+        name=Descubre,
+        description={}
+}
+\newglossaryentry{API}
+{
+        name=API,
+        description={}
+}

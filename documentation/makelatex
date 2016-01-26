@@ -1,9 +1,13 @@
 #!/bin/sh
 
-#echo "Deleting build folder..."
-rm build/*
+if test "$1" == "-r"
+then
+	echo "Deleting build folder..."
+	rm build/*
 
-#echo "Make main.pdf..."
+	echo "Make main.pdf..."
+fi
+
 
 pdflatex -synctex=1 -interaction=nonstopmode --output-directory=build main.tex > build/log.txt
 bibtex build/main >> build/log.txt
