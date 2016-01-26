@@ -12,6 +12,13 @@
 W(t) = C(t-K)^{3} + W_{max}
 \end{equation}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{lstlisting}
+
+\end{lstlisting}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{figure}[!ht]
 	\begin{centering}
@@ -19,6 +26,28 @@ W(t) = C(t-K)^{3} + W_{max}
 			\caption{Un perro maléfico como otro cualquiera.}
 				\label{fig:evil-dog}
 	\end{centering}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure}[!ht]
+	\begin{adjustwidth}{\oddsidemargin-1in}{\rightmargin}
+	%	\centering
+			\begin{subfigure}{\paperwidth}
+				\centering
+				\includegraphics[scale=.45]{images/square-turtle.png}
+				\caption{Cuadrado dibujado por el robot Turtle.}
+				\label{fig:square-turtle}
+			\end{subfigure}
+			\begin{subfigure}{\paperwidth}
+				\centering
+				\includegraphics[scale=.45]{images/flower-turtle.png}
+				\caption{Flor dibujada por el robot Turle.}
+				\label{fig:flower-turtle}
+			\end{subfigure}
+			%\caption{Ejemplo de dibujo utilizando funciones por el robot Turtle.}
+		\label{fig:square-flower-turtle}
+	\end{adjustwidth}
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
