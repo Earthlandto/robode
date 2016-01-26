@@ -15,7 +15,7 @@ pdflatex -synctex=1 -interaction=nonstopmode --output-directory=build main.tex >
 echo "BIBTEX===============================" >> build/logo.txt
 cd build
 cp ../references.bib . 
-bibtex main.aux >> build/log.txt
+bibtex main.aux >> log.txt
 cd ..
 
 echo "MAKEGLOSSARIES=======================" >> build/logo.txt
@@ -26,5 +26,7 @@ pdflatex -synctex=1 -interaction=nonstopmode --output-directory=build main.tex >
 
 echo "PDFLATEX=============================" >> build/logo.txt
 pdflatex -synctex=1 -interaction=nonstopmode --output-directory=build main.tex >> build/log.txt
+
+cp build/main.pdf documentation.pdf
 
 echo "Build."
