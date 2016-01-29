@@ -22,7 +22,7 @@ De la misma manera, estudios realizados en niños \cite{clements1986effects} de 
 
 
 \section{Situación actual}
-\label{sub:aprendiendo-programar}
+\label{sec:situacion-actual}
 
 
 Actualmente existen muchos proyectos para que se introduzca la programación en las aulas y se aprenda a programar desde edades tempranas, ya sea en el aula con un profesor, en casa con los padres o de manera independiente. Estos proyectos vienen respaldados por importantes cambios en los planes de estudios de todo el mundo para enseñar programación\cite{cs-education,madrid-programacion,codigo21, guide-england-computing,chicago-cs}, marcando una clara tendencia social de incluir la programación en los currículos académicos.
@@ -78,65 +78,62 @@ void draw() {
 \end{lstlisting}\label{code:circulos-color-raton}
 
 
-Como ya hemos mencionado anteriormente, la sintaxis es un subconjunto de Java, lo cual hace que iJava se parezca a la mayoría de los lenguajes de programación actuales. Esto simplifica el aprendizaje de nuevos lenguajes. También, gracias a la librería gráfica y matemática, los programas se simplifican mucho,  en cuanto a complejidad como en longitud. De esta manera se consigue aligerar la carga de trabajo que tiene que realizar el alumno para conseguir hacer un programa vistoso, enganchándolo más fácilmente a la actividad de programar. 
+La sintaxis de iJava se parece a muchos de los lenguajes modernos y más utilizados, lo cual simplifica el aprendizaje de estos nuevos lenguajes. También, gracias a la librería gráfica y matemática, los programas se simplifican mucho,  en cuanto a complejidad como en longitud. De esta manera se consigue aligerar la carga de trabajo que tiene que realizar el alumno para conseguir hacer un programa vistoso, enganchándolo más fácilmente a la actividad de programar. 
 
 
 \begin{figure}[!ht]
-	\begin{adjustwidth}{\oddsidemargin-1in}{\rightmargin}
-	%	\centering
-			\begin{subfigure}{\paperwidth}
-				\centering
-				\includegraphics[scale=.35]{images/descubre-explora.png}
-				\caption{Sección \emph{Explora} del proyecto \Gls{descubre}. Obtenido de \cite{descubre}.}
-				\label{fig:descubre-explora}
-			\end{subfigure}
-			\begin{subfigure}{\paperwidth}
-				\centering
-				\includegraphics[scale=.35]{images/descubre-aprende.png}
-				\caption{Sección \emph{Aprende} del proyecto \Gls{descubre}. Obtenido de \cite{descubre}.}
-				\label{fig:descubre-aprende}
-			\end{subfigure}
-		\label{fig:decubre-explora-aprende}
-	\end{adjustwidth}
-\end{figure}
-
-
-\begin{figure}[!ht]
-	\begin{adjustwidth}{\oddsidemargin-1in}{\rightmargin}
-	%	\centering
-			\begin{subfigure}{\paperwidth}
-				\centering
-				\includegraphics[scale=.35]{images/descubre-crea.png}
+	\begin{centering}
+		\includegraphics[width=0.65\textwidth]{images/descubre-crea.png}
 				\caption{Sección \emph{Crea} del proyecto \Gls{descubre}. Obtenido de \cite{descubre}.}
 				\label{fig:descubre-crea}
-			\end{subfigure}
-			\begin{subfigure}{\paperwidth}
-				\centering
-				\includegraphics[scale=.35]{images/descubre-retos.png}
-				\caption{Sección \emph{Retos} del proyecto \Gls{descubre}. Obtenido de \cite{descubre}.}
-				\label{fig:descubre-retos}
-			\end{subfigure}
-		\label{fig:decubre-crea-retos}
-	\end{adjustwidth}
+	\end{centering}
 \end{figure}
 
+
+
 \begin{figure}[!ht]
-	\begin{adjustwidth}{\oddsidemargin-1in}{\rightmargin}
-	%	\centering
-			\begin{subfigure}{\paperwidth}
-				\centering
-				\includegraphics[scale=.35]{images/descubre-profile.png}
+	\begin{centering}
+		\includegraphics[width=0.5\textwidth]{images/descubre-explora.png}
+				\caption{Sección \emph{Explora} del proyecto \Gls{descubre}. Obtenido de \cite{descubre}.}
+				\label{fig:descubre-explora}
+	\end{centering}
+\end{figure}
+
+
+
+\begin{figure}[!ht]
+	\begin{centering}
+		\includegraphics[width=0.5\textwidth]{images/descubre-aprende.png}
+				\caption{Sección \emph{Aprende} del proyecto \Gls{descubre}. Obtenido de \cite{descubre}.}
+				\label{fig:descubre-aprende}
+	\end{centering}
+\end{figure}
+
+
+\begin{figure}[!ht]
+	\begin{centering}
+		\includegraphics[width=0.5\textwidth]{images/descubre-retos.png}
+				\caption{Sección \emph{Retos} del proyecto \Gls{descubre}. Obtenido de \cite{descubre}.}
+				\label{fig:descubre-retos}
+	\end{centering}
+\end{figure}
+
+
+\begin{figure}[!ht]
+	\begin{centering}
+		\includegraphics[width=0.5\textwidth]{images/descubre-profile.png}
 				\caption{Vista del perfil de usuario del proyecto \Gls{descubre}. Obtenido de \cite{descubre}.}
 				\label{fig:descubre-perfil}
-			\end{subfigure}
-			\begin{subfigure}{\paperwidth}
-				\centering
-				\includegraphics[scale=.35]{images/descubre-statistics.png}
+	\end{centering}
+\end{figure}
+
+
+\begin{figure}[!ht]
+	\begin{centering}
+		\includegraphics[width=0.5\textwidth]{images/descubre-statistics.png}
 				\caption{Sección de estadísticas del usuario del proyecto \Gls{descubre}. Obtenido de \cite{descubre}.}
 				\label{fig:descubre-estadisticas}
-			\end{subfigure}
-		\label{fig:decubre-perfil-estadisticas}
-	\end{adjustwidth}
+	\end{centering}
 \end{figure}
 
 
@@ -148,8 +145,21 @@ Como ya hemos mencionado anteriormente, la sintaxis es un subconjunto de Java, l
 	\end{centering}
 \end{figure}
 
+
+
+
+
 \section{Motivación y enfoque del proyecto}
 \label{sec:motivacion}
+
+Las nuevas tecnologías están haciendo que cada vez más gente de todas las edades se interese por la informática, y más concretamente por la programación. Poco a poco la informática deja de ser cosa de un grupo selecto de gente {\red{color}que sabe que una aplicación no es \emph{magia}}.
+
+Como ya hemos comentado anteriormente, existe un movimiento que pretende introducir la informática y la programación en las aulas. Se han demostrado los beneficios de enseñar a programar en una edad escolar temprana.
+
+Es en este momento cuando se hace imprescindible tomar decisiones acertadas. Aprender a programar en edades pre-universitaria debe ser algo accesible a cualquier estudiante, independiente de su condición o los antecedentes del mismo. Igualmente, los conceptos de programación deben ser presentados de manera {\color{red}escalonada y paulatina \cite{fernandez2002analisis}}.
+
+El proyecto se enfocará desarrollando un simulador de robot de dos ruedas en el que los alumnos puedan programar su comportamiento. Se ofrece una librería de funciones para simplificar la interacción con el mismo y conseguir cierta funcionalidad extra. 
+
 
 
 %% Último párrafo: explicar de que van las siguientes secciones.
