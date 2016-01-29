@@ -15,7 +15,7 @@ Es necesario comprender la informática y desarrollar el \emph{pensamiento compu
 
 Aprender a programar es mencionado como uno de los 7 grandes retos de la educación informática \cite{mcgettrick2005grand} y diversos estudios \cite{renumol2009classification} muestran que las principales dificultades para un alumno cuando está en el proceso de aprender a programar son (a) como empezar un programa; (b) comprensión de la sintaxis específica del lenguaje de programación; (c) comprensión de la lógica\footnote{En este caso me refiero a lógica booleana, o también llamada Álgebra de Boole.} y (d) problemas a la hora de depurar el código escrito. 
 
-Aunque a primera vista aprender a programar pueda parecer una tarea ardua y compleja, tiene sus ventajas. En el estudio realizado por Janet Siegmund {\color{red}et al} en \cite{siegmund2014understanding}, podemos ver como los participantes mientras comprendían, analizaban y buscaban errores en pequeños trozos de código, daban claras muestras de estar desarrollando actividad cerebral en regiones del cerebro relacionadas con el procesado del lenguaje, la atención y la memoria de trabajo.
+Aunque a primera vista aprender a programar pueda parecer una tarea ardua y compleja, tiene sus ventajas. En el estudio realizado por Janet Siegmund y otros en \cite{siegmund2014understanding}, podemos ver como los participantes mientras comprendían, analizaban y buscaban errores en pequeños trozos de código, daban claras muestras de estar desarrollando actividad cerebral en regiones del cerebro relacionadas con el procesado del lenguaje, la atención y la memoria de trabajo.
 
 De la misma manera, estudios realizados en niños \cite{clements1986effects} de entre 6 y 8 años, muestran que estos demostraron mayor capacidad de atención, más autonomía y un mayor placer por el descubrimiento de nuevos conceptos. En la misma linea, un estudio en niños de infantil \cite{logo-geometry} que utilizaban el \Gls{logo} demostró que los mismos obtuvieron mejores resultados en pruebas de razonamiento, matemáticas o resolución de problemas. Otro estudio más reciernte \cite{liao1991effects} demuestra que aprender a programar (independientemente el lenguaje) potencia la creatividad y la habilidad de aprendizaje en personas de corta edad.
 
@@ -50,6 +50,36 @@ A nivel europeo, la \Gls{com-euro}{\color{red}\cite{ec-code-week}} ha promovido 
 \Gls{descubre}\cite{descubre} es un proyecto {\color{red}desarrollado por la Facultad de Informática de la Universidad de Murcia} y tiene como objetivo ayudar a los alumnos de secundaria y bachillerato a que desarrollen sus capacidades descubriendo lo que es la informática y aprendiendo a programar. Así como fomentar la inclusión del aprendizaje de la programación en secundaria y bachillerato. 
 
 Para ello, en un mismo sitio web, se integra (a) un conjunto de tutoriales de programación (figura \ref{fig:descubre-aprende}); (b) una herramienta que permite programar (figura \ref{fig:descubre-crea}) y realizar ejercicios o retos propuestos (figura \ref{fig:descubre-retos}) y (c) una pequeña red social que permite publicar y compartir (figura \ref{fig:descubre-explora}) con el resto de compañeros los programas realizados. Adicionalmente se consultar las estadísticas de aprendizaje (figura \ref{fig:descubre-perfil}) y tiempo dedicado (figura \ref{fig:descubre-estadisticas}) en la plataforma.
+
+En cuanto a la herramienta para desarrollar programas, el lenguaje utilizado es \Gls{ijava}\cite{sanchez2009ijava} y ha sido desarrollado por J. A. Sánchez Laguna. iJava es un lenguaje imperativo basado en \Gls{java} y comparte su sintaxis. También incorpora un conjunto reducido de funciones de librería clasificadas en los tres grupos siguientes: númericas, entrad/salida y gráficas. iJava se estudiará más en detalle en el apéndice \ref{anexo:ijava}.
+
+En el código \ref{code:hello-world} podemos ver un programa básico escrito en iJava que muestra por pantalla la cadena "Hello World.". En el código \ref{code:circulos-color-raton} podemos ver un código un poco más complejo que dibuja círculos de colores en la pantalla según la posición del ratón. En la figura \ref{fig:salida-code-circulos-color-raton} se puede ver la salida del programa.
+
+
+\begin{lstlisting}[caption=Programa básico en iJava imprimiendo por pantalla la cadena "Hello World.".]
+void main(){
+  println("Hello World.");
+}
+\end{lstlisting}\label{code:hello-world}
+
+
+\begin{lstlisting}[language=Java, caption=Programa en iJava que dibuja un circulo de un color diferente según la posición en la pantalla en la que se encuentra el ratón.]
+void main() {
+  noStroke();
+  background(0);
+  animate(draw);
+}
+
+void draw() {
+  background(0,0,0,0.01);
+  fill(mouseX, mouseY, 0);
+  ellipse(mouseX, mouseY, 50,50);
+}
+\end{lstlisting}\label{code:circulos-color-raton}
+
+
+Como ya hemos mencionado anteriormente, la sintaxis es un subconjunto de Java, lo cual hace que iJava se parezca a la mayoría de los lenguajes de programación actuales. Esto simplifica el aprendizaje de nuevos lenguajes. También, gracias a la librería gráfica y matemática, los programas se simplifican mucho,  en cuanto a complejidad como en longitud. De esta manera se consigue aligerar la carga de trabajo que tiene que realizar el alumno para conseguir hacer un programa vistoso, enganchándolo más fácilmente a la actividad de programar. 
+
 
 \begin{figure}[!ht]
 	\begin{adjustwidth}{\oddsidemargin-1in}{\rightmargin}
@@ -110,8 +140,22 @@ Para ello, en un mismo sitio web, se integra (a) un conjunto de tutoriales de pr
 \end{figure}
 
 
+\begin{figure}[!ht]
+	\begin{centering}
+		\includegraphics[width=0.5\textwidth]{images/salida-code-circulos-color-raton.png}
+			\caption{Salida del programa escrito en iJava ejecutado por el código \ref{code:circulos-color-raton}.}
+				\label{fig:salida-code-circulos-color-raton}
+	\end{centering}
+\end{figure}
+
 \section{Motivación y enfoque del proyecto}
 \label{sec:motivacion}
+
+
+%% Último párrafo: explicar de que van las siguientes secciones.
+
+
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

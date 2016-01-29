@@ -79,16 +79,17 @@
      backgroundcolor=\color{gray97},
      rulesepcolor=\color{black},
      tabsize=2,
+     captionpos=b,
      %
-     stringstyle=\ttfamily,
+     stringstyle=\ttfamily\color{javagreen},
      showstringspaces = false,
      basicstyle=\small\ttfamily,
      commentstyle=\color{gray45},
-     keywordstyle=\bfseries,
+     keywordstyle=\bfseries\color{javadocblue},
      %
+     numberstyle=\tiny,
      numbers=left,
      numbersep=10pt,
-     numberstyle=\tiny,
      numberfirstline = true,
      firstline=1,
      stepnumber=2,
@@ -96,10 +97,11 @@
      %
      language=Java,
      %
-     keywords=[2]{export,Monitor},
+     keywords=[2]{main, draw, animate, ellipse, print, println, line},
 	 keywordstyle={[2]\ttfamily\color{black}},
 	 morekeywords={export, Monitor}
 }
+\renewcommand{\lstlistingname}{Código}
 
 
 \bibliographystyle{acm}
