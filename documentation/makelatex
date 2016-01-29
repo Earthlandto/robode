@@ -9,23 +9,24 @@ then
 fi
 
 
-echo "PDFLATEX=============================" > build/logo.txt
+echo "PDFLATEX============================================================" > build/log.txt
 pdflatex -synctex=1 -interaction=nonstopmode --output-directory=build main.tex >> build/log.txt
 
-echo "BIBTEX===============================" >> build/logo.txt
+echo "BIBTEX==============================================================" >> build/log.txt
 cd build
 cp ../references.bib . 
 bibtex main.aux >> log.txt
 cd ..
 
-echo "MAKEGLOSSARIES=======================" >> build/logo.txt
+echo "MAKEGLOSSARIES=======================================================" >> build/log.txt
 makeglossaries  -d build main  >> build/log.txt
 
-echo "PDFLATEX=============================" >> build/logo.txt
+echo "PDFLATEX=============================================================" >> build/log.txt
 pdflatex -synctex=1 -interaction=nonstopmode --output-directory=build main.tex >> build/log.txt
 
-echo "PDFLATEX=============================" >> build/logo.txt
+echo "PDFLATEX=============================================================" >> build/log.txt
 pdflatex -synctex=1 -interaction=nonstopmode --output-directory=build main.tex >> build/log.txt
+
 
 cp build/main.pdf documentation.pdf
 
