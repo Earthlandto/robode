@@ -48,7 +48,20 @@ A nivel europeo, la \Gls{com-euro}\cite{ec-code-week} ha promovido durante el a�
 \section{Usando la electrónica y la robótica para enseñar a programar}
 \label{sec:electronica-robotica}
 
-Hasta ahora se ha estado hablando de 
+
+Una forma bastante extendida para enseñar a programar en las aulas es con robótica y electrónica. Muchos proyectos de robótica animan al alumno a formarse en dos grandes materias: electrónica y programación. Cuando un estudiante tiene que hacer que un robot se mueva, tendrá que aprender a programar su comportamiento, pero también deberá conocer y en algunos casos incluso crear nuevas piezas para su correcto funcionamiento y personalización. 
+
+Existen proyectos como Arduino\footnote{Arduino es una placa base con un microprocesador que es capaz de analizar entradas de información (un sensor, un botón o incluso una notificación de Twitter (\url{www.twitter.com}) y convertirlo en una respuesta como el activar un robot o encender un led. Todo esto acompañado de un software facil de programar. El proyecto es completamente \emph{\gls{open-source}}.}\cite{arduino} y Raspberry Pi\footnote{Raspberry Pi es un ordenador del tamaño de una tarjeta de crédito. También se provee un Sistema Operativo \emph{Open Source} (aunque este puede ser cambiado). Su funcionamiento es sencillo de programar en Scratch\cite{scratch} o Python\cite{python,lutz2013learning}.}\cite{raspberry-pi} que proporciona {\color{red}los elementos y materiales} básicos para poder crear nuevos proyectos. 
+
+En concreto, una de las meta originales de Raspberry Pi es conseguir que los niños aprendan a programar y conozcan como funciona realmente un ordenador. Tanto Arduino como Raspberry Pi pueden adquirirse a un bajo precio, lo cual facilita la adquisición de los mismos por parte de instituciones de enseñanza o particulares. Esto ha facilitado la alta inclusión de estos dos proyectos en las aulas.
+
+Otro proyecto que también está muy extendido en las aulas Lego Mindstorm EV3 y NXT. Dos kits de iniciación a la robótica con Lego. Permite al estudiante crear con piezas de lego un robot y programar su comportamiento. Los robots suelen tomar forma de brazo robótico o de vehículo capaz de seguir lineas pintadas en el suelo haciendo uso de sensores. Todo esto viene también acompañado de un software para programar el comportamiento de los diferentes componentes del robot.
+
+
+{\color{red}
+Esto es suficiente?
+No se si debería ponerme a hablar de Moway y robomind y todo eso si ya en el estado del arte se hablará ampliamente de eso...
+}
 
 
 
@@ -168,16 +181,16 @@ Es en este momento cuando se hace imprescindible tomar decisiones acertadas. Apr
 
 El proyecto se enfocará desarrollando un simulador de robot de dos ruedas en el que los alumnos puedan programar su comportamiento. Se ofrece una librería de funciones para simplificar la interacción con el mismo y conseguir cierta funcionalidad extra que simplifique la tarea de comprensión y usabilidad del simulador.
 
-El simulador se integrará en la plataforma Descubre la pogramación, mencionada en la sección \ref{sec:descubre}. Esto conlleva que el estudiante programará el comportamiento del robot en iJava. El robot estará dentro de un circuito con distintos elementos con los que podrá interactuar. Asimismo, el robot dispondrá de una serie de sensores para poder recibir información del mundo que le rodea.
+El simulador se integrará en la plataforma Descubre la pogramación, mencionada en la sección \ref{sec:descubre}. Esto supone que el estudiante programará el comportamiento del robot simulado en iJava. El robot estará dentro de un circuito con distintos elementos con los que podrá interactuar. Asimismo, el robot dispondrá de una serie de sensores para poder recibir información del mundo que le rodea.
 
-Al incluir el simulador como un módulo de descubre, se pretende reforzar el esfuerzo por parte de sus creadores de hacer llegar la programación al mayor numero de estudiantes pre-universitarios posible, proponiendo una alternativa más vistosa, que añade una componente más de entretenimiento a la actividad de programar.
-
-Igualmente, los estudiantes que ya están usando la plataforma Descubre, podrán trabajar los conceptos de programación (bucles, condiciones, variables y funciones, entre otras) en un entorno diferente, renovando así su interés en otra actividad diferente.
-
-
-{\color{blue}
-Esto permitirá ligar con la siguiente sección en la que se decide ampliar descubre añadiendo el simulador del robot. La justificación puede ser que de este modo se permite a quien no tiene recursos materiales para comprar el hardware o es ménos hábil con los aspectos mecánicos y electrónicos que también programe robots.
+Al incluir el simulador como un módulo de descubre, se pretende reforzar el esfuerzo por parte de sus creadores de hacer llegar la programación al mayor numero de estudiantes pre-universitarios posible, proponiendo una alternativa atractiva y que añade una componente más de entretenimiento a la actividad de programar. {\color{red}Por otra parte, permite que el alumno asimile conceptos de robótica de manera transparente. Y al ser de libre acceso, también elimina la barrera que puede suponer realizar una inversión en material electrónico como puede ocurrir con Arduino, Raspberry Pi o Lego. 
 }
+
+Igualmente, los estudiantes que ya están usando la plataforma Descubre, podrán trabajar los conceptos de programación (bucles, condiciones, variables y funciones, entre otros) en un entorno diferente, renovando así su interés en otra actividad diferente.
+
+
+%Esto permitirá ligar con la siguiente sección en la que se decide ampliar descubre añadiendo el simulador del robot. La justificación puede ser que de este modo se permite a quien no tiene recursos materiales para comprar el hardware o es ménos hábil con los aspectos mecánicos y electrónicos que también programe robots.
+
 
 %% Último párrafo: explicar de que van las siguientes secciones.
 En las secciones siguientes se hablará de cuales son las alternativas ya creadas que trabajan en esta linea. También se verá como se ha desarrollado la idea principal y que resultados se han obtenido. Por último, se analizarán los objetivos conseguidos y que ofrece mi propuesta de diferente con los proyectos ya desarrollados.
@@ -195,12 +208,26 @@ A nivel global, actualmente existe una gran cantidad de proyectos con la única 
 La mayoría de estos proyectos promueven una enseñanza independiente y autodidacta bajo un entorno on-line y gratuito. De esta manera, el alumno puede aprender a su propio ritmo y desde cualquier parte del mundo.
 
 
-\section{El lenguaje Logo y el robot Turtle}
+\section{Los origenes: lenguaje Logo y robot Turtle}
 \label{sec:Logo}
 
 El lenguaje Logo, basado en \Gls{lisp}, fue diseñado como una herramienta para aprendizaje. Todas sus características -interactividad, modularidad, extensibilidad, flexibilidad en los tipos de datos- persiguen esta meta. El lenguaje Logo fue uno de los primeros proyectos en emprender la difícil tarea de enseñar a programar a niños de Primaria.
 
-Como se explica en la página oficial del proyecto Logo\cite{logo}, durante la década de los 70, en el \acrfull{MIT} y diferentes centros de investigación europeos, se llevó a cabo una investigación sobre el uso del \Gls{logo} en un pequeño grupo de alumnos de Secundaria. {\color{blue}Todo el proceso se ha documentado en diferentes artículos como \cite{feurzeig1969programming} o \cite{pea1984logo}.}
+{\color{blue}
+Como se explica en la página oficial del proyecto Logo\cite{logo}, durante la década de los 70, en el \acrfull{MIT} y diferentes centros de investigación europeos, se llevaron a cabo investigaciones sobre el uso del \Gls{logo} en pequeños grupos de alumnos de Educación Primaria. 
+
+A pesar de los diversos estudios que se han realizado a lo largo de los años, no se han conseguido obtener unos resultados claros sobre la posible ventaja de enseñar a programar a niños de Primaria con Logo. En \cite{feurzeig1969programming}, Feurzeig y otros consiguen una leve mejoría en la nota obtenida en el Test de Habilidades Básicas de Iowa (Iowa Test of Basic Skills, o ITBS)\footnote{El Iowa Test of Basic Skills (ITBS), es un test que se realiza anualmente siguiendo una serie de estándars a nivel de estado para medir el rendimiento académico de los alumnos.}. En la tabla \ref{tab:logo-itbs} se puede ver como la nota global del grupo que aprende a programar (denominado \emph{computer}) es de 114 puntos más que el curso anterior, mientras que la obtención del grupo de control es solo de 6 puntos. Aún así, se puede ver como la nota del grupo de control sigue siendo mayor que la del grupo \emph{computer}. Ante éste hecho, Feurzeig concluye que el grupo de control no representaba muy bien al grupo \emph{computer} y que, por tanto, la comparación perdía validez.
+Más tarde, Pea y Kurland en \cite{pea1984logo} concluyen que, tras el estudio en dos cursos separados de alumnos, aprender a programar no conseguía mostrar ningún beneficio claro en el rendimiento de los alumnos en comparación al grupo de control.
+Poco más tarde, Moss \cite{moss1985creating} obtiene evidencias de la relación en el aprendizaje de Logo con el desarrollo de conceptos primitivos que más adelante se enlazarían con la álgebra básica. 
+}
+
+\begin{table}[!ht]
+	\begin{centering}
+		\includegraphics[width=0.8\textwidth]{images/logo-itbs.png}
+			\caption{Tabla que muestra los resultados obtenidos en el ITBS por los alumnos que aprendierona programar (denominado \emph{computer}) y el grupo de control. Obtenido de \cite{feurzeig1969programming}.}
+				\label{tab:logo-itbs}
+	\end{centering}
+\end{table}
 
 El proyecto \emph{Turtle} es el proyecto más popular del lenguaje Logo. Nació como una criatura robótica que se movía por el suelo y se podía programar solo con 2 instrucciones básicas: \texttt{forward x} y \texttt{right y}, para avanzar \texttt{x} \emph{pasos de tortuga} o girar \texttt{y} grados hacia la derecha, respectivamente.
 
@@ -256,7 +283,7 @@ El proyecto Turtle ha sido reproducido y modernizado en proyectos más recientes
 
 
 {\color{blue}
-¿Comentarás algo de robomind o codehs que también son descendientes directos de lego? lo bueno es que el primero te hace enfocar la idea de la tortuga hacia un robot más realista, la segunda que lleva el aprendizaje a entorno web y tecnologías javascript. Todo esto te abre temas para seguir escribiendo el trabajo. Recuerda que sabes más de lo que crees y has hecho más de lo que piensas.
+J.A: ¿Comentarás algo de robomind o codehs que también son descendientes directos de lego? lo bueno es que el primero te hace enfocar la idea de la tortuga hacia un robot más realista, la segunda que lleva el aprendizaje a entorno web y tecnologías javascript. Todo esto te abre temas para seguir escribiendo el trabajo. Recuerda que sabes más de lo que crees y has hecho más de lo que piensas.
 }
 
 
@@ -270,8 +297,6 @@ Khan Academy\cite{khan-academy}, con casi 37 millones de usuarios, es uno de los
 \label{sec:Code.org}
 
 Code.org\cite{code-org} es una plataforma on-line que se dedica exclusivamente a enseñar a programar y cuenta ya con más de 8 millones de usuarios. Cuenta con una gran comunidad de educadores y apoyos entre los que se puede contar al Presidente B. H. Obama. Lleva a cabo proyectos como \emph{Hour of Code} en el que promueve que los usuarios inviertan una hora diaria programando en diferentes juegos, muchos de ellos utilizando \Gls{Blockly}\cite{blockly}.
-
-{\color{blue} Parece que estoy haciendo publicidad... shit}
 
 
 \section{Squeak Etoys}
@@ -301,11 +326,22 @@ Este Trabajo Fin de Grado consiste en desarrollar un módulo de simulación de u
 \section{Metodología}
 \label{sec:metodologia}
 
+{\color{green}
+Que metodología he seguido? Extreme programming
+
+
+Hablar de herramientas utilizadas?
+}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 4: Diseño y resolución del trabajo realizado
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Diseño y resolución del trabajo realizado}\label{diseno}
 
+
+{\color{green}
+Decidir que poner, como, en que orden.
+}
 
 
 

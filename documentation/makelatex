@@ -2,7 +2,7 @@
 
 if test "$1" == "-r"
 then
-	echo "Deleting build folder..."
+	#echo "Deleting build folder..."
 	rm build/*
 
 	#echo "Making main.pdf..."
@@ -31,4 +31,4 @@ pdflatex -synctex=1 -interaction=nonstopmode --output-directory=build main.tex >
 cp build/main.pdf documentation.pdf
 cp build/main.pdf ~/Desktop/documentation.pdf
 
-echo "Build."
+#echo "Build."
