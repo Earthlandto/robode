@@ -45,15 +45,21 @@ Code.org cuenta con decenas de millones de estudiantes de más de 180 países, d
 A nivel europeo, la \Gls{com-euro}\cite{ec-code-week} ha promovido durante el año 2015 la \emph{EU Code Week}\cite{code-week} como parte de su Estrategia para la Educación y la Formación 2020. Este proyecto consistió en eventos de una semana de duración en la que se enseñaba informática y programación en lugares de toda Europa\footnote{En España, se realizaron eventos dentro del marco del proyecto \emph{EU Code Week} en Madrid, Sevilla, Murcia, Asturias, Canarias, Cantabria, Zamora, Cataluña, Ceuta, Badajoz, La Rioja, País Vasco y Valencia.}.
 
 
+\section{Usando la electrónica y la robótica para enseñar a programar}
+\label{sec:electronica-robotica}
+
+Hasta ahora se ha estado hablando de 
+
+
 
 \section{Proyecto Descubre la programación}
 \label{sec:descubre}
 
-\Gls{descubre}\cite{descubre} es un proyecto {\color{red}diseñado por la Facultad de Informática de la Universidad de Murcia} y tiene como objetivo ayudar a los alumnos de Secundaria y Bachillerato a que desarrollen sus capacidades descubriendo lo que es la informática y aprendiendo a programar. Así como fomentar la inclusión del aprendizaje de la programación en secundaria y bachillerato.
+\Gls{descubre}\cite{descubre} es un proyecto diseñado en la Facultad de Informática de la Universidad de Murcia y tiene como objetivo ayudar a los alumnos de Secundaria y Bachillerato a que desarrollen sus capacidades descubriendo lo que es la informática y aprendiendo a programar. Así como fomentar la inclusión del aprendizaje de la programación en secundaria y bachillerato.
 
 Para ello, en un mismo sitio web, se integra (a) un conjunto de tutoriales de programación (figura \ref{fig:descubre-aprende}); (b) una herramienta que permite programar (figura \ref{fig:descubre-crea}) y realizar ejercicios o retos propuestos (figura \ref{fig:descubre-retos}) y (c) una pequeña red social que permite publicar y compartir con el resto de compañeros los programas realizados (figura \ref{fig:descubre-explora}). Adiccionalmente se puede consultar las estadísticas de aprendizaje (figura \ref{fig:descubre-perfil}) y tiempo dedicado (figura \ref{fig:descubre-estadisticas}) en la plataforma, tanto por el alumno como por el profesor. De esta manera se permite que los profesores puedan utilizar Descubre en las aulas y realizar un seguimiento de la dedicación y progreso del alumno. 
 
-En cuanto a la herramienta para desarrollar programas, el lenguaje utilizado es \gls{ijava}\cite{sanchez2009ijava} y ha sido desarrollado por J. A. Sánchez Laguna. iJava es un lenguaje imperativo basado en \Gls{java} y comparte su sintaxis, aunque se han eliminado todos los componentes del lenguaje Orientado a Objetos. También incorpora un conjunto reducido de funciones de librería clasificadas en los tres grupos siguientes: númericas, entrad/salida y gráficas\footnote{Si el lector está interesado en aprender más sobre este lenguaje, puede consultar \cite{sanchez2009ijava}, o en \cite{descubre-lenguaje}.}.
+En cuanto a la herramienta para desarrollar programas, el lenguaje utilizado es \gls{ijava}\cite{sanchez2009ijava} y ha sido desarrollado por J. A. Sánchez Laguna. iJava es un lenguaje imperativo basado en \Gls{java} y comparte su sintaxis, aunque se han eliminado todos los componentes del lenguaje Orientado a Objetos. También incorpora un conjunto reducido de funciones de librería clasificadas en los tres grupos siguientes: númericas, entrad/salida y gráficas\footnote{Si el lector está interesado en aprender más sobre este lenguaje, puede consultar \cite{sanchez2009ijava} o \cite{descubre-lenguaje}.}.
 
 A modo de ilustración, podemos ver el código \ref{code:hello-world}, un programa que imprime por pantalla la cadena "Hello World.". En el código \ref{code:circulos-color-raton} podemos ver un programa un poco más complejo que dibuja círculos de colores en la pantalla según la posición del ratón. En la figura \ref{fig:salida-code-circulos-color-raton} se puede ver la salida de este último programa.
 
@@ -80,7 +86,7 @@ void draw() {
 \end{lstlisting}\label{code:circulos-color-raton}
 
 
-La sintaxis de iJava se parece a muchos de los lenguajes modernos y más utilizados (al ser un subconjunto de la sintaxis de Java), lo cual simplifica el aprendizaje cuando se intenta aprender un nuevo lenguaje. También, gracias a la librería gráfica y matemática, los programas se simplifican mucho en cuanto a complejidad y longitud. De esta manera se consigue aligerar la carga de trabajo que tiene que realizar el alumno para conseguir hacer un programa vistoso, enganchándolo más fácilmente a la actividad de programar.
+La sintaxis de iJava se parece a muchos de los lenguajes modernos y más utilizados (al ser un subconjunto de la sintaxis de Java), lo cual simplifica el aprendizaje cuando se intenta aprender un nuevo lenguaje. También, gracias a la librería gráfica y matemática, los programas se simplifican mucho en cuanto a complejidad y longitud. De esta manera se consigue aligerar la carga de trabajo que tiene que realizar el alumno para conseguir hacer un programa vistoso, haciendo que la actividad de programar sea más atractiva.
 
 
 \begin{figure}[!ht]
@@ -154,7 +160,7 @@ La sintaxis de iJava se parece a muchos de los lenguajes modernos y más utiliza
 \section{Motivación y enfoque del proyecto}
 \label{sec:motivacion}
 
-Las nuevas tecnologías están haciendo que cada vez más gente de todas las edades se interese por la informática, y más concretamente por la programación. Poco a poco la informática deja de ser cosa de un grupo selecto de gente {\red{color}que sabe que una aplicación no es \emph{magia}}.
+Las nuevas tecnologías están haciendo que cada vez más gente de todas las edades se interese por la informática, y más concretamente por la programación. Poco a poco la informática deja de ser cosa de un grupo selecto {\color{red}de gente que entiende su funcionamiento}. 
 
 Como ya hemos comentado anteriormente, existe un movimiento que pretende introducir la informática y la programación en las aulas. Se han demostrado los beneficios de enseñar a programar en una edad escolar temprana.
 
@@ -169,13 +175,12 @@ Al incluir el simulador como un módulo de descubre, se pretende reforzar el esf
 Igualmente, los estudiantes que ya están usando la plataforma Descubre, podrán trabajar los conceptos de programación (bucles, condiciones, variables y funciones, entre otras) en un entorno diferente, renovando así su interés en otra actividad diferente.
 
 
+{\color{blue}
+Esto permitirá ligar con la siguiente sección en la que se decide ampliar descubre añadiendo el simulador del robot. La justificación puede ser que de este modo se permite a quien no tiene recursos materiales para comprar el hardware o es ménos hábil con los aspectos mecánicos y electrónicos que también programe robots.
+}
+
 %% Último párrafo: explicar de que van las siguientes secciones.
 En las secciones siguientes se hablará de cuales son las alternativas ya creadas que trabajan en esta linea. También se verá como se ha desarrollado la idea principal y que resultados se han obtenido. Por último, se analizarán los objetivos conseguidos y que ofrece mi propuesta de diferente con los proyectos ya desarrollados.
-
-
-
-
-{\color{red}¿Se puede decir que me he explicado el "enfoque del proyecto"?}
 
 
 
@@ -186,7 +191,7 @@ En las secciones siguientes se hablará de cuales son las alternativas ya creada
 
 
 
-A nivel global, actualmente existe una gran cantidad de proyectos con la única intención de enseñar, principalmente a algumos de Secundaria y Bachillerato, diferentes aspectos de la informática como lo es la programación \cite{code-school,code-org,code-academy}, la robótica \cite{robomind-web,moway} e incluso chips y electrónica (con \Gls{arduino}\cite{arduino}). Algunos de estos proyectos llevan décadas activos, como lo es el lenguaje \Gls{logo}\cite{logo} y su proyecto \Gls{turtle}\cite{logo-turtle}.
+A nivel global, actualmente existe una gran cantidad de proyectos con la única intención de enseñar, principalmente a alumnos de Secundaria y Bachillerato, diferentes aspectos de la informática como lo es la programación \cite{code-school,code-org,code-academy}, la robótica \cite{robomind-web,moway} e incluso electrónica (con \Gls{arduino}\cite{arduino}). Algunos de estos proyectos llevan décadas activos, como lo es el lenguaje \Gls{logo}\cite{logo} y su proyecto \Gls{turtle}\cite{logo-turtle}.
 La mayoría de estos proyectos promueven una enseñanza independiente y autodidacta bajo un entorno on-line y gratuito. De esta manera, el alumno puede aprender a su propio ritmo y desde cualquier parte del mundo.
 
 
@@ -195,7 +200,7 @@ La mayoría de estos proyectos promueven una enseñanza independiente y autodida
 
 El lenguaje Logo, basado en \Gls{lisp}, fue diseñado como una herramienta para aprendizaje. Todas sus características -interactividad, modularidad, extensibilidad, flexibilidad en los tipos de datos- persiguen esta meta. El lenguaje Logo fue uno de los primeros proyectos en emprender la difícil tarea de enseñar a programar a niños de Primaria.
 
-Como se explica en la página oficial del proyecto Logo\cite{logo}, durante la década de los 70, en el \acrfull{MIT} y diferentes centros de investigación europeos, se llevó a cabo una investigación sobre el uso del \Gls{logo} en un pequeño grupo de alumnos de Secundaria. Todo el proceso se ha documentado en diferentes artículos como \cite{feurzeig1969programming} o \cite{pea1984logo}.
+Como se explica en la página oficial del proyecto Logo\cite{logo}, durante la década de los 70, en el \acrfull{MIT} y diferentes centros de investigación europeos, se llevó a cabo una investigación sobre el uso del \Gls{logo} en un pequeño grupo de alumnos de Secundaria. {\color{blue}Todo el proceso se ha documentado en diferentes artículos como \cite{feurzeig1969programming} o \cite{pea1984logo}.}
 
 El proyecto \emph{Turtle} es el proyecto más popular del lenguaje Logo. Nació como una criatura robótica que se movía por el suelo y se podía programar solo con 2 instrucciones básicas: \texttt{forward x} y \texttt{right y}, para avanzar \texttt{x} \emph{pasos de tortuga} o girar \texttt{y} grados hacia la derecha, respectivamente.
 
@@ -204,27 +209,27 @@ Combinando estas dos instrucciones de lo más simples, nuestro robot Turtle pued
 \begin{figure}[!ht]
 	\begin{centering}
 		\includegraphics[width=0.8\textwidth]{images/mov-turtle.png}
-			\caption{Movimiento de Turtle en forma de cuadrado utilizando únicamente sus instrucciones básicas \texttt{forward} y \texttt{right}.}
+			\caption{Movimiento de Turtle en forma de cuadrado utilizando únicamente sus instrucciones básicas \texttt{forward} y \texttt{right}. Obtenido de \cite{logo-turtle}.}
 				\label{fig:mov-turtle}
 	\end{centering}
 \end{figure}
 
 Para ilustrar brevemente el lenguaje Logo junto con el robot Turtle, vamos a mostrar como se dibujaría una figura que guarda cierto parecido a una flor.
-En el código que se muestra a continuación, creamos una función \texttt{square} que dibuja un cuadrado de tamaño 50 pasos, como podemos ver en la figura \ref{fig:square-turtle}
+En el código \ref{code:logo-square}, creamos una función \texttt{square} que dibuja un cuadrado de tamaño 50 (\emph{pasos de tortuga}), como podemos ver en la figura \ref{fig:square-turtle}
 
-\begin{lstlisting}[language=Logo, Caption=Definición de una función \texttt{square} en el Lenguaje Logo consiguiendo que el robot Turtle dibuje un cuadrado.]
+\begin{lstlisting}[language=Logo, caption=Definición de una función \texttt{square} en el Lenguaje Logo consiguiendo que el robot Turtle dibuje un cuadrado. Obtenido de \cite{logo-turtle}.]
 to square
 	repeat 4 [forward 50 right 90]
 end
-\end{lstlisting}
+\end{lstlisting}\label{code:logo-square}
 
-Y a continuación definimos una función \texttt{flower} que utiliza la función \texttt{square} antes descrita y que dibujará una flor, como se puede apreciar en la figura \ref{fig:flower-turtle}
+Y a continuación definimos una función \texttt{flower}(código \ref{code:logo-flower}) que utiliza la función \texttt{square} y que dibujará una figura similar a una flor, como se aprecia en la figura \ref{fig:flower-turtle}.
 
-\begin{lstlisting}[language=Logo, Caption=Definición de una función \texttt{flower} en el Lenguaje Logo consiguiendo que el robot Turtle dibuje una figura con forma floral.]
+\begin{lstlisting}[language=Logo, caption=Definición de una función \texttt{flower} en el Lenguaje Logo consiguiendo que el robot Turtle dibuje una figura con forma floral. Obtenido de \cite{logo-turtle}.]
 to flower
 	repeat 36 [right 10 square]
 end
-\end{lstlisting}
+\end{lstlisting}\label{code:logo-flower}
 
 \begin{figure}[!ht]
 	\begin{adjustwidth}{\oddsidemargin-1in}{\rightmargin}
@@ -232,13 +237,13 @@ end
 			\begin{subfigure}{\paperwidth}
 				\centering
 				\includegraphics[scale=.45]{images/square-turtle.png}
-				\caption{Cuadrado dibujado por el robot Turtle.}
+				\caption{Cuadrado dibujado por el robot Turtle. Obtenido de \cite{logo-turtle}.}
 				\label{fig:square-turtle}
 			\end{subfigure}
 			\begin{subfigure}{\paperwidth}
 				\centering
 				\includegraphics[scale=.45]{images/flower-turtle.png}
-				\caption{Flor dibujada por el robot Turle.}
+				\caption{Flor dibujada por el robot Turle. Obtenido de \cite{logo-turtle}.}
 				\label{fig:flower-turtle}
 			\end{subfigure}
 			%\caption{Ejemplo de dibujo utilizando funciones por el robot Turtle.}
@@ -248,6 +253,11 @@ end
 
 
 El proyecto Turtle ha sido reproducido y modernizado en proyectos más recientes como Turtle Academy \cite{turtle-academy}, el cual utiliza Scratch\cite{scratch} para dibujar en la pantalla.
+
+
+{\color{blue}
+¿Comentarás algo de robomind o codehs que también son descendientes directos de lego? lo bueno es que el primero te hace enfocar la idea de la tortuga hacia un robot más realista, la segunda que lleva el aprendizaje a entorno web y tecnologías javascript. Todo esto te abre temas para seguir escribiendo el trabajo. Recuerda que sabes más de lo que crees y has hecho más de lo que piensas.
+}
 
 
 \section{Khan Academy}
@@ -261,7 +271,7 @@ Khan Academy\cite{khan-academy}, con casi 37 millones de usuarios, es uno de los
 
 Code.org\cite{code-org} es una plataforma on-line que se dedica exclusivamente a enseñar a programar y cuenta ya con más de 8 millones de usuarios. Cuenta con una gran comunidad de educadores y apoyos entre los que se puede contar al Presidente B. H. Obama. Lleva a cabo proyectos como \emph{Hour of Code} en el que promueve que los usuarios inviertan una hora diaria programando en diferentes juegos, muchos de ellos utilizando \Gls{Blockly}\cite{blockly}.
 
-{\color{red} Parece que estoy haciendo publicidad... shit}
+{\color{blue} Parece que estoy haciendo publicidad... shit}
 
 
 \section{Squeak Etoys}
@@ -307,5 +317,7 @@ Este Trabajo Fin de Grado consiste en desarrollar un módulo de simulación de u
 
 
 
-% explicar en que se diferencia robode con el resto y porque es mejor o que ventajas tiene
-% explicar como resuelvo los problemas que se encuentra un estudiante cuando programa (intro-3º parrafo)
+{\color{blue}
+explicar en que se diferencia robode con el resto y porque es mejor o que ventajas tiene
+explicar como resuelvo los problemas que se encuentra un estudiante cuando programa (intro-3º parrafo)
+}
