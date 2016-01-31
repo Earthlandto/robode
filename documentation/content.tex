@@ -208,10 +208,10 @@ A nivel global y desde hace varias décadas, existe una gran cantidad de proyect
 La mayoría de estos proyectos promueven una enseñanza independiente y autodidacta bajo un entorno on-line y gratuito. De esta manera, el alumno puede aprender a su propio ritmo y desde cualquier parte del mundo.
 
 
-\section{{\color{red}Los origenes: }lenguaje Logo y robot Turtle}
+\section{Lenguaje Logo y robot Turtle}
 \label{sec:Logo}
 
-El lenguaje Logo, basado en \Gls{lisp}, fue diseñado como una herramienta para aprendizaje. Todas sus características -interactividad, modularidad, extensibilidad, flexibilidad en los tipos de datos- persiguen esta meta. El lenguaje Logo fue uno de los primeros proyectos en emprender la difícil tarea de enseñar a programar a niños de Primaria.
+El lenguaje Logo, {\color{red}desarrollado a finales de la decada de los 60} y basado en \Gls{lisp}, fue diseñado como una herramienta para aprendizaje. Todas sus características -interactividad, modularidad, extensibilidad, flexibilidad en los tipos de datos- persiguen esta meta. El lenguaje Logo fue uno de los primeros proyectos en emprender la difícil tarea de enseñar a programar a niños de Primaria.
 
 {\color{blue}
 Como se explica en la página oficial del proyecto Logo\cite{logo}, durante la década de los 70, en el \acrfull{MIT} y diferentes centros de investigación europeos, se llevaron a cabo investigaciones sobre el uso del \Gls{logo} en pequeños grupos de alumnos de Educación Primaria.
@@ -374,7 +374,7 @@ Otra función muy importante para poder desplazar a Turtle, es la opción de gir
 
 Hasta ahora, cualquier desplazamiento de Turtle por la pantalla dejaba una linea o rastro. Con la orden \texttt{penup}, la tortuga dejará de pintar hasta que se ejecute la orden \texttt{pendown}. También se puede ejecutar la instrucción \texttt{clearscreen} que limpiará la pantalla de cualquier rastro dejado por la tortuga.
 
-La instrucción \texttt{label} mostrará por pantalla el mensaje que se pase como argumento, pero este debe ser una \emph{word} o \emph{sentence}(solo uno). Para más información sobre los tipos de datos \emph{words} y \emph{sentences} se puede consultar la sección \ref{sec:logo-variables}.
+La instrucción \texttt{label} mostrará por pantalla el mensaje que se pase como argumento, pero este debe ser una \emph{word} o \emph{sentence}(solo un argumento)\footnote{Para más información sobre los tipos de datos \emph{words} y \emph{sentences} se puede consultar la sección \ref{sec:logo-variables}.}.
 
 \subsubsection*{Resumen de instrucciones de Turtle}
 
@@ -409,48 +409,39 @@ hideturtle & ht & -\\
 
 
 
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 {\color{green}
-(J.A.:) Aquí podrías hacer una descripción del lenguaje y sus características para luego comparar con otra alternativa. Pero no pongas un par de ejemplos en los que, además [...] (hablando de cuanto profundizar) Sólo si luego necesitas comparar esas características con las de otro lenguaje, si no no aportaría mucho.
-}
-
-
-Para ilustrar brevemente el lenguaje Logo junto con el robot Turtle, vamos a mostrar como se dibujaría una figura que guarda cierto parecido a una flor.
-En el código \ref{code:logo-square}, creamos una función \texttt{square} que dibuja un cuadrado de tamaño 50 (\emph{pasos de tortuga}), como podemos ver en la figura \ref{fig:square-turtle}
-
-
-
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-{\color{blue}
 (J.A.:) ¿Comentarás algo de robomind o codehs que también son descendientes directos de lego? lo bueno es que el primero te hace enfocar la idea de la tortuga hacia un robot más realista, la segunda que lleva el aprendizaje a entorno web y tecnologías javascript. Todo esto te abre temas para seguir escribiendo el trabajo. Recuerda que sabes más de lo que crees y has hecho más de lo que piensas.
 }
 
 
-\section{Khan Academy}
-\label{sec:Khan Academy}
+% \section{Khan Academy}
+% \label{sec:Khan Academy}
 
-Khan Academy\cite{khan-academy}, con casi 37 millones de usuarios, es uno de los mayores proyectos web para aprender casi de cualquier tema: Matemáticas, estadística, economía o humanidades.
-
-
-\section{Code.org}
-\label{sec:Code.org}
-
-Code.org\cite{code-org} es una plataforma on-line que se dedica exclusivamente a enseñar a programar y cuenta ya con más de 8 millones de usuarios. Cuenta con una gran comunidad de educadores y apoyos entre los que se puede contar al Presidente B. H. Obama. Lleva a cabo proyectos como \emph{Hour of Code} en el que promueve que los usuarios inviertan una hora diaria programando en diferentes juegos, muchos de ellos utilizando \Gls{Blockly}\cite{blockly}.
+% Khan Academy\cite{khan-academy}, con casi 37 millones de usuarios, es uno de los mayores proyectos web para aprender casi de cualquier tema: Matemáticas, estadística, economía o humanidades.
 
 
-\section{Squeak Etoys}
-\label{sec:squeak-etoys}
+% \section{Code.org}
+% \label{sec:Code.org}
+
+% Code.org\cite{code-org} es una plataforma on-line que se dedica exclusivamente a enseñar a programar y cuenta ya con más de 8 millones de usuarios. Cuenta con una gran comunidad de educadores y apoyos entre los que se puede contar al Presidente B. H. Obama. Lleva a cabo proyectos como \emph{Hour of Code} en el que promueve que los usuarios inviertan una hora diaria programando en diferentes juegos, muchos de ellos utilizando \Gls{Blockly}\cite{blockly}.
 
 
-\section{Blockly y Scratch}
-\label{sec:blockly-scratch}
+% \section{Squeak Etoys}
+% \label{sec:squeak-etoys}
+
+
+% \section{Blockly y Scratch}
+% \label{sec:blockly-scratch}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
