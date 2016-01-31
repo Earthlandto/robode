@@ -74,17 +74,17 @@ Para ello, en un mismo sitio web, se integra (a) un conjunto de tutoriales de pr
 
 En cuanto a la herramienta para desarrollar programas, el lenguaje utilizado es \gls{ijava}\cite{sanchez2009ijava} y ha sido desarrollado por J. A. Sánchez Laguna. iJava es un lenguaje imperativo basado en \Gls{java} y comparte su sintaxis, aunque se han eliminado todos los componentes del lenguaje Orientado a Objetos. También incorpora un conjunto reducido de funciones de librería clasificadas en los tres grupos siguientes: númericas, entrad/salida y gráficas\footnote{Si el lector está interesado en aprender más sobre este lenguaje, puede consultar \cite{sanchez2009ijava} o \cite{descubre-lenguaje}.}.
 
-A modo de ilustración, podemos ver el código \ref{code:hello-world}, un programa que imprime por pantalla la cadena "Hello World.". En el código \ref{code:circulos-color-raton} podemos ver un programa un poco más complejo que dibuja círculos de colores en la pantalla según la posición del ratón. En la figura \ref{fig:salida-code-circulos-color-raton} se puede ver la salida de este último programa.
+A modo de ilustración, podemos ver el código \ref{code:hello-world}, un programa que imprime por pantalla la cadena "Hello World". En el código \ref{code:circulos-color-raton} podemos ver un programa un poco más complejo que dibuja círculos de colores en la pantalla según la posición del ratón. En la figura \ref{fig:salida-code-circulos-color-raton} se puede ver la salida de este último programa.
 
 
-\begin{lstlisting}[caption=Programa básico en iJava imprimiendo por pantalla la cadena "Hello World.".]
+\begin{lstlisting}[language={Java}, label={code:hello-world}, caption={Programa básico en iJava imprimiendo la cadena "Hello World".}]
 void main(){
-  print("Hello World.");
+  print("Hello World");
 }
-\end{lstlisting}\label{code:hello-world}
+\end{lstlisting}
 
 
-\begin{lstlisting}[language=Java, caption=Programa en iJava que dibuja un circulo de un color diferente según la posición en la pantalla en la que se encuentra el ratón.]
+\begin{lstlisting}[language={Java},label={code:circulos-color-raton}, caption={Programa en iJava que dibuja un circulo de un color diferente según la posición en la pantalla en la que se encuentra el ratón.}]
 void main() {
   //repetimos en bucle la función 'draw'
   animate(draw);
@@ -96,7 +96,7 @@ void draw() {
   //dibujamos una elipse con radio 50
   ellipse(mouseX, mouseY, 50,50);
 }
-\end{lstlisting}\label{code:circulos-color-raton}
+\end{lstlisting}
 
 
 La sintaxis de iJava se parece a muchos de los lenguajes modernos y más utilizados (al ser un subconjunto de la sintaxis de Java), lo cual simplifica el aprendizaje cuando se intenta aprender un nuevo lenguaje. También, gracias a la librería gráfica y matemática, los programas se simplifican mucho en cuanto a complejidad y longitud. De esta manera se consigue aligerar la carga de trabajo que tiene que realizar el alumno para conseguir hacer un programa vistoso, haciendo que la actividad de programar sea más atractiva.
@@ -229,63 +229,195 @@ Poco más tarde, Moss \cite{moss1985creating} obtiene evidencias de la relación
 	\end{centering}
 \end{table}
 
-El proyecto \emph{Turtle} es el proyecto más popular del lenguaje Logo. Nació como una criatura robótica que se movía por el suelo y se podía programar solo con 2 instrucciones básicas: \texttt{forward x} y \texttt{right y}, para avanzar \texttt{x} \emph{pasos de tortuga} o girar \texttt{y} grados hacia la derecha, respectivamente.
 
-Combinando estas dos instrucciones de lo más simples, nuestro robot Turtle puede realizar cualquier movimiento más complejo, como podemos ver en la figura \ref{fig:mov-turtle}.
+\subsection{Uso del lenguaje Logo}
+\label{sec:logo-lenguaje}
 
-\begin{figure}[!ht]
+A continuación se realizará una revisión de las principales características del lenguaje Logo para tener una visión general de su funcionamiento y sintaxis. Este análisis se basa en el trabajo de \cite[p.274-305]{feurzeig1969programming}. Si el lector quiere ampliar información sobre el lenguaje Logo, puede consultar \cite{friendly2014advanced} o \cite{logo-resources}.
+
+
+\subsubsection*{\emph{words}, \emph{sentences}, operaciones y comandos}
+
+Un tipo de dato \emph{words} está formado por 0 o más caracteres sin espacios. Algunos ejemplos son: "SUN", "CAT", "97&!", "" (cadena vacía). En cambio, el tipo de datos \emph{sentences} es formado por un conjunto de \emph{words} separado por espacios, como por ejemplo "HELLO WORLD" o "3 + 2 = 5". 
+
+En el lenguaje Logo existen operadores para tratar con los tipos \emph{words} y \emph{sentences}. También se pueden encontrar una serie de operaciones predefinidas en el lenguaje que ofrecen funcionalidad extra, como controlar la entrada/salida de un programa, saber la fecha o manejo de \emph{words} y \emph{sentences}. En la tabla \ref{tab:logo-operaciones} vemos un resumen de las operaciones elementales del lenguaje Logo, el número de argumentos que requiere, un ejemplo de entrada y su salida correspondiente.
+
+
+\begin{table}[!ht]
 	\begin{centering}
-		\includegraphics[width=0.8\textwidth]{images/mov-turtle.png}
-			\caption{Movimiento de Turtle en forma de cuadrado utilizando únicamente sus instrucciones básicas \texttt{forward} y \texttt{right}. Obtenido de \cite{logo-turtle}.}
-				\label{fig:mov-turtle}
+		\begin{tabular}{c|c|c|c}
+\emph{Operador} & N. argumentos & Entrada & Salida\\
+\hline
+\texttt{FIRST}	& 1 & "CAT" & "C"\\
+- & - & "CAT AND DOG" & "CAT"\\
+\texttt{LAST} & 1 & "CAT" & "T"\\
+- & - & "CAT AND DOG" & "DOG"\\
+\texttt{BUTFIRST} &1& "CAT" & "AT"\\
+- & - & "CAT AND DOG" & "AND DOG"\\
+\texttt{BUTLAST} & 1 & "CAT" & "CA"\\
+- & - & "CAT AND DOG" & "CAT AND"\\
+\texttt{COUNT} & 1 & "CAT" & "3"\\
+- & - & "CAT DOG" & "2"\\
+\texttt{WORD}& 2 & "CAT" "DOG" & "CATDOG"\\
+\texttt{SENTENCE}& 2 & "CAT" "DOG" & "CAT DOG"\\
+- & - & "CAT " "DOG" & "CAT DOG"\\
+\texttt{PRINT} & 1 & "CAT" & CAT\\
+\texttt{TIME} & 0 & - & "5:42 PM"\\
+\texttt{DATE} & 0 & - & "1/31/2016"\\
+\texttt{SUM} & 2 & "-5" "5" & "0"\\
+\texttt{DIFFERENCE} & 2 & "5" "5"& "0"\\
+\texttt{MAXIMUN} & 2 & "-5" "5" & "5"\\
+\texttt{MINIMUN} & 2 & "3" "5"& "3"\\
+\end{tabular}
+	\caption{Resumen de las operaciones elementales que ofrece el lenguaje Logo.}
+		\label{tab:logo-operaciones}
 	\end{centering}
-\end{figure}
+\end{table}
 
-{\color{green}
-(J.A.:) Aquí podrías hacer una descripción del lenguaje y sus características para luego comparar con otra alternativa. Pero no pongas un par de ejemplos en los que, además [...] (hablando de cuanto profundizar) Sólo si luego necesitas comparar esas características con las de otro lenguaje, si no no aportaría mucho.
-}
+Si se intentara ejecutar la operación \texttt{WORD} "CAT " "DOG", se produciría un error al ser uno de sus parámetros un tipo \emph{sentence} y no \emph{word}. De igual manera, las operaciones \texttt{SUM}, \texttt{DIFFERENCE}, \texttt{MAXIMUN} y \texttt{MINIMUN} deben recibir argumentos numéricos o se produciría un error.
 
-
-Para ilustrar brevemente el lenguaje Logo junto con el robot Turtle, vamos a mostrar como se dibujaría una figura que guarda cierto parecido a una flor.
-En el código \ref{code:logo-square}, creamos una función \texttt{square} que dibuja un cuadrado de tamaño 50 (\emph{pasos de tortuga}), como podemos ver en la figura \ref{fig:square-turtle}
-
-\begin{lstlisting}[language=Logo, caption=Definición de una función \texttt{square} en el Lenguaje Logo consiguiendo que el robot Turtle dibuje un cuadrado. Obtenido de \cite{logo-turtle}.]
-to square
-	repeat 4 [forward 50 right 90]
-end
-\end{lstlisting}\label{code:logo-square}
-
-Y a continuación definimos una función \texttt{flower}(código \ref{code:logo-flower}) que utiliza la función \texttt{square} y que dibujará una figura similar a una flor, como se aprecia en la figura \ref{fig:flower-turtle}.
-
-\begin{lstlisting}[language=Logo, caption=Definición de una función \texttt{flower} en el Lenguaje Logo consiguiendo que el robot Turtle dibuje una figura con forma floral. Obtenido de \cite{logo-turtle}.]
-to flower
-	repeat 36 [right 10 square]
-end
-\end{lstlisting}\label{code:logo-flower}
-
-\begin{figure}[!ht]
-	\begin{adjustwidth}{\oddsidemargin-1in}{\rightmargin}
-	%	\centering
-			\begin{subfigure}{\paperwidth}
-				\centering
-				\includegraphics[scale=.45]{images/square-turtle.png}
-				\caption{Cuadrado dibujado por el robot Turtle. Obtenido de \cite{logo-turtle}.}
-				\label{fig:square-turtle}
-			\end{subfigure}
-			\begin{subfigure}{\paperwidth}
-				\centering
-				\includegraphics[scale=.45]{images/flower-turtle.png}
-				\caption{Flor dibujada por el robot Turle. Obtenido de \cite{logo-turtle}.}
-				\label{fig:flower-turtle}
-			\end{subfigure}
-			%\caption{Ejemplo de dibujo utilizando funciones por el robot Turtle.}
-		\label{fig:square-flower-turtle}
-	\end{adjustwidth}
-\end{figure}
+También es posible encadenar varios operadores. De esta manera, la cadena de instrucciones \texttt{FIRST OF BUTFIRST OF "CAT"} devolverá el \emph{word} "A".
 
 
-El proyecto Turtle ha sido reproducido y modernizado en proyectos más recientes como Turtle Academy \cite{turtle-academy}, el cual utiliza Scratch\cite{scratch} para dibujar en la pantalla.
+\subsubsection*{Variables, definiendo nuevas operaciones y comentarios}
+\label{sec:logo-variables}
 
+Para definir variables basta con usar el operador \texttt{MAKE} seguido de \emph{"}(comilla doble), el nombre de la variable y el valor que se quiere asignar. Para hacer uso de la variable, utilizamos el símbolo \emph{:}(dos puntos) seguido del nombre de la variable. Para hacer comentarios se utiliza el símbolo \emph{;}(punto y coma). Podemos ver un ejemplo en el código \ref{code:logo-nueva-variable}. 
+
+\begin{lstlisting}[language={Logo}, label={code:logo-nueva-variable}, caption={Ejemplo de definición de nuevas variables en el lenguaje Logo.}]
+MAKE "ADULTO 18
+
+PRINT :ADULTO  ; salida -> 18
+\end{lstlisting}
+
+También es posible crear nuevas operaciones. Se utilizan las palabras reservadas \texttt{TO} y \texttt{END} para marcar el inicio y final de la definición, respectivamente. A continuación es necesario declarar el nombre con el que se definirá la operación que se está creando (el cual no puede coincidir con ninguna palabra reservada en el lenguaje, como es común en la mayoría de lenguajes de programación). Es opcional la declaración de parámetros que se pasaran a la operación. Por último, y antes de la palabra \texttt{END}, se incluirán las instrucciones que realizará la operación.
+
+En el código \ref{code:logo-nuevas-operaciones} se puede ver un ejemplo de definición de nuevas operación. 
+
+\begin{lstlisting}[language={Logo}, label={code:logo-nuevas-operaciones}, caption={Definición de nuevas operaciones en el lenguaje Logo.}]
+TO SALUDAR
+	MAKE "SALUDO "HELLO WORLD"
+	OUTPUT SALUDO
+END
+
+PRINT SALUDAR  ;  salida -> HELLO WORLD
+
+TO PENULTIMO :algo
+	OUTPUT FIRST OF  LAST :algo
+END
+
+PRINT PENULTIMO OF "CAT BIRD DOG" ;  salida  ->  BIRD
+
+PRINT PENULTIMO OF "CAT" ;  salida  ->  A
+\end{lstlisting}
+
+
+\subsubsection*{Operadores aritméticos}
+
+A parte de los operadores \texttt{SUM} y \texttt{DIFFERENCE} antes mencionados, Logo también otorga la posibilidad de utilizar los operadores aritméticos clásicos. La única condición es que la salida generada debe ser tratada o almacenada (en variables, como veremos en la sección siguiente) de alguna manera. Los operadores más importantes son \texttt{+}, \texttt{-}, \texttt{*}, \texttt{/} y \texttt{sqrt}.
+
+\begin{lstlisting}[language={Logo}, label={code:logo-operadores-aritmeticos}, caption=Ejemplo de uso de operadores aritméticos en el lenguaje Logo.]
+PRINT 2*3  ;  salida  -> 6
+
+MAKE "RUEDAS  4
+
+PRINT :RUEDAS ;  salida  -> 4
+\end{lstlisting}
+
+
+\subsubsection*{Operadores \texttt{IF} y \texttt{REPEAT}}
+
+Se pueden crear operaciones condicionales utilizando la palabra clave \texttt{IF} seguida de una sentencia y una lista de órdenes a ejecutar si se evalúa dicha sentencia a verdadero. La lista de órdenes se declara entre corchetes (\texttt{[]}) y para la sentencia se pueden utilizar los operadores infijos \texttt{=}, \texttt{>} y \texttt{<}. En el código \ref{code:logo-if} podemos ver un ejemplo de uso.
+
+\begin{lstlisting}[language=Logo,label={code:logo-if}, caption=Condiciones en el lenguaje logo con el operador \texttt{IF}.]
+MAKE "PETALOS 4
+
+IF :PETALOS > 3 [ PRINT "TREBOL DE LA BUENA SUERTE" ]
+\end{lstlisting}
+
+Para repetir una serie de instrucciones, Logo ofrece el comando \texttt{REPEAT}, que va seguido de un valor numérico y la lista de instrucciones. El valor numérico (que puede ser parametrizado) es el número de veces que se repetirá en bucle las instrucciones. En el código \ref{code:logo-repeat} vemos un ejemplo de este comando.
+
+
+\begin{lstlisting}[language=Logo,label={code:logo-repeat}, caption=Condiciones en el lenguaje logo con el operador \texttt{IF}.]
+REPEAT 10 [ PRINT "HOLA MUNDO" ]
+\end{lstlisting}
+
+
+\subsection{Turtle de Logo}
+\label{sec:turtle}
+
+El proyecto \emph{Turtle} es el proyecto más popular del lenguaje Logo. Nació como una criatura robótica que se movía por la pantalla pintando según se desplazaba. Turtle se utiliza ampliamente desde hace décadas para enseñar a programar a niños de primaria y secundaria conceptos de programación, pero también de matemáticas y geometría\cite{abelson1980disessa,brown1995101}. 
+
+A pesar de su larga vida, el proyecto Turtle ha sabido mantenerse vivo y se ha modernizado en proyectos más recientes como Turtle Academy \cite{turtle-academy} o Curly Logo \cite{curly-logo}
+
+
+\subsubsection{Programando el movimiento de Turtle en el lenguaje Logo}
+\label{sec:logo-turtle-lenguaje}
+
+A parte de toda la funcionalidad que ofrece Logo como lenguaje, Turtle aporta una librería para poder controlar a nuestra criatura que pintará la pantalla, la cual suele ser tradicionalmente representada con una tortuga. Principalmente, se podrá controlar el movimiento de nuestra tortuga y el giro de ésta. También se le podrá ordenar que deje de pintar para permitir movimiento por la pantalla sin rastro. La mayoría de estos comandos pueden abreviarse para simplificar la escritura. 
+
+El resumen sobre la funcionalidad de Turtle que se muestra en las secciones siguientes es un compendio formado a partir de \cite{logo-turtle-lenguaje}, \cite{turtle-academy} y \cite{abelson1980disessa}. 
+
+
+\subsubsection*{Moviendo a Turtle}
+
+La tortuga siempre se moverá según el eje de coordenadas. El punto (0, 0) se encontrará normalmente en medio de la pantalla y es la posición inicial de la tortuga. El eje de coordenadas \texttt{y} crece positivamente en dirección Norte (hacia arriba).
+
+Los comandos \texttt{forward} y \texttt{barckward} mueven la tortuga hacia delante y detrás, respectivamente, según la posición en la que esté mirando. Los comandos \texttt{setx}, \texttt{sety} y \texttt{setxy} se utilizan para establecer la tortuga en el eje de coordenadas \texttt{x}, \texttt{y} o en ambos, respectivamente.
+
+La orden \texttt{home} devuelve a la tortuga a la posición (0, 0) de la pantalla. Adicionalmente, se puede ocultar (o mostrar) la tortuga con las órdenes \texttt{showturtle} y \texttt{hideturtle}.
+
+Otra función muy importante para poder desplazar a Turtle, es la opción de girarla. Podemos decidir el giro con las instrucciones \texttt{right} y \texttt{left} y el ángulo de giro (el valor tiene que ser un número positivo). 
+
+
+\subsubsection*{Pintando con Turtle}
+
+Hasta ahora, cualquier desplazamiento de Turtle por la pantalla dejaba una linea o rastro. Con la orden \texttt{penup}, la tortuga dejará de pintar hasta que se ejecute la orden \texttt{pendown}. También se puede ejecutar la instrucción \texttt{clearscreen} que limpiará la pantalla de cualquier rastro dejado por la tortuga.
+
+La instrucción \texttt{label} mostrará por pantalla el mensaje que se pase como argumento, pero este debe ser una \emph{word} o \emph{sentence}(solo uno). Para más información sobre los tipos de datos \emph{words} y \emph{sentences} se puede consultar la sección \ref{sec:logo-variables}.
+
+\subsubsection*{Resumen de instrucciones de Turtle}
+ 
+ 
+En la tabla \ref{tab:turtle-lenguaje} se muestra un resumen de las órdenes que puede recibir Turtle.
+
+\begin{table}[!ht]
+	\begin{centering}
+		\begin{tabular}{c|c|c}
+Orden & abreviatura & Argumentos\\
+\hline
+forward & fd & Longitud del movimiento\\
+backward & bk & Longitud del movimiento\\
+home & - & -\\
+setx & - & Nueva coodenada X\\
+sety & - & Nueva coodenada Y\\
+setxy & - & Nueva coodenada X e Y\\
+right & rt & Ángulo en el sentido de las agujas del reloj\\
+left & lt & Ángulo en el sentido contrario a las agujas del reloj\\
+penup & pu & -\\
+pendown & pd & -\\
+clearscreen & cs & -\\
+label & - & Una \emph{word} o \emph{sentence}\\
+showturtle & st & -\\
+hideturtle & ht & -\\
+\end{tabular}
+	\caption{Resumen de órdenes en Turtle usando el lenguaje Logo.}
+		\label{tab:turtle-lenguaje}
+	\end{centering}
+\end{table}
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 {\color{blue}
 (J.A.:) ¿Comentarás algo de robomind o codehs que también son descendientes directos de lego? lo bueno es que el primero te hace enfocar la idea de la tortuga hacia un robot más realista, la segunda que lleva el aprendizaje a entorno web y tecnologías javascript. Todo esto te abre temas para seguir escribiendo el trabajo. Recuerda que sabes más de lo que crees y has hecho más de lo que piensas.
