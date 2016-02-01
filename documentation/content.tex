@@ -55,7 +55,7 @@ Existen proyectos como Arduino\footnote{Arduino es una placa base con un micropr
 
 En concreto, una de las meta originales de Raspberry Pi es conseguir que los niños aprendan a programar y conozcan como funciona realmente un ordenador. Tanto Arduino como Raspberry Pi pueden adquirirse a un bajo precio, lo cual facilita la adquisición de los mismos por parte de instituciones de enseñanza o particulares. Esto ha facilitado la alta inclusión de estos dos proyectos en las aulas.
 
-Otro proyecto que también está muy extendido en las aulas Lego Mindstorm EV3 y NXT. Dos kits de iniciación a la robótica con Lego. Permite al estudiante crear con piezas de lego un robot y programar su comportamiento. Los robots suelen tomar forma de brazo robótico o de vehículo capaz de seguir lineas pintadas en el suelo haciendo uso de sensores. Todo esto viene también acompañado de un software para programar el comportamiento de los diferentes componentes del robot.
+Otro proyecto que también está muy extendido en las aulas es Lego Mindstorm EV3 y NXT\cite{lego-mindstorm}. Dos kits de iniciación a la robótica con Lego. Permite al estudiante crear con piezas de lego un robot y programar su comportamiento. Los robots suelen tomar forma de brazo robótico o de vehículo capaz de seguir lineas pintadas en el suelo haciendo uso de sensores. Toda este material robótico viene acompañado de un software para programar el comportamiento de los diferentes componentes del robot y un estilo de programación con bloques\cite{lego-mindstorm-programar}, al estilo Scratch.
 
 
 {\color{red}
@@ -183,18 +183,19 @@ El proyecto se enfocará desarrollando un simulador de robot de dos ruedas en el
 
 El simulador se integrará en la plataforma Descubre la pogramación, mencionada en la sección \ref{sec:descubre}. Esto supone que el estudiante programará el comportamiento del robot simulado en iJava. El robot estará dentro de un circuito con distintos elementos con los que podrá interactuar. Asimismo, el robot dispondrá de una serie de sensores para poder recibir información del mundo que le rodea.
 
-Al incluir el simulador como un módulo de descubre, se pretende reforzar el esfuerzo por parte de sus creadores de hacer llegar la programación al mayor numero de estudiantes pre-universitarios posible, proponiendo una alternativa atractiva y que añade una componente más de entretenimiento a la actividad de programar. {\color{red}Por otra parte, permite que el alumno asimile conceptos de robótica de manera transparente. Al una plataforma de libre acceso, también elimina la barrera que puede suponer realizar una inversión en material electrónico como puede ocurrir con Arduino, Raspberry Pi o Lego.
+Al incluir el simulador como un módulo de Descubre, se pretende reforzar el esfuerzo por parte de sus creadores de hacer llegar la programación al mayor numero de estudiantes pre-universitarios posible, proponiendo una alternativa atractiva y que añade una componente más de entretenimiento a la actividad de programar. {\color{red}Por otra parte, permite que el alumno asimile conceptos de robótica de manera transparente. Al utilizar una plataforma web y de libre acceso, también se busca eliminar la barrera que puede suponer realizar una inversión en material electrónico como puede ocurrir con Arduino, Raspberry Pi o Lego.
 }
 
-Igualmente, los estudiantes que ya están usando la plataforma Descubre, podrán trabajar los conceptos de programación (bucles, condiciones, variables y funciones, entre otros) en un entorno diferente, renovando así su interés en otra actividad diferente y aprender jugando.
+Igualmente, los estudiantes que ya están usando la plataforma Descubre, podrán trabajar los conceptos de programación (bucles, condiciones, variables y funciones, entre otros) en un entorno diferente, renovando así su interés en otra actividad y aprender jugando.
 
 
 %Esto permitirá ligar con la siguiente sección en la que se decide ampliar descubre añadiendo el simulador del robot. La justificación puede ser que de este modo se permite a quien no tiene recursos materiales para comprar el hardware o es ménos hábil con los aspectos mecánicos y electrónicos que también programe robots.
 
 
 %% Último párrafo: explicar de que van las siguientes secciones.
-En las secciones siguientes se hablará de cuales son las alternativas ya creadas que trabajan en esta linea. También se verá como se ha desarrollado la idea principal y que resultados se han obtenido. Por último, se analizarán los objetivos conseguidos y que ofrece mi propuesta de diferente con los proyectos ya desarrollados.
-
+{\color{blue}
+En el capítulo \ref{estado-arte} se analizaran cuales son las alternativas que existen actualmente que trabajan en esta linea. En el capítulo \ref{diseno} se verá como se ha desarrollado la idea principal y que resultados se han obtenido. Por último, en el capítulo \ref{conslusiones} se analizarán los objetivos conseguidos y que ofrece mi propuesta en comparación a los proyectos actuales.
+}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -204,19 +205,21 @@ En las secciones siguientes se hablará de cuales son las alternativas ya creada
 
 
 
-A nivel global y desde hace varias décadas, existe una gran cantidad de proyectos con la única intención de enseñar, a alumnos de Educación Primaria, Secundaria y Bachillerato, diferentes aspectos de la informática como lo es la programación \cite{code-school,code-org,code-academy}, la robótica \cite{robomind-web,moway} e incluso electrónica (con \Gls{arduino}\cite{arduino}). Algunos de estos proyectos llevan décadas activos, como lo es el lenguaje \Gls{logo}\cite{logo} y su proyecto \Gls{turtle}\cite{logo-turtle}.
+A nivel global y desde hace varias décadas, existe una gran cantidad de proyectos con la única intención de enseñar, a alumnos de Educación Primaria, Secundaria y Bachillerato, diferentes aspectos de la informática como lo es la programación \cite{code-school,code-org,code-academy}, la robótica \cite{robomind-web,moway} e incluso electrónica (con \Gls{arduino}\cite{arduino}, Raspberry Pi\cite{raspberry-pi} o Lego Mindstorm\cite{lego-mindstorm-programar}). 
 La mayoría de estos proyectos promueven una enseñanza independiente y autodidacta bajo un entorno on-line y gratuito. De esta manera, el alumno puede aprender a su propio ritmo y desde cualquier parte del mundo.
+
+En las siguientes secciones se hablará del \Gls{logo}\cite{logo} y el proyecto \Gls{turtle}\cite{logo-turtle}, un proyecto que lleva décadas activo, con la principal finalidad de enseñar programación y matemáticas a niños. También se estudiarán los diferentes proyectos que existen actualmente y que promueven una enseñanza a niños en entornos web. Por último, se analizarán los diferentes proyectos que enseñan programación jugando y que utilizan robots y/o simuladores.
 
 
 \section{Lenguaje Logo y robot Turtle}
 \label{sec:Logo}
 
-El lenguaje Logo, {\color{red}desarrollado a finales de la decada de los 60} y basado en \Gls{lisp}, fue diseñado como una herramienta para aprendizaje. Todas sus características -interactividad, modularidad, extensibilidad, flexibilidad en los tipos de datos- persiguen esta meta. El lenguaje Logo fue uno de los primeros proyectos en emprender la difícil tarea de enseñar a programar a niños de Primaria.
+El lenguaje Logo, {\color{red}desarrollado a finales de la decada de los 60} y basado en \Gls{lisp}, fue diseñado como una herramienta de aprendizaje a niños. Todas sus características -interactividad, modularidad, extensibilidad, flexibilidad en los tipos de datos- persiguen esta meta. El lenguaje Logo fue uno de los primeros proyectos en emprender la difícil tarea de enseñar a programar a niños de Primaria.
 
 {\color{blue}
 Como se explica en la página oficial del proyecto Logo\cite{logo}, durante la década de los 70, en el \acrfull{MIT} y diferentes centros de investigación europeos, se llevaron a cabo investigaciones sobre el uso del \Gls{logo} en pequeños grupos de alumnos de Educación Primaria.
 
-A pesar de los diversos estudios que se han realizado a lo largo de los años, no se han conseguido obtener unos resultados claros sobre la posible ventaja de enseñar a programar a niños de Primaria con Logo. En \cite{feurzeig1969programming}, Feurzeig y otros consiguen una leve mejoría en la nota obtenida en el Test de Habilidades Básicas de Iowa (Iowa Test of Basic Skills, o ITBS)\footnote{El Iowa Test of Basic Skills (ITBS), es un test que se realiza anualmente siguiendo una serie de estándars a nivel de estado para medir el rendimiento académico de los alumnos.}. En la tabla \ref{tab:logo-itbs} se puede ver como la nota global del grupo que aprende a programar (denominado \emph{computer}) es de 114 puntos más que el curso anterior, mientras que la obtención del grupo de control es solo de 6 puntos. Aún así, se puede ver como la nota del grupo de control sigue siendo mayor que la del grupo \emph{computer}. Ante éste hecho, Feurzeig concluye que el grupo de control no representaba muy bien al grupo \emph{computer} y que, por tanto, la comparación perdía validez.
+A pesar de los diversos estudios que se han realizado a lo largo de los años, no se han conseguido obtener unos resultados claros sobre la posible ventaja de enseñar a programar a niños de Primaria y Secundaria con Logo. En \cite{feurzeig1969programming}, Feurzeig y otros consiguen una leve mejoría en la nota obtenida en el Test de Habilidades Básicas de Iowa (Iowa Test of Basic Skills, o ITBS)\footnote{El Iowa Test of Basic Skills (ITBS), es un test que se realiza anualmente siguiendo una serie de estándars a nivel de estado para medir el rendimiento académico de los alumnos en materias como: vocabulario, ortografía, algebra, conceptos aritméticos y comprensión de tablas y gráficos, entre otros.}. En la tabla \ref{tab:logo-itbs} se puede ver como la nota global del grupo que aprende a programar (denominado \emph{computer}) es de 114 puntos más que el curso anterior, mientras que la obtención del grupo de control es solo de 6 puntos. Aún así, se puede ver como la nota del grupo de control sigue siendo mayor que la del grupo \emph{computer}. Ante éste hecho, Feurzeig concluye que el grupo de control no representaba muy bien al grupo \emph{computer} y que, por tanto, la comparación perdía validez.
 Más tarde, Pea y Kurland en \cite{pea1984logo} concluyen que, tras el estudio en dos cursos separados de alumnos, aprender a programar no conseguía mostrar ningún beneficio claro en el rendimiento de los alumnos en comparación al grupo de control.
 Poco más tarde, Moss \cite{moss1985creating} obtiene evidencias de la relación en el aprendizaje de Logo con el desarrollo de conceptos primitivos que más adelante se enlazarían con la álgebra básica.
 }
@@ -224,7 +227,7 @@ Poco más tarde, Moss \cite{moss1985creating} obtiene evidencias de la relación
 \begin{table}[!ht]
 	\begin{centering}
 		\includegraphics[width=0.8\textwidth]{images/logo-itbs.png}
-			\caption{Tabla que muestra los resultados obtenidos en el ITBS por los alumnos que aprendierona programar (denominado \emph{computer}) y el grupo de control. Obtenido de \cite{feurzeig1969programming}.}
+			\caption{Tabla que muestra los resultados obtenidos en el ITBS por los alumnos que aprendierona programar (denominado \emph{computer}) y el grupo de control. Obtenido de \cite[p.251]{feurzeig1969programming}.}
 				\label{tab:logo-itbs}
 	\end{centering}
 \end{table}
@@ -238,9 +241,9 @@ A continuación se realizará una revisión de las principales características 
 
 \subsubsection*{\emph{words}, \emph{sentences}, operaciones y comandos}
 
-Un tipo de dato \emph{words} está formado por 0 o más caracteres sin espacios. Algunos ejemplos son: "SUN", "CAT", "97&!", "" (cadena vacía). En cambio, el tipo de datos \emph{sentences} es formado por un conjunto de \emph{words} separado por espacios, como por ejemplo "HELLO WORLD" o "3 + 2 = 5".
+Hay dos tipos de datos principales: \emph{words} y \emph{sentences}. \emph{words} está formado por 0 o más caracteres, sin espacios. Algunos ejemplos son: "SUN", "CAT", "5",  "97&!", "" (cadena vacía). El tipo de datos \emph{sentences} se forma por un conjunto de \emph{words} separado por espacios, como por ejemplo "HELLO WORLD" o "3 + 2 = 5". Un numero es una \emph{word} pero conpuesto únicamente por dígitos.
 
-En el lenguaje Logo existen operadores para tratar con los tipos \emph{words} y \emph{sentences}. También se pueden encontrar una serie de operaciones predefinidas en el lenguaje que ofrecen funcionalidad extra, como controlar la entrada/salida de un programa, saber la fecha o manejo de \emph{words} y \emph{sentences}. En la tabla \ref{tab:logo-operaciones} vemos un resumen de las operaciones elementales del lenguaje Logo, el número de argumentos que requiere, un ejemplo de entrada y su salida correspondiente.
+En el lenguaje Logo existen operadores para tratar con los tipos \emph{words} y \emph{sentences}. También se pueden encontrar una serie de operaciones predefinidas en el lenguaje que ofrecen funcionalidad extra, como controlar la entrada/salida de un programa, saber la fecha o manejo de \emph{words} y \emph{sentences}. En la tabla \ref{tab:logo-operaciones} vemos un resumen de las operaciones elementales del lenguaje Logo, el número de argumentos que requiere y un ejemplo de entrada con su salida correspondiente.
 
 
 \begin{table}[!ht]
@@ -274,12 +277,12 @@ En el lenguaje Logo existen operadores para tratar con los tipos \emph{words} y 
 	\end{centering}
 \end{table}
 
-Si se intentara ejecutar la operación \texttt{WORD} "CAT " "DOG", se produciría un error al ser uno de sus parámetros un tipo \emph{sentence} y no \emph{word}. De igual manera, las operaciones \texttt{SUM}, \texttt{DIFFERENCE}, \texttt{MAXIMUN} y \texttt{MINIMUN} deben recibir argumentos numéricos o se produciría un error.
+Si se intentara ejecutar la operación \texttt{WORD} "CAT " "DOG", se produciría un error al ser uno de sus parámetros un tipo \emph{sentence} y no \emph{word} (el primer argumento contiene un espacio). De igual manera, las operaciones \texttt{SUM}, \texttt{DIFFERENCE}, \texttt{MAXIMUN} y \texttt{MINIMUN} deben recibir argumentos numéricos o se produciría un error.
 
 También es posible encadenar varios operadores. De esta manera, la cadena de instrucciones \texttt{FIRST OF BUTFIRST OF "CAT"} devolverá el \emph{word} "A".
 
 
-\subsubsection*{Variables, definiendo nuevas operaciones y comentarios}
+\subsubsection*{Variables, comentarios y definiendo nuevas operaciones}
 \label{sec:logo-variables}
 
 Para definir variables basta con usar el operador \texttt{MAKE} seguido de \emph{"}(comilla doble), el nombre de la variable y el valor que se quiere asignar. Para hacer uso de la variable, utilizamos el símbolo \emph{:}(dos puntos) seguido del nombre de la variable. Para hacer comentarios se utiliza el símbolo \emph{;}(punto y coma). Podemos ver un ejemplo en el código \ref{code:logo-nueva-variable}.
@@ -314,7 +317,7 @@ PRINT PENULTIMO OF "CAT" ;  salida  ->  A
 
 \subsubsection*{Operadores aritméticos}
 
-A parte de los operadores \texttt{SUM} y \texttt{DIFFERENCE} antes mencionados, Logo también otorga la posibilidad de utilizar los operadores aritméticos clásicos. La única condición es que la salida generada debe ser tratada o almacenada (en variables, como veremos en la sección siguiente) de alguna manera. Los operadores más importantes son \texttt{+}, \texttt{-}, \texttt{*}, \texttt{/} y \texttt{sqrt}.
+A parte de los operadores \texttt{SUM} y \texttt{DIFFERENCE} antes mencionados, Logo también otorga la posibilidad de utilizar los operadores aritméticos clásicos. La única condición es que la salida generada debe ser tratada (\texttt{PRINT}) o almacenada (en variables, como veremos en la sección siguiente) de alguna manera. Los operadores más importantes son \texttt{+}, \texttt{-}, \texttt{*}, \texttt{/} y \texttt{sqrt}.
 
 \begin{lstlisting}[language={Logo}, label={code:logo-operadores-aritmeticos}, caption=Ejemplo de uso de operadores aritméticos en el lenguaje Logo.]
 PRINT 2*3  ;  salida  -> 6
@@ -346,15 +349,15 @@ REPEAT 10 [ PRINT "HOLA MUNDO" ]
 \subsection{Turtle de Logo}
 \label{sec:turtle}
 
-El proyecto \emph{Turtle} es el proyecto más popular del lenguaje Logo. Nació como una criatura robótica que se movía por la pantalla pintando según se desplazaba. Turtle se utiliza ampliamente desde hace décadas para enseñar a programar a niños de primaria y secundaria conceptos de programación, pero también de matemáticas y geometría\cite{abelson1980disessa,brown1995101}.
+El proyecto \emph{Turtle} es el proyecto más popular del lenguaje Logo. Nació como una criatura robótica, arreglada para que pareciera una tortuga, que se movía por el suelo con un rotulador atado que pintaba el suelo. Más tarde evolucionó a una imagen de una tortuga que se movía por la pantalla pintando según se desplazaba. Turtle se utiliza ampliamente desde hace décadas para enseñar a programar a niños de Primaria y Secundaria conceptos de programación, pero también de matemáticas y geometría\cite{abelson1980disessa,brown1995101}.
 
-A pesar de su larga vida, el proyecto Turtle ha sabido mantenerse vivo y se ha modernizado en proyectos más recientes como Turtle Academy \cite{turtle-academy} o Curly Logo \cite{curly-logo}
+A pesar de su larga vida, el proyecto Turtle ha sabido mantenerse vivo y se ha modernizado en proyectos más recientes como Turtle Academy \cite{turtle-academy} o Curly Logo \cite{curly-logo}.
 
 
 \subsubsection{Programando el movimiento de Turtle en el lenguaje Logo}
 \label{sec:logo-turtle-lenguaje}
 
-A parte de toda la funcionalidad que ofrece Logo como lenguaje, Turtle aporta una librería para poder controlar a nuestra criatura que pintará la pantalla, la cual suele ser tradicionalmente representada con una tortuga. Principalmente, se podrá controlar el movimiento de nuestra tortuga y el giro de ésta. También se le podrá ordenar que deje de pintar para permitir movimiento por la pantalla sin rastro. La mayoría de estos comandos pueden abreviarse para simplificar la escritura.
+A parte de toda la funcionalidad que ofrece Logo como lenguaje, Turtle aporta una librería para poder controlar a nuestra criatura que pintará la pantalla. Ésta suele ser tradicionalmente representada con una tortuga o una flecha. Principalmente, se podrá controlar el movimiento de nuestra tortuga y el giro de ésta. También se le podrá ordenar que deje de pintar para permitir movimiento por la pantalla sin rastro. La mayoría de estos comandos pueden abreviarse para simplificar la escritura.
 
 El resumen sobre la funcionalidad de Turtle que se muestra en las secciones siguientes es un compendio formado a partir de \cite{logo-turtle-lenguaje}, \cite{turtle-academy} y \cite{abelson1980disessa}.
 
@@ -363,18 +366,18 @@ El resumen sobre la funcionalidad de Turtle que se muestra en las secciones sigu
 
 La tortuga siempre se moverá según el eje de coordenadas. El punto (0, 0) se encontrará normalmente en medio de la pantalla y es la posición inicial de la tortuga. El eje de coordenadas \texttt{y} crece positivamente en dirección Norte (hacia arriba).
 
-Los comandos \texttt{forward} y \texttt{barckward} mueven la tortuga hacia delante y detrás, respectivamente, según la posición en la que esté mirando. Los comandos \texttt{setx}, \texttt{sety} y \texttt{setxy} se utilizan para establecer la tortuga en el eje de coordenadas \texttt{x}, \texttt{y} o en ambos, respectivamente.
+Los comandos \texttt{forward} y \texttt{barckward} mueven la tortuga hacia delante y atrás, respectivamente, según la posición en la que esté mirando. Los comandos \texttt{setx}, \texttt{sety} y \texttt{setxy} se utilizan para establecer la tortuga en el eje de coordenadas \texttt{x}, \texttt{y} o en ambos, respectivamente.
 
-La orden \texttt{home} devuelve a la tortuga a la posición (0, 0) de la pantalla. Adicionalmente, se puede ocultar (o mostrar) la tortuga con las órdenes \texttt{showturtle} y \texttt{hideturtle}.
+La orden \texttt{home} devuelve a la tortuga a la posición (0, 0) de la pantalla. Adicionalmente, se puede ocultar o mostrar (si ya está oculta) la tortuga con las órdenes \texttt{showturtle} y \texttt{hideturtle}.
 
-Otra función muy importante para poder desplazar a Turtle, es la opción de girarla. Podemos decidir el giro con las instrucciones \texttt{right} y \texttt{left} y el ángulo de giro (el valor tiene que ser un número positivo).
+Otra función muy importante de Turtle, es la opción de girarla. Podemos decidir el giro con las instrucciones \texttt{right} y \texttt{left} y el ángulo de giro (el valor tiene que ser un número positivo). Un ángulo de giro de 380º sería equivalente a girar la tortuga 20º.
 
 
 \subsubsection*{Pintando con Turtle}
 
 Hasta ahora, cualquier desplazamiento de Turtle por la pantalla dejaba una linea o rastro. Con la orden \texttt{penup}, la tortuga dejará de pintar hasta que se ejecute la orden \texttt{pendown}. También se puede ejecutar la instrucción \texttt{clearscreen} que limpiará la pantalla de cualquier rastro dejado por la tortuga.
 
-La instrucción \texttt{label} mostrará por pantalla el mensaje que se pase como argumento, pero este debe ser una \emph{word} o \emph{sentence}(solo un argumento)\footnote{Para más información sobre los tipos de datos \emph{words} y \emph{sentences} se puede consultar la sección \ref{sec:logo-variables}.}.
+La instrucción \texttt{label} acepta un argumento y mostrará por pantalla su contenido. El argumento debe ser de tipo \emph{word} o \emph{sentence}\footnote{Para más información sobre los tipos de datos \emph{words} y \emph{sentences}, como se formar y cual es su funcionamiento, se puede consultar la sección \ref{sec:logo-variables}.}.
 
 \subsubsection*{Resumen de instrucciones de Turtle}
 
