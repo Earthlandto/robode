@@ -1,24 +1,5 @@
 function Robode(worker) {
 
-
-    var b2Vec2 = Simulator.Env.b2Vec2;
-    var b2BodyDef = Simulator.Env.b2BodyDef;
-    var b2Body = Simulator.Env.b2Body;
-    var b2FixtureDef = Simulator.Env.b2FixtureDef;
-    var b2Fixture = Simulator.Env.b2Fixture;
-    var b2World = Simulator.Env.b2World;
-    // var b2MassData = Simulator.Env.b2MassData;
-    var b2PolygonShape = Simulator.Env.b2PolygonShape;
-    var b2CircleShape = Simulator.Env.b2CircleShape;
-    var b2DebugDraw = Simulator.Env.b2DebugDraw;
-    var b2RevoluteJointDef = Simulator.Env.b2RevoluteJointDef;
-    var b2ContactListener = Simulator.Env.b2ContactListener;
-
-    // var world = Simulator.World;
-    var robodeIni = Simulator.robodeInit;
-    var circuit = new Simulator.Circuit(320,330);
-
-
     /****************************************************************************
      *                                                                           *
      *       CRAFT ROBODE                                                        *
@@ -212,7 +193,6 @@ function Robode(worker) {
     };
 
     contactListener.EndContact = function(contact) {
-        if(!bodiesSensed) return;
 
         var isSensorA = contact.GetFixtureA().IsSensor();
         var isSensorB = contact.GetFixtureB().IsSensor();
@@ -289,21 +269,20 @@ function Robode(worker) {
     var idInterval = null;
 
 
-    // Init the world, robot, sensors and everything
+    // Init the world, robot, sensors and everuthing
     this.init = function(canvasID) {
 
         canvasID = canvasID ||  null;
 
         if (!canvasID) return;
 
-        Simulator.World = new b2World(
+        world = new b2World(
             new b2Vec2(0, 0), //gravity
             true //allow sleep
         );
 
-        console.log(Simulator.World);
         //setup debug draw
-        Simulator.World.configDraw(new b2DebugDraw(), canvasID);
+        world.configDraw(new b2DebugDraw(), world, canvasID, scale);
 
         // robot main body
         robot = createRobot(robodeIni.x, robodeIni.y, robodeIni.width, robodeIni.height);
@@ -323,23 +302,23 @@ function Robode(worker) {
         sLine_right = createLineSensor('right', robot);
 
         // Create circuit
-        circuit.craft();
+        craftCircuit();
 
         running = true;
 
         // add collision listener
         bodiesSensed = {};
-        Simulator.World.SetContactListener(contactListener);
+        world.SetContactListener(contactListener);
 
         idInterval = window.setInterval(function() {
-            Simulator.World.Step(
+            world.Step(
                 1 / 60, //frame-rate
                 10, //velocity iterations
                 10 //position iterations
             );
 
-            Simulator.World.DrawDebugData();
-            Simulator.World.ClearForces();
+            world.DrawDebugData();
+            world.ClearForces();
 
             updateMovement();
 
@@ -354,12 +333,12 @@ function Robode(worker) {
         window.clearInterval(idInterval);
 
         // Clear canvas
-        Simulator.World.clearCanvas();
+        world.clearCanvas();
 
         bodiesSensed = null;
         //destroy world
-        Simulator.World.destroyAll();
-        Simulator.World = null;
+        world.destroyAll();
+        world = null;
 
         //reset speeds
         rspeed = 0;
@@ -525,7 +504,7 @@ function Robode(worker) {
         fixDef.shape.SetAsBox(width, height);
 
         //robot BODY
-        var robot = Simulator.World.CreateBody(bodyDef);
+        var robot = world.CreateBody(bodyDef);
         robot.setName("robot");
 
         robot.CreateFixture(fixDef);
@@ -544,7 +523,7 @@ function Robode(worker) {
         fixDef.shape = new b2PolygonShape();
         fixDef.shape.SetAsBox(0.2, 0.4);
         fixDef.isSensor = false;
-        var wheelBody = Simulator.World.CreateBody(bodyDef);
+        var wheelBody = world.CreateBody(bodyDef);
         wheelBody.CreateFixture(fixDef);
         wheelBody.setName("wheel");
         return wheelBody;
@@ -560,7 +539,7 @@ function Robode(worker) {
         revoluteJointDef.enableLimit = true;
         revoluteJointDef.maxMotorTorque = Number.MAX_SAFE_INTEGER;
         revoluteJointDef.enableMotor = true;
-        return Simulator.World.CreateJoint(revoluteJointDef);
+        return world.CreateJoint(revoluteJointDef);
 
     }
 
@@ -587,7 +566,7 @@ function Robode(worker) {
         fixDef.shape.SetAsArray(vPoints, vPoints.length);
         fixDef.isSensor = true;
 
-        var sensor = Simulator.World.CreateBody(bodyDef);
+        var sensor = world.CreateBody(bodyDef);
 
         sensor.CreateFixture(fixDef);
         sensor.setName('sensor' + name);
@@ -599,7 +578,7 @@ function Robode(worker) {
         jointdef.enableMotor = false;
         jointdef.enableLimit = false;
         jointdef.maxMotorTorque = Number.MAX_SAFE_INTEGER;
-        Simulator.World.CreateJoint(jointdef);
+        world.CreateJoint(jointdef);
 
         return sensor;
     }
@@ -628,7 +607,7 @@ function Robode(worker) {
         fixDef.shape = new b2CircleShape(radius);
         fixDef.isSensor = true;
 
-        var sline = Simulator.World.CreateBody(bodyDef);
+        var sline = world.CreateBody(bodyDef);
         sline.setName("sensorL" + (name === 'left' ? 'I' : 'D'));
 
         sline.CreateFixture(fixDef);
@@ -640,7 +619,7 @@ function Robode(worker) {
         jointdef.enableMotor = false;
         jointdef.enableLimit = true;
 
-        Simulator.World.CreateJoint(jointdef);
+        world.CreateJoint(jointdef);
 
         return sline;
     }
