@@ -2,9 +2,11 @@ function iJavaCompiler() {
 
     var parser = new iJavaParser();
     var sandbox = new Worker('js/mylibs/iJavaSandbox.js');
-	Simulator.Robode = new Robode(sandbox);
-    var robode = Simulator.Robode;
-    console.log(robode);
+
+    // Simulator.Robode = new Robode(sandbox);
+    // var robode = Simulator.Robode;
+    var robode = new Simulator.Robode(sandbox);
+
     var errorHandler = null;
     var outputHandler = null;
 

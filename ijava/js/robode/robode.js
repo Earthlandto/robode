@@ -301,7 +301,6 @@ function Robode(worker) {
             true //allow sleep
         );
 
-        console.log(Simulator.World);
         //setup debug draw
         Simulator.World.configDraw(new b2DebugDraw(), canvasID);
 
