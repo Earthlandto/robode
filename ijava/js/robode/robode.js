@@ -15,8 +15,8 @@ function Robode(worker) {
     var b2ContactListener = Simulator.Env.b2ContactListener;
 
     // var world = Simulator.World;
-    var robodeIni = Simulator.robodeInit;
-    var circuit = new Simulator.Circuit(320,330);
+    var initConfig = Simulator.config;
+    var circuit = Simulator.Circuit;
 
 
     /****************************************************************************
@@ -305,7 +305,7 @@ function Robode(worker) {
         Simulator.World.configDraw(new b2DebugDraw(), canvasID);
 
         // robot main body
-        robot = createRobot(robodeIni.x, robodeIni.y, robodeIni.width, robodeIni.height);
+        robot = createRobot(initConfig.robodeIniX, initConfig.robodeIniY, initConfig.robodeW, initConfig.robodeH);
         // wheels
         fr = createWheel(robot.GetWorldCenter().x + 0.53, robot.GetWorldCenter().y + 0.5);
         fl = createWheel(robot.GetWorldCenter().x - 0.53, robot.GetWorldCenter().y + 0.5);

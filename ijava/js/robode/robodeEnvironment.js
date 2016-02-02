@@ -7,13 +7,16 @@ Simulator.Env = {};
 (function() {
     Simulator.World = null;
     Simulator.ScaleWorld = 10; //initial
-    Simulator.robodeInit = {
-        x: 16,
-        y: 16,
-        width: 0.6,
-        height: 1
+    Simulator.config = {
+        robodeIniX: 16,
+        robodeIniY: 16,
+        robodeW: 0.6,
+        robodeH: 1,
+        worldWidth: 320,
+        worldHeight: 320
+        // scaleWorld: 10
     };
-    Simulator.Robode = null;
+    // Simulator.Robode = null;
     Simulator.Circuit = null;
 })();
 
@@ -170,7 +173,7 @@ Simulator.Env = {};
 
         // ...end create circuit.
     };
-    Simulator.Circuit = Circuit;
+    Simulator.Circuit = new Circuit(Simulator.config.worldWidth, Simulator.config.worldHeight);
 })();
 
 
