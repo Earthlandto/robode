@@ -8,13 +8,19 @@ Simulator.Env = {};
     Simulator.World = null;
     // Simulator.ScaleWorld = 10; //initial
     Simulator.config = {
+        //robode init config
         robodeIniX: 16,
         robodeIniY: 16,
         robodeW: 0.6,
         robodeH: 1,
+        //world init config
         worldWidth: 640,
         worldHeight: 640,
-        scaleWorldIni: 10
+        scaleWorldIni: 10,
+        //sensor line config
+        radiusInitSensorLine: 0.02,
+        //line config
+        lineInitThickness: 1
     };
     // Simulator.Robode = null;
     Simulator.Circuit = null;
@@ -60,6 +66,8 @@ Simulator.Env = {};
 
     Simulator.Env.b2World.prototype.lines = [];
 
+    Simulator.Env.b2World.prototype.lineThickness = Simulator.config.lineInitThickness;
+
     Simulator.Env.b2World.prototype.getLines = function() {
         return this.lines;
     };
@@ -70,7 +78,7 @@ Simulator.Env = {};
         myDebugDraw.SetSprite(document.getElementById(myCanvas).getContext("2d"));
         myDebugDraw.SetDrawScale(Simulator.config.scaleWorldIni);
         myDebugDraw.SetFillAlpha(0.3);
-        myDebugDraw.SetLineThickness(1.0);
+        myDebugDraw.SetLineThickness(Simulator.config.lineInitThickness);
         myDebugDraw.SetFlags(Simulator.Env.b2DebugDraw.e_shapeBit | Simulator.Env.b2DebugDraw.e_jointBit);
         Simulator.World.SetDebugDraw(myDebugDraw);
     };
@@ -78,11 +86,14 @@ Simulator.Env = {};
     Simulator.Env.b2World.prototype.setWorldScale = function(newScale) {
 
         var myscale = newScale.clamp(5, 30);
-
+        //define the new scale
         this.m_debugDraw.SetDrawScale(myscale);
+        //change canvas size to wrap the world into it
         var mycanvas = this.m_debugDraw.m_ctx.canvas;
         mycanvas.width = (Simulator.config.worldWidth * myscale) / Simulator.config.scaleWorldIni;
         mycanvas.height = (Simulator.config.worldHeight * myscale) / Simulator.config.scaleWorldIni;
+        //change line thickness
+        this.lineThickness *= myscale;
     };
 
     Simulator.Env.b2World.prototype.getWorldScale = function() {
@@ -195,7 +206,7 @@ Simulator.Env = {};
         //define the shape
         if (points.length == 1) {
             // line sensor
-            fixDef.shape = new Simulator.Env.b2CircleShape(0.2);
+            fixDef.shape = new Simulator.Env.b2CircleShape(Simulator.config.radiusInitSensorLine);
         } else {
             // external sensor
             fixDef.shape = new Simulator.Env.b2PolygonShape();
@@ -212,28 +223,28 @@ Simulator.Env = {};
         jointdef.Initialize(bodyAttached, this.body, bodyAttached.GetWorldCenter());
         jointdef.collideConnected = false;
         jointdef.enableMotor = false;
-        jointdef.enableLimit = (points.length ===1);
+        jointdef.enableLimit = (points.length === 1);
         jointdef.maxMotorTorque = Number.MAX_SAFE_INTEGER;
         Simulator.World.CreateJoint(jointdef);
     }
 
     Simulator.Env.b2Fixture.prototype.nCollided = 0;
 
-    Simulator.Env.b2Fixture.prototype.addCollition = function(){
+    Simulator.Env.b2Fixture.prototype.addCollition = function() {
         this.nCollided++;
     };
 
-    Simulator.Env.b2Fixture.prototype.removeCollition = function(){
+    Simulator.Env.b2Fixture.prototype.removeCollition = function() {
         this.nCollided--;
     };
 
-    Sensor.prototype.setAngle= function (angle){
+    Sensor.prototype.setAngle = function(angle) {
         this.body.SetAngle(angle);
     };
-    Sensor.prototype.setAngularVelocity= function (angVel){
+    Sensor.prototype.setAngularVelocity = function(angVel) {
         this.body.SetAngularVelocity(angVel);
     };
-    Sensor.prototype.setLinearVelocity= function (linVel){
+    Sensor.prototype.setLinearVelocity = function(linVel) {
         this.body.SetLinearVelocity(linVel);
     };
 
