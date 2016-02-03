@@ -323,6 +323,7 @@ function Robode(worker) {
 
         // Create circuit
         circuit.craft();
+        Simulator.World.setWorldScale(Simulator.config.scaleWorldIni);
 
         running = true;
 

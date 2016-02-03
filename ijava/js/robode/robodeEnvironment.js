@@ -70,6 +70,9 @@ Simulator.Env = {};
 
     Simulator.Env.b2World.prototype.setWorldScale = function(newScale) {
         this.m_debugDraw.SetDrawScale(newScale);
+        var mycanvas = this.m_debugDraw.m_ctx.canvas;
+        mycanvas.width = (Simulator.config.worldWidth * newScale) / Simulator.config.scaleWorldIni;
+        mycanvas.height = (Simulator.config.worldHeight * newScale) / Simulator.config.scaleWorldIni;
     };
 
     Simulator.Env.b2World.prototype.getWorldScale = function() {
