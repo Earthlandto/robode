@@ -68,10 +68,16 @@ Simulator.Env = {};
 
     Simulator.Env.b2World.prototype.lineThickness = Simulator.config.lineInitThickness;
 
-    Simulator.Env.b2World.prototype.getLines = function() {
-        return this.lines;
+    // Simulator.Env.b2World.prototype.getLines = function() {
+    //     return this.lines;
+    // };
+    Simulator.Env.b2World.prototype.addLine = function(line) {
+        this.lines.push(line);
     };
 
+    Simulator.Env.b2World.prototype.getDistanceCollitionLine = function() {
+        return this.lineThickness + Simulator.config.radiusInitSensorLine * Simulator.World.getWorldScale();
+    };
 
     Simulator.Env.b2World.prototype.configDraw = function(myDebugDraw, myCanvas) {
 
@@ -179,10 +185,16 @@ Simulator.Env = {};
         posOffsetY = posOffsetY || 0;
 
         this.body = null;
+        this.getPosition = function() {
+            return {
+                x: this.body.GetWorldCenter().x,
+                y: this.body.GetWorldCenter().y
+            };
+        };
 
         this.name = "sensor" + name;
 
-        this.position = {
+        var positionIni = {
             x: bodyAttached.GetWorldCenter().x + posOffsetX,
             y: bodyAttached.GetWorldCenter().y + posOffsetY
         };
@@ -191,7 +203,7 @@ Simulator.Env = {};
 
         var bodyDef = new Simulator.Env.b2BodyDef();
         bodyDef.type = Simulator.Env.b2Body.b2_dynamicBody;
-        bodyDef.position.Set(this.position.x, this.position.y);
+        bodyDef.position.Set(positionIni.x, positionIni.y);
         bodyDef.setName(this.name);
         this.body = Simulator.World.CreateBody(bodyDef);
 
@@ -295,6 +307,8 @@ Simulator.Env = {};
 
         //Create circuit...
 
+        Simulator.World.addLine(new Bezier(0, 0, 100, 100, 500, 500));
+        Simulator.World.addLine(new Bezier(0, 0, 0, 0, 0, 500));
 
         // ...end create circuit.
     };

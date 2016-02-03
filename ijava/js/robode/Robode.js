@@ -89,10 +89,9 @@ function Robode(worker) {
 
     // external sensors list
     var extSensors = [];
-
     // line sensors
-    var sline_left = null; // line sensor left
-    var sline_right = null; // line sensor right
+    var sensorLL = null; // line sensor left
+    var sensorLR = null; // line sensor right
 
 
     /****************************************************************************
@@ -266,8 +265,8 @@ function Robode(worker) {
             x: Simulator.config.robodeIniX,
             y: Simulator.config.robodeIniY
         }];
-        sLine_left = new Simulator.Sensor(posIniAux, "LI", robot, -0.21, -0.2);
-        sLine_right = new Simulator.Sensor(posIniAux, "LD", robot, 0.21, -0.2);
+        sensorLL = new Simulator.Sensor(posIniAux, "LI", robot, -0.21, -0.2);
+        sensorLR = new Simulator.Sensor(posIniAux, "LD", robot, 0.21, -0.2);
 
 
         // Create circuit
@@ -366,6 +365,10 @@ function Robode(worker) {
      ****************************************************************************/
 
     var updateMovement = function() {
+
+        detectLineCollition(sensorLL);
+        detectLineCollition(sensorLR);
+
         cancelVel(fr);
         cancelVel(fl);
 
@@ -440,6 +443,61 @@ function Robode(worker) {
     /****************************************************************************
      *       ROBOT COLLISION CONTROL FUNCTIONS                                  *
      ****************************************************************************/
+
+
+    function detectLineCollition(sensor) {
+
+        var lines = Simulator.World.lines;
+        if (lines.length === 0) return;
+
+        var minDistance = Simulator.World.getDistanceCollitionLine();
+
+        lines.forEach(function(c) {
+            var p = pointInBezier(c, sensor.getPosition());//FIXME paralelizar!
+            // if any sensor collided, notify sandbox
+            if (distance(p, sensor.getPosition()) <= minDistance) {
+                var message = {
+                    id: sensor.name,
+                    state: "begin"
+                };
+                sendMessage("sensor", message);
+                return;
+            }
+
+        });
+        //if it detects no collitions, send endContact
+        //FIXME optimizar!
+        var message = {
+            id: sensor.name,
+            state: "end"
+        };
+        sendMessage("sensor", message);
+    }
+
+
+    function pointInBezier(curve, point) {
+        var luts = curve.getLUT();
+        var i,
+            end = luts.length,
+            dist,
+            minDist = distance(luts[0], point),
+            sec = 0;
+        for (i = 1; i < end; i++) {
+            dist = distance(luts[i], point);
+            if (dist < minDist) {
+                sec = i;
+                minDist = dist;
+            }
+        }
+        var t = sec / (end - 1);
+        return curve.get(t);
+    }
+
+    function distance(p, q) {
+        return Math.abs(Math.sqrt(Math.pow((p.x - q.x), 2) + Math.pow((p.y - q.y), 2)));
+    }
+
+
 
 
     function isRobotPart(bodySensedName, elems2avoid) {
