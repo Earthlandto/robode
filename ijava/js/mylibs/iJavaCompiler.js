@@ -6,7 +6,7 @@ function iJavaCompiler() {
     // Simulator.Robode = new Robode(sandbox);
     // var robode = Simulator.Robode;
     var robode = new Robode(sandbox);
-    
+
 
     var errorHandler = null;
     var outputHandler = null;

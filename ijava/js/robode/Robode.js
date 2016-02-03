@@ -463,9 +463,8 @@ function Robode(worker) {
             var p = pointInBezier(c, position); //FIXME paralelizar!
             // if any sensor collided, notify sandbox
             var dist = distance(p, position);
-            // console.log(dist, minDistance);
             if (dist <= minDistance) {
-                /////////
+                ///////// TODO: DELETE
                 // console.log(sensor.getPosition());
                 var ctx = Simulator.World.m_debugDraw.m_ctx;
                 ctx.save();
@@ -529,8 +528,6 @@ function Robode(worker) {
     function distance(p, q) {
         return Math.abs(Math.sqrt(Math.pow((p.x - q.x), 2) + Math.pow((p.y - q.y), 2)));
     }
-
-
 
 
     function isRobotPart(bodySensedName, elems2avoid) {
