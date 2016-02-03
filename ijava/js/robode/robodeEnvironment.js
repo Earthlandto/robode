@@ -58,6 +58,13 @@ Simulator.Env = {};
         return this.GetBody().getName();
     };
 
+    Simulator.Env.b2World.prototype.lines = [];
+
+    Simulator.Env.b2World.prototype.getLines = function() {
+        return this.lines;
+    };
+
+
     Simulator.Env.b2World.prototype.configDraw = function(myDebugDraw, myCanvas) {
 
         myDebugDraw.SetSprite(document.getElementById(myCanvas).getContext("2d"));
@@ -72,7 +79,6 @@ Simulator.Env = {};
 
         var myscale = newScale.clamp(5, 30);
 
-        console.log(myscale);
         this.m_debugDraw.SetDrawScale(myscale);
         var mycanvas = this.m_debugDraw.m_ctx.canvas;
         mycanvas.width = (Simulator.config.worldWidth * myscale) / Simulator.config.scaleWorldIni;
@@ -133,7 +139,7 @@ Simulator.Env = {};
         ctx.clearRect(0, 0, mycanvas.width, mycanvas.height);
     };
 
-    Number.prototype.clamp = function (min, max){
+    Number.prototype.clamp = function(min, max) {
         return Math.min(Math.max(this, min), max);
     };
 
@@ -150,6 +156,89 @@ Simulator.Env = {};
         }
     });
 
+
+})();
+
+
+(function() {
+
+
+    function Sensor(points, name, bodyAttached, /*optional*/ posOffsetX, /*optional*/ posOffsetY) {
+        posOffsetX = posOffsetX || 0;
+        posOffsetY = posOffsetY || 0;
+
+        this.body = null;
+
+        this.name = "sensor" + name;
+
+        this.position = {
+            x: bodyAttached.GetWorldCenter().x + posOffsetX,
+            y: bodyAttached.GetWorldCenter().y + posOffsetY
+        };
+
+        //create our sensor (box2d body)
+
+        var bodyDef = new Simulator.Env.b2BodyDef();
+        bodyDef.type = Simulator.Env.b2Body.b2_dynamicBody;
+        bodyDef.position.Set(this.position.x, this.position.y);
+        bodyDef.setName(this.name);
+        this.body = Simulator.World.CreateBody(bodyDef);
+
+
+        var fixDef = new Simulator.Env.b2FixtureDef();
+        fixDef.isSensor = true;
+        fixDef.density = 40; //TODO:remove?
+        fixDef.friction = 1;
+        fixDef.restitution = 0;
+
+
+        //define the shape
+        if (points.length == 1) {
+            // line sensor
+            fixDef.shape = new Simulator.Env.b2CircleShape(0.2);
+        } else {
+            // external sensor
+            fixDef.shape = new Simulator.Env.b2PolygonShape();
+            var vPoints = [];
+            points.forEach(function(elem, index, array) {
+                vPoints[index] = new Simulator.Env.b2Vec2(elem.x, elem.y);
+            });
+            fixDef.shape.SetAsArray(vPoints, vPoints.length);
+        }
+        this.body.CreateFixture(fixDef);
+
+        // create the joint to body attached
+        var jointdef = new Simulator.Env.b2RevoluteJointDef();
+        jointdef.Initialize(bodyAttached, this.body, bodyAttached.GetWorldCenter());
+        jointdef.collideConnected = false;
+        jointdef.enableMotor = false;
+        jointdef.enableLimit = (points.length ===1);
+        jointdef.maxMotorTorque = Number.MAX_SAFE_INTEGER;
+        Simulator.World.CreateJoint(jointdef);
+    }
+
+    Simulator.Env.b2Fixture.prototype.nCollided = 0;
+
+    Simulator.Env.b2Fixture.prototype.addCollition = function(){
+        this.nCollided++;
+    };
+
+    Simulator.Env.b2Fixture.prototype.removeCollition = function(){
+        this.nCollided--;
+    };
+
+    Sensor.prototype.setAngle= function (angle){
+        this.body.SetAngle(angle);
+    };
+    Sensor.prototype.setAngularVelocity= function (angVel){
+        this.body.SetAngularVelocity(angVel);
+    };
+    Sensor.prototype.setLinearVelocity= function (linVel){
+        this.body.SetLinearVelocity(linVel);
+    };
+
+
+    Simulator.Sensor = Sensor;
 
 })();
 

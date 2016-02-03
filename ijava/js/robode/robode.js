@@ -103,41 +103,13 @@ function Robode(worker) {
      *  Create a contact listener and we define preSolve, beginContact and       *
      *   endContact functions.                                                   *
      *  We have a robot part list to avoid this bodies in our begin/endContac    *
-     *   function. Also, preSolve function cancels collisions with line objects. *
+     *   function.                                                               *
      *                                                                           *
      ****************************************************************************/
 
     var contactListener = new b2ContactListener();
 
     var robotparts = ['wheel', 'robot'];
-    /*  The bodiesSensed variable stores the bodies sensed by each sensor.
-    For each body, stores the number the fixtures that the sensor has sensed.
-    Format:
-        map {k, map{k', v}}
-    Example:
-        var bodiesSensed = {
-            "sline-left": {
-                line3: 10
-            },
-            "sensorTL": {
-                border2: 3
-            }
-        };
-    */
-    var bodiesSensed = null;
-
-    // If a sensor detects a line, the contac's enabled.
-    contactListener.PreSolve = function(contact, oldManifold) {
-
-        if (!bodiesSensed) return;
-
-        var udA = contact.GetFixtureA().getBodyName();
-        var udB = contact.GetFixtureB().getBodyName();
-
-        if (udA.substr(0, 4) == 'line' || udB.substr(0, 4) == 'line') {
-            contact.SetEnabled(false);
-        }
-    };
 
     /*  The sensoring begins when a particular sensor perceive a body through
     one of its parts (fixtures). Then, beginContact function counts the aparitions
@@ -146,107 +118,80 @@ function Robode(worker) {
     function). */
     contactListener.BeginContact = function(contact) {
 
-        if (!bodiesSensed) return;
+        if (!running) return;
 
         var isSensorA = contact.GetFixtureA().IsSensor();
         var isSensorB = contact.GetFixtureB().IsSensor();
 
         if (isSensorA != isSensorB) { // a XOR b: is any fixture a sensor?
-
+            //find who is the sensor and who the body
             var bodySensed, bodySensor;
 
             if (isSensorA) {
-                bodySensor = contact.GetFixtureA().getBodyName();
-                bodySensed = contact.GetFixtureB().getBodyName();
+                bodySensor = contact.GetFixtureA();
+                bodySensed = contact.GetFixtureB();
             } else {
-                bodySensor = contact.GetFixtureB().getBodyName();
-                bodySensed = contact.GetFixtureA().getBodyName();
+                bodySensor = contact.GetFixtureB();
+                bodySensed = contact.GetFixtureA();
             }
 
             // if it's a robot part, do nothing
-            if (isRobotPart(bodySensed, robotparts))
+            if (isRobotPart(bodySensed.getBodyName(), robotparts))
                 return;
-            var message;
-            // Had the body sensed the body previously?
-            if (bodiesSensed.hasOwnProperty(bodySensor)) {
-                var listSensed = bodiesSensed[bodySensor];
-                var sensedIndex = listSensed.findIndex(function(elem) {
-                    return elem.hasOwnProperty(bodySensed);
-                });
 
-                //if the body is already sensed
-                if (sensedIndex > -1) {
-                    (listSensed[sensedIndex])[bodySensed] += 1;
-                    if ((listSensed[sensedIndex])[bodySensed] === 1) {
-                        message = {
-                            id: bodySensor,
-                            state: "begin"
-                        };
-                        sendMessage("sensor", message);
-                    }
-
-                } else {
-                    // it's first time this sensor sensed this body
-                    var bodysensedAux = {};
-                    bodysensedAux[bodySensed] = 1;
-                    listSensed.push(bodysensedAux);
-                    message = {
-                        id: bodySensor,
-                        state: "begin"
-                    };
-                    sendMessage("sensor", message);
-                }
-            } else { // if it's the first time that the sensor perceive any body...
-                bodiesSensed[bodySensor] = [];
-                var newBodySensed = {};
-                newBodySensed[bodySensed] = 1;
-                bodiesSensed[bodySensor].push(newBodySensed);
-                message = {
-                    id: bodySensor,
+            /*  Here, we got a collition sensor-body.
+                if is the first collition detect by this sensor
+                    then send message to sandbox */
+            if (bodySensor.nCollided === 0) {
+                var message = {
+                    id: bodySensor.getBodyName(),
                     state: "begin"
                 };
                 sendMessage("sensor", message);
             }
+            //add the collition
+            bodySensor.addCollition();
+
 
         }
     };
 
     contactListener.EndContact = function(contact) {
-        if(!bodiesSensed) return;
+        if (!running) return;
 
         var isSensorA = contact.GetFixtureA().IsSensor();
         var isSensorB = contact.GetFixtureB().IsSensor();
 
-        if (isSensorA != isSensorB) { // a XOR b
-
+        if (isSensorA != isSensorB) { // a XOR b: is any fixture a sensor?
+            //find who is the sensor and who the body
             var bodySensed, bodySensor;
 
             if (isSensorA) {
-                bodySensor = contact.GetFixtureA().getBodyName();
-                bodySensed = contact.GetFixtureB().getBodyName();
+                bodySensor = contact.GetFixtureA();
+                bodySensed = contact.GetFixtureB();
             } else {
-                bodySensor = contact.GetFixtureB().getBodyName();
-                bodySensed = contact.GetFixtureA().getBodyName();
+                bodySensor = contact.GetFixtureB();
+                bodySensed = contact.GetFixtureA();
             }
 
             // if it's a robot part, do nothing
-            if (isRobotPart(bodySensed, robotparts))
+            if (isRobotPart(bodySensed.getBodyName(), robotparts))
                 return;
 
-            // The body has already been sensed previously
-            var listSensed = bodiesSensed[bodySensor];
-            var sensedIndex = listSensed.findIndex(function(elem) {
-                return elem.hasOwnProperty(bodySensed);
-            });
-
-            (listSensed[sensedIndex])[bodySensed] -= 1;
-            if ((listSensed[sensedIndex])[bodySensed] < 1) {
+            /*  Here, we got a collition sensor-body.
+                if is the first collition detect by this sensor
+                    then send message to sandbox */
+            if (bodySensor.nCollided === 1) {
                 var message = {
-                    id: bodySensor,
+                    id: bodySensor.getBodyName(),
                     state: "end"
                 };
                 sendMessage("sensor", message);
             }
+            //remove the collition
+            bodySensor.removeCollition();
+
+
         }
     };
 
@@ -313,13 +258,18 @@ function Robode(worker) {
         jfr = addWheelJoint(robot, fr);
         jfl = addWheelJoint(robot, fl);
         // external sensors
-        extSensors.push(createExternalSensor(pointsTL, "NO", robot));
-        extSensors.push(createExternalSensor(pointsTR, "NE", robot));
-        extSensors.push(createExternalSensor(pointsBL, "SO", robot));
-        extSensors.push(createExternalSensor(pointsBR, "SE", robot));
+        extSensors.push(new Simulator.Sensor(pointsTL, "NO", robot));
+        extSensors.push(new Simulator.Sensor(pointsTR, "NE", robot));
+        extSensors.push(new Simulator.Sensor(pointsBL, "SO", robot));
+        extSensors.push(new Simulator.Sensor(pointsBR, "SE", robot));
         //Line sensors
-        sLine_left = createLineSensor('left', robot);
-        sLine_right = createLineSensor('right', robot);
+        var posIniAux = [{
+            x: Simulator.config.robodeIniX,
+            y: Simulator.config.robodeIniY
+        }];
+        sLine_left = new Simulator.Sensor(posIniAux, "LI", robot, -0.21, -0.2);
+        sLine_right = new Simulator.Sensor(posIniAux, "LD", robot, 0.21, -0.2);
+
 
         // Create circuit
         circuit.craft();
@@ -328,7 +278,6 @@ function Robode(worker) {
         running = true;
 
         // add collision listener
-        bodiesSensed = {};
         Simulator.World.SetContactListener(contactListener);
 
         idInterval = window.setInterval(function() {
@@ -356,7 +305,6 @@ function Robode(worker) {
         // Clear canvas
         Simulator.World.clearCanvas();
 
-        bodiesSensed = null;
         //destroy world
         Simulator.World.destroyAll();
         Simulator.World = null;
@@ -386,8 +334,8 @@ function Robode(worker) {
         robot.SetAngularVelocity(0);
 
         extSensors.forEach(function(elem) {
-            elem.SetLinearVelocity(new b2Vec2(0, 0));
-            elem.SetAngularVelocity(0);
+            elem.setLinearVelocity(new b2Vec2(0, 0));
+            elem.setAngularVelocity(0);
         });
 
         if (!robot.IsAwake()) {
@@ -483,8 +431,8 @@ function Robode(worker) {
         fl.SetAngularVelocity(robotAV);
 
         extSensors.forEach(function(elem) {
-            elem.SetAngularVelocity(robotAV);
-            elem.SetAngle(robot.GetAngle());
+            elem.setAngularVelocity(robotAV);
+            elem.setAngle(robot.GetAngle());
         });
     }
 
@@ -562,87 +510,6 @@ function Robode(worker) {
         revoluteJointDef.enableMotor = true;
         return Simulator.World.CreateJoint(revoluteJointDef);
 
-    }
-
-    function createExternalSensor(points, name, robot) {
-
-        var robotPos = robot.GetWorldCenter();
-
-
-        var bodyDef = new b2BodyDef();
-        bodyDef.type = b2Body.b2_dynamicBody;
-        bodyDef.position.Set(robotPos.x, robotPos.y);
-        var fixDef = new b2FixtureDef();
-        fixDef.density = 40;
-        fixDef.friction = 1;
-        fixDef.restitution = 0;
-        fixDef.shape = new b2PolygonShape();
-
-        var vPoints = [];
-        points.forEach(function(elem, index, array) {
-            vPoints[index] = new b2Vec2(elem.x, elem.y);
-        });
-
-
-        fixDef.shape.SetAsArray(vPoints, vPoints.length);
-        fixDef.isSensor = true;
-
-        var sensor = Simulator.World.CreateBody(bodyDef);
-
-        sensor.CreateFixture(fixDef);
-        sensor.setName('sensor' + name);
-
-        // make the joint
-        var jointdef = new b2RevoluteJointDef();
-        jointdef.Initialize(robot, sensor, robotPos);
-        jointdef.collideConnected = false;
-        jointdef.enableMotor = false;
-        jointdef.enableLimit = false;
-        jointdef.maxMotorTorque = Number.MAX_SAFE_INTEGER;
-        Simulator.World.CreateJoint(jointdef);
-
-        return sensor;
-    }
-
-
-    function createLineSensor(name, robot) {
-
-        var robotPos = robot.GetWorldCenter();
-        var radius = 0.2;
-
-        var position;
-        if (name === 'left') {
-            position = robotPos.x - radius + 0.01;
-        } else { // name === 'right'
-            position = robotPos.x + radius - 0.01;
-        }
-
-        var bodyDef = new b2BodyDef();
-        bodyDef.type = b2Body.b2_dynamicBody;
-        bodyDef.position.Set(position, robotPos.y - 0.2);
-
-        var fixDef = new b2FixtureDef();
-        fixDef.density = 40;
-        fixDef.friction = 1;
-        fixDef.restitution = 0;
-        fixDef.shape = new b2CircleShape(radius);
-        fixDef.isSensor = true;
-
-        var sline = Simulator.World.CreateBody(bodyDef);
-        sline.setName("sensorL" + (name === 'left' ? 'I' : 'D'));
-
-        sline.CreateFixture(fixDef);
-
-        // make the joint
-        var jointdef = new b2RevoluteJointDef();
-        jointdef.Initialize(robot, sline, robotPos);
-        jointdef.collideConnected = false;
-        jointdef.enableMotor = false;
-        jointdef.enableLimit = true;
-
-        Simulator.World.CreateJoint(jointdef);
-
-        return sline;
     }
 
 }
