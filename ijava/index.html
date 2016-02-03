@@ -52,8 +52,8 @@
 
         #mycanvas {
             background: #eee;
-            width: 320px;
-            height: 320px;
+            /*width: 320px;
+            height: 320px;*/
             padding: 0px;
             margin: 0px;
             border-top: 1px solid #aaa;
@@ -147,8 +147,8 @@
                 </div>
             </div>
             <div id="fixed">
-                <div id="canvascontainer">
-                    <canvas id="mycanvas" width="320" height="320">Canvas not supported.</canvas>
+                <div id="canvascontainer" style="width:322px;height:322px;overflow-x:auto;overflow-y:auto">
+                    <canvas id="mycanvas" width="640" height="640">Canvas not supported.</canvas>
                 </div>
                 <div>
                     <textarea id="output" rows="5" readonly></textarea>

@@ -6,18 +6,19 @@ Simulator.Env = {};
 // define Simulator init valors
 (function() {
     Simulator.World = null;
-    Simulator.ScaleWorld = 10; //initial
+    // Simulator.ScaleWorld = 10; //initial
     Simulator.config = {
         robodeIniX: 16,
         robodeIniY: 16,
         robodeW: 0.6,
         robodeH: 1,
-        worldWidth: 320,
-        worldHeight: 320
-        // scaleWorld: 10
+        worldWidth: 640,
+        worldHeight: 640,
+        scaleWorldIni: 10
     };
     // Simulator.Robode = null;
     Simulator.Circuit = null;
+
 })();
 
 
@@ -60,7 +61,7 @@ Simulator.Env = {};
     Simulator.Env.b2World.prototype.configDraw = function(myDebugDraw, myCanvas) {
 
         myDebugDraw.SetSprite(document.getElementById(myCanvas).getContext("2d"));
-        myDebugDraw.SetDrawScale(Simulator.ScaleWorld);
+        myDebugDraw.SetDrawScale(Simulator.config.scaleWorldIni);
         myDebugDraw.SetFillAlpha(0.3);
         myDebugDraw.SetLineThickness(1.0);
         myDebugDraw.SetFlags(Simulator.Env.b2DebugDraw.e_shapeBit | Simulator.Env.b2DebugDraw.e_jointBit);
@@ -72,7 +73,7 @@ Simulator.Env = {};
     };
 
     Simulator.Env.b2World.prototype.getWorldScale = function() {
-        return this.m_debugDraw;
+        return this.m_debugDraw.m_drawScale;
     };
 
     Simulator.Env.b2World.prototype.destroyAll = function() {
@@ -141,7 +142,7 @@ Simulator.Env = {};
     Circuit.prototype.craft = function() {
 
         //===create world borders===================================================================
-        var scale = Simulator.ScaleWorld;
+        var scale = Simulator.config.scaleWorldIni;
 
         var bodyDef = new Simulator.Env.b2BodyDef();
         bodyDef.type = Simulator.Env.b2Body.b2_staticBody;
