@@ -387,7 +387,7 @@ En la tabla \ref{tab:turtle-lenguaje} se muestra un resumen de las órdenes que 
 \begin{table}[!ht]
 	\begin{centering}
 		\begin{tabular}{c|c|c}
-Orden & abreviatura & Argumentos\\
+Orden & Abreviatura & Argumentos\\
 \hline
 forward & fd & Longitud del movimiento\\
 backward & bk & Longitud del movimiento\\
@@ -410,13 +410,6 @@ hideturtle & ht & -\\
 \end{table}
 
 
-
-
-
-
-
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -425,6 +418,89 @@ hideturtle & ht & -\\
 {\color{green}
 (J.A.:) ¿Comentarás algo de robomind o codehs que también son descendientes directos de lego? lo bueno es que el primero te hace enfocar la idea de la tortuga hacia un robot más realista, la segunda que lleva el aprendizaje a entorno web y tecnologías javascript. Todo esto te abre temas para seguir escribiendo el trabajo. Recuerda que sabes más de lo que crees y has hecho más de lo que piensas.
 }
+
+
+\section{Robomind}
+\label{sec:robomind}
+
+
+Robomind Academy\cite{robomind-web} es una plataforma que busca potenciar y extender el \emph{Computational Thinking} entre alumnos de Educación Primaria y Secundaria. Sus creadores opinan\footnote{En la sección \emph{Visión} de la página web oficial de Robomind Academy se puede ver cuales son los principios y metas detrás del proyecto (\url{https://www.robomindacademy.com/go/robomind/about#vision}).} que la informática debería tener el mismo estatus que las matemáticas o la lengua, algo esencial en la formación del estudiante. Argumentan que, a través del \emph{Computational Thinking} se podrán realizar avances en el cuidado de la salud o la industria, algo totalmente necesario en pleno Siglo XXI. 
+
+
+Actualmente, Robomind ofrece un entorno de programación multiplataforma: aplicación de escritorio, entorno web y aplicación para Tablet. En la figura \ref{fig:robomind-entorno} podemos ver un ejemplo de como es el entorno de programación que propone Robomind.
+
+
+\begin{figure}[!ht]
+	\begin{centering}
+		\includegraphics[width=0.8\textwidth]{images/robomind-entorno.png}
+			\caption{Entorno de programación en Robomind Academy. Obtenido de \cite{robomind-web}.}
+				\label{fig:robomind-entorno}
+	\end{centering}
+\end{figure}
+
+
+El proyecto en sí está orientado a que profesores y alumnos trabajen conjuntamente en desarrollar las actividades, permitiendo que los profesores puedan realizar un seguimiento del avance y trabajo de los alumnos a cargo. También permite que los alumnos puedan registrarse independientemente y aprender a su propio ritmo. Los cursos están divididos entre alumnos de Educación Primaria y Secundaria. 
+
+Las soluciones antes mencionadas son {\color{red}de pago}. Dependiendo de si eres profesor o estudiante y de si quieres (o no) utilizar la versión de escritorio, se ofrecen distintos planes de compra. 
+A parte, Robomind ofrece planes gratuitos para alumnos con características más limitadas o una cantidad inferior de cursos. Adicionalmente, Robomind participa en el proyecto \emph{La Hora del Código}\cite{hour-of-code}, ofreciendo una introducción a Robomind completamente gratuita. Una de sus funciones más interesantes es la de poder traducir el código escrito en Robomind para poder utilizarlo con tu propio Lego Mindstorm NXT\footnote{Para más información sobre Lego Mindstorm NXT se puede acudir a \cite{lego-mindstorm} o \cite{lego-mindstorm-programar}.}.
+
+Por último, tanto la interfaz, la página web, la aplicación o los tutoriales está completamente en inglés, ofreciendo una cierta barrera de entrada a todo aquel interesado que no sea angloparlante. 
+
+\subsection{Programar con Robomind Academy}
+
+Sus propias funciones y código...
+
+
+\section{CodeHS}
+\label{sec:CodeHS}
+
+
+Otro proyecto muy extendido que promueve el \emph{Computational Thinking} es CodeHS. CodeHS es una plataforma online con la que personas de todas las edades pueden aprender informática. Tienen cursos de introducción a la informática, programar con diferentes lenguajes, bases de datos, e incluso una versión modernizada de Karel the Robot\cite{pattis1981karel}. 
+
+CodeHS ofrece muchas opciones de aprendizaje independiente, incluso ofreciendo tutores personalizados para resolver dudas de los usuarios, está especialmente dirigido a enseñar programación en colegios e institutos. Ofrece planes de pago para implantar la plataforma en las clases y herramientas de seguimiento y evaluación para que el profesor pueda supervisar y dirigir el rendimiento de los alumnos. Aunque los planes gratuitos ofrecen un reducido número de cursos, permite al usuario programar libremente en cualquiera de los lenguajes que tiene disponible. 
+
+
+
+
+\section{Scratch}
+\label{sec:scratch}
+
+
+Scratch\cite{scratch} es un proyecto creado en el seno del Lifelong Kindergarten Group en el MIT Media Lab, \acrfull{MIT}. Scratch permite programar juegos interactivos, animaciones y programas de todo tipo. Todo esto apoyado por una gran comunidad de usuarios y profesores que forman una enorme red social de más de 9.5 millones de usuarios registrados y casi 13 millones de proyectos compartidos actualmente\footnote{En la página oficial de Scratch se pueden obtener las estadísticas de uso y participación del proyecto (\url{https://scratch.mit.edu/statistics/}).}.
+
+Scratch está orientado a enseñar a programar a niños de Primaria Y Secundaria. Como podemos ver en la figura \ref{fig:scratch-edad} la mayoría de usuarios de Scratch son alumnos de Secundaria, en torno a los 12 y 15 años de edad.
+
+\begin{figure}[!ht]
+	\begin{centering}
+		\includegraphics[width=0.8\textwidth]{images/scratch-edad.png}
+			\caption{Gráfico de edad de los usuarios de \url{https://scratch.mit.edu}. Obtenido de \url{https://scratch.mit.edu/statistics/}.}
+				\label{fig:scratch-edad}
+	\end{centering}
+\end{figure}
+
+
+\subsection{Funcionamiento de Scratch}
+\label{sec:scratch-funcionamiento}
+
+La idea básica de Scratch {\color{red}es muy simple (?????)}. Se tiene una serie de bloques que representan las diferentes funcionalidades del lenguaje (crear o modificar variables, bucles, condiciones, funciones de librería, etc) y el programador tiene que ir \emph{encajando} las piezas de código una encima de otra para formar el flujo de ejecución del programa. Existen piezas que solo encajan con ciertas otras o algunas que pueden ir por separado.
+
+
+En general, la plataforma Scratch se forma por tres grandes componentes:
+\begin{enumerate}
+	\item \textbf{Un editor visual} que presenta un conjunto de bloques cuya forma ofrece pistas de como pueden encajar los diferentes bloques.
+	\item \textbf{Un interprete} que puede traducir y ejecutar el flujo de código que forman los diferentes bloques unidos entre sí.
+	\item \textbf{Una interfaz} que muestra la salida (tanto de texto como gráfica) del código ejecutado por el interprete. También permite controlar la entrada del ratón, de las teclas, etc.
+\end{enumerate}
+
+En la figura \ref{fig:scratch-example} podemos ver un ejemplo del editor y la interfaz. Además, podemos ver como las piezas encajan una encima de la otra, y de manera muy visual, es fácil de entender el código y en que orden se va a ejecutar cada elemento.
+
+\begin{figure}[!ht]
+	\begin{centering}
+		\includegraphics[width=0.8\textwidth]{images/scratch-example.png}
+			\caption{Ejemplo de la interfaz de usuario y el editor de código que ofrece Scratch.}
+				\label{fig:scratch-example}
+	\end{centering}
+\end{figure}
 
 
 % \section{Khan Academy}
