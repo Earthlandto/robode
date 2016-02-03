@@ -1,6 +1,5 @@
 function Robode(worker) {
 
-
     var b2Vec2 = Simulator.Env.b2Vec2;
     var b2BodyDef = Simulator.Env.b2BodyDef;
     var b2Body = Simulator.Env.b2Body;
