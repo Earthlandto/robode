@@ -207,7 +207,7 @@ function iJavaSandbox() {
      *                                                                          *
      ****************************************************************************/
 
-     var roboderunning = false;
+    var roboderunning = false;
 
     // sensors
     var sensorNE = false,
@@ -221,7 +221,7 @@ function iJavaSandbox() {
 
     function iniciarRobot() {
 
-        if (roboderunning){
+        if (roboderunning) {
             var msgerr = "Error: El robot ya se ha iniciado.";
             error(msgerr);
             return;
