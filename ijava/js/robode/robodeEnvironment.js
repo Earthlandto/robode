@@ -69,10 +69,14 @@ Simulator.Env = {};
     };
 
     Simulator.Env.b2World.prototype.setWorldScale = function(newScale) {
-        this.m_debugDraw.SetDrawScale(newScale);
+
+        var myscale = newScale.clamp(5, 30);
+
+        console.log(myscale);
+        this.m_debugDraw.SetDrawScale(myscale);
         var mycanvas = this.m_debugDraw.m_ctx.canvas;
-        mycanvas.width = (Simulator.config.worldWidth * newScale) / Simulator.config.scaleWorldIni;
-        mycanvas.height = (Simulator.config.worldHeight * newScale) / Simulator.config.scaleWorldIni;
+        mycanvas.width = (Simulator.config.worldWidth * myscale) / Simulator.config.scaleWorldIni;
+        mycanvas.height = (Simulator.config.worldHeight * myscale) / Simulator.config.scaleWorldIni;
     };
 
     Simulator.Env.b2World.prototype.getWorldScale = function() {
@@ -129,8 +133,22 @@ Simulator.Env = {};
         ctx.clearRect(0, 0, mycanvas.width, mycanvas.height);
     };
 
+    Number.prototype.clamp = function (min, max){
+        return Math.min(Math.max(this, min), max);
+    };
 
-	window
+
+    window.addEventListener("keyup", function(e) {
+        if (!Simulator.World) return;
+        switch (e.keyCode) {
+            case 38: // UP
+                Simulator.World.setWorldScale(Simulator.World.getWorldScale() + 0.5);
+                break;
+            case 40: // UP
+                Simulator.World.setWorldScale(Simulator.World.getWorldScale() - 0.5);
+                break;
+        }
+    });
 
 
 })();
