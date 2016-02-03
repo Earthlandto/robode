@@ -509,7 +509,7 @@ function Robode(worker) {
 
 
     function pointInBezier(curve, point) {
-        var luts = curve.getLUT(200);
+        var luts = curve.getLUT();
         var i,
             end = luts.length,
             dist,
