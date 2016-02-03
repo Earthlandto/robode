@@ -286,6 +286,7 @@ function Robode(worker) {
             );
 
             Simulator.World.DrawDebugData();
+            Simulator.World.drawLines();
             Simulator.World.ClearForces();
 
             updateMovement();
@@ -365,7 +366,7 @@ function Robode(worker) {
      ****************************************************************************/
 
     var updateMovement = function() {
-
+        // console.log(sensorLL.getPosition());
         detectLineCollition(sensorLL);
         detectLineCollition(sensorLR);
 
@@ -450,33 +451,65 @@ function Robode(worker) {
         var lines = Simulator.World.lines;
         if (lines.length === 0) return;
 
-        var minDistance = Simulator.World.getDistanceCollitionLine();
+        var anysensed = false;
 
+        var minDistance = Simulator.World.getDistanceCollitionLine();
+        var scale = Simulator.World.getWorldScale();
+        var position = {
+            x: sensor.getPosition().x * scale,
+            y: sensor.getPosition().y * scale
+        };
         lines.forEach(function(c) {
-            var p = pointInBezier(c, sensor.getPosition());//FIXME paralelizar!
+            var p = pointInBezier(c, position); //FIXME paralelizar!
             // if any sensor collided, notify sandbox
-            if (distance(p, sensor.getPosition()) <= minDistance) {
+            var dist = distance(p, position);
+            // console.log(dist, minDistance);
+            if (dist <= minDistance) {
+                /////////
+                // console.log(sensor.getPosition());
+                var ctx = Simulator.World.m_debugDraw.m_ctx;
+                ctx.save();
+                ctx.strokeStyle = "blue";
+                ctx.lineWidth = 10;
+                ctx.beginPath();
+                ctx.moveTo(position.x, position.y);
+                ctx.lineTo(p.x, p.y);
+                ctx.stroke();
+
+                ctx.lineWidth = 10;
+                ctx.strokeStyle = "orange";
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 2, 0, 2 * Math.PI);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.arc(position.x, position.y, 2, 0, 2 * Math.PI);
+                ctx.stroke();
+                ctx.restore();
+                ///////
                 var message = {
                     id: sensor.name,
                     state: "begin"
                 };
                 sendMessage("sensor", message);
+                anysensed = true;
                 return;
             }
 
         });
         //if it detects no collitions, send endContact
         //FIXME optimizar!
-        var message = {
-            id: sensor.name,
-            state: "end"
-        };
-        sendMessage("sensor", message);
+        if (!anysensed) {
+            var message = {
+                id: sensor.name,
+                state: "end"
+            };
+            sendMessage("sensor", message);
+        }
     }
 
 
     function pointInBezier(curve, point) {
-        var luts = curve.getLUT();
+        var luts = curve.getLUT(200);
         var i,
             end = luts.length,
             dist,

@@ -10,7 +10,7 @@ Simulator.Env = {};
     Simulator.config = {
         //robode init config
         robodeIniX: 16,
-        robodeIniY: 16,
+        robodeIniY: 32,
         robodeW: 0.6,
         robodeH: 1,
         //world init config
@@ -18,9 +18,9 @@ Simulator.Env = {};
         worldHeight: 640,
         scaleWorldIni: 10,
         //sensor line config
-        radiusInitSensorLine: 0.02,
+        radiusInitSensorLine: 0.2,
         //line config
-        lineInitThickness: 1
+        lineThickness: 0.5
     };
     // Simulator.Robode = null;
     Simulator.Circuit = null;
@@ -66,7 +66,7 @@ Simulator.Env = {};
 
     Simulator.Env.b2World.prototype.lines = [];
 
-    Simulator.Env.b2World.prototype.lineThickness = Simulator.config.lineInitThickness;
+    Simulator.Env.b2World.prototype.lineThickness = Simulator.config.lineThickness;
 
     // Simulator.Env.b2World.prototype.getLines = function() {
     //     return this.lines;
@@ -76,7 +76,7 @@ Simulator.Env = {};
     };
 
     Simulator.Env.b2World.prototype.getDistanceCollitionLine = function() {
-        return this.lineThickness + Simulator.config.radiusInitSensorLine * Simulator.World.getWorldScale();
+        return (this.lineThickness * this.getWorldScale());
     };
 
     Simulator.Env.b2World.prototype.configDraw = function(myDebugDraw, myCanvas) {
@@ -84,7 +84,7 @@ Simulator.Env = {};
         myDebugDraw.SetSprite(document.getElementById(myCanvas).getContext("2d"));
         myDebugDraw.SetDrawScale(Simulator.config.scaleWorldIni);
         myDebugDraw.SetFillAlpha(0.3);
-        myDebugDraw.SetLineThickness(Simulator.config.lineInitThickness);
+        myDebugDraw.SetLineThickness(this.lineThickness);
         myDebugDraw.SetFlags(Simulator.Env.b2DebugDraw.e_shapeBit | Simulator.Env.b2DebugDraw.e_jointBit);
         Simulator.World.SetDebugDraw(myDebugDraw);
     };
@@ -98,8 +98,6 @@ Simulator.Env = {};
         var mycanvas = this.m_debugDraw.m_ctx.canvas;
         mycanvas.width = (Simulator.config.worldWidth * myscale) / Simulator.config.scaleWorldIni;
         mycanvas.height = (Simulator.config.worldHeight * myscale) / Simulator.config.scaleWorldIni;
-        //change line thickness
-        this.lineThickness *= myscale;
     };
 
     Simulator.Env.b2World.prototype.getWorldScale = function() {
@@ -154,6 +152,26 @@ Simulator.Env = {};
         var ctx = this.m_debugDraw.m_ctx;
         var mycanvas = ctx.canvas;
         ctx.clearRect(0, 0, mycanvas.width, mycanvas.height);
+    };
+
+    Simulator.Env.b2World.prototype.drawLines = function() {
+        var ctx = this.m_debugDraw.m_ctx;
+        var scale = this.getWorldScale();
+        ctx.save();
+        ctx.lineWidth = this.lineThickness * scale;
+        ctx.strokeStyle = "black";
+        this.lines.forEach(function(l) {
+            var points = l.points;
+            ctx.beginPath();
+            ctx.moveTo(points[0].x, points[0].y);
+            if (points.length > 3) {
+                ctx.bezierCurveTo(points[1].x, points[1].y, points[2].x, points[2].y, points[3].x, points[3].y);
+            } else  {
+                ctx.quadraticCurveTo(points[1].x, points[1].y, points[2].x, points[2].y);
+            }
+            ctx.stroke();
+        });
+        ctx.restore();
     };
 
     Number.prototype.clamp = function(min, max) {
@@ -235,7 +253,7 @@ Simulator.Env = {};
         jointdef.Initialize(bodyAttached, this.body, bodyAttached.GetWorldCenter());
         jointdef.collideConnected = false;
         jointdef.enableMotor = false;
-        jointdef.enableLimit = (points.length === 1);
+        jointdef.enableLimit = (points.length === 1); //enable limit if it's a line sensor
         jointdef.maxMotorTorque = Number.MAX_SAFE_INTEGER;
         Simulator.World.CreateJoint(jointdef);
     }
@@ -307,8 +325,8 @@ Simulator.Env = {};
 
         //Create circuit...
 
-        Simulator.World.addLine(new Bezier(0, 0, 100, 100, 500, 500));
-        Simulator.World.addLine(new Bezier(0, 0, 0, 0, 0, 500));
+        Simulator.World.addLine(new Bezier(0, 0, 100, 400, 320, 320));
+        Simulator.World.addLine(new Bezier(0, 0, 320, 100, 0, 320));
 
         // ...end create circuit.
     };

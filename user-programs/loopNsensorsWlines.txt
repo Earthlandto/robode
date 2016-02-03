@@ -5,14 +5,12 @@ void setup(){
 void loop(){
   avanzarRobot(1000,1000);
   if (sensorLI || sensorLD){
-    println("line!");
+    print(".");
   }
   if (sensorNO || sensorNE){
-    println("forward");
     avanzarRobot(-2000,-1000);
   }
   if (sensorSO || sensorSE){
-    println("back");
     avanzarRobot(2000,1000);
   }
 }
