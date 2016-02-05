@@ -588,18 +588,30 @@ A continuación vamos a enumerar las funciones básicas para controlar el movimi
 	\end{itemize}	
 \end{itemize}
 
-\subsection{{\color{green}Otras alternativas}}
-\label{sec:robot-alternativas}
+
+{\color{green}
+Conclusión mía:
+Obviamente, Robomind es una versión modernizada de Karel the robot + Turtle de Logo: Escenario discreto, interactua con el mismo mirando o cogiendo objetos y pinta el suelo por donde pasa.
+}
+
+%\subsection{{\color{green}Otras alternativas}}
+%\label{sec:robot-alternativas}
+
+
 
 
 \section{Aprendiendo Online}
 \label{sec:aprendiendo-online}
 
+En la sección anterior se han analizado diferentes alternativas para aprender a través de la robótica. Algunas de estas alternativas tienen una gran componente Hardware, como puede ser Lego Minstorm. Por otra parte, Robomind, como simulador de un robot, permite al alumno iniciarse en la robótica sin necesidad  de un robot. 
+
+Aunque es una práctica bastante utilizada, usar un robot no es la única alternativa para aprender a programar. Usar un entorno online para enseñar a programar es una alternativa que ha obtenido notable popularidad últimamente. Como se vio en la sección \ref{sec:scratch}, Scratch es un gran exponente del \emph{Computational Thinking} que utiliza un entorno principalmente online para que niños de todo el mundo aprenda a programar. Aunque éste no es el único proyecto que existe en esta linea. CodeHS y CodeSchool son algunos de los proyectos con más repercusión que buscan extender la cultura del \emph{Computational Thinking}, especialmente ente niños. En las siguientes secciones se estudiaran estas alternativas.
+
 \subsection{CodeHS}
 \label{sec:CodeHS}
 
 
-Otro proyecto muy extendido que promueve el \emph{Computational Thinking} es CodeHS. CodeHS es una plataforma online con la que personas de todas las edades pueden aprender informática. Tienen cursos de introducción a la informática, programar con diferentes lenguajes, bases de datos, e incluso una versión modernizada de Karel the Robot, el cual se analizará en más detalle en la siguiente sección.
+Otro proyecto muy extendido que promueve el \emph{Computational Thinking} es CodeHS. CodeHS es una plataforma online con la que personas de todas las edades pueden aprender informática. Tienen cursos de introducción a la informática, programar con diferentes lenguajes, bases de datos, e incluso una versión modernizada de Karel the robot\cite{pattis1981karel}, el cual se analizará en más detalle en la siguiente sección.
 
 CodeHS ofrece muchas opciones de aprendizaje independiente, incluso ofreciendo tutores personalizados para resolver dudas de los usuarios, está especialmente dirigido a enseñar programación en colegios e institutos. Ofrece planes de pago para implantar la plataforma en las clases y herramientas de seguimiento y evaluación para que el profesor pueda supervisar y dirigir el rendimiento de los alumnos. Aunque los planes gratuitos ofrecen un reducido número de cursos, permite al usuario programar libremente en cualquiera de los lenguajes que tiene disponible. 
 
@@ -608,19 +620,26 @@ CodeHS ofrece muchas opciones de aprendizaje independiente, incluso ofreciendo t
 \label{sec:karel-the-robot}
 
 
-\cite{pattis1981karel}
+Karel\footnote{El nombre de Karel the robot es nombrado en honor a Karel Čapek, un escritor checo que introdujo el término \emph{robot} por primera vez.} es un lenguaje de programación creado por R. Pattis en \emph{Karel the robot: A gentle introduction to the Art of Programming} en 1981\cite{pattis1981karel}. En el, Pattis enseña conceptos de programación siguiendo una metodogía \emph{Early bird}\cite{early-bird}, la cual consiste en enseñar primero los conceptos más importantes.
 
+Karel se mueve en un escenario discreto con celdas por las que se puede mover y con el que puede interactuar. Las órdenes básicas del robot Karel son: \texttt{move} para avanzar una posición en la dirección que está mirando; \texttt{turnLeft} para girar 90º en sentido contrario a las agujas del reloj; \texttt{putBeeper} y \texttt{pickBeeper} para depositar o recoger, respectivamente, un \emph{beeper} (localizador) en la posición en la que se encuentra Karel; y por último, \texttt{turnoff}, para apagarse a si mismo y finalizar la ejecución del programa.
 
+Adicionalmente, Karel también proporciona instrucciones para comprobar si hay obstáculos o un \emph{beeper} en la posición que se encuentra. Toda esta funcionalidad viene acompañada de instrucciones de control, bucles y operaciones aritméticas.
 
 
 \subsection{Code.org}
 \label{sec:Code.org}
 
-% Code.org\cite{code-org} es una plataforma on-line que se dedica exclusivamente a enseñar a programar y cuenta ya con más de 8 millones de usuarios. Cuenta con una gran comunidad de educadores y apoyos entre los que se puede contar al Presidente B. H. Obama. Lleva a cabo proyectos como \emph{Hour of Code} en el que promueve que los usuarios inviertan una hora diaria programando en diferentes juegos, muchos de ellos utilizando \Gls{Blockly}\cite{blockly}.
+Code.org\cite{code-org} es una plataforma on-line cuya meta es enseñar a programar \emph{Computational Thinking} entre niños de todas las edades. Actualmente cuenta con más de 8 millones de usuarios y está respaldada por una gran comunidad de educadores y gente influyente de todos los sectores, no solamente el de la informática.
+
+Uno de los proyectos con más repercusión es el \emph{Hour of Code}\cite{hour-of-code} (Hora del Código) que intenta que todos los niños dediquen una hora diaria a programar. Esta idea está apoyada por muchas empresas que ponen sus recursos y productos a disponibilidad de Code.org para que puedan hacer uso de esto. Uno de ellos, por ejemplo, es Robomind, que como ya hemos comentado en la sección \ref{sec:robomind}, tiene una modalidad gratuita con pruebas para aprender a utilizar el simulador de robot de Robomind. Marcas como Disney, Flappy bird o Rovio\footnote{Rovio es una empresa conocida por desarrollar los populares juegos de smartphone, Angry Birds.} ponen a disposición de Code.org y los niños el uso de sus personajes, intentando captar la atención de los niños y haciendo la activdad altamente atractiva. También, personas influyentes {\color{red}del panorama internacional} se ofrecen a explicar conceptos de informática durante la Hora del Código a los niños. 
+
+Para programar, en Code.org se utiliza una versión simplificada de Scratch (el cual se ha estudiado en la sección \ref{sec:scratch}) con la misma mecánica. Code.org propone muchos cursos independientes y decenas de horas de aprendizaje, con actividades nuevas para captar la atención del niño. 
 
 
-\subsection{{\color{green}Otras alternativas}}
-\label{sec:online-alternativas}
+
+%\subsection{{\color{green}Otras alternativas}}
+%\label{sec:online-alternativas}
 
 
 
