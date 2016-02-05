@@ -1,4 +1,3 @@
 .DS_Store
-/documentation/build/*
-!/documentation/build/*.pdf
+/documentation/build
 /documentation/*.tex.bak

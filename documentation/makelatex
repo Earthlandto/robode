@@ -30,5 +30,6 @@ pdflatex -synctex=1 -interaction=nonstopmode --output-directory=build main.tex >
 
 cp build/main.pdf documentation.pdf
 cp build/main.pdf ~/Desktop/documentation.pdf
+cp build/main.pdf ~/Dropbox/documentation.pdf
 
 #echo "Build."
