@@ -517,6 +517,11 @@ La aplicación gratuita Moway World permite crear diagramas de flujo para progra
 Moway tiene varios módulos que pueden ser añadidos para ampliar su funcionalidad o manejo, como son: módulos de radiofrecuencia, placas Raspberry Pi, tarjetas wifi o una cámara para captar imágenes en tiempo real. También se ofrece una alternativa a Moway de código abierto, llamada Mowayduino. Mowayduino está basado en Arduino y tiene toda la funcionalidad y potencia que ofrece Arduino. Los kits que se disponen inicialmente para Mowaiduino son los mismos que para Moway. Para programar un Mowayduino se proporciona el entorno de programación oficial de Arduino.
 
 {\color{blue}
+Un uso común de Moway es como robot \emph{sigue-lineas}. Los sensores de linea de los que dispone proporcionan información para poder conocer el estado del robot con respecto a una linea, es decir, si está sobre una linea o no. Al tener 2 sensores, puede conocer si se está saliendo de la linea (quizás porque esta realiza una curva) y en la dirección en la que esto ocurre. Por ejemplo, si el sensor derecho deja de detectar la linea, quiere decir que: o la linea está realizando una curva hacia la izquierda o que el robot Moway está moviéndose hacia la derecha fuera de la linea (lo cual ocurre en ambos casos, si se analiza la situación desde el punto de vista de la linea). Por tanto, al estar saliéndose de la linea por la derecha, el robot Moway tendrá que moverse hacia la izquierda para mantenerse dentro del la misma. 
+}
+
+
+{\color{red}
 En general, Moway ofrece un robot para programarlo y configurarlo junto a un entorno de programación, como puede ser Scratch. Es un buen inicio en la robótica pero su software privativo deja las opciones de ampliación y de creación de complementos y terceras partes un poco limitadas.
 }
 

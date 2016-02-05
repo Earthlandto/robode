@@ -1,31 +1,61 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 3: Análisis de objetivos y metodología
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{Análisis de objetivos, metodología y herramientas}\label{objetivos-metodologia}
+\chapter{Objetivos, metodología y herramientas}
+\label{objetivos-metodologia-herramientas}
 
-\section{Objetivos}
-\label{sec:Objetivos}
+\section{Análisis de objetivos}
+\label{sec:objetivos}
 
-Este Trabajo Fin de Grado consiste en desarrollar un módulo de simulación de un robot para integrarlo en la plataforma \Gls{descubre}. Para ello se tendrán que cubrir una serie de subobjetivos que nombraremos a continuación.
+Este Trabajo Fin de Grado consiste en desarrollar un módulo de simulación de un robot para integrarlo en la plataforma \Gls{descubre}(\url{descubre.inf.um.es}).
+
+El simulador se ha denominado \emph{Robode} y éste simulará un robot real con {\color{red}funciones realistas} y en un entorno continuo {\color{red}(y no discreto)}. El simulador dispondrá de una serie de características básicas:
 \begin{itemize}
-\item Estudiar el uso y aplicación de diferentes librerías de físicas para generar el robot.
-\item Comprensión de la plataforma Descubre así como su posterior modificación.
-\item Creación de un simulador de un robot de dos ruedas y su integración en la plataforma Descubre.
-\item Modificación del motor de \gls{ijava} y creación de la \acrshort{API} para poder controlar el robot.
+	\item Robode será un robot de dos ruedas.
+	\item Cada rueda de Robode se moverá de manera independiente, simulando un motor para cada rueda. 
+	\item Robode se encontrará en un circuito finito. 
+	\item El circuito tendrá \emph{lineas} pintadas en el suelo, \emph{obstáculos} y \emph{fronteras}.
+	\item Las lineas pintadas el suelo no colisionarán con Robode.
+	\item Los obstáculos podrán colisionar con Robode, produciendo un efecto en el contacto de ambos cuerpos, desplazándolos según la velocidad y características físicas de cada uno.
+	\item Las fronteras serán elementos estáticos del circuito, impidiendo su movimiento o el de Robode a través de las mismas. El circuito tendrá fronteras limitando su superficie.
+	\item Dispondrá de 2 sensores que, mirando al suelo, detectarán lineas pintadas y, por tanto, si Robode se encuentra sobre una linea.
+	\item Dispondrá de sensores de proximidad delanteros y traseros, que detectarán si se va a producir una colisión con un obstáculo o una frontera.
 \end{itemize}
+
+
+El simulador se integrará con Descubre, una plataforma para aprender programación utilizando el lenguaje iJava\footnote{Para más información sobre la plataforma Descubre y el lenguaje iJava se puede consultar la sección \ref{sec:descubre}.}. Por tanto, será necesario entender el funcionamiento interno de la plataforma y modificarla apropiadamente para poder integrar Robode con Descubre. De está manera, se añadirán las funciones necesarias para poder crear programas en iJava y controlar el robot.
 
 
 \section{Metodología}
 \label{sec:metodologia}
 
-% JS: pag 36 tfg aletea
+% JS: pag 36 tfg aletea 
 
+
+
+\subsection{Tecnologías}
+\label{sec:tecnologias}
+
+{\color{blue}
+JS, HTML, CSS...
+}
 
 
 
 \section{Herramientas utilizadas}
 \label{sec:herramientas}
 
+Las herramientas que se han usado para desarrollar este proyecto se describen a continuación:
+
+\begin{itemize}
+	\item \textbf{Atom}\footnote{Página oficial de Atom (\url{https://atom.io}).} como editor de código. Acompañado de paquetes \emph{linter}\footnote{Un \emph{linter} analiza el código escrito en busca de errores tipográficos. Para más información sobre el \emph{linter} de Atom, se puede consultar la página web de la herramienta: \url{https://atom.io/packages/linter}.} para Javascript, HTML y CSS que detectan la mayoría de los errores sintácticos que se producen a la hora de programar. También se han utilizado diferentes paquetes para tabular y organizar el código automáticamente. 
+
+	\item Como herramienta de control de versiones se ha utilizado \textbf{Git}\footnote{Página oficial del proyecto Git (\url{https://git-scm.com}).} y como repositorio \textbf{GitHub}\footnote{Página oficial de GitHub (\url{https://github.com})}.
+	
+	\item Para las pruebas, ejecución y depuración de la aplicación se ha utilizado tanto \textbf{Google Chrome}\footnote{Página oficial de Google Chrome (\url{https://www.google.es/chrome/browser/desktop/}).} versión 48, como \textbf{Safari}\footnote{Página oficial de Safari (\url{http://www.apple.com/es/safari/}).} versión 9.0.3.
+	
+	\item Para el desarrollo de esta documentación se ha utilizado \textbf{MacTex} como motor de \emph{Latex}\footnote{Página oficial del proyecto Latex (\url{https://www.latex-project.org}).} y \textbf{TexMaker}\footnote{Página oficial de TexMaker (\url{http://www.xm1math.net/texmaker/}).} para la redacción del documento. También se ha utilizado \textbf{BibTex}\footnote{Página oficial de BibTex (\url{http://www.bibtex.org}).} como gestor bibliográfico.
+\end{itemize}
 
 
 
@@ -39,7 +69,7 @@ Este Trabajo Fin de Grado consiste en desarrollar un módulo de simulación de u
 
 
 %Decidir que poner, como, en que orden.
-
+ 
 
 
 
