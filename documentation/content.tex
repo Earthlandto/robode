@@ -410,18 +410,6 @@ hideturtle & ht & -\\
 \end{table}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-{\color{green}
-(J.A.:) ¿Comentarás algo de robomind o codehs que también son descendientes directos de lego? lo bueno es que el primero te hace enfocar la idea de la tortuga hacia un robot más realista, la segunda que lleva el aprendizaje a entorno web y tecnologías javascript. Todo esto te abre temas para seguir escribiendo el trabajo. Recuerda que sabes más de lo que crees y has hecho más de lo que piensas.
-}
-
-
-
-
 \section{Scratch}
 \label{sec:scratch}
 
@@ -498,19 +486,47 @@ A continuación, se estudiaran diferentes proyectos que permiten aprender a prog
 \subsection{Lego Mindstorm NXT/EV3}
 \label{sec:lego-nxt-ec3}
 
-%Otro proyecto que también está muy extendido en las aulas es Lego Mindstorm EV3 y NXT\cite{lego-mindstorm}. Dos kits de iniciación a la robótica con Lego. Permite al estudiante crear con piezas de lego un robot y programar su comportamiento. Los robots suelen tomar forma de brazo robótico o de vehículo capaz de seguir lineas pintadas en el suelo haciendo uso de sensores. Toda este material robótico viene acompañado de un software para programar el comportamiento de los diferentes componentes del robot y un estilo de programación con bloques\cite{lego-mindstorm-programar}, similar al usado en Scratch.
+Como se ha mencionado en la sección \ref{sec:electronica-robotica}, el proyecto Lego Mindstorm\cite{lego-mindstorm} está orientado a enseñar robótica a estudiantes de Primaria y Secundaria. Lego proporciona dos kits para crear tu propio robot: NXT y EV3. Lego Mindstorm NXT fue lanzado en 2006, y su siguiente versión, Lego Mindstorm EV3, salió la público en 2013. Tanto la versión NXT como EV3 son ampliamente utilizadas y existen una gran cantidad de competiciones que fomentan su uso.
 
-Como se ha mencionado en la sección \ref{sec:electronica-robotica}, el proyecto Lego Mindstorm\cite{lego-mindstorm} está orientado a enseñar robótica a estudiantes de Primaria y Secundaria. Lego proporciona dos kits para crear tu propio robot: NXT y EV3.
+Cada kit está compuesto por elementos Software para poder programar el comportamiento del robot y elementos Hardware como sensores, accesorios, piezas de lego y el \emph{Brick} (ladrillo). El \emph{Brick} es un aparato con el que se pueden programar comportamientos básicos a las piezas conectadas al mismo, pero principalmente es el cerebro de todo el robot. Las piezas son compatibles entre los dos sistemas, la diferencia radica en el \emph{Brick}. 
 
-Lego Mindstorm NXT, lanzado a finales de 2006, es un kit para programar compuesto por elementos Hardware y Software. El Hardware está formado principalmente por un conjunto de sensores, accesorios y piezas de Lego, que son controlados por el \emph{Brick} (ladrillo). El \emph{Brick} es un aparato que permite controlar y programar comportamientos básicos en el robot a través de unos sensores conectados al mismo. También se puede utilizar lenguaje de programación 
+En concreto, EV3 viene acompañado del \emph{Lego Mindstorm EV3 Home Edition Software} y su \emph{brick}, el \emph{Brick P EV3}. De esta manera se puede programar instrucciones al robot con bloques (o iconos) que recuerdan a Scratch. Los bloques representan diferentes funciones del lenguaje y el programador debe conectar dichos bloques para crear el flujo de ejecución del programa. Lego también ofrece \emph{EV3 Programmer}, una versión gratuita y simplificada (con menos funcionalidad y bloques) para programar los robots.
+
+Los bloques se dividen en: bloques de acción, bloques de flujo, bloques de sensores, bloques de operación de datos y bloques avanzados. 
+Los bloques de acción permiten controlar la rotación de los motores y las luces del \emph{Brick P EV3}. Los bloques de flujo definen cual será el flujo del programa, cuyo inicio se define con el \emph{bloque de inicio}. Los bloques de sensores, entre otras funciones, controlan los sensores de color y táctiles conectado al \emph{Brick}. Los sensores de operación de datos permiten definir variables, realizar cálculos matemáticos o obtener valores aleatorios. Por último, los bloques avanzados permiten administrar ficheros o usar establecer conexiones Bluetooth.
+
+Por otra parte, existen muchos lenguajes de terceros o adaptaciones que pueden importarse al \emph{Brick} de Lego Mindstorm y, de esta manera, controlar el robot con un lenguaje ciertamente más avanzado. Algunos de estos son Python, Lua, .Net, C/C++, Java o Robomind, del cual hablaremos en la sección \ref{sec:robomind}.
 
 
 \subsection{Moway}
 \label{sec:moway}
 
 
-Mowayduino
+El robot Moway\cite{moway} es un robot desarrollado como herramienta educativa. Moway se compone por un conjunto de sensores y actuadores que le permiten recibir información del mundo y reaccionar a la misma según la las instrucciones que se le hayan proporcionado.
 
+Los actuadores de los que dispone el robot Moway son: dos ruedas, luces LEDs y un altavoz. Por otra parte, los sensores de los que dispone Moway son: 
+\begin{itemize}
+	\item Un sensor de luz que le permite detectar el nivel de luz ambiente. 
+	\item 2 sensores de linea, mirando hacia el suelo, que detectan diferencias de color.
+	\item 4 sensores de obstáculos en la parte frontal del robot que detectan la distancia a los mismos.
+	\item Un micrófono para detectar el nivel de ruido.
+	\item Un sensor de temperatura. 
+	\item Un acelerómetro que detecta inclinación y fuerzas.
+\end{itemize}
+
+La aplicación gratuita, Moway World permite crear diagramas de flujo para programar el comportamiento del robot, con funciones para activar controlar los diferentes actuadores del robot Moway y recibir información de los sensores. También, permite programar su funcionamiento en Scratch, el cual se ha analizado en la sección \ref{sec:scratch}. 
+
+Moway tiene varios módulos que pueden ser añadidos para ampliar su funcionalidad o manejo, como son: módulos de radiofrecuencia, placas Raspberry Pi, tarjetas wifi e incluso una cámara para captar imágenes en tiempo real. También ofrecen una alternativa a Moway de código abierto, Mowayduino. Mowayduino está basado en Arduino y tiene toda la funcionalidad y potencia que ofrece Arduino. Los kits que se disponen inicialmente para Mowaiduino son los mismos que para Moway.
+
+{\color{blue}
+En general, Moway ofrece un robot para programarlo y configurarlo junto a un entorno de programación, como puede ser Scratch. Es un buen inicio en la robótica pero su software privativo deja las opciones de ampliación y de creación de complementos y terceras partes un poco limitadas.
+}
+
+{\color{red}
+¿Lo de Moway muy escueto?
+
+¿¿Necesarias fotos en Lego y Moway??
+}
 
 
 \subsection{Robomind}
@@ -535,7 +551,7 @@ Actualmente, Robomind ofrece un entorno de programación multiplataforma: aplica
 El proyecto en sí está orientado a que profesores y alumnos trabajen conjuntamente en desarrollar las actividades, permitiendo que los profesores puedan realizar un seguimiento del avance y trabajo de los alumnos a cargo. También permite que los alumnos puedan registrarse independientemente y aprender a su propio ritmo. Los cursos están divididos entre alumnos de Educación Primaria y Secundaria. 
 
 Las soluciones antes mencionadas son {\color{red}de pago}. Dependiendo de si eres profesor o estudiante y de si quieres (o no) utilizar la versión de escritorio, se ofrecen distintos planes de compra. 
-A parte, Robomind ofrece planes gratuitos para alumnos con características más limitadas o una cantidad inferior de cursos. Adicionalmente, Robomind participa en el proyecto \emph{La Hora del Código}\cite{hour-of-code}, ofreciendo una introducción a Robomind completamente gratuita. Una de sus funciones más interesantes es la de poder traducir el código escrito en Robomind para poder utilizarlo con tu propio Lego Mindstorm NXT\footnote{Para más información sobre Lego Mindstorm NXT se puede acudir a \cite{lego-mindstorm} o \cite{lego-mindstorm-programar}.}.
+A parte, Robomind ofrece planes gratuitos para alumnos con características más limitadas o una cantidad inferior de cursos. Adicionalmente, Robomind participa en el proyecto \emph{La Hora del Código}\cite{hour-of-code}, ofreciendo una introducción a Robomind completamente gratuita. Una de sus funciones más interesantes es la de poder traducir el código escrito en Robomind para poder utilizarlo con tu propio Lego Mindstorm\footnote{Ya se ha hablado de Lego Mindstorm en la sección \ref{sec:lego-nxt-ec3}. Para más información sobre Lego Mindstorm NXT se puede acudir a \cite{lego-mindstorm}.}.
 
 Por último, tanto la interfaz, la página web, la aplicación o los tutoriales está completamente en inglés, ofreciendo una cierta barrera de entrada a todo aquel interesado que no sea angloparlante. 
 
@@ -583,12 +599,17 @@ A continuación vamos a enumerar las funciones básicas para controlar el movimi
 \label{sec:CodeHS}
 
 
-Otro proyecto muy extendido que promueve el \emph{Computational Thinking} es CodeHS. CodeHS es una plataforma online con la que personas de todas las edades pueden aprender informática. Tienen cursos de introducción a la informática, programar con diferentes lenguajes, bases de datos, e incluso una versión modernizada de {\color{green}Karel the Robot\cite{pattis1981karel}. }
+Otro proyecto muy extendido que promueve el \emph{Computational Thinking} es CodeHS. CodeHS es una plataforma online con la que personas de todas las edades pueden aprender informática. Tienen cursos de introducción a la informática, programar con diferentes lenguajes, bases de datos, e incluso una versión modernizada de Karel the Robot, el cual se analizará en más detalle en la siguiente sección.
 
 CodeHS ofrece muchas opciones de aprendizaje independiente, incluso ofreciendo tutores personalizados para resolver dudas de los usuarios, está especialmente dirigido a enseñar programación en colegios e institutos. Ofrece planes de pago para implantar la plataforma en las clases y herramientas de seguimiento y evaluación para que el profesor pueda supervisar y dirigir el rendimiento de los alumnos. Aunque los planes gratuitos ofrecen un reducido número de cursos, permite al usuario programar libremente en cualquiera de los lenguajes que tiene disponible. 
 
+
 \subsubsection{Karel the Robot}
 \label{sec:karel-the-robot}
+
+
+\cite{pattis1981karel}
+
 
 
 
