@@ -9,11 +9,10 @@
 
 Como dice M. Lemaire\cite{lemaire2014incorporating}, en una sociedad que está incrementando su dependencia a las nuevas tecnologías\footnote{Aquí, con nuevas tecnologías me refiero a productos y proyectos derivados de la Informática y las \acrfull{TIC} como puede ser los proyectos que detallamos en la sección \ref{estado-arte}.}, es imprescindible que las nuevas generaciones desarrollen la habilidad de pensar de manera crítica sobre tecnología.
 
-{\color{blue}
-El \emph{pensamiento computacional}, como se refiere A. Bundy en \cite{bundy2007computational}, afecta a  investigaciones de casi todas las disciplinas, tanto de ciencias como de humanidades. [...] La informática no solo ha permitido que los investigadores puedan hacer nuevas preguntas, sino también ha permitido aceptar nuevos tipos de respuesta. Por ejemplo, preguntas que requieren el procesamiento de una gran cantidad de datos.
+El \emph{Computational Thinking} (pensamiento computacional)\cite{wing2006computational}, es el arte de pensar como un ordenador. El pensamiento computacional, como se refiere A. Bundy en \cite{bundy2007computational}, afecta a investigaciones de casi todas las disciplinas, tanto de ciencias como de humanidades. [...] La informática no solo ha permitido que los investigadores puedan hacer nuevas preguntas, sino también ha permitido aceptar nuevos tipos de respuesta. Por ejemplo, preguntas que requieren el procesamiento de una gran cantidad de datos.
 
 Es necesario comprender la informática y desarrollar el \emph{pensamiento computacional}. Se necesitan desarrollar nuevas tecnologías, nuevo \gls{hardware} y \gls{software} que automatice tareas largas, complejas y con una alta cantidad de cómputo. Tareas que no siempre los humanos podemos resolver de manera directa. Para conseguir esto, muchas veces es necesario programar.
-}
+
 
 Pero aprender a programar es mencionado como uno de los 7 grandes retos de la educación informática \cite{mcgettrick2005grand} y diversos estudios \cite{renumol2009classification} muestran que las principales dificultades para un alumno cuando está en el proceso de aprender a programar son (a) como empezar un programa; (b) comprensión de la sintaxis específica del lenguaje de programación; (c) comprensión de la lógica\footnote{En este caso me refiero a lógica booleana, o también llamada Álgebra de Boole.} y (d) problemas a la hora de depurar el código escrito.
 
@@ -174,9 +173,9 @@ La sintaxis de iJava se parece a muchos de los lenguajes modernos y más utiliza
 \section{Motivación y enfoque del proyecto}
 \label{sec:motivacion}
 
-Las nuevas tecnologías están haciendo que cada vez más gente de todas las edades se interese por la informática, y más concretamente por la programación. Poco a poco la informática deja de ser cosa de un grupo selecto de gente que entiende su funcionamiento.
+Las nuevas tecnologías están haciendo que cada vez más gente de todas las edades se interese por la informática, y más concretamente por la programación. Poco a poco la informática deja de ser cosa de un grupo selecto de gente que entiende su funcionamiento. Como bien argumenta J. Wing en \cite{wing2006computational} y \cite{Wing3717}, se debería extender el pensamiento computacional en ambientes pre-universitarios y exponer a los alumnos al pensamiento y a los métodos computacionales.
 
-Como ya hemos comentado anteriormente, existe un movimiento que pretende introducir la informática y la programación en las aulas. Se han demostrado los beneficios de enseñar a programar en una edad escolar temprana.
+Como ya hemos comentado anteriormente, existe un movimiento que pretende introducir la informática y la programación en las aulas puesto que se han demostrado los beneficios de enseñar a programar en una edad escolar temprana.
 
 Es en este momento cuando se hace imprescindible tomar decisiones acertadas. Aprender a programar en edades pre-universitaria debe ser algo accesible a cualquier estudiante, independiente de su condición o los antecedentes del mismo. Igualmente, los conceptos de programación deben ser presentados de manera, incremental, empezando por los más simples para luego ampliar a conceptos más complejos, como defiende L. Fernandez y otros en \cite{fernandez2002analisis}.
 
@@ -414,14 +413,14 @@ hideturtle & ht & -\\
 \label{sec:scratch}
 
 
-Scratch\cite{scratch} es un proyecto creado en el seno del Lifelong Kindergarten Group en el MIT Media Lab, \acrfull{MIT}. Permite programar juegos interactivos, animaciones y programas de todo tipo en un entorno web. Todo esto apoyado por una gran comunidad de usuarios y profesores que forman una enorme red social de más de 9.5 millones de usuarios registrados y casi 13 millones de proyectos compartidos actualmente\footnote{En la página oficial de Scratch se pueden obtener las estadísticas de uso y participación del proyecto (\url{https://scratch.mit.edu/statistics/}).}.
+Scratch\cite{scratch} es un proyecto creado en el seno del Lifelong Kindergarten Group en el MIT Media Lab, \acrfull{MIT}. Permite programar juegos interactivos, animaciones y programas de todo tipo en un entorno web. Todo esto apoyado por una gran comunidad de usuarios y profesores que forman una enorme red social de más de 9.5 millones de usuarios registrados y casi 13 millones de proyectos compartidos actualmente\footnote{En la página oficial de Scratch se pueden obtener las estadísticas de uso y participación (\url{https://scratch.mit.edu/statistics/}).}.
 
-Scratch está orientado a enseñar a programar a niños de Primaria Y Secundaria. Como podemos ver en la figura \ref{fig:scratch-edad} la mayoría de usuarios de Scratch son alumnos de Secundaria, en torno a los 12 y 15 años de edad.
+Scratch está orientado a enseñar a programar a niños de Primaria y Secundaria y como se puede apreciar en la figura \ref{fig:scratch-edad} la mayoría de usuarios de Scratch cumplen dicho perfil, la edad está en torno a los 12 y 15 años.
 
 \begin{figure}[!ht]
 	\begin{centering}
 		\includegraphics[width=0.8\textwidth]{images/scratch-edad.png}
-			\caption{Gráfico de edad de los usuarios de \url{https://scratch.mit.edu}. Obtenido de \url{https://scratch.mit.edu/statistics/}.}
+			\caption{Gráfico de edad de los usuarios de Scratch. Obtenido de \url{https://scratch.mit.edu/statistics/}.}
 				\label{fig:scratch-edad}
 	\end{centering}
 \end{figure}
@@ -430,17 +429,17 @@ Scratch está orientado a enseñar a programar a niños de Primaria Y Secundaria
 \subsection{Funcionamiento de Scratch}
 \label{sec:scratch-funcionamiento}
 
-La idea básica para programar con Scratch es la de unir bloques que \emph{encajan} entre si para crear el flujo de ejecución del programa. Se tiene una serie de bloques que representan las diferentes funcionalidades del lenguaje (crear o modificar variables, bucles, condiciones, funciones de librería, etc). Existen bloques que solo encajan con otros de forma compatible. De esta manera, se espera conseguir una relación visual y directa por parte del programador entre lo que se puede hacer y no. 
+La idea básica para programar con Scratch es la de crear el flujo del programa mediante la unión de bloques que representan las diferentes funcionalidades del lenguaje (crear o modificar variables, bucles, condiciones, funciones de librería, etc). Existen dependencias entre la forma de los bloques, de esta manera, solo unos bloques \emph{encajaran} con los que tengan una forma compatible. De esta manera, se consigue una relación visual y directa por parte del programador entre los bloques que puedes unir, y sobretodo, {\color{red}de lo que no puedes hacer.}
 
 
-En general, la plataforma Scratch se forma por tres grandes componentes:
+En general, la plataforma Scratch tiene tres grandes componentes:
 \begin{enumerate}
 	\item \textbf{Un editor visual} que presenta un conjunto de bloques cuya forma ofrece pistas de como pueden encajar los diferentes bloques.
 	\item \textbf{Un interprete} que puede traducir y ejecutar el flujo de código que forman los diferentes bloques unidos entre sí.
 	\item \textbf{Una interfaz} que muestra la salida (tanto de texto como gráfica) del código ejecutado por el interprete. También permite controlar la entrada del ratón, de las teclas, etc.
 \end{enumerate}
 
-En la figura \ref{fig:scratch-example} podemos ver un ejemplo del editor y la interfaz. Además, podemos ver como las piezas encajan una encima de la otra, y de manera muy visual, es fácil de entender el código y en que orden se va a ejecutar cada elemento.
+En la figura \ref{fig:scratch-example} podemos ver un ejemplo del editor y la interfaz así como de un programa de ejemplo que mueve al personaje seleccionado por la pantalla, cambiado su color.
 
 \begin{figure}[!ht]
 	\begin{centering}
@@ -450,24 +449,24 @@ En la figura \ref{fig:scratch-example} podemos ver un ejemplo del editor y la in
 	\end{centering}
 \end{figure}
 
-La idea principal detrás de la programación en Scratch es la animación de los diferentes \emph{sprites} que proporciona (aunque también permite subir o crear tus propios imágenes). Por tanto, los bloques irán enfocados a otorgar movimiento al \emph{sprite} en cuestión. Los \emph{sprites} se animan por separado.
+Cuando se programa con Scratch, la meta final es la de animar uno o más elementos por la pantalla. Estos elementos son los \emph{sprites} (imágenes), los cuales vienen predefinidos en una galería o pueden ser proporcionados por el propio usuario. Por tanto, los bloques irán enfocados a otorgar movimiento al \emph{sprite} en cuestión.
 
 En cuanto a los tipos de bloques, actualmente están divididos en 11 categorías distintas:
 \begin{itemize}
 	\item \textbf{Movimiento:} Incluye funciones para mover, girar o establecer la posición y ángulo de giro del \emph{sprite}.
 	\item \textbf{Apariencia:} Esta sección contiene funciones tanto para modificar la apariencia del \emph{sprite} como para mostrar mensajes en la pantalla a modo de diálogos de los \emph{sprites}.
-	\item \textbf{Sonido:} Funciones para controlar la el sonido de la aplicación que se está creando con Scratch. Permite reproducir sonidos precargados en la plataforma o subidos por el programador, diferentes instrumentos o establecer el volumen de la aplicación.
-	\item \textbf{Pincel:} Permite pintar el escenario de forma similar a Turlte (para más información, consultar sección \ref{sec:turtle}).
+	\item \textbf{Sonido:} Funciones para controlar el sonido de la aplicación que se está creando con Scratch. Permite reproducir sonidos precargados en la plataforma o subidos por el programador, diferentes instrumentos o establecer el volumen de la aplicación.
+	\item \textbf{Pincel:} Permite pintar el escenario de forma similar a Turlte, dejando un rastro por donde se va desplazando (para más información sobre Turtle, consultar sección \ref{sec:turtle}).
 	\item \textbf{Datos:} Creación de variables y listas y modificación de los valores de las mismas.
-	\item \textbf{Eventos:} Bloques para detectar y reaccionar a ciertos eventos como el click de un ratón sobre un \emph{sprite} o teclas del teclado presionadas.
-	\item \textbf{Control:} Incluye bloques con las condiciones y blucles clásicos.
-	\item \textbf{Percepción:} Esta sección contiene funciones para detectar eventos de teclado y ratón. También provee funciones para controlar tiempo y establecer lapsos de tiempo. 
+	\item \textbf{Eventos:} Bloques para detectar y reaccionar a ciertos eventos como el click de un ratón sobre un \emph{sprite} o el teclado.
+	\item \textbf{Control:} Incluye bloques con las condiciones y bucles clásicos.
+	\item \textbf{Percepción:} Esta sección contiene funciones para detectar eventos de teclado y ratón. También provee funciones para establecer lapsos de tiempo. 
 	\item \textbf{Operadores:} Bloques para utilizar operadores matemáticos.
 	\item \textbf{Bloques propios} y \textbf{Extensiones}: Scratch permite crear tus propios bloques y usar extensiones integradas con la aplicación como \emph{Lego WeDo} y \emph{PicoBoard}. 
 \end{itemize}
 
 
-Como conclusión, Scratch es un entorno completo y autosuficiente con una gran y compleja funcionalidad que permite a niños y mayores realizar aplicaciones sin necesidad de saber programar pero aprendiendo conceptos básicos como la repetción, el control de instrucciones y como llevar a cabo una animación. 
+Como conclusión, Scratch es un entorno completo y {\color{red}autosuficiente} con una gran y compleja funcionalidad que permite a niños y mayores realizar aplicaciones sin necesidad de saber programar pero aprendiendo conceptos básicos como la repetición, el control de instrucciones y como llevar a cabo una animación. 
 
 
 
@@ -475,34 +474,33 @@ Como conclusión, Scratch es un entorno completo y autosuficiente con una gran y
 \label{sec:aprendiendo-robots}
 
 
-En secciones anteriores se han analizado dos formas de aprender a programar. Logo, junto a Turtle, fue el primer lenguaje de programación que se creó para enseñar a programar a niños de Primaria y Secundaria. Por otra parte, Scratch es actualmente un gran promotor del \emph{Computational Thinking} con una gran cantidad de usuarios activos.
-
+En secciones anteriores se han analizado dos formas de aprender a programar. Logo, junto a Turtle, fue el primer lenguaje de programación que se creó para enseñar a programar a niños de Primaria y Secundaria. Por otra parte, Scratch es actualmente un gran promotor del \emph{Computational Thinking} con una cantidad considerable de usuarios activos.
 
 Pero también existen otras enfoques para aprender programación y \emph{Computational Thinking} y la robótica es una muy popular. Se estudiarán diferentes alternativas desde Lego Mindstorm, que es principalmente hardware, a Robomind, un simulador de un robot.
 
-A continuación, se estudiaran diferentes proyectos que permiten aprender a programar con robots o simuladores de estos.
+A continuación, se detallarán diferentes proyectos que permiten aprender a programar con robots o simuladores de estos.
 
 
 \subsection{Lego Mindstorm NXT/EV3}
 \label{sec:lego-nxt-ec3}
 
-Como se ha mencionado en la sección \ref{sec:electronica-robotica}, el proyecto Lego Mindstorm\cite{lego-mindstorm} está orientado a enseñar robótica a estudiantes de Primaria y Secundaria. Lego proporciona dos kits para crear tu propio robot: NXT y EV3. Lego Mindstorm NXT fue lanzado en 2006, y su siguiente versión, Lego Mindstorm EV3, salió la público en 2013. Tanto la versión NXT como EV3 son ampliamente utilizadas y existen una gran cantidad de competiciones que fomentan su uso.
+Como se ha mencionado en la sección \ref{sec:electronica-robotica}, el proyecto Lego Mindstorm\cite{lego-mindstorm} está orientado a enseñar robótica a estudiantes de Primaria y Secundaria. Lego proporciona dos kits para crear tu propio robot: NXT y EV3. Lego Mindstorm NXT\footnote{Actualmente, Lego Mindstorm NXT tiene soporte por parte de Lego hasta finales del año 2015.} fue lanzado en 2006, y su siguiente versión, Lego Mindstorm EV3, salió al público en 2013. Tanto la versión NXT como EV3 son ampliamente utilizadas y existen una gran cantidad de competiciones que fomentan su uso.
 
-Cada kit está compuesto por elementos Software para poder programar el comportamiento del robot y elementos Hardware como sensores, accesorios, piezas de lego y el \emph{Brick} (ladrillo). El \emph{Brick} es un aparato con el que se pueden programar comportamientos básicos a las piezas conectadas al mismo, pero principalmente es el cerebro de todo el robot. Las piezas son compatibles entre los dos sistemas, la diferencia radica en el \emph{Brick}. 
+Cada kit está compuesto por elementos Software para poder programar el comportamiento del robot y elementos Hardware como sensores, accesorios, piezas de lego y el \emph{Brick} (ladrillo). El \emph{Brick} es un aparato con el que se pueden programar comportamientos básicos a las piezas conectadas al mismo, pero principalmente es el cerebro de todo el robot. Las piezas son mayormente compatibles entre los dos sistemas, la diferencia radica en el \emph{Brick}. 
 
-En concreto, EV3 viene acompañado del \emph{Lego Mindstorm EV3 Home Edition Software} y su \emph{brick}, el \emph{Brick P EV3}. De esta manera se puede programar instrucciones al robot con bloques (o iconos) que recuerdan a Scratch. Los bloques representan diferentes funciones del lenguaje y el programador debe conectar dichos bloques para crear el flujo de ejecución del programa. Lego también ofrece \emph{EV3 Programmer}, una versión gratuita y simplificada (con menos funcionalidad y bloques) para programar los robots.
+En concreto, EV3 viene acompañado del \emph{Lego Mindstorm EV3 Home Edition Software} y su \emph{brick}, el \emph{Brick P EV3}. De esta manera se puede programar instrucciones al robot con bloques (o iconos) que recuerdan a Scratch. Los bloques representan diferentes funciones del lenguaje y el programador debe conectar dichos bloques para crear el flujo de ejecución del programa. Lego también ofrece \emph{EV3 Programmer}, una versión gratuita y simplificada (con menos funcionalidad y bloques) para programar los robots de Lego.
 
 Los bloques se dividen en: bloques de acción, bloques de flujo, bloques de sensores, bloques de operación de datos y bloques avanzados. 
-Los bloques de acción permiten controlar la rotación de los motores y las luces del \emph{Brick P EV3}. Los bloques de flujo definen cual será el flujo del programa, cuyo inicio se define con el \emph{bloque de inicio}. Los bloques de sensores, entre otras funciones, controlan los sensores de color y táctiles conectado al \emph{Brick}. Los sensores de operación de datos permiten definir variables, realizar cálculos matemáticos o obtener valores aleatorios. Por último, los bloques avanzados permiten administrar ficheros o usar establecer conexiones Bluetooth.
+Los bloques de acción permiten controlar la rotación de los motores y las luces del \emph{Brick P EV3}. Los bloques de flujo definen cual será el flujo del programa, cuyo inicio se define con el \emph{bloque de inicio}. Los bloques de sensores, entre otras funciones, controlan los sensores táctiles y de color conectados al \emph{brick}. Los sensores de operación de datos permiten definir variables, realizar cálculos matemáticos u obtener valores aleatorios. Por último, los bloques avanzados permiten administrar ficheros o establecer conexiones Bluetooth.
 
-Por otra parte, existen muchos lenguajes de terceros o adaptaciones que pueden importarse al \emph{Brick} de Lego Mindstorm y, de esta manera, controlar el robot con un lenguaje ciertamente más avanzado. Algunos de estos son Python, Lua, .Net, C/C++, Java o Robomind, del cual hablaremos en la sección \ref{sec:robomind}.
+Por otra parte, existen muchas aplicaciones de terceros que permiten utilizar lenguajes de programación de alto nivel para controlar el robot, como pueden ser Python, Lua, .Net, C/C++, Java o Robomind (del cual hablaremos en la sección \ref{sec:robomind}).
 
 
 \subsection{Moway}
 \label{sec:moway}
 
 
-El robot Moway\cite{moway} es un robot desarrollado como herramienta educativa. Moway se compone por un conjunto de sensores y actuadores que le permiten recibir información del mundo y reaccionar a la misma según la las instrucciones que se le hayan proporcionado.
+El robot Moway\cite{moway} es un robot desarrollado como herramienta educativa. Moway se compone por un conjunto de sensores y actuadores que le permiten recibir información del mundo real y reaccionar a la misma según las instrucciones que se le hayan proporcionado.
 
 Los actuadores de los que dispone el robot Moway son: dos ruedas, luces LEDs y un altavoz. Por otra parte, los sensores de los que dispone Moway son: 
 \begin{itemize}
@@ -514,9 +512,9 @@ Los actuadores de los que dispone el robot Moway son: dos ruedas, luces LEDs y u
 	\item Un acelerómetro que detecta inclinación y fuerzas.
 \end{itemize}
 
-La aplicación gratuita, Moway World permite crear diagramas de flujo para programar el comportamiento del robot, con funciones para activar controlar los diferentes actuadores del robot Moway y recibir información de los sensores. También, permite programar su funcionamiento en Scratch, el cual se ha analizado en la sección \ref{sec:scratch}. 
+La aplicación gratuita Moway World permite crear diagramas de flujo para programar el comportamiento del robot, con funciones para activar y controlar los diferentes actuadores del robot Moway en función de la información obtenida por los sensores. También permite programar su funcionamiento con Scratch, el cual se ha analizado en la sección \ref{sec:scratch}. 
 
-Moway tiene varios módulos que pueden ser añadidos para ampliar su funcionalidad o manejo, como son: módulos de radiofrecuencia, placas Raspberry Pi, tarjetas wifi e incluso una cámara para captar imágenes en tiempo real. También ofrecen una alternativa a Moway de código abierto, Mowayduino. Mowayduino está basado en Arduino y tiene toda la funcionalidad y potencia que ofrece Arduino. Los kits que se disponen inicialmente para Mowaiduino son los mismos que para Moway.
+Moway tiene varios módulos que pueden ser añadidos para ampliar su funcionalidad o manejo, como son: módulos de radiofrecuencia, placas Raspberry Pi, tarjetas wifi o una cámara para captar imágenes en tiempo real. También se ofrece una alternativa a Moway de código abierto, llamada Mowayduino. Mowayduino está basado en Arduino y tiene toda la funcionalidad y potencia que ofrece Arduino. Los kits que se disponen inicialmente para Mowaiduino son los mismos que para Moway. Para programar un Mowayduino se proporciona el entorno de programación oficial de Arduino.
 
 {\color{blue}
 En general, Moway ofrece un robot para programarlo y configurarlo junto a un entorno de programación, como puede ser Scratch. Es un buen inicio en la robótica pero su software privativo deja las opciones de ampliación y de creación de complementos y terceras partes un poco limitadas.
@@ -533,7 +531,7 @@ En general, Moway ofrece un robot para programarlo y configurarlo junto a un ent
 \label{sec:robomind}
 
 
-Robomind Academy\cite{robomind-web} es una plataforma que busca potenciar y extender el \emph{Computational Thinking} entre alumnos de Educación Primaria y Secundaria. Sus creadores opinan\footnote{En la sección \emph{Visión} de la página web oficial de Robomind Academy se puede ver cuales son los principios y metas detrás del proyecto (\url{https://www.robomindacademy.com/go/robomind/about#vision}).} que la informática debería tener el mismo estatus que las matemáticas o la lengua, algo esencial en la formación del estudiante. Argumentan que, a través del \emph{Computational Thinking} se podrán realizar avances en el cuidado de la salud o la industria, algo totalmente necesario en pleno Siglo XXI. 
+Robomind Academy\cite{robomind-web} es una plataforma que busca potenciar y extender el \emph{Computational Thinking} entre alumnos de Educación Primaria y Secundaria. Sus creadores opinan\footnote{En la sección \emph{Visión} de la página web oficial de Robomind Academy se puede ver cuales son los principios y metas detrás del proyecto (\url{https://www.robomindacademy.com/go/robomind/about#vision}). Consultado el 2 de febrero de 2016.} que la informática debería tener el mismo estatus que las matemáticas o la lengua, algo esencial en la formación del estudiante. Argumentan que, a través del \emph{Computational Thinking} se podrán realizar avances en el cuidado de la salud o la industria, algo totalmente necesario en pleno Siglo XXI. 
 
 
 Actualmente, Robomind ofrece un entorno de programación multiplataforma: aplicación de escritorio, entorno web y aplicación para Tablet. En la figura \ref{fig:robomind-entorno} podemos ver un ejemplo de como es el entorno de programación que propone Robomind.
@@ -557,9 +555,9 @@ Por último, tanto la interfaz, la página web, la aplicación o los tutoriales 
 
 \subsubsection{Programa con Robomind Academy}
 
-En Robomind se plantea la programación de un robot simulado que está dentro de un escenario. Este escenario es una cuadrícula por la que se mueve el robot. El robot puede interactuar con el escenario pintando o limpiando el suelo, recogiendo o dejando objetos, o comprobando el estado de su casillas adyacentes (si hay algún objeto o está pintado).
+En Robomind se plantea la programación de un robot simulado que está dentro de un escenario. Este escenario es una cuadrícula por la que se mueve el robot. El robot puede interactuar con el escenario pintando o limpiando el suelo, recogiendo y dejando objetos, o comprobando el estado de su casillas adyacentes (si hay algún objeto, obstaculo o está pintado).
 
-A continuación vamos a enumerar las funciones básicas para controlar el movimiento o acciones del robot de Robomind\footnote{Para una información más detallada se puede consultar \url{https://www.robomindacademy.com/go/robomind/help}.}. Adicionalmente, Robomind también permite usar definición de variables y nuevas funciones, estructuras de control y bucles.
+A continuación vamos a enumerar las funciones básicas para controlar el movimiento o acciones del robot de Robomind\footnote{Para una información más detallada se puede consultar \url{https://www.robomindacademy.com/go/robomind/help}.}. Adicionalmente, Robomind también permite usar definición de variables y nuevas funciones, estructuras de control y bucles, tipícos de cualquier lenguaje de programación moderno.
 
 \begin{itemize}
 \item Moviendo el robot:
@@ -611,18 +609,18 @@ Aunque es una práctica bastante utilizada, usar un robot no es la única altern
 \label{sec:CodeHS}
 
 
-Otro proyecto muy extendido que promueve el \emph{Computational Thinking} es CodeHS. CodeHS es una plataforma online con la que personas de todas las edades pueden aprender informática. Tienen cursos de introducción a la informática, programar con diferentes lenguajes, bases de datos, e incluso una versión modernizada de Karel the robot\cite{pattis1981karel}, el cual se analizará en más detalle en la siguiente sección.
+Otro proyecto muy extendido que promueve el \emph{Computational Thinking} es CodeHS. CodeHS es una plataforma online con la que personas de todas las edades pueden aprender informática. Tienen cursos de introducción a la informática, programar con diferentes lenguajes, bases de datos, e incluso una versión modernizada de Karel the robot\cite{pattis1981karel} (El robot Karel), el cual se analizará en más detalle en la siguiente sección.
 
-CodeHS ofrece muchas opciones de aprendizaje independiente, incluso ofreciendo tutores personalizados para resolver dudas de los usuarios, está especialmente dirigido a enseñar programación en colegios e institutos. Ofrece planes de pago para implantar la plataforma en las clases y herramientas de seguimiento y evaluación para que el profesor pueda supervisar y dirigir el rendimiento de los alumnos. Aunque los planes gratuitos ofrecen un reducido número de cursos, permite al usuario programar libremente en cualquiera de los lenguajes que tiene disponible. 
+CodeHS ofrece muchas opciones de aprendizaje independiente, incluso con tutores personalizados para resolver dudas de los usuarios, está especialmente dirigido a enseñar programación en colegios e institutos. Ofrece planes de pago para implantar la plataforma en las clases o herramientas de seguimiento y evaluación para que el profesor pueda supervisar el rendimiento de los alumnos. Aunque los planes gratuitos ofrecen un reducido número de cursos, permite al usuario programar libremente en una gran selección de lenguajes que tiene disponible, como pueden ser Javascript, Ruby o Python.
 
 
 \subsubsection{Karel the Robot}
 \label{sec:karel-the-robot}
 
 
-Karel\footnote{El nombre de Karel the robot es nombrado en honor a Karel Čapek, un escritor checo que introdujo el término \emph{robot} por primera vez.} es un lenguaje de programación creado por R. Pattis en \emph{Karel the robot: A gentle introduction to the Art of Programming} en 1981\cite{pattis1981karel}. En el, Pattis enseña conceptos de programación siguiendo una metodogía \emph{Early bird}\cite{early-bird}, la cual consiste en enseñar primero los conceptos más importantes.
+Karel\footnote{El nombre de Karel the robot es nombrado en honor a Karel Čapek, un escritor checo que introdujo el término \emph{robot} por primera vez.} es un lenguaje de programación creado por R. Pattis en su libro \emph{Karel the robot: A gentle introduction to the Art of Programming} (El robot Karel: Una introducción gentil al arte de programar) en 1981\cite{pattis1981karel}. En el, Pattis enseña conceptos de programación siguiendo una metodogía \emph{Early bird}\cite{early-bird}, que consiste en enseñar primero los conceptos más importantes.
 
-Karel se mueve en un escenario discreto con celdas por las que se puede mover y con el que puede interactuar. Las órdenes básicas del robot Karel son: \texttt{move} para avanzar una posición en la dirección que está mirando; \texttt{turnLeft} para girar 90º en sentido contrario a las agujas del reloj; \texttt{putBeeper} y \texttt{pickBeeper} para depositar o recoger, respectivamente, un \emph{beeper} (localizador) en la posición en la que se encuentra Karel; y por último, \texttt{turnoff}, para apagarse a si mismo y finalizar la ejecución del programa.
+Karel se mueve en un escenario discreto con celdas y con el que se puede interactuar. Las órdenes básicas del robot Karel son: \texttt{move} para avanzar una posición en la dirección que está mirando; \texttt{turnLeft} para girar 90º en sentido contrario a las agujas del reloj; \texttt{putBeeper} y \texttt{pickBeeper} para depositar o recoger, respectivamente, un \emph{beeper} (localizador) en la posición en la que se encuentra Karel; y por último, \texttt{turnoff}, para apagarse a si mismo y finalizar la ejecución del programa.
 
 Adicionalmente, Karel también proporciona instrucciones para comprobar si hay obstáculos o un \emph{beeper} en la posición que se encuentra. Toda esta funcionalidad viene acompañada de instrucciones de control, bucles y operaciones aritméticas.
 
@@ -630,9 +628,9 @@ Adicionalmente, Karel también proporciona instrucciones para comprobar si hay o
 \subsection{Code.org}
 \label{sec:Code.org}
 
-Code.org\cite{code-org} es una plataforma on-line cuya meta es enseñar a programar \emph{Computational Thinking} entre niños de todas las edades. Actualmente cuenta con más de 8 millones de usuarios y está respaldada por una gran comunidad de educadores y gente influyente de todos los sectores, no solamente el de la informática.
+Code.org\cite{code-org} es una plataforma on-line cuyo objetivo es extender el \emph{Computational Thinking} entre niños de todas las edades. Actualmente cuenta con más de 8 millones de usuarios y está respaldada por una gran comunidad de educadores y gente influyente de todos los sectores, no solamente el de la informática.
 
-Uno de los proyectos con más repercusión es el \emph{Hour of Code}\cite{hour-of-code} (Hora del Código) que intenta que todos los niños dediquen una hora diaria a programar. Esta idea está apoyada por muchas empresas que ponen sus recursos y productos a disponibilidad de Code.org para que puedan hacer uso de esto. Uno de ellos, por ejemplo, es Robomind, que como ya hemos comentado en la sección \ref{sec:robomind}, tiene una modalidad gratuita con pruebas para aprender a utilizar el simulador de robot de Robomind. Marcas como Disney, Flappy bird o Rovio\footnote{Rovio es una empresa conocida por desarrollar los populares juegos de smartphone, Angry Birds.} ponen a disposición de Code.org y los niños el uso de sus personajes, intentando captar la atención de los niños y haciendo la activdad altamente atractiva. También, personas influyentes {\color{red}del panorama internacional} se ofrecen a explicar conceptos de informática durante la Hora del Código a los niños. 
+Uno de los proyectos con más repercusión es el \emph{Hour of Code}\cite{hour-of-code} (Hora del Código) que intenta que todos los niños dediquen una hora diaria a programar. Esta idea está apoyada por muchas empresas que ponen sus recursos y productos a disponibilidad de Code.org para que puedan hacer uso de estos. Uno de ellos, por ejemplo, es Robomind, que como ya se comentó en la sección \ref{sec:robomind}, tiene una modalidad gratuita con pruebas para aprender a utilizar el simulador del robot Robomind. Marcas como Disney, Flappy bird o Rovio\footnote{Rovio es una empresa conocida por desarrollar los populares juegos de smartphone Angry Birds.} ponen a disposición de Code.org y los niños el uso de sus personajes, intentando captar la atención de los niños y haciendo la actividad altamente atractiva. También, personas influyentes {\color{red}del panorama internacional} se ofrecen a explicar conceptos de programación durante la Hora del Código a los niños. 
 
 Para programar, en Code.org se utiliza una versión simplificada de Scratch (el cual se ha estudiado en la sección \ref{sec:scratch}) con la misma mecánica. Code.org propone muchos cursos independientes y decenas de horas de aprendizaje, con actividades nuevas para captar la atención del niño. 
 
