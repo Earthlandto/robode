@@ -2,7 +2,8 @@
 % 1: Introducción
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \pagenumbering{arabic} % para empezar la numeración con números
-\chapter{Introducción}\label{introduccion}
+\chapter{Introducción}
+\label{introduccion}
 
 
 %Desde el comienzo de su historia, la informática ha intervenido en cada aspecto científico y social existente. La dependencia de la sociedad en una ciencia tan reciente resalta la importancia de que sea algo comprensible y comprendido para la sociedad misma.
@@ -49,19 +50,18 @@ A nivel europeo, la \Gls{com-euro}\cite{ec-code-week} ha promovido durante el a�
 \section{Electrónica y robótica como herramienta de aprendizaje}
 \label{sec:electronica-robotica}
 
+{\color{blue{
+Es bastante común que la introducción en las aulas del \emph{Computational Thinking} sea a través de la robótica y electrónica}. Muchos proyectos de robótica animan al alumno a formarse en dos grandes materias: electrónica y programación. Cuando un estudiante tiene que hacer que un robot se mueva, tendrá que aprender a programar su comportamiento, pero también deberá conocer y en algunos casos incluso crear nuevas piezas para su correcto funcionamiento y personalización.
 
-Una forma bastante extendida para enseñar a programar en las aulas es con robótica y electrónica. Muchos proyectos de robótica animan al alumno a formarse en dos grandes materias: electrónica y programación. Cuando un estudiante tiene que hacer que un robot se mueva, tendrá que aprender a programar su comportamiento, pero también deberá conocer y en algunos casos incluso crear nuevas piezas para su correcto funcionamiento y personalización.
+Existen proyectos como Arduino\cite{arduino} y Raspberry Pi\cite{raspberry-pi} que proporcionan los elementos y materiales básicos para poder crear nuevos proyectos. Arduino es una placa base con un microprocesador que es capaz de analizar entradas de información (un sensor, un botón o incluso una notificación de Twitter (\url{www.twitter.com}) y convertirlo en una respuesta como el activar un robot o encender un led. Todo esto acompañado de un software facil de programar. El proyecto es completamente \emph{\gls{open-source}}. Raspberry Pi es un ordenador del tamaño de una tarjeta de crédito. {\color{blue}También se provee por defecto un Sistema Operativo \emph{Open Source} pero el sistema está completamente abierto a cambios y mejoras por parte de la comunidad. 
+}
 
-Existen proyectos como Arduino\cite{arduino} y Raspberry Pi\cite{raspberry-pi} que proporciona los elementos y materiales básicos para poder crear nuevos proyectos. Arduino es una placa base con un microprocesador que es capaz de analizar entradas de información (un sensor, un botón o incluso una notificación de Twitter (\url{www.twitter.com}) y convertirlo en una respuesta como el activar un robot o encender un led. Todo esto acompañado de un software facil de programar. El proyecto es completamente \emph{\gls{open-source}}. Raspberry Pi es un ordenador del tamaño de una tarjeta de crédito. También se provee un Sistema Operativo \emph{Open Source} (aunque este puede ser cambiado). Su funcionamiento es sencillo de programar en Scratch\cite{scratch} o Python\cite{python,lutz2013learning}.
-
-En concreto, una de las meta originales de Raspberry Pi es conseguir que los niños aprendan a programar y conozcan como funciona realmente un ordenador. Tanto Arduino como Raspberry Pi pueden adquirirse a un bajo precio, lo cual facilita la adquisición de los mismos por parte de instituciones de enseñanza o particulares. Esto ha facilitado la alta inclusión de estos dos proyectos en las aulas.
+En concreto, una de las meta originales de Raspberry Pi es conseguir que los niños aprendan a programar y conozcan como funciona realmente un ordenador. {\color{blue}Tanto Arduino como Raspberry Pi pueden adquirirse a un bajo precio, lo que facilita que las instituciones de enseñanza introduzcan estas tecnologías en las aulas como parte de su currículo.
+}
 
 Otro proyecto que también está muy extendido en las aulas es Lego Mindstorm EV3 y NXT\cite{lego-mindstorm}. Dos kits de iniciación a la robótica con Lego. Permite al estudiante crear con piezas de lego un robot y programar su comportamiento. Los robots suelen tomar forma de brazo robótico o de vehículo capaz de seguir lineas pintadas en el suelo haciendo uso de sensores. Toda este material robótico viene acompañado de un software para programar el comportamiento de los diferentes componentes del robot y un estilo de programación con bloques\cite{lego-mindstorm-programar}, similar al usado en Scratch.
 
-{\color{blue}
 En la sección \ref{sec:aprendiendo-robots} se hablará más del uso de la electrónica y la robótica como elementos de enseñanza.
-}
-
 
 
 
@@ -72,7 +72,7 @@ En la sección \ref{sec:aprendiendo-robots} se hablará más del uso de la elect
 
 Para ello, en un mismo sitio web, se integra (a) un conjunto de tutoriales de programación; (b) una herramienta que permite programar (figura \ref{fig:descubre-crea}) y realizar ejercicios o retos propuestos y (c) una pequeña red social que permite publicar y compartir con el resto de compañeros los programas realizados. Adiccionalmente se puede consultar las estadísticas de aprendizaje y tiempo dedicado en la plataforma, tanto por el alumno como por el profesor. De esta manera se permite que los profesores puedan utilizar Descubre en las aulas y realizar un seguimiento de la dedicación y progreso del alumno.
 
-En cuanto a la herramienta para desarrollar programas, el lenguaje utilizado es \gls{ijava}\cite{sanchez2009ijava} y ha sido desarrollado por J. A. Sánchez Laguna. iJava es {\color{red}un lenguaje imperativo basado en \Gls{java} que comparte su sintaxis. Ofrece un enfoque procedural para programar con la Orientación a Objetos como algo opcional.}
+En cuanto a la herramienta para desarrollar programas, el lenguaje utilizado es \gls{ijava}\cite{sanchez2009ijava} y ha sido desarrollado por J. A. Sánchez Laguna. iJava es un lenguaje imperativo basado en \Gls{java} que comparte su sintaxis. Ofrece un enfoque procedural para programar con la Orientación a Objetos como algo opcional.
 % aunque se han eliminado todos los componentes del lenguaje Orientado a Objetos. 
  También incorpora un conjunto reducido de funciones de librería clasificadas en los tres grupos siguientes: númericas, entrad/salida y gráficas\footnote{Si el lector está interesado en aprender más sobre este lenguaje, puede consultar \cite{sanchez2009ijava} o \cite{descubre-lenguaje}.}.
 
@@ -170,18 +170,18 @@ La sintaxis de iJava se parece a muchos de los lenguajes modernos y más utiliza
 
 
 
-\section{Motivación y enfoque del proyecto}
+\section{Motivación y enfoque de este proyecto}
 \label{sec:motivacion}
 
 Las nuevas tecnologías están haciendo que cada vez más gente de todas las edades se interese por la informática, y más concretamente por la programación. Poco a poco la informática deja de ser cosa de un grupo selecto de gente que entiende su funcionamiento. Como bien argumenta J. Wing en \cite{wing2006computational} y \cite{Wing3717}, se debería extender el pensamiento computacional en ambientes pre-universitarios y exponer a los alumnos al pensamiento y a los métodos computacionales.
 
 Como ya hemos comentado anteriormente, existe un movimiento que pretende introducir la informática y la programación en las aulas puesto que se han demostrado los beneficios de enseñar a programar en una edad escolar temprana.
 
-Es en este momento cuando se hace imprescindible tomar decisiones acertadas. Aprender a programar en edades pre-universitaria debe ser algo accesible a cualquier estudiante, independiente de su condición o los antecedentes del mismo. Igualmente, los conceptos de programación deben ser presentados de manera, incremental, empezando por los más simples para luego ampliar a conceptos más complejos, como defiende L. Fernandez y otros en \cite{fernandez2002analisis}.
+Es en este momento cuando se hace imprescindible tomar decisiones acertadas. Aprender a programar en edades pre-universitaria debe ser algo accesible a cualquier estudiante, independiente de su condición o los antecedentes del mismo. Igualmente, los conceptos de programación deben ser presentados de manera incremental, empezando por los más simples para luego ampliar a conceptos más complejos, como defiende L. Fernandez y otros en \cite{fernandez2002analisis}.
 
-El proyecto se enfocará desarrollando un simulador de robot de dos ruedas en el que los alumnos puedan programar su comportamiento. Se ofrece una librería de funciones para simplificar la interacción con el mismo y conseguir cierta funcionalidad extra que simplifique la tarea de comprensión y usabilidad del simulador.
+Este proyecto se enfocará desarrollando un simulador de robot de dos ruedas en el que los alumnos puedan programar su comportamiento. Se ofrece una librería de funciones para simplificar la interacción con el mismo y conseguir cierta funcionalidad extra que simplifique la tarea de comprensión y usabilidad del simulador.
 
-El simulador se integrará en la plataforma Descubre la pogramación, mencionada en la sección \ref{sec:descubre}. Esto supone que el estudiante programará el comportamiento del robot simulado en iJava. El robot estará dentro de un circuito con distintos elementos con los que podrá interactuar. Asimismo, el robot dispondrá de una serie de sensores para poder recibir información del mundo que le rodea.
+El simulador se integrará en la plataforma Descubre la programación, mencionada en la sección \ref{sec:descubre}. Esto supone que el estudiante programará el comportamiento del robot simulado en iJava. El robot estará dentro de un circuito con distintos elementos con los que podrá interactuar. Asimismo, el robot dispondrá de una serie de sensores para poder recibir información del mundo que le rodea.
 
 Al incluir el simulador como un módulo de Descubre, se pretende reforzar el esfuerzo por parte de sus creadores de hacer llegar la programación al mayor numero de estudiantes pre-universitarios posible, proponiendo una alternativa atractiva y que añade una componente más de entretenimiento a la actividad de programar. Por otra parte, permite que el alumno asimile conceptos de robótica de manera transparente. Al utilizar una plataforma web y de libre acceso, también se busca eliminar la barrera que puede suponer realizar una inversión en material electrónico como puede ocurrir con Arduino, Raspberry Pi o Lego.
 
@@ -210,7 +210,7 @@ La mayoría de estos proyectos promueven una enseñanza independiente y autodida
 En las siguientes secciones se hablará del \Gls{logo}\cite{logo} y el proyecto \Gls{turtle}\cite{logo-turtle}, un proyecto que lleva décadas activo, con la principal finalidad de enseñar programación y matemáticas a niños. También se estudiarán los diferentes proyectos que existen actualmente y que promueven una enseñanza a niños en entornos web. Por último, se analizarán los diferentes proyectos que enseñan programación jugando y que utilizan robots y/o simuladores.
 
 
-\section{Lenguaje Logo y robot Turtle}
+\section{Logo y el robot Turtle}
 \label{sec:Logo}
 
 El lenguaje Logo, desarrollado a finales de la decada de los 60 y basado en \Gls{lisp}, fue diseñado como una herramienta de aprendizaje a niños. Todas sus características -interactividad, modularidad, extensibilidad, flexibilidad en los tipos de datos- persiguen esta meta. El lenguaje Logo fue uno de los primeros proyectos en emprender la difícil tarea de enseñar a programar a niños de Primaria.
@@ -232,117 +232,9 @@ Poco más tarde, Moss \cite{moss1985creating} obtiene evidencias de la relación
 \end{table}
 
 
-\subsection{Uso del lenguaje Logo}
-\label{sec:logo-lenguaje}
-
-A continuación se realizará una revisión de las principales características del lenguaje Logo para tener una visión general de su funcionamiento y sintaxis. Este análisis se basa en el trabajo de \cite[p.274-305]{feurzeig1969programming}. Si el lector quiere ampliar información sobre el lenguaje Logo, puede consultar \cite{friendly2014advanced} o \cite{logo-resources}.
-
-
-\subsubsection*{\emph{words}, \emph{sentences}, operaciones y comandos}
-
-Hay dos tipos de datos principales: \emph{words} y \emph{sentences}. \emph{words} está formado por 0 o más caracteres, sin espacios. Algunos ejemplos son: "SUN", "CAT", "5",  "97&!", "" (cadena vacía). El tipo de datos \emph{sentences} se forma por un conjunto de \emph{words} separado por espacios, como por ejemplo "HELLO WORLD" o "3 + 2 = 5". Un numero es una \emph{word} pero conpuesto únicamente por dígitos.
-
-En el lenguaje Logo existen operadores para tratar con los tipos \emph{words} y \emph{sentences}. También se pueden encontrar una serie de operaciones predefinidas en el lenguaje que ofrecen funcionalidad extra, como controlar la entrada/salida de un programa, saber la fecha o manejo de \emph{words} y \emph{sentences}. En la tabla \ref{tab:logo-operaciones} vemos un resumen de las operaciones elementales del lenguaje Logo, el número de argumentos que requiere y un ejemplo de entrada con su salida correspondiente.
-
-
-\begin{table}[!ht]
-	\begin{centering}
-		\begin{tabular}{c|c|c|c}
-\emph{Operador} & N. argumentos & Entrada & Salida\\
-\hline
-\texttt{FIRST}	& 1 & "CAT" & "C"\\
-- & - & "CAT AND DOG" & "CAT"\\
-\texttt{LAST} & 1 & "CAT" & "T"\\
-- & - & "CAT AND DOG" & "DOG"\\
-\texttt{BUTFIRST} &1& "CAT" & "AT"\\
-- & - & "CAT AND DOG" & "AND DOG"\\
-\texttt{BUTLAST} & 1 & "CAT" & "CA"\\
-- & - & "CAT AND DOG" & "CAT AND"\\
-\texttt{COUNT} & 1 & "CAT" & "3"\\
-- & - & "CAT DOG" & "2"\\
-\texttt{WORD}& 2 & "CAT" "DOG" & "CATDOG"\\
-\texttt{SENTENCE}& 2 & "CAT" "DOG" & "CAT DOG"\\
-- & - & "CAT " "DOG" & "CAT DOG"\\
-\texttt{PRINT} & 1 & "CAT" & CAT\\
-\texttt{TIME} & 0 & - & "5:42 PM"\\
-\texttt{DATE} & 0 & - & "1/31/2016"\\
-\texttt{SUM} & 2 & "-5" "5" & "0"\\
-\texttt{DIFFERENCE} & 2 & "5" "5"& "0"\\
-\texttt{MAXIMUN} & 2 & "-5" "5" & "5"\\
-\texttt{MINIMUN} & 2 & "3" "5"& "3"\\
-\end{tabular}
-	\caption{Resumen de las operaciones elementales que ofrece el lenguaje Logo.}
-		\label{tab:logo-operaciones}
-	\end{centering}
-\end{table}
-
-Si se intentara ejecutar la operación \texttt{WORD} "CAT " "DOG", se produciría un error al ser uno de sus parámetros un tipo \emph{sentence} y no \emph{word} (el primer argumento contiene un espacio). De igual manera, las operaciones \texttt{SUM}, \texttt{DIFFERENCE}, \texttt{MAXIMUN} y \texttt{MINIMUN} deben recibir argumentos numéricos o se produciría un error.
-
-También es posible encadenar varios operadores. De esta manera, la cadena de instrucciones \texttt{FIRST OF BUTFIRST OF "CAT"} devolverá el \emph{word} "A".
-
-
-\subsubsection*{Variables, comentarios y definiendo nuevas operaciones}
-\label{sec:logo-variables}
-
-Para definir variables basta con usar el operador \texttt{MAKE} seguido de \emph{"}(comilla doble), el nombre de la variable y el valor que se quiere asignar. Para hacer uso de la variable, utilizamos el símbolo \emph{:}(dos puntos) seguido del nombre de la variable. Para hacer comentarios se utiliza el símbolo \emph{;}(punto y coma). Podemos ver un ejemplo en el código \ref{code:logo-nueva-variable}.
-
-\begin{lstlisting}[language={Logo}, label={code:logo-nueva-variable}, caption={Ejemplo de definición de nuevas variables en el lenguaje Logo.}]
-MAKE "ADULTO 18
-
-PRINT :ADULTO  ; salida -> 18
-\end{lstlisting}
-
-También es posible crear nuevas operaciones. Se utilizan las palabras reservadas \texttt{TO} y \texttt{END} para marcar el inicio y final de la definición, respectivamente. A continuación es necesario declarar el nombre con el que se definirá la operación que se está creando (el cual no puede coincidir con ninguna palabra reservada en el lenguaje, como es común en la mayoría de lenguajes de programación). Es opcional la declaración de parámetros que se pasaran a la operación. Por último, y antes de la palabra \texttt{END}, se incluirán las instrucciones que realizará la operación.
-
-En el código \ref{code:logo-nuevas-operaciones} se puede ver un ejemplo de definición de nuevas operación.
-
-\begin{lstlisting}[language={Logo}, label={code:logo-nuevas-operaciones}, caption={Definición de nuevas operaciones en el lenguaje Logo.}]
-TO SALUDAR
-	MAKE "SALUDO "HELLO WORLD"
-	OUTPUT SALUDO
-END
-
-PRINT SALUDAR  ;  salida -> HELLO WORLD
-
-TO PENULTIMO :algo
-	OUTPUT FIRST OF  LAST :algo
-END
-
-PRINT PENULTIMO OF "CAT BIRD DOG" ;  salida  ->  BIRD
-
-PRINT PENULTIMO OF "CAT" ;  salida  ->  A
-\end{lstlisting}
-
-
-\subsubsection*{Operadores aritméticos}
-
-A parte de los operadores \texttt{SUM} y \texttt{DIFFERENCE} antes mencionados, Logo también otorga la posibilidad de utilizar los operadores aritméticos clásicos. La única condición es que la salida generada debe ser tratada (\texttt{PRINT}) o almacenada (en variables, como veremos en la sección siguiente) de alguna manera. Los operadores más importantes son \texttt{+}, \texttt{-}, \texttt{*}, \texttt{/} y \texttt{sqrt}.
-
-\begin{lstlisting}[language={Logo}, label={code:logo-operadores-aritmeticos}, caption=Ejemplo de uso de operadores aritméticos en el lenguaje Logo.]
-PRINT 2*3  ;  salida  -> 6
-
-MAKE "RUEDAS  4
-
-PRINT :RUEDAS ;  salida  -> 4
-\end{lstlisting}
-
-
-\subsubsection*{Operadores \texttt{IF} y \texttt{REPEAT}}
-
-Se pueden crear operaciones condicionales utilizando la palabra clave \texttt{IF} seguida de una sentencia y una lista de órdenes a ejecutar si se evalúa dicha sentencia a verdadero. La lista de órdenes se declara entre corchetes (\texttt{[]}) y para la sentencia se pueden utilizar los operadores infijos \texttt{=}, \texttt{>} y \texttt{<}. En el código \ref{code:logo-if} podemos ver un ejemplo de uso.
-
-\begin{lstlisting}[language=Logo,label={code:logo-if}, caption=Condiciones en el lenguaje logo con el operador \texttt{IF}.]
-MAKE "PETALOS 4
-
-IF :PETALOS > 3 [ PRINT "TREBOL DE LA BUENA SUERTE" ]
-\end{lstlisting}
-
-Para repetir una serie de instrucciones, Logo ofrece el comando \texttt{REPEAT}, que va seguido de un valor numérico y la lista de instrucciones. El valor numérico (que puede ser parametrizado) es el número de veces que se repetirá en bucle las instrucciones. En el código \ref{code:logo-repeat} vemos un ejemplo de este comando.
-
-
-\begin{lstlisting}[language=Logo,label={code:logo-repeat}, caption=Condiciones en el lenguaje logo con el operador \texttt{IF}.]
-REPEAT 10 [ PRINT "HOLA MUNDO" ]
-\end{lstlisting}
+{\color{blue}
+En el Apéndice \ref{anexo:logo-lenguaje} se hace un breve estudio del lenguaje Logo y las principales características que posee el lenguaje.
+}
 
 
 \subsection{Turtle de Logo}
@@ -476,9 +368,14 @@ Como conclusión, Scratch es un entorno completo y {\color{red}autosuficiente} c
 
 En secciones anteriores se han analizado dos formas de aprender a programar. Logo, junto a Turtle, fue el primer lenguaje de programación que se creó para enseñar a programar a niños de Primaria y Secundaria. Por otra parte, Scratch es actualmente un gran promotor del \emph{Computational Thinking} con una cantidad considerable de usuarios activos.
 
-Pero también existen otras enfoques para aprender programación y \emph{Computational Thinking} y la robótica es una muy popular. Se estudiarán diferentes alternativas desde Lego Mindstorm, que es principalmente hardware, a Robomind, un simulador de un robot.
+{\color{blue}
+No obstante, existen otros enfoques para enseñar programación y desarrollar el pensamiento computacional. La robótica es una opción muy extendida y que atrae a partes iguales a alumnos y docentes. En las siguientes secciones se estudiaran diferentes alternativas que utilizar tanto simuladores como robots reales.
+}
 
-A continuación, se detallarán diferentes proyectos que permiten aprender a programar con robots o simuladores de estos.
+
+%Pero también existen otras enfoques para aprender programación {\color{blue}y desarrollar el pensamiento computacional y usar la robótica es una forma muy popular}. Se estudiarán diferentes alternativas desde Lego Mindstorm, que es principalmente hardware, a Robomind, un simulador de un robot.
+
+%A continuación, se detallarán diferentes proyectos que permiten aprender a programar con robots o simuladores de estos.
 
 
 \subsection{Lego Mindstorm NXT/EV3}
@@ -493,7 +390,7 @@ En concreto, EV3 viene acompañado del \emph{Lego Mindstorm EV3 Home Edition Sof
 Los bloques se dividen en: bloques de acción, bloques de flujo, bloques de sensores, bloques de operación de datos y bloques avanzados. 
 Los bloques de acción permiten controlar la rotación de los motores y las luces del \emph{Brick P EV3}. Los bloques de flujo definen cual será el flujo del programa, cuyo inicio se define con el \emph{bloque de inicio}. Los bloques de sensores, entre otras funciones, controlan los sensores táctiles y de color conectados al \emph{brick}. Los sensores de operación de datos permiten definir variables, realizar cálculos matemáticos u obtener valores aleatorios. Por último, los bloques avanzados permiten administrar ficheros o establecer conexiones Bluetooth.
 
-Por otra parte, existen muchas aplicaciones de terceros que permiten utilizar lenguajes de programación de alto nivel para controlar el robot, como pueden ser Python, Lua, .Net, C/C++, Java o Robomind (del cual hablaremos en la sección \ref{sec:robomind}).
+Por otra parte, existen muchas {\color{red}aplicaciones de terceros no oficiales} que permiten utilizar lenguajes de programación de alto nivel para controlar el robot, como pueden ser Python, Lua, .Net, C/C++, Java o Robomind (del cual hablaremos en la sección \ref{sec:robomind}).
 
 
 \subsection{Moway}
@@ -521,15 +418,27 @@ Un uso común de Moway es como robot \emph{sigue-lineas}. Los sensores de linea 
 }
 
 
+
 {\color{red}
 En general, Moway ofrece un robot para programarlo y configurarlo junto a un entorno de programación, como puede ser Scratch. Es un buen inicio en la robótica pero su software privativo deja las opciones de ampliación y de creación de complementos y terceras partes un poco limitadas.
+
+Moway, junto a Robomind, será uno de los pilares en los que se basará el simulador que se desarrollará, en especial la parte que tiene que ver con las características del simulador.
+
 }
 
-{\color{red}
-¿Lo de Moway muy escueto?
 
-¿¿Necesarias fotos en Lego y Moway??
-}
+
+\subsection{Karel the Robot}
+\label{sec:karel-the-robot}
+
+
+Karel\footnote{El nombre de Karel the robot es nombrado en honor a Karel Čapek, un escritor checo que introdujo el término \emph{robot} por primera vez.} es un lenguaje de programación creado por R. Pattis en su libro \emph{Karel the robot: A gentle introduction to the Art of Programming} (El robot Karel: Una introducción gentil al arte de programar) en 1981\cite{pattis1981karel}. En el, Pattis enseña conceptos de programación siguiendo una metodogía \emph{Early bird}\cite{early-bird}, que consiste en enseñar primero los conceptos más importantes.
+
+Karel se mueve en un escenario discreto con celdas y con el que se puede interactuar. Las órdenes básicas del robot Karel son: \texttt{move} para avanzar una posición en la dirección que está mirando; \texttt{turnLeft} para girar 90º en sentido contrario a las agujas del reloj; \texttt{putBeeper} y \texttt{pickBeeper} para depositar o recoger, respectivamente, un \emph{beeper} (localizador) en la posición en la que se encuentra Karel; y por último, \texttt{turnoff}, para apagarse a si mismo y finalizar la ejecución del programa.
+
+Adicionalmente, Karel también proporciona instrucciones para comprobar si hay obstáculos o un \emph{beeper} en la posición que se encuentra. Toda esta funcionalidad viene acompañada de instrucciones de control, bucles y operaciones aritméticas.
+
+
 
 
 \subsection{Robomind}
@@ -592,18 +501,12 @@ A continuación vamos a enumerar las funciones básicas para controlar el movimi
 \end{itemize}
 
 
-{\color{green}
-Conclusión mía:
-Obviamente, Robomind es una versión modernizada de Karel the robot + Turtle de Logo: Escenario discreto, interactua con el mismo mirando o cogiendo objetos y pinta el suelo por donde pasa.
+{\color{blue}
+Como se puede ver, Robomind está formado por elementos de \emph{Karel the robot}, como lo es el movimiento en un escenario discreto y la forma de interactuar con el entorno, y por \emph{Turtle} de Logo y su capacidad de dejar un rastro por donde va pasando.
 }
 
-%\subsection{{\color{green}Otras alternativas}}
-%\label{sec:robot-alternativas}
 
-
-
-
-\section{Aprendiendo Online}
+\section{Aprendizaje Online}
 \label{sec:aprendiendo-online}
 
 En la sección anterior se han analizado diferentes alternativas para aprender a través de la robótica. Algunas de estas alternativas tienen una gran componente Hardware, como puede ser Lego Minstorm. Por otra parte, Robomind, como simulador de un robot, permite al alumno iniciarse en la robótica sin necesidad  de un robot. 
@@ -614,33 +517,18 @@ Aunque es una práctica bastante utilizada, usar un robot no es la única altern
 \label{sec:CodeHS}
 
 
-Otro proyecto muy extendido que promueve el \emph{Computational Thinking} es CodeHS. CodeHS es una plataforma online con la que personas de todas las edades pueden aprender informática. Tienen cursos de introducción a la informática, programar con diferentes lenguajes, bases de datos, e incluso una versión modernizada de Karel the robot\cite{pattis1981karel} (El robot Karel), el cual se analizará en más detalle en la siguiente sección.
+Otro proyecto muy extendido que promueve el \emph{Computational Thinking} es CodeHS. CodeHS es una plataforma online con la que personas de todas las edades pueden aprender informática. Tienen cursos de introducción a la informática, programar con diferentes lenguajes, bases de datos, e incluso una versión modernizada de Karel the robot, el cual se ha analizado en la sección \ref{sec:karel-the-robot}.
 
 CodeHS ofrece muchas opciones de aprendizaje independiente, incluso con tutores personalizados para resolver dudas de los usuarios, está especialmente dirigido a enseñar programación en colegios e institutos. Ofrece planes de pago para implantar la plataforma en las clases o herramientas de seguimiento y evaluación para que el profesor pueda supervisar el rendimiento de los alumnos. Aunque los planes gratuitos ofrecen un reducido número de cursos, permite al usuario programar libremente en una gran selección de lenguajes que tiene disponible, como pueden ser Javascript, Ruby o Python.
-
-
-\subsubsection{Karel the Robot}
-\label{sec:karel-the-robot}
-
-
-Karel\footnote{El nombre de Karel the robot es nombrado en honor a Karel Čapek, un escritor checo que introdujo el término \emph{robot} por primera vez.} es un lenguaje de programación creado por R. Pattis en su libro \emph{Karel the robot: A gentle introduction to the Art of Programming} (El robot Karel: Una introducción gentil al arte de programar) en 1981\cite{pattis1981karel}. En el, Pattis enseña conceptos de programación siguiendo una metodogía \emph{Early bird}\cite{early-bird}, que consiste en enseñar primero los conceptos más importantes.
-
-Karel se mueve en un escenario discreto con celdas y con el que se puede interactuar. Las órdenes básicas del robot Karel son: \texttt{move} para avanzar una posición en la dirección que está mirando; \texttt{turnLeft} para girar 90º en sentido contrario a las agujas del reloj; \texttt{putBeeper} y \texttt{pickBeeper} para depositar o recoger, respectivamente, un \emph{beeper} (localizador) en la posición en la que se encuentra Karel; y por último, \texttt{turnoff}, para apagarse a si mismo y finalizar la ejecución del programa.
-
-Adicionalmente, Karel también proporciona instrucciones para comprobar si hay obstáculos o un \emph{beeper} en la posición que se encuentra. Toda esta funcionalidad viene acompañada de instrucciones de control, bucles y operaciones aritméticas.
 
 
 \subsection{Code.org}
 \label{sec:Code.org}
 
-Code.org\cite{code-org} es una plataforma on-line cuyo objetivo es extender el \emph{Computational Thinking} entre niños de todas las edades. Actualmente cuenta con más de 8 millones de usuarios y está respaldada por una gran comunidad de educadores y gente influyente de todos los sectores, no solamente el de la informática.
+Code.org\cite{code-org} es una plataforma on-line cuyo objetivo es extender el desarrollo de las habilidades relacionadas con el pensamiento computacional entre niños de todas las edades. Actualmente cuenta con más de 8 millones de usuarios y está respaldada por una gran comunidad de educadores y gente influyente de todos los sectores, no solamente el de la informática.
 
-Uno de los proyectos con más repercusión es el \emph{Hour of Code}\cite{hour-of-code} (Hora del Código) que intenta que todos los niños dediquen una hora diaria a programar. Esta idea está apoyada por muchas empresas que ponen sus recursos y productos a disponibilidad de Code.org para que puedan hacer uso de estos. Uno de ellos, por ejemplo, es Robomind, que como ya se comentó en la sección \ref{sec:robomind}, tiene una modalidad gratuita con pruebas para aprender a utilizar el simulador del robot Robomind. Marcas como Disney, Flappy bird o Rovio\footnote{Rovio es una empresa conocida por desarrollar los populares juegos de smartphone Angry Birds.} ponen a disposición de Code.org y los niños el uso de sus personajes, intentando captar la atención de los niños y haciendo la actividad altamente atractiva. También, personas influyentes {\color{red}del panorama internacional} se ofrecen a explicar conceptos de programación durante la Hora del Código a los niños. 
+Uno de los proyectos con más repercusión es el \emph{Hour of Code}\cite{hour-of-code} (Hora del Código) que intenta que todos los niños dediquen una hora diaria a programar. Esta idea está apoyada por muchas empresas que ponen sus recursos y productos a disponibilidad de Code.org para que puedan hacer uso de estos. Uno de ellos, por ejemplo, es Robomind, que como ya se comentó en la sección \ref{sec:robomind}, tiene una modalidad gratuita con pruebas para aprender a utilizar el simulador del robot Robomind. Marcas como Disney, Flappy bird o Rovio\footnote{Rovio es una empresa conocida por desarrollar los populares juegos de smartphone Angry Birds.} ponen a disposición de Code.org y los niños el uso de sus personajes, intentando captar la atención de los niños y haciendo la actividad altamente atractiva. También, personas influyentes del panorama internacional se ofrecen a explicar conceptos de programación durante la Hora del Código a los niños. 
 
 Para programar, en Code.org se utiliza una versión simplificada de Scratch (el cual se ha estudiado en la sección \ref{sec:scratch}) con la misma mecánica. Code.org propone muchos cursos independientes y decenas de horas de aprendizaje, con actividades nuevas para captar la atención del niño. 
 
-
-
-%\subsection{{\color{green}Otras alternativas}}
-%\label{sec:online-alternativas}
 
