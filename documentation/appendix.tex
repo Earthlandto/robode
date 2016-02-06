@@ -160,3 +160,144 @@ REPEAT 10 [ PRINT "HOLA MUNDO" ]
 
 
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Apendice C
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\chapter{Programando el movimiento de Turtle en el lenguaje Logo}
+\label{anexo:logo-turtle-lenguaje}
+
+A parte de toda la funcionalidad que ofrece Logo como lenguaje, Turtle aporta una librería para poder controlar a nuestra criatura que pintará la pantalla. Ésta suele ser tradicionalmente representada con una tortuga o una flecha. Principalmente, se podrá controlar el movimiento de nuestra tortuga y el giro de ésta. También se le podrá ordenar que deje de pintar para permitir movimiento por la pantalla sin rastro. La mayoría de estos comandos pueden abreviarse para simplificar la escritura.
+
+El resumen sobre la funcionalidad de Turtle que se muestra en las secciones siguientes es un compendio formado a partir de \cite{logo-turtle-lenguaje}, \cite{turtle-academy} y \cite{abelson1980disessa}.
+
+
+\section*{Moviendo a Turtle}
+
+La tortuga siempre se moverá según el eje de coordenadas. El punto (0, 0) se encontrará normalmente en medio de la pantalla y es la posición inicial de la tortuga. El eje de coordenadas \texttt{y} crece positivamente en dirección Norte (hacia arriba).
+
+Los comandos \texttt{forward} y \texttt{barckward} mueven la tortuga hacia delante y atrás, respectivamente, según la posición en la que esté mirando. Los comandos \texttt{setx}, \texttt{sety} y \texttt{setxy} se utilizan para establecer la tortuga en el eje de coordenadas \texttt{x}, \texttt{y} o en ambos, respectivamente.
+
+La orden \texttt{home} devuelve a la tortuga a la posición (0, 0) de la pantalla. Adicionalmente, se puede ocultar o mostrar (si ya está oculta) la tortuga con las órdenes \texttt{showturtle} y \texttt{hideturtle}.
+
+Otra función muy importante de Turtle, es la opción de girarla. Podemos decidir el giro con las instrucciones \texttt{right} y \texttt{left} y el ángulo de giro (el valor tiene que ser un número positivo). Un ángulo de giro de 380º sería equivalente a girar la tortuga 20º.
+
+
+\section*{Pintando con Turtle}
+
+Hasta ahora, cualquier desplazamiento de Turtle por la pantalla dejaba una linea o rastro. Con la orden \texttt{penup}, la tortuga dejará de pintar hasta que se ejecute la orden \texttt{pendown}. También se puede ejecutar la instrucción \texttt{clearscreen} que limpiará la pantalla de cualquier rastro dejado por la tortuga.
+
+La instrucción \texttt{label} acepta un argumento y mostrará por pantalla su contenido. El argumento debe ser de tipo \emph{word} o \emph{sentence}\footnote{Para más información sobre los tipos de datos \emph{words} y \emph{sentences}, como se formar y cual es su funcionamiento, se puede consultar la sección \ref{sec:logo-variables}.}.
+
+\section*{Resumen de instrucciones de Turtle}
+
+
+En la tabla \ref{tab:turtle-lenguaje} se muestra un resumen de las órdenes que puede recibir Turtle.
+
+\begin{table}[!ht]
+	\begin{centering}
+		\begin{tabular}{c|c|l}
+Orden & Abreviatura & Argumentos\\
+\hline
+forward & fd & Longitud del movimiento\\
+backward & bk & Longitud del movimiento\\
+home & - & -\\
+setx & - & Nueva coodenada X\\
+sety & - & Nueva coodenada Y\\
+setxy & - & Nueva coodenada X e Y\\
+right & rt & Ángulo en el sentido de las agujas del reloj\\
+left & lt & Ángulo en el sentido contrario a las agujas del reloj\\
+penup & pu & -\\
+pendown & pd & -\\
+clearscreen & cs & -\\
+label & - & Una \emph{word} o \emph{sentence}\\
+showturtle & st & -\\
+hideturtle & ht & -\\
+\end{tabular}
+	\caption{Resumen de órdenes en Turtle usando el lenguaje Logo.}
+		\label{tab:turtle-lenguaje}
+	\end{centering}
+\end{table}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Apendice D
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Programación con Robomind Academy}
+\label{anexo:programacion-robomind}
+
+En Robomind se plantea la programación de un robot simulado que está dentro de un escenario. Este escenario es una cuadrícula por la que se mueve el robot. El robot puede interactuar con el escenario pintando o limpiando el suelo, recogiendo y dejando objetos, o comprobando el estado de su casillas adyacentes (si hay algún objeto, obstaculo o está pintado).
+
+A continuación vamos a enumerar las funciones básicas para controlar el movimiento o acciones del robot de Robomind\footnote{Para una información más detallada se puede consultar \url{https://www.robomindacademy.com/go/robomind/help}.}. Adicionalmente, Robomind también permite usar definición de variables y nuevas funciones, estructuras de control y bucles, tipícos de cualquier lenguaje de programación moderno.
+
+\begin{itemize}
+\item Moviendo el robot:
+	\begin{itemize}
+	\item  \texttt{forward} o \texttt{forward(n)}: Mover el robot 1 o \texttt{n} pasos hacía el frente.
+	\item \texttt{backward} o \texttt{backward(n)}: Mover el robot 1 o \texttt{n} pasos hacía el atrás.
+	\item \texttt{left} o \texttt{left(n)}: Girar el robot 90º hacía la derecha, 1 o \texttt{n} veces.
+	\item \texttt{right} o \texttt{right(n)}: Girar el robot 90º hacía la derecha, 1 o \texttt{n} veces.
+	\end{itemize}
+\item Interactuando con el escenario:
+	\begin{itemize}
+		\item \texttt{pickUp}: Coger el objeto que se encuentra delante del robot.
+		\item \texttt{putDown}: Dejar el objeto justo delante del robot.
+		\item  \texttt{eatUp}: \emph{Comer} el objeto en frente del robot. Implica destruirlo y no poder volver a interactuar con él.
+		\item \texttt{paintWhite}:  Pinta un rastro blanco por las cuadrículas por las que se desplazará el robot.
+		\item \texttt{paintBlack}: Pinta un rastro negro por las cuadrículas por las que se desplazará el robot.
+		\item  \texttt{stopPainting}:Deja de pintar.
+	\end{itemize}	
+\item El robot puede comprobar, de manera independiente, el estado de las casillas adyacentes a sí mismo, excepto hacia atrás. Para representar cada dirección (\emph{front}, \emph{left} y \emph{right}), se usará una \emph{X}. Todas estas instrucciones devuelven un valor \emph{booleano}.
+	\begin{itemize}
+		\item \texttt{XIsClear}:  Comprueba si la casilla \emph{X} está vacía.
+		\item \texttt{XIsObstacle}:  Comprueba si en la casilla \emph{X} hay un obstáculo, generalmente una pared o un objeto que impide su avance.
+		\item \texttt{XIsBeacon}:  Comprueba si en la casilla \emph{X} hay un objeto (con el que podrá interactuar).
+		\item \texttt{XIsWhite}:  Comprueba si la casilla \emph{X} está pintada de blanco.
+		\item \texttt{XIsBlack}:  Comprueba si la casilla \emph{X} está pintada de negro.
+	\end{itemize}	
+\end{itemize}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Apendice D
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Programando con Scratch}
+\label{anexo:scratch-funcionamiento}
+
+En general, la plataforma Scratch tiene tres grandes componentes:
+\begin{enumerate}
+	\item \textbf{Un editor visual} que presenta un conjunto de bloques cuya forma ofrece pistas de como pueden encajar los diferentes bloques.
+	\item \textbf{Un interprete} que puede traducir y ejecutar el flujo de código que forman los diferentes bloques unidos entre sí.
+	\item \textbf{Una interfaz} que muestra la salida (tanto de texto como gráfica) del código ejecutado por el interprete. También permite controlar la entrada del ratón, de las teclas, etc.
+\end{enumerate}
+
+En la figura \ref{fig:scratch-example} podemos ver un ejemplo del editor y la interfaz así como de un programa de ejemplo que mueve al personaje seleccionado por la pantalla, cambiado su color.
+
+\begin{figure}[!ht]
+	\begin{centering}
+		\includegraphics[width=1\textwidth]{images/scratch-example.png}
+			\caption{Ejemplo de la interfaz de usuario y el editor de código que ofrece Scratch.}
+				\label{fig:scratch-example}
+	\end{centering}
+\end{figure}
+
+Cuando se programa con Scratch, la meta final es la de animar uno o más elementos por la pantalla. Estos elementos son los \emph{sprites} (imágenes), los cuales vienen predefinidos en una galería o pueden ser proporcionados por el propio usuario. Por tanto, los bloques irán enfocados a otorgar movimiento al \emph{sprite} en cuestión.
+
+En cuanto a los tipos de bloques, actualmente están divididos en 11 categorías distintas:
+\begin{itemize}
+	\item \textbf{Movimiento:} Incluye funciones para mover, girar o establecer la posición y ángulo de giro del \emph{sprite}.
+	\item \textbf{Apariencia:} Esta sección contiene funciones tanto para modificar la apariencia del \emph{sprite} como para mostrar mensajes en la pantalla a modo de diálogos de los \emph{sprites}.
+	\item \textbf{Sonido:} Funciones para controlar el sonido de la aplicación que se está creando con Scratch. Permite reproducir sonidos precargados en la plataforma o subidos por el programador, diferentes instrumentos o establecer el volumen de la aplicación.
+	\item \textbf{Pincel:} Permite pintar el escenario de forma similar a Turlte, dejando un rastro por donde se va desplazando (para más información sobre Turtle, consultar sección \ref{sec:turtle}).
+	\item \textbf{Datos:} Creación de variables y listas y modificación de los valores de las mismas.
+	\item \textbf{Eventos:} Bloques para detectar y reaccionar a ciertos eventos como el click de un ratón sobre un \emph{sprite} o el teclado.
+	\item \textbf{Control:} Incluye bloques con las condiciones y bucles clásicos.
+	\item \textbf{Percepción:} Esta sección contiene funciones para detectar eventos de teclado y ratón. También provee funciones para establecer lapsos de tiempo. 
+	\item \textbf{Operadores:} Bloques para utilizar operadores matemáticos.
+	\item \textbf{Bloques propios} y \textbf{Extensiones}: Scratch permite crear tus propios bloques y usar extensiones integradas con la aplicación como \emph{Lego WeDo} y \emph{PicoBoard}. 
+\end{itemize}
+

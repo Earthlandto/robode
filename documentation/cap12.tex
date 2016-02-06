@@ -53,11 +53,11 @@ A nivel europeo, la \Gls{com-euro}\cite{ec-code-week} ha promovido durante el a�
 {\color{blue{
 Es bastante común que la introducción en las aulas del \emph{Computational Thinking} sea a través de la robótica y electrónica}. Muchos proyectos de robótica animan al alumno a formarse en dos grandes materias: electrónica y programación. Cuando un estudiante tiene que hacer que un robot se mueva, tendrá que aprender a programar su comportamiento, pero también deberá conocer y en algunos casos incluso crear nuevas piezas para su correcto funcionamiento y personalización.
 
-Existen proyectos como Arduino\cite{arduino} y Raspberry Pi\cite{raspberry-pi} que proporcionan los elementos y materiales básicos para poder crear nuevos proyectos. Arduino es una placa base con un microprocesador que es capaz de analizar entradas de información (un sensor, un botón o incluso una notificación de Twitter (\url{www.twitter.com}) y convertirlo en una respuesta como el activar un robot o encender un led. Todo esto acompañado de un software facil de programar. El proyecto es completamente \emph{\gls{open-source}}. Raspberry Pi es un ordenador del tamaño de una tarjeta de crédito. {\color{blue}También se provee por defecto un Sistema Operativo \emph{Open Source} pero el sistema está completamente abierto a cambios y mejoras por parte de la comunidad. 
-}
+Existen proyectos como Arduino\cite{arduino} y Raspberry Pi\cite{raspberry-pi} que proporcionan los elementos y materiales básicos para poder crear nuevos proyectos. Arduino es una placa base con un microprocesador que es capaz de analizar entradas de información (un sensor, un botón o incluso una notificación de Twitter (\url{www.twitter.com}) y convertirlo en una respuesta como el activar un robot o encender un led. Todo esto acompañado de un software facil de programar. El proyecto es completamente \emph{\gls{open-source}}. Raspberry Pi es un ordenador del tamaño de una tarjeta de crédito. También se provee por defecto un Sistema Operativo \emph{Open Source} pero el sistema está completamente abierto a cambios y mejoras por parte de la comunidad. 
 
-En concreto, una de las meta originales de Raspberry Pi es conseguir que los niños aprendan a programar y conozcan como funciona realmente un ordenador. {\color{blue}Tanto Arduino como Raspberry Pi pueden adquirirse a un bajo precio, lo que facilita que las instituciones de enseñanza introduzcan estas tecnologías en las aulas como parte de su currículo.
-}
+
+En concreto, una de las meta originales de Raspberry Pi es conseguir que los niños aprendan a programar y conozcan como funciona realmente un ordenador. Tanto Arduino como Raspberry Pi pueden adquirirse a un bajo precio, lo que facilita que las instituciones de enseñanza introduzcan estas tecnologías en las aulas como parte de su currículo.
+
 
 Otro proyecto que también está muy extendido en las aulas es Lego Mindstorm EV3 y NXT\cite{lego-mindstorm}. Dos kits de iniciación a la robótica con Lego. Permite al estudiante crear con piezas de lego un robot y programar su comportamiento. Los robots suelen tomar forma de brazo robótico o de vehículo capaz de seguir lineas pintadas en el suelo haciendo uso de sensores. Toda este material robótico viene acompañado de un software para programar el comportamiento de los diferentes componentes del robot y un estilo de programación con bloques\cite{lego-mindstorm-programar}, similar al usado en Scratch.
 
@@ -232,9 +232,8 @@ Poco más tarde, Moss \cite{moss1985creating} obtiene evidencias de la relación
 \end{table}
 
 
-{\color{blue}
 En el Apéndice \ref{anexo:logo-lenguaje} se hace un breve estudio del lenguaje Logo y las principales características que posee el lenguaje.
-}
+
 
 
 \subsection{Turtle de Logo}
@@ -244,61 +243,7 @@ El proyecto \emph{Turtle} es el proyecto más popular del lenguaje Logo. Nació 
 
 A pesar de su larga vida, el proyecto Turtle ha sabido mantenerse vivo y se ha modernizado en proyectos más recientes como Turtle Academy \cite{turtle-academy} o Curly Logo \cite{curly-logo}.
 
-
-\subsubsection{Programando el movimiento de Turtle en el lenguaje Logo}
-\label{sec:logo-turtle-lenguaje}
-
-A parte de toda la funcionalidad que ofrece Logo como lenguaje, Turtle aporta una librería para poder controlar a nuestra criatura que pintará la pantalla. Ésta suele ser tradicionalmente representada con una tortuga o una flecha. Principalmente, se podrá controlar el movimiento de nuestra tortuga y el giro de ésta. También se le podrá ordenar que deje de pintar para permitir movimiento por la pantalla sin rastro. La mayoría de estos comandos pueden abreviarse para simplificar la escritura.
-
-El resumen sobre la funcionalidad de Turtle que se muestra en las secciones siguientes es un compendio formado a partir de \cite{logo-turtle-lenguaje}, \cite{turtle-academy} y \cite{abelson1980disessa}.
-
-
-\subsubsection*{Moviendo a Turtle}
-
-La tortuga siempre se moverá según el eje de coordenadas. El punto (0, 0) se encontrará normalmente en medio de la pantalla y es la posición inicial de la tortuga. El eje de coordenadas \texttt{y} crece positivamente en dirección Norte (hacia arriba).
-
-Los comandos \texttt{forward} y \texttt{barckward} mueven la tortuga hacia delante y atrás, respectivamente, según la posición en la que esté mirando. Los comandos \texttt{setx}, \texttt{sety} y \texttt{setxy} se utilizan para establecer la tortuga en el eje de coordenadas \texttt{x}, \texttt{y} o en ambos, respectivamente.
-
-La orden \texttt{home} devuelve a la tortuga a la posición (0, 0) de la pantalla. Adicionalmente, se puede ocultar o mostrar (si ya está oculta) la tortuga con las órdenes \texttt{showturtle} y \texttt{hideturtle}.
-
-Otra función muy importante de Turtle, es la opción de girarla. Podemos decidir el giro con las instrucciones \texttt{right} y \texttt{left} y el ángulo de giro (el valor tiene que ser un número positivo). Un ángulo de giro de 380º sería equivalente a girar la tortuga 20º.
-
-
-\subsubsection*{Pintando con Turtle}
-
-Hasta ahora, cualquier desplazamiento de Turtle por la pantalla dejaba una linea o rastro. Con la orden \texttt{penup}, la tortuga dejará de pintar hasta que se ejecute la orden \texttt{pendown}. También se puede ejecutar la instrucción \texttt{clearscreen} que limpiará la pantalla de cualquier rastro dejado por la tortuga.
-
-La instrucción \texttt{label} acepta un argumento y mostrará por pantalla su contenido. El argumento debe ser de tipo \emph{word} o \emph{sentence}\footnote{Para más información sobre los tipos de datos \emph{words} y \emph{sentences}, como se formar y cual es su funcionamiento, se puede consultar la sección \ref{sec:logo-variables}.}.
-
-\subsubsection*{Resumen de instrucciones de Turtle}
-
-
-En la tabla \ref{tab:turtle-lenguaje} se muestra un resumen de las órdenes que puede recibir Turtle.
-
-\begin{table}[!ht]
-	\begin{centering}
-		\begin{tabular}{c|c|l}
-Orden & Abreviatura & Argumentos\\
-\hline
-forward & fd & Longitud del movimiento\\
-backward & bk & Longitud del movimiento\\
-home & - & -\\
-setx & - & Nueva coodenada X\\
-sety & - & Nueva coodenada Y\\
-setxy & - & Nueva coodenada X e Y\\
-right & rt & Ángulo en el sentido de las agujas del reloj\\
-left & lt & Ángulo en el sentido contrario a las agujas del reloj\\
-penup & pu & -\\
-pendown & pd & -\\
-clearscreen & cs & -\\
-label & - & Una \emph{word} o \emph{sentence}\\
-showturtle & st & -\\
-hideturtle & ht & -\\
-\end{tabular}
-	\caption{Resumen de órdenes en Turtle usando el lenguaje Logo.}
-		\label{tab:turtle-lenguaje}
-	\end{centering}
-\end{table}
+En el apéndice {anexo:logo-turtle-lenguaje} se puede consultar información sobre cual es el funcionamiento de Turtle.
 
 
 \section{Scratch}
@@ -318,47 +263,11 @@ Scratch está orientado a enseñar a programar a niños de Primaria y Secundaria
 \end{figure}
 
 
-\subsection{Funcionamiento de Scratch}
-\label{sec:scratch-funcionamiento}
+La idea básica para programar con Scratch es la de crear el flujo del programa mediante la unión de bloques que representan las diferentes funcionalidades del lenguaje (crear o modificar variables, bucles, condiciones, funciones de librería, etc). Existen dependencias entre la forma de los bloques, de esta manera, solo unos bloques \emph{encajaran} con los que tengan una forma compatible. De esta manera, se consigue una relación visual y directa por parte del programador entre los bloques que puedes unir, y sobretodo, de lo que no puedes hacer.
 
-La idea básica para programar con Scratch es la de crear el flujo del programa mediante la unión de bloques que representan las diferentes funcionalidades del lenguaje (crear o modificar variables, bucles, condiciones, funciones de librería, etc). Existen dependencias entre la forma de los bloques, de esta manera, solo unos bloques \emph{encajaran} con los que tengan una forma compatible. De esta manera, se consigue una relación visual y directa por parte del programador entre los bloques que puedes unir, y sobretodo, {\color{red}de lo que no puedes hacer.}
+Para saber más sobre el funcionamiento de Scratch y como se programa con esta herramienta se puede consultar el apéndice \ref{anexo:scratch-funcionamiento}.
 
-
-En general, la plataforma Scratch tiene tres grandes componentes:
-\begin{enumerate}
-	\item \textbf{Un editor visual} que presenta un conjunto de bloques cuya forma ofrece pistas de como pueden encajar los diferentes bloques.
-	\item \textbf{Un interprete} que puede traducir y ejecutar el flujo de código que forman los diferentes bloques unidos entre sí.
-	\item \textbf{Una interfaz} que muestra la salida (tanto de texto como gráfica) del código ejecutado por el interprete. También permite controlar la entrada del ratón, de las teclas, etc.
-\end{enumerate}
-
-En la figura \ref{fig:scratch-example} podemos ver un ejemplo del editor y la interfaz así como de un programa de ejemplo que mueve al personaje seleccionado por la pantalla, cambiado su color.
-
-\begin{figure}[!ht]
-	\begin{centering}
-		\includegraphics[width=1\textwidth]{images/scratch-example.png}
-			\caption{Ejemplo de la interfaz de usuario y el editor de código que ofrece Scratch.}
-				\label{fig:scratch-example}
-	\end{centering}
-\end{figure}
-
-Cuando se programa con Scratch, la meta final es la de animar uno o más elementos por la pantalla. Estos elementos son los \emph{sprites} (imágenes), los cuales vienen predefinidos en una galería o pueden ser proporcionados por el propio usuario. Por tanto, los bloques irán enfocados a otorgar movimiento al \emph{sprite} en cuestión.
-
-En cuanto a los tipos de bloques, actualmente están divididos en 11 categorías distintas:
-\begin{itemize}
-	\item \textbf{Movimiento:} Incluye funciones para mover, girar o establecer la posición y ángulo de giro del \emph{sprite}.
-	\item \textbf{Apariencia:} Esta sección contiene funciones tanto para modificar la apariencia del \emph{sprite} como para mostrar mensajes en la pantalla a modo de diálogos de los \emph{sprites}.
-	\item \textbf{Sonido:} Funciones para controlar el sonido de la aplicación que se está creando con Scratch. Permite reproducir sonidos precargados en la plataforma o subidos por el programador, diferentes instrumentos o establecer el volumen de la aplicación.
-	\item \textbf{Pincel:} Permite pintar el escenario de forma similar a Turlte, dejando un rastro por donde se va desplazando (para más información sobre Turtle, consultar sección \ref{sec:turtle}).
-	\item \textbf{Datos:} Creación de variables y listas y modificación de los valores de las mismas.
-	\item \textbf{Eventos:} Bloques para detectar y reaccionar a ciertos eventos como el click de un ratón sobre un \emph{sprite} o el teclado.
-	\item \textbf{Control:} Incluye bloques con las condiciones y bucles clásicos.
-	\item \textbf{Percepción:} Esta sección contiene funciones para detectar eventos de teclado y ratón. También provee funciones para establecer lapsos de tiempo. 
-	\item \textbf{Operadores:} Bloques para utilizar operadores matemáticos.
-	\item \textbf{Bloques propios} y \textbf{Extensiones}: Scratch permite crear tus propios bloques y usar extensiones integradas con la aplicación como \emph{Lego WeDo} y \emph{PicoBoard}. 
-\end{itemize}
-
-
-Como conclusión, Scratch es un entorno completo y {\color{red}autosuficiente} con una gran y compleja funcionalidad que permite a niños y mayores realizar aplicaciones sin necesidad de saber programar pero aprendiendo conceptos básicos como la repetición, el control de instrucciones y como llevar a cabo una animación. 
+Como conclusión, Scratch es un entorno completo y autosuficiente con una gran y compleja funcionalidad que permite a niños y mayores realizar aplicaciones sin necesidad de saber programar pero aprendiendo conceptos básicos como la repetición, el control de instrucciones y como llevar a cabo una animación. 
 
 
 
@@ -368,14 +277,7 @@ Como conclusión, Scratch es un entorno completo y {\color{red}autosuficiente} c
 
 En secciones anteriores se han analizado dos formas de aprender a programar. Logo, junto a Turtle, fue el primer lenguaje de programación que se creó para enseñar a programar a niños de Primaria y Secundaria. Por otra parte, Scratch es actualmente un gran promotor del \emph{Computational Thinking} con una cantidad considerable de usuarios activos.
 
-{\color{blue}
 No obstante, existen otros enfoques para enseñar programación y desarrollar el pensamiento computacional. La robótica es una opción muy extendida y que atrae a partes iguales a alumnos y docentes. En las siguientes secciones se estudiaran diferentes alternativas que utilizar tanto simuladores como robots reales.
-}
-
-
-%Pero también existen otras enfoques para aprender programación {\color{blue}y desarrollar el pensamiento computacional y usar la robótica es una forma muy popular}. Se estudiarán diferentes alternativas desde Lego Mindstorm, que es principalmente hardware, a Robomind, un simulador de un robot.
-
-%A continuación, se detallarán diferentes proyectos que permiten aprender a programar con robots o simuladores de estos.
 
 
 \subsection{Lego Mindstorm NXT/EV3}
@@ -390,7 +292,7 @@ En concreto, EV3 viene acompañado del \emph{Lego Mindstorm EV3 Home Edition Sof
 Los bloques se dividen en: bloques de acción, bloques de flujo, bloques de sensores, bloques de operación de datos y bloques avanzados. 
 Los bloques de acción permiten controlar la rotación de los motores y las luces del \emph{Brick P EV3}. Los bloques de flujo definen cual será el flujo del programa, cuyo inicio se define con el \emph{bloque de inicio}. Los bloques de sensores, entre otras funciones, controlan los sensores táctiles y de color conectados al \emph{brick}. Los sensores de operación de datos permiten definir variables, realizar cálculos matemáticos u obtener valores aleatorios. Por último, los bloques avanzados permiten administrar ficheros o establecer conexiones Bluetooth.
 
-Por otra parte, existen muchas {\color{red}aplicaciones de terceros no oficiales} que permiten utilizar lenguajes de programación de alto nivel para controlar el robot, como pueden ser Python, Lua, .Net, C/C++, Java o Robomind (del cual hablaremos en la sección \ref{sec:robomind}).
+Por otra parte, existen muchas aplicaciones de terceros no oficiales que permiten utilizar lenguajes de programación de alto nivel para controlar el robot, como pueden ser Python, Lua, .Net, C/C++, Java o Robomind (del cual hablaremos en la sección \ref{sec:robomind}).
 
 
 \subsection{Moway}
@@ -414,18 +316,13 @@ La aplicación gratuita Moway World permite crear diagramas de flujo para progra
 
 Moway tiene varios módulos que pueden ser añadidos para ampliar su funcionalidad o manejo, como son: módulos de radiofrecuencia, placas Raspberry Pi, tarjetas wifi o una cámara para captar imágenes en tiempo real. También se ofrece una alternativa a Moway de código abierto, llamada Mowayduino. Mowayduino está basado en Arduino y tiene toda la funcionalidad y potencia que ofrece Arduino. Los kits que se disponen inicialmente para Mowaiduino son los mismos que para Moway. Para programar un Mowayduino se proporciona el entorno de programación oficial de Arduino.
 
-{\color{blue}
+
 Un uso común de Moway es como robot \emph{sigue-lineas}. Los sensores de linea de los que dispone proporcionan información para poder conocer el estado del robot con respecto a una linea, es decir, si está sobre una linea o no. Al tener 2 sensores, puede conocer si se está saliendo de la linea (quizás porque esta realiza una curva) y en la dirección en la que esto ocurre. Por ejemplo, si el sensor derecho deja de detectar la linea, quiere decir que: o la linea está realizando una curva hacia la izquierda o que el robot Moway está moviéndose hacia la derecha fuera de la linea (lo cual ocurre en ambos casos, si se analiza la situación desde el punto de vista de la linea). Por tanto, al estar saliéndose de la linea por la derecha, el robot Moway tendrá que moverse hacia la izquierda para mantenerse dentro del la misma. 
-}
 
 
-
-{\color{red}
 En general, Moway ofrece un robot para programarlo y configurarlo junto a un entorno de programación, como puede ser Scratch. Es un buen inicio en la robótica pero su software privativo deja las opciones de ampliación y de creación de complementos y terceras partes un poco limitadas.
 
 Moway, junto a Robomind, será uno de los pilares en los que se basará el simulador que se desarrollará, en especial la parte que tiene que ver con las características del simulador.
-
-}
 
 
 
@@ -463,46 +360,14 @@ Actualmente, Robomind ofrece un entorno de programación multiplataforma: aplica
 
 El proyecto en sí está orientado a que profesores y alumnos trabajen conjuntamente en desarrollar las actividades, permitiendo que los profesores puedan realizar un seguimiento del avance y trabajo de los alumnos a cargo. También permite que los alumnos puedan registrarse independientemente y aprender a su propio ritmo. Los cursos están divididos entre alumnos de Educación Primaria y Secundaria. 
 
-Las soluciones antes mencionadas son {\color{red}de pago}. Dependiendo de si eres profesor o estudiante y de si quieres (o no) utilizar la versión de escritorio, se ofrecen distintos planes de compra. 
+Las soluciones antes mencionadas son de pago. Dependiendo de si eres profesor o estudiante y de si quieres (o no) utilizar la versión de escritorio, se ofrecen distintos planes de compra. 
 A parte, Robomind ofrece planes gratuitos para alumnos con características más limitadas o una cantidad inferior de cursos. Adicionalmente, Robomind participa en el proyecto \emph{La Hora del Código}\cite{hour-of-code}, ofreciendo una introducción a Robomind completamente gratuita. Una de sus funciones más interesantes es la de poder traducir el código escrito en Robomind para poder utilizarlo con tu propio Lego Mindstorm\footnote{Ya se ha hablado de Lego Mindstorm en la sección \ref{sec:lego-nxt-ec3}. Para más información sobre Lego Mindstorm NXT se puede acudir a \cite{lego-mindstorm}.}.
 
 Por último, tanto la interfaz, la página web, la aplicación o los tutoriales está completamente en inglés, ofreciendo una cierta barrera de entrada a todo aquel interesado que no sea angloparlante. 
 
-\subsubsection{Programa con Robomind Academy}
-
-En Robomind se plantea la programación de un robot simulado que está dentro de un escenario. Este escenario es una cuadrícula por la que se mueve el robot. El robot puede interactuar con el escenario pintando o limpiando el suelo, recogiendo y dejando objetos, o comprobando el estado de su casillas adyacentes (si hay algún objeto, obstaculo o está pintado).
-
-A continuación vamos a enumerar las funciones básicas para controlar el movimiento o acciones del robot de Robomind\footnote{Para una información más detallada se puede consultar \url{https://www.robomindacademy.com/go/robomind/help}.}. Adicionalmente, Robomind también permite usar definición de variables y nuevas funciones, estructuras de control y bucles, tipícos de cualquier lenguaje de programación moderno.
-
-\begin{itemize}
-\item Moviendo el robot:
-	\begin{itemize}
-	\item  \texttt{forward} o \texttt{forward(n)}: Mover el robot 1 o \texttt{n} pasos hacía el frente.
-	\item \texttt{backward} o \texttt{backward(n)}: Mover el robot 1 o \texttt{n} pasos hacía el atrás.
-	\item \texttt{left} o \texttt{left(n)}: Girar el robot 90º hacía la derecha, 1 o \texttt{n} veces.
-	\item \texttt{right} o \texttt{right(n)}: Girar el robot 90º hacía la derecha, 1 o \texttt{n} veces.
-	\end{itemize}
-\item Interactuando con el escenario:
-	\begin{itemize}
-		\item \texttt{pickUp}: Coger el objeto que se encuentra delante del robot.
-		\item \texttt{putDown}: Dejar el objeto justo delante del robot.
-		\item  \texttt{eatUp}: \emph{Comer} el objeto en frente del robot. Implica destruirlo y no poder volver a interactuar con él.
-		\item \texttt{paintWhite}:  Pinta un rastro blanco por las cuadrículas por las que se desplazará el robot.
-		\item \texttt{paintBlack}: Pinta un rastro negro por las cuadrículas por las que se desplazará el robot.
-		\item  \texttt{stopPainting}:Deja de pintar.
-	\end{itemize}	
-\item El robot puede comprobar, de manera independiente, el estado de las casillas adyacentes a sí mismo, excepto hacia atrás. Para representar cada dirección (\emph{front}, \emph{left} y \emph{right}), se usará una \emph{X}. Todas estas instrucciones devuelven un valor \emph{booleano}.
-	\begin{itemize}
-		\item \texttt{XIsClear}:  Comprueba si la casilla \emph{X} está vacía.
-		\item \texttt{XIsObstacle}:  Comprueba si en la casilla \emph{X} hay un obstáculo, generalmente una pared o un objeto que impide su avance.
-		\item \texttt{XIsBeacon}:  Comprueba si en la casilla \emph{X} hay un objeto (con el que podrá interactuar).
-		\item \texttt{XIsWhite}:  Comprueba si la casilla \emph{X} está pintada de blanco.
-		\item \texttt{XIsBlack}:  Comprueba si la casilla \emph{X} está pintada de negro.
-	\end{itemize}	
-\end{itemize}
-
-
 {\color{blue}
+Para ampliar información de como se programa Robomind, se puede consultar el apéndice \ref{anexo:programacion-robomind}.
+
 Como se puede ver, Robomind está formado por elementos de \emph{Karel the robot}, como lo es el movimiento en un escenario discreto y la forma de interactuar con el entorno, y por \emph{Turtle} de Logo y su capacidad de dejar un rastro por donde va pasando.
 }
 
