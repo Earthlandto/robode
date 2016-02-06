@@ -305,6 +305,10 @@ function iJavaSandbox() {
         sendMessage("robode", message);
     }
 
+    function left(){
+        //empty TODO HACER
+    }
+
     function manageSensors(message) {
         switch (message.id) {
             case "sensorNW":

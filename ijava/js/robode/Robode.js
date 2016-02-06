@@ -285,7 +285,7 @@ function Robode(worker) {
                 10 //position iterations
             );
 
-			// Simulator.World.drawLines();
+            // Simulator.World.drawLines();
             Simulator.World.DrawDebugData();
             Simulator.World.ClearForces();
 
@@ -340,6 +340,10 @@ function Robode(worker) {
         if (!robot.IsAwake()) {
             stop = false;
         }
+    };
+
+    this.left = function() {
+        //empty TODO HACER!
     };
 
 
