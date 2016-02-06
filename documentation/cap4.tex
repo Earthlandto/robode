@@ -119,9 +119,12 @@ De esta manera, el robot tendrá 2 sensores que detectan colisiones en la parte 
 
 Los sensores que detectan lineas serán modelados como círculos simulando dos cámaras mirando al suelo, igual que ocurre en el robot Moway. 
 
-Todos estos elementos del robot están modelados en cuerpos separados. No obstante, es necesario que se mantengan unidos y se muevan a la vez. Es aquí donde entran en juego los \emph{joints}. Usaremos un joint de tipo \texttt{Revolute}, que permite definir una unión entre dos cuerpos como si fuera una cuerda de tamaño fijo, fijando de esta manera la distancia por la que se separan ambos cuerpos. Adicionalmente, la principal característica de este joint es que permite simular un motor que gira en base al joint. Se aprovechará esta característica para simular las ruedas y el movimiento de estas. Por tanto, tendremos 8 joints que unen el cuerpo principal con las partes del robot (2 ruedas, 2 sensores de linea y 4 sensores de colisión.).
+Todos estos elementos del robot están modelados en cuerpos separados. No obstante, es necesario que se mantengan unidos y se muevan a la vez. Es aquí donde entran en juego los \emph{joints}. Usaremos un joint de tipo \texttt{Revolute}, que permite definir una unión entre dos cuerpos como si fuera una cuerda de tamaño fijo, manteniendo la distancia por la que se separan ambos cuerpos. Por tanto, tendremos 8 joints que unen el cuerpo principal con las partes del robot (2 ruedas, 2 sensores de linea y 4 sensores de colisión.).
  
-En la figura \ref{fig:robot-skel} se puede ver el esqueleto del robot con todos los elementos juntos.
+El código Javascript que crea el robot ya se ha visto en el código \ref{ejemplo-factoria}. Los valores de densidad, fricción y restitución\footnote{La restitución de un cuerpo es la capacidad que tiene el mismo de \emph{rebotar} contra una superficie contra la que choca. Por ejemplo, una pelota cayendo sobre una superficie plana rebotará con una fuerza igual a la velocidad con la que ha golpeado la superficie si el valor es 1. Con valor 0, se desactiva esta propiedad.} serán 40, 1 y 0, respectivamente. Estos valores se mantendrán iguales en todos los cuerpos creados, para dar una sensación de uniformidad en las colisiones. Cuanto mayor sea la densidad de un cuerpo, mayor será su masa. Los valores de fricción y restitución van de 0 a 1, siendo 0 un valor que anula la propiedad. 
+ 
+ 
+En la figura \ref{fig:robot-skel} se puede ver el esqueleto del robot con todos los elementos juntos. 
 
 \begin{figure}[!ht]
 	\begin{centering}
@@ -131,13 +134,42 @@ En la figura \ref{fig:robot-skel} se puede ver el esqueleto del robot con todos 
 	\end{centering}
 \end{figure}
 
-{\color{green} ===POR AQUI===}.
 
+\subsubsection{Ruedas}
+
+La característica principal de un \texttt{Revolute Joint} es la posibilidad de establecer  un límite para que los cuerpos puedan rotar en función de las anclas que se establecen en cada cuerpo. Así, se puede establecer un motor que simule entre otros ruedas, cadenas o puertas giratorias. Justo lo que se pretende.
+
+El movimiento de las ruedas del robot se simulará con el giro que permite hacer el joint y la velocidad de giro determinará la velocidad a la que se mueve la rueda. En el código \ref{code:wheel-joint} se puede ver la creación de un del joint que une el coche con la rueda.
+
+\begin{lstlisting}[language={Java},label={code:wheel-joint}, caption={Función que crea el joint que une la rueda al coche.}]
+function addWheelJoint(mybody, mywheel) {
+
+	var revoluteJointDef = new b2RevoluteJointDef();
+	revoluteJointDef.Initialize(mybody, mywheel, mywheel.GetWorldCenter());
+
+	revoluteJointDef.enableMotor = true;
+	revoluteJointDef.motorSpeed = 0;
+	revoluteJointDef.maxMotorTorque = Number.MAX_SAFE_INTEGER;
+	revoluteJointDef.enableLimit = true;
+
+	return Simulator.World.CreateJoint(revoluteJointDef);
+}
+\end{lstlisting}
+
+La función \texttt{Initialize()} recibe como parámetros los dos cuerpos que van a ser unidos por el joint y el punto en el que se realizará el ancla (para eso se utilizará la función \texttt{GetWorldCenter()} de la clase \texttt{Body} para obtener el punto del mundo en el que se encuentra un cuerpo).
+
+Se activará la propiedad de motor en las ruedas y se le dará un valor inicial de 0. También se establecerá el valor máximo de torsión del joint para evitar que ante una fuerza de giro muy grande, el joint se mueva de su sitio. Por último, se activará un límite para que las ruedas no se muevan de su sitio ya que es esta propiedad la que define si el ancla será fija o permitirá movimiento con respecto a la separación de los dos cuerpos.
+
+
+\subsubsection*{Sensores}
+{\color{green} ===POR AQUI===}.
 
 
 \subsection{Moviendo a Robode}
 \label{moviendo-robode}
 
+%velocidad de las ruedas, cancelación velocidad lateral, movimiento...
+% hablar propiedades de los cuerpos y fixtures 
 
 
 \subsection{Detectando colisiones}
