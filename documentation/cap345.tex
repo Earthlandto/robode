@@ -78,10 +78,108 @@ Las herramientas que se han usado para desarrollar este proyecto se describen a 
 \chapter{Diseño y resolución del trabajo realizado}
 \label{diseno}
 
+Después de estudiar cual es la situación actual de la enseñanza de la programación a un nivel global y los diferentes proyectos que promueven el \emph{pensamiento computacional}, en este capítulo se analizarán cuales son las necesidades del proyecto Robode y como se han resuelto.
+
+Como ya se ha mencionado anteriormente, se creará un simulador de un robot, al que hemos denominado \emph{Robode}, y se integrará en la plataforma Descubre la programación. Robode  estará dentro de un mundo del que podrá moverse con libertad y con el que podrá interactuar. El robot tendrá dos ruedas que se mueven independientemente (con un motor para cada una de ellas) y dispondrá de sensores que informarán de posibles colisiones con el robot. También, el robot tendrá la capacidad de detectar lineas o caminos pintados en el suelo, sabiendo también en que dirección detecta (o no) la linea.
+
+Adicionalmente, el robot y el mundo en el que este se encuentra será dibujado en un elemento \emph{canvas} de HTML5, al igual que ocurre en la plataforma Descubre.
+
+{\color{red}
+Como se puede ver, Robode es la unión de varias de los proyectos que se han analizado en el capítulo \ref{estado-arte}. Por una parte, la idea principal de crear un simulador es igual a la que se ha realizado en Robomind (el cual se analiza en la sección \ref{sec:robomind}) pero simulando un robot en un mundo continuo y con características similares a las de Moway (analizado en la sección \ref{sec:moway}).
+}
 
 
-%Decidir que poner, como, en que orden.
- 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+En las secciones siguientes se analizarán las distintas alternativas que se han manejado para poder cumplir esta meta y 
+
+
+\section{Creación del mundo}
+\label{sec:mundo}
+
+
+Para la creación del mundo y de las físicas que gestionen las colisiones y la interacción entre todos los elementos del mundo se podría tanto haber creado una librería de físicas desde 0 como utilizar una ya existente, y en el caso de que fuera necesario, adaptarla a las necesidades de Robode. 
+
+Por supuesto, crear una librería de físicas desde 0 y dotarlo de una parte gráfica que dibujara los elementos sobre el \emph{canvas} de HTML5 podría conformar, eso únicamente, un Trabajo Fin de Grado completo. La idea de utilizar alguna de las librerías que ya existen y que son de software libre para adaptarla a las necesidades actuales cobra mucha fuerza. 
+
+Entra las opciones de librería que existen actualmente para Javascript, y habiendo descartado las opciones de pago, restaban dos alternativas que podían cumplir los requisitos que se planteaban. Estas son \texttt{PhysicsJS}\footnote{Página oficial de la librería PhysicsJS (\url{http://wellcaffeinated.net/PhysicsJS}).} y \texttt{Box2d}\cite{box2d}. Ambas permiten multitud de implementaciones para realizar casi cualquier aplicación o juego, pero lo que decanta la balanza es la falta de  elementos constrictores\footnote{En este caso, un elemento constrictor es un objeto que limita de alguna manera los movimientos de otro. Un ejemplo en la vida real puede ser una articulación en el cuerpo humano: el movimiento del brazo está limitado por el ángulo de movimiento que esa articulación le permite hacer.} en la librería \texttt{PhysicsJS}. \texttt{PhysicsJS} está aún en fase beta y, aunque promete ser una gran librería de físicas y es muy completa, aún necesita ser mejorada. La necesidad de estos elementos constrictores se verá en la sección \ref{sec:contruccion-robot}, cuando se construya el robot.
+
+Por tanto, se ha elegido la librería Box2dweb\footnote{El repositorio de Box2Dweb está alojado en GitHub (\url{https://github.com/hecht-software/box2dweb}).}, la cual es un port de la librería Box2D desarrollada para Flash\footnote{Página oficial de la librería Box2D para Flash (\url{http://www.box2dflash.org}).} y tiene una gran y activa comunidad usando ambas versiones de Box2d, lo que facilita el trabajo de resolución de dudas y problemas. También existe otra alternativa en Javascript de la librería Box2D, llamada Box2DJS, pero ésta está basada en una versión anterior de Box2D y no se ha seguido actualizando. 
+
+
+\texttt{Box2D} tiene una serie de elementos básicos que afectan al diseño y uso de nuestro simulador. Estos son: el Mundo (World), los Cuerpos (Bodies), los Accesorios (Fixtures) y las Articulaciones o elementos constrictores (Joints).
+
+El núcleo del motor de físicas en \texttt{Box2D} es \emph{World}. \emph{World} define los parámetros básicos que regirán la simulación más tarde, como puede ser el ratio de actualización o la gravedad. También contiene y controla el resto de elementos: \emph{Bodies}, \emph{Fixtures} y \emph{Joints}. La creación de estos elementos siguen un \emph{patrón factoría}, teniendo que definirlo primero en un objeto para poder crear el elemento real. 
+
+En el código \ref{code:ejemplo-factoria} se puede ver como se crea el cuerpo principal del robot utilizando una factoría tanto para definir el objeto \emph{Body} como la \emph{Fixture} a partir de \emph{World}, que realizará la creación del mismo.
+
+\begin{lstlisting}[language={Javascript},label={code:ejemplo-factoria}, caption={Creación del cuerpo principal del robot utilizando la librería Box2dweb.}]
+var bodyDef = new b2BodyDef();
+bodyDef.type = b2Body.b2_dynamicBody;
+bodyDef.position.Set(posX, posY);
+bodyDef.linearDamping = 8;
+bodyDef.angularDamping = 8;
+
+var fixDef = new b2FixtureDef();
+fixDef.density = 40;
+fixDef.friction = 1;
+fixDef.restitution = 0;
+fixDef.shape = new b2PolygonShape();
+fixDef.shape.SetAsBox(width, height);
+
+//robot BODY
+var robot = Simulator.World.CreateBody(bodyDef);
+robot.setName("robot");
+
+robot.CreateFixture(fixDef);
+\end{lstlisting}
+
+
+El elemento \emph{Body} será el que contenga la información básica del objeto, como es su posición, velocidad o ángulo de giro. Será el elemento \emph{Fixture} el que defina la forma (si es un polígono o círculo y de que forma) y características (fricción que produce, densidad, etc) del \emph{Body} al que está asociado. El mismo método se sigue para crear el resto de elementos como un \emph{Joint} en \texttt{Box2D}.
+
+
+%Hablar de box2d y como se forma/programa y otras librerías 
+
+
+
+
+
+\subsection{Construcción del robot}
+\label{sec:contruccion-robot}
+
+\subsection{Construcción de circuitos}
+\label{sec:construccion-circuitos}
+
+
+El entorno o circuito por el que se moverá el robot tiene los siguientes elementos: (a) obstáculos, con los que podrá chocar y que se desplazaran por la colisión; (b) fronteras, que no podrán ser desplazadas o atravesadas por el robot y (c) lineas, que no producirán una colisión pero que podrán ser detectadas por el robot. 
+
+
+\subsection{Colisiones}
+\label{sec:colisiones}
+
+
+
+
+\section{Curvas de Bezier}
+\label{sec:bezier}
+
+Uno de los aspectos más importantes en Robode es la capacidad del mismo de poder detectar lineas. La finalidad de esto es que se pueda programar un comportamiento \emph{sigue-lineas}. Para ello, era necesario responder a una serie de preguntas:
+\begin{enumerate}
+	\item ¿Cómo se representan las lineas pintadas en el suelo?
+	\item ¿Cómo se modelan dichas lineas?
+\end{enumerate}
+
+
+\section{Integración en Descubre}
+\label{sec:integracion-descubre}
+
+\subsection{Modificación del lenguaje iJava}
+\label{sec:modificacion-ijava}
+
 
 
 
