@@ -1,0 +1,19 @@
+void setup(){
+  initRobot();
+}
+
+void loop(){
+  if(isCollision)
+    print(".");
+  if(isLine)
+    print("-");
+
+  motors(1000,1000);
+
+  if(sensorNW || sensorNE)
+    motors(-1000,-2000);
+  if (sensorSW)
+    motors(2000,1000);
+  if(sensorSE)
+    motors(1000,2000);
+}

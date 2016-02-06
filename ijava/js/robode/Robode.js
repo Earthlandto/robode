@@ -256,17 +256,17 @@ function Robode(worker) {
         jfr = addWheelJoint(robot, fr);
         jfl = addWheelJoint(robot, fl);
         // external sensors
-        extSensors.push(new Simulator.Sensor(pointsTL, "NO", robot));
+        extSensors.push(new Simulator.Sensor(pointsTL, "NW", robot));
         extSensors.push(new Simulator.Sensor(pointsTR, "NE", robot));
-        extSensors.push(new Simulator.Sensor(pointsBL, "SO", robot));
+        extSensors.push(new Simulator.Sensor(pointsBL, "SW", robot));
         extSensors.push(new Simulator.Sensor(pointsBR, "SE", robot));
         //Line sensors
         var posIniAux = [{
             x: Simulator.config.robodeIniX,
             y: Simulator.config.robodeIniY
         }];
-        sensorLL = new Simulator.Sensor(posIniAux, "LI", robot, -0.21, -0.2);
-        sensorLR = new Simulator.Sensor(posIniAux, "LD", robot, 0.21, -0.2);
+        sensorLL = new Simulator.Sensor(posIniAux, "LL", robot, -0.21, -0.2);
+        sensorLR = new Simulator.Sensor(posIniAux, "LR", robot, 0.21, -0.2);
 
 
         // Create circuit

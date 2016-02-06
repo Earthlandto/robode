@@ -211,15 +211,16 @@ function iJavaSandbox() {
 
     // sensors
     var sensorNE = false,
-        sensorNO = false,
+        sensorNW = false,
         sensorSE = false,
-        sensorSO = false;
-    var sensorLD = false,
-        sensorLI = false;
-    var percibiendo = false;
+        sensorSW = false;
+    var sensorLR = false,
+        sensorLL = false;
+    var isCollision = false,
+        isLine = false;
 
 
-    function iniciarRobot() {
+    function initRobot() {
 
         if (roboderunning) {
             var msgerr = "Error: El robot ya se ha iniciado.";
@@ -249,15 +250,15 @@ function iJavaSandbox() {
         };
         sendMessage("robode", message);
         sensorNE = false;
-        sensorNO = false;
+        sensorNW = false;
         sensorSE = false;
-        sensorSO = false;
-        sensorLD = false;
-        sensorLI = false;
-        percibiendo = false;
+        sensorSW = false;
+        sensorLR = false;
+        sensorLL = false;
+        isCollision = false;
     }
 
-    function esperar(millis) {
+    function wait(millis) {
         //Add delay time to runtime.timeLimit
         if (runtime) {
             if (runtime.deep > -1) {
@@ -271,7 +272,7 @@ function iJavaSandbox() {
         }
     }
 
-    function avanzarRobot(lspeed, rspeed) {
+    function motors(lspeed, rspeed) {
 
         if (!roboderunning) {
             var msg = {
@@ -288,7 +289,7 @@ function iJavaSandbox() {
         sendMessage("robode", message);
     }
 
-    function detenerRobot() {
+    function stop() {
         if (!roboderunning) {
             var msg = {
                 message: "Error: Primero es necesario iniciar el robot con la función: 'iniciarRobot()'."
@@ -306,30 +307,27 @@ function iJavaSandbox() {
 
     function manageSensors(message) {
         switch (message.id) {
-            case "sensorNO":
-                sensorNO = (message.state === "begin");
+            case "sensorNW":
+                sensorNW = (message.state === "begin");
                 break;
             case "sensorNE":
                 sensorNE = (message.state === "begin");
                 break;
-            case "sensorSO":
-                sensorSO = (message.state === "begin");
+            case "sensorSW":
+                sensorSW = (message.state === "begin");
                 break;
             case "sensorSE":
                 sensorSE = (message.state === "begin");
                 break;
-            case "sensorLD":
-                sensorLD = (message.state === "begin");
+            case "sensorLR":
+                sensorLR = (message.state === "begin");
                 break;
-            case "sensorLI":
-                sensorLI = (message.state === "begin");
+            case "sensorLL":
+                sensorLL = (message.state === "begin");
                 break;
         }
-        percibiendo = anySensorActive();
-    }
-
-    function anySensorActive() {
-        return sensorLI || sensorLD || sensorNO || sensorNE ||  sensorSO || sensorSE;
+        isCollision = sensorLL || sensorLR || sensorNW || sensorNE ||  sensorSW || sensorSE;
+        isLine = sensorLL ||  sensorLR;
     }
 
 

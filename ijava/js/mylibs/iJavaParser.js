@@ -1624,30 +1624,36 @@ function iJavaParser() {
          *                                                                          *
          ****************************************************************************/
 
+        // Sensores de colisiones indivuduales
+        system_variable("sensorNW", BooleanDatatype, false);
         system_variable("sensorNE", BooleanDatatype, false);
-        system_variable("sensorNO", BooleanDatatype, false);
+        system_variable("sensorSW", BooleanDatatype, false);
         system_variable("sensorSE", BooleanDatatype, false);
-        system_variable("sensorSO", BooleanDatatype, false);
 
-        system_variable("sensorLD", BooleanDatatype, false);
-        system_variable("sensorLI", BooleanDatatype, false);
+        //sensores de lineas individuales
+        system_variable("sensorLR", BooleanDatatype, false);
+        system_variable("sensorLL", BooleanDatatype, false);
 
-        system_variable("percibiendo", BooleanDatatype, false);
+        //sensores de colisión y lineas grupales
+        system_variable("isCollision", BooleanDatatype, false);
+        system_variable("isLine", BooleanDatatype, false);
 
-
-        library_function("esperar", new FunctionDatatype(VoidDatatype, [{
+        // wait (n_millisec)
+        library_function("wait", new FunctionDatatype(VoidDatatype, [{
             datatype: IntegerDatatype
         }]));
-
-        library_function("iniciarRobot", new FunctionDatatype(VoidDatatype, []));
-
-        library_function("detenerRobot", new FunctionDatatype(VoidDatatype, []));
-
-        library_function("avanzarRobot", new FunctionDatatype(VoidDatatype, [{
+        //initRobot ()
+        library_function("initRobot", new FunctionDatatype(VoidDatatype, []));
+        //stopRobot()
+        library_function("stop", new FunctionDatatype(VoidDatatype, []));
+        //motors(vel_motor_izq, vel_motor_der)
+        library_function("motors", new FunctionDatatype(VoidDatatype, [{
             datatype: IntegerDatatype
         }, {
             datatype: IntegerDatatype
         }]));
+        // left()
+        library_function("left", new FunctionDatatype(VoidDatatype, []));
 
         /****************************************************************************
          *       END ROBODE DEFINITION                                              *
