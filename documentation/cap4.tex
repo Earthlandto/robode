@@ -34,6 +34,7 @@ Al final, se ha establecido que la librería a utilizar será Box2Dweb. En cuant
 Una vez que se ha aclarado que la librería utilizada es \texttt{Box2Dweb}, por simplicidad, a partir de ahora nos referiremos a ésta simplemente como \texttt{Box2D}.
 
 \subsection{Definición del Mundo}
+\label{sec:definicion-mundo}
 
 En \texttt{Box2D} existen una serie de objetos que representan al mundo y los diferentes elementos que lo componen.  Estos son: el Mundo (World), los Cuerpos (Bodies), los Accesorios (Fixtures) y las Articulaciones o elementos constrictores (Joints).
 
@@ -81,7 +82,7 @@ A continuación se explicarán las características principales de los elementos
 
 \subsubsection*{Objeto \texttt{Body}}
 
-Los cuerpos en Box2D pueden ser dinámicos (tipo \texttt{b2\_dynamicBody}) o estáticos (tipo \texttt{b2\_staticBody }). Un cuerpo dinámico podrá moverse y se verá afectado por el entorno y otros cuerpos. Un cuerpo estático será inmune a fuerzas como la gravedad y su posición no cambiará. Robode y todos sus componentes serán cuerpos dinámicos mientras que las fronteras del mundo, serán cuerpos estáticos. También, un cuerpo puede estar inactivo a través de la propiedad \texttt{sleep} del mismo.
+Los cuerpos en Box2D pueden ser dinámicos (tipo \texttt{b2\_dynamicBody}) o estáticos (tipo \texttt{b2\_staticBody }). Un cuerpo dinámico podrá moverse y se verá afectado por el entorno y otros cuerpos. Un cuerpo estático será inmune a fuerzas como la gravedad y su posición no cambiará. Robode y todos sus componentes serán cuerpos dinámicos mientras que las fronteras del mundo, serán cuerpos estáticos. También, un cuerpo está activo si su propiedad \texttt{sleep} está activa. El efecto de un cuerpo inactivo ya se ha explicado en la sección \ref{sec:definicion-mundo}.
 
 Un cuerpo conoce los \emph{fixtures} asociados a él (que puede ser más de uno) y los \emph{joints} a los que está atado.
 
@@ -94,17 +95,17 @@ Las propiedades \texttt{linearDamping} y \texttt{angularDamping}\footnote{Aquí,
 
  %ya que se puede definir la posición del cuerpo y la de la \emph{fixture} de manera que no coincidan. De esta manera, la función \texttt{GetWorldPosition()} obtendrá la posición correcta del cuerpo con respecto a la del \emph{fixture}.
 
-Adicionalmente, se ha modificado el prototipo de las clases \texttt{b2Body} y \texttt{b2BodyDef} (clase plantilla para crear \emph{bodies}) para añadir una característica más al cuerpo, el nombre del mismo.
+Adicionalmente, se ha modificado el prototipo de las clases \texttt{b2Body} y \texttt{b2BodyDef} (clase plantilla para crear \emph{bodies}) para añadir una característica más al cuerpo, el nombre que se le asigna al cuerpo. Esto se usará principalmente para poder distinguir estos objetos fácilmente en una colisión.
 
 
 \subsubsection*{Objeto \texttt{Fixture}}
 
 Los objetos \texttt{b2Fixture} definen la apariencia del objeto al que están asociado y las características físicas que le harán interactuar con el mundo de una u otra manera.
 
-Box2D proporciona dos clases principales para definir la forma de las \emph{fixtures}: \texttt{b2CircleShape} y \texttt{b2PolygonShape}. La primera representa a una forma circular y es necesario indicar el radio del circulo a crear. La segunda forma representa a un polígono. Los polígonos tienen dos formas principales de definirse:
+Box2D proporciona dos clases principales para definir la forma de las \emph{fixtures}: \texttt{b2CircleShape()} y \texttt{b2PolygonShape()}. La primera representa a una forma circular y es necesario indicar el radio del circulo a crear. La segunda forma representa a un polígono. Los polígonos tienen dos formas principales de definirse:
 
 \begin{itemize}
-	\item Con forma de caja definiendo su ancho y largo (con el método \texttt{AsBox()}).
+	\item Con forma de caja definiendo su ancho y largo (con el método \texttt{SetAsBox()}).
 	\item Con una forma libre. Es necesario indicar los vértices del polígono y su cantidad (con el método \texttt{AsArray()}). Es así como se pueden crear triángulo o trapecios en Box2D, por ejemplo. En este caso es importante no crear formas cóncavas, pues provocarán errores en la simulación.
 \end{itemize}
 
@@ -153,6 +154,8 @@ En las siguientes secciones se explicará más en detalle como se han creado cad
 
 El cuerpo principal está modelado como un rectángulo. Éste será más largo que ancho y tendrá el resto de cuerpos (sensores y ruedas) \emph{atados} a él con joints. El cuerpo principal de Robode será dinámico, así como los sensores y ruedas.
 
+La forma se ha creado creando una fixture con forma poligonal. Se ha utilizado la función \texttt{SetAsBox()} que permite definir el ancho y alto del polígono, creándolo con forma rectangular. El ancho del robot será de 6 píxeles mientras que su largo medirá 10 píxeles.
+
 En el listado de código \ref{code:creacion-cuerpo-principal} se puede ver el código que construye el cuerpo principal de Robode.
 
 \begin{lstlisting}[language={Javascript},label={code:creacion-cuerpo-principal}, caption={Creación del cuerpo principal del robot utilizando la librería Box2dweb.}]
@@ -183,9 +186,32 @@ robot.CreateFixture(fixDef);
 
 \subsubsection*{Ruedas}
 
-Las ruedas de Robode se simularan con 
+Las ruedas de Robode se simularan con dos polígonos con forma rectangular  (método \texttt{SetAsBox()} de la clase \texttt{b2PolygonShape}). Su posición está retrasada con respecto al centro del cuerpo principal y su ancho es de 2 píxeles mientras que su alto mide 4 píxeles. En el listado de código \ref{code:creation-wheel} se puede ver como se han construido las ruedas. Como se puede ver, se ha mantenido los valores de densidad, fricción y restitución del cuerpo principal, reduciendo así la posibilidad de comportamientos anómalos en colisiones.
 
-El movimiento de las ruedas del robot se simulará con el giro que permite hacer el joint y la velocidad de giro determinará la velocidad a la que se mueve la rueda. En el listado del código  \ref{code:wheel-joint} se puede ver la creación de un del joint que une el coche con la rueda.
+\begin{lstlisting}[language={Javascript},label={code:creation-wheel}, caption={Función que crea las ruedas de Robode.}]
+function createWheel(x, y) {
+
+	var bodyDef = new b2BodyDef();
+	bodyDef.type = b2Body.b2_dynamicBody;
+	bodyDef.position.Set(x, y);
+	
+	var fixDef = new b2FixtureDef();
+	fixDef.density = 40;
+	fixDef.friction = 1;
+	fixDef.restitution = 0;
+	fixDef.isSensor = false;
+
+	fixDef.shape = new b2PolygonShape();
+	fixDef.shape.SetAsBox(0.2, 0.4);
+	
+	var wheelBody = Simulator.World.CreateBody(bodyDef);
+	wheelBody.setName("wheel");
+	wheelBody.CreateFixture(fixDef);
+	return wheelBody;
+}
+\end{lstlisting}
+
+El movimiento de las ruedas del robot se simulará con el giro que permite hacer el joint y la velocidad de giro determinará la velocidad a la que se mueve la rueda. El método de simulación de movimiento del robot se explicará más adelante. En el listado de código  \ref{code:wheel-joint} se puede ver la creación de un del joint que une el coche con la rueda.
 
 \begin{lstlisting}[language={Javascript},label={code:wheel-joint}, caption={Función que crea el joint que une la rueda al coche.}]
 function addWheelJoint(mybody, mywheel) {
@@ -209,31 +235,11 @@ Se activará la propiedad de motor en las ruedas y se le dará un valor inicial 
 
 \subsubsection*{Sensores}
 
-{\color{green}REVISAR}
-
-%%%%%%
-Los 4 sensores de colisión serán modelados con triángulos y estarán dispuestos de forma que sobresalgan del cuerpo principal con la base del triángulo hacía el exterior, para así poder detectar colisiones antes de que ocurran. Las posiciones de cada uno de los 4 sensores se han descrito con las posiciones cardinales: noroeste, sureste, noreste y sureste. 
-
-De esta manera, el robot tendrá 2 sensores que detectan colisiones en la parte delantera y otros dos en la trasera. 
-
-
-Los sensores que detectan líneas serán modelados como círculos simulando dos cámaras mirando al suelo, igual que ocurre en el robot Moway. 
-%%%%%
-
-
-
-Para los sensores de colisión, se utilizará una forma triangular, mientras que para los sensores de linea, la forma será circular.
-
-Los triángulos serán \emph{fixtures} poligonales (clase \texttt{b2PolygonShape}) y para definir sus puntos, Box2D proporciona la función \texttt{fixDef.shape.SetAsArray()} que recibe como parámetros los puntos de cada vértice de la forma poligonal. Hay que tener cuidado con la forma con la que se crea, puesto que, como ya se ha comentado anteriormente, una de las limitaciones de Box2D es la falta de polígonos cóncavos. 
-
-En cuanto a los sensores que detectan líneas, la forma circular se definirá con la clase \texttt{b2CircleShape} que recibirá como parámetro para la construcción del círculo el radio del mismo.
-
-En la variable \texttt{points} se tienen los puntos que definen la forma del sensor. Si es un único punto, se construirá un sensor circular, mientras que si son más puntos, se creará una forma poligonal (en este caso un triángulo para los sensores de colisión).
-
+Los sensores de colisión tendrán forma de triángulo y los sensores que detectan lineas forma de círculo. Más adelante se describirá como se les ha otorgado la forma a cada uno del sensor. Por otra parte, todos los sensores serán cuerpos estáticos.
 
 Box2D provee de manera nativa que los cuerpos (en concreto, la \emph{fixture} que contiene) se definan como un \emph{sensor} en el motor físico. Esto otorga una serie de características que hacen que los sensores de Robode puedan percibir cuerpos con los que colisionan. 
 
-Para definir un cuerpo en Box2D como sensor, se tendrá que establecer la propiedad \texttt{isSensor} a \texttt{true} cuando se construya la \emph{fixture} del cuerpo que lo contendrá. En el listado del código \ref{code:creation-sensor} se puede ver como se crean los sensores. 
+Para definir un cuerpo en Box2D como sensor, se tendrá que establecer la propiedad \texttt{isSensor} a \texttt{true} cuando se construya la \emph{fixture} del cuerpo que lo contendrá. En el listado del código \ref{code:creation-sensor} se puede ver como se crean los sensores. La forma que se les ha otorgado a los sensores se explicará en la sección posterior posterior.
 
 \begin{lstlisting}[language={Javascript},label={code:creation-sensor}, caption={Función que construye un sensor de Robode.}]
 function Sensor(points, name, bodyAttached) {
@@ -250,30 +256,59 @@ function Sensor(points, name, bodyAttached) {
     var fixDef = new Simulator.Env.b2FixtureDef();
     fixDef.isSensor = true;
 
-    //define the shape
-    if (points.length == 1) {
-        // line sensor
-        fixDef.shape = new Simulator.Env.b2CircleShape(Simulator.config.radiusInitSensorLine);
-    } else {
-        // collision sensor
-        fixDef.shape = new Simulator.Env.b2PolygonShape();
-        var vPoints = [];
-        points.forEach(function(elem, index, array) {
-            vPoints[index] = new Simulator.Env.b2Vec2(elem.x, elem.y);
-        });
-        fixDef.shape.SetAsArray(vPoints, vPoints.length);
-    }
+    // define the shape
+    // points variable contains the point's shape
+	if (points.length == 1) {
+		// just 1 point -> line sensor
+		fixDef.shape = new Simulator.Env.b2CircleShape(0.2);
+	} else {
+		// collision sensor
+		fixDef.shape = new Simulator.Env.b2PolygonShape();
+		var vPoints = [];
+		points.forEach(function(elem, index, array) {
+			vPoints[index] = new Simulator.Env.b2Vec2(elem.x, elem.y);
+		});
+		fixDef.shape.SetAsArray(vPoints, vPoints.length);
+	}
+
     this.body.CreateFixture(fixDef);
 
     //(...)
 }
 \end{lstlisting}
 
-En cuanto a la unión de los sensores al cuerpo principal, se vuelven a usar joints de tipo \texttt{revolute} para mantenerlos a la misma distancia, al igual que cuando se crearon las ruedas en la sección anterior. La diferencia aquí radica en que no activaremos un motor para los sensores y que desactivaremos la colisión que se crea con el cuerpo, permitiendo que \emph{convivan} en el mismo espacio los sensores y los cuerpos.
+En cuanto a la unión de los sensores al cuerpo principal, se vuelven a usar joints de tipo \texttt{Revolute} para mantenerlos a la misma distancia, al igual que cuando se crearon las ruedas en la sección anterior. La diferencia aquí radica en que no activaremos un motor para los sensores y que desactivaremos la colisión que se crea con el cuerpo, permitiendo que \emph{convivan} en el mismo espacio los sensores y los cuerpos.
 
 Otra modificación con respecto al joint de las ruedas es que solo en los sensores de colisión, la propiedad \texttt{enableLimit} debe ser establecida a \texttt{false}. Si no se hiciera esto, el joint de los sensores de colisión bloquearía el movimiento del joint de las ruedas, impidiendo su movimiento y el coche no se movería.
 
 Una vez se ha visto como se crean los sensores, se ve que hay muchas propiedades que afectan a la gestión de colisiones. Esto se verá más en profundidad en las secciones correspondientes a cada tipo de sensor.
+
+\subsubsection*{Dando forma a los sensores}
+
+Los 4 sensores de colisión tendrán forma de triángulo y estarán dispuestos de forma que sobresalgan del cuerpo principal con la base del triángulo hacía el exterior, para así poder detectar una colisión antes de que ocurra. Las posiciones de cada uno de los 4 sensores se han descrito con las posiciones cardinales: noroeste, sureste, noreste y sureste. De esta manera, el robot tendrá 2 sensores que detectan colisiones en la parte delantera y otros dos en la trasera. 
+
+Los 2 sensores que detectan líneas tendrán forma de círculo simulando dos cámaras que miran al suelo, igual que ocurre en el robot Moway. Para dotar de forma a los sensores que detectan líneas, se puede utilizar la clase \texttt{b2CircleShape} y con un radio de 2 píxeles, se asigna la forma al \emph{fixture} correspondiente.
+
+No obstante, la forma de los sensores de colisión, al ser triangular, requiere que se definan los vértices del polígono previamente.  Para realizar esto, utilizaremos la función \texttt{fixDef.shape.SetAsArray()}\footnote{Hay que tener en cuenta que, como ya se ha mencionado en la sección \ref{sec:motor-fisico}, las formas cóncavas no son soportadas por Box2D.} que recibe como parámetro los vértices del polígono a crear y el número de vértices del mismo. Obviamente, los vértices tendrán que formar un triángulo con la base hacia el exterior de Robode.
+
+Lo último que hay que saber al respecto es que los puntos de los vértices tienen que pasarse a la función \texttt{fixDef.shape.SetAsArray()} con respecto al punto origen del cuerpo. En el código \ref{code:vertices-sensorNE} se muestran los puntos de los vértices del sensor en la posición noreste. El resto de sensores tienen la misma longitud pero solo cambia el eje de coordenadas en el que se mueve.
+
+\begin{lstlisting}[language={Javascript},label={code:vertices-sensorNE}, caption={Vértices que forman el triángulo del sensor noreste de Robode.}]
+var pointsTR = [
+	{
+	    x: 0.1,
+	    y: -0.1
+	}, {
+	    x: 0.5,
+	    y: -1.6
+	}, {
+	    x: 1.5,
+	    y: -0.8
+	}
+];
+\end{lstlisting}
+
+
 
 \subsection{Moviendo a Robode}
 \label{moviendo-robode}
@@ -346,17 +381,17 @@ contactListener.BeginContact = function(contact) {
 };
 \end{lstlisting}
 
-Como se puede ver en la linea 21, la comprobación acabará si el cuerpo percibido es una parte del coche, como una rueda o el propio cuerpo principal. Si un cuerpo es parte del robot se comprueba con el nombre del mismo. Los nombres de los cuerpos se establecen en la creación de un cuerpo con la función \texttt{setName()} de la clase \texttt{b2Body}\footnote{Se ha redefinido el prototipo de la clase b2Body para añadir la función \texttt{setName()} de manera transparente a cualquier cuerpo de Box2D.}. Un ejemplo de esto se ha podido ver en los listados de código \ref{code:creation-sensor} o \ref{code:ejemplo-factoria}.
+Como se puede ver en la linea 21, la comprobación acabará si el cuerpo percibido es una parte del coche, como una rueda o el propio cuerpo principal. La forma de comprobar si un cuerpo es parte del robot es con el nombre del cuerpo. Este se ha establecido en la creación de los cuerpos con la función \texttt{setName()} de la clase \texttt{Body}.
 
-También, en las lineas 28 a 33 se notifica la colisión. En secciones posteriores explicaremos el proceso de notificación y la comunicación del simulador con el resto de la aplicación.
+También, se puede ver como en las lineas 28 a 33 se notifica la colisión enviando un mensaje. En secciones posteriores se explicará el proceso de notificación y la comunicación del simulador con el resto de la aplicación.
+
+\subsection{Detectando lineas}
+\label{detectando-lineas}
 
 
 {\color{green} ===POR AQUI===}.
 
 
-
-\subsection{Detectando lineas}
-\label{detectando-lineas}
 
 \subsubsection{Curvas de Bezier}
 \label{bezier}
@@ -372,7 +407,7 @@ También, en las lineas 28 a 33 se notifica la colisión. En secciones posterior
 \label{animando-robode}
 
 %\subsubsection{Multihilo y esas cosas}
-Aquí se habla de como se anima y que tiene que decir JS y su sistema monohilo al respecto. También temas de zoom y scroll
+Aquí se habla de como se anima y que tiene que decir JS y su sistema monohilo al respecto. También temas de zoom y scroll y relación de tamaño del robot con la escala
 
 
 
