@@ -85,7 +85,7 @@ Simulator.Env = {};
         myDebugDraw.SetDrawScale(Simulator.config.scaleWorldIni);
         myDebugDraw.SetFillAlpha(0.3);
         myDebugDraw.SetLineThickness(this.lineThickness);
-        myDebugDraw.SetFlags(Simulator.Env.b2DebugDraw.e_shapeBit | Simulator.Env.b2DebugDraw.e_jointBit);
+        myDebugDraw.SetFlags(Simulator.Env.b2DebugDraw.e_shapeBit); // | Simulator.Env.b2DebugDraw.e_jointBit);
         Simulator.World.SetDebugDraw(myDebugDraw);
     };
 
