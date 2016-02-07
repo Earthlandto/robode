@@ -147,10 +147,8 @@ function Robode(worker) {
                 };
                 sendMessage("sensor", message);
             }
-            //add the collition
+            //increment the collition count
             bodySensor.addCollition();
-
-
         }
     };
 
@@ -186,7 +184,7 @@ function Robode(worker) {
                 };
                 sendMessage("sensor", message);
             }
-            //remove the collition
+            //decrement the collition counter
             bodySensor.removeCollition();
 
 

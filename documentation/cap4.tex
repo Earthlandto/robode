@@ -6,7 +6,7 @@
 
 Después de estudiar cual es la situación actual de la enseñanza de la programación a un nivel global y los diferentes proyectos que promueven el \emph{pensamiento computacional}, en este capítulo se analizarán cuales son las necesidades del proyecto Robode y como se han resuelto.
 
-Como ya se ha mencionado anteriormente, se creará un simulador de un robot, al que hemos denominado \emph{Robode}, y se integrará en la plataforma Descubre la programación. Robode  estará dentro de un mundo del que podrá moverse con libertad y con el que podrá interactuar. El robot tendrá dos ruedas que se mueven independientemente (con un motor para cada una de ellas) y dispondrá de sensores que informarán de posibles colisiones con el robot. También, el robot tendrá la capacidad de detectar líneas o caminos pintados en el suelo, sabiendo también en que dirección detecta (o no) la linea.
+Como ya se ha mencionado anteriormente, se creará un simulador de un robot, al que hemos denominado \emph{Robode}, y se integrará en la plataforma Descubre la programación. Robode  estará dentro de un mundo del que podrá moverse con libertad y con el que podrá interactuar. El robot tendrá dos ruedas que se mueven independientemente (con un motor para cada una de ellas) y dispondrá de sensores que informarán de posibles colisiones con obstáculos. También, el robot tendrá la capacidad de detectar líneas o caminos pintados en el suelo, sabiendo también en que dirección detecta (o no) la linea.
 
 Adicionalmente, el robot y el mundo en el que este se encuentra será dibujado en un elemento \emph{canvas} de HTML5, al igual que ocurre en la plataforma Descubre.
 
@@ -18,33 +18,32 @@ En las secciones siguientes se va a estudiar como se ha diseñado y creado Robod
 
 
 
-\section{Motor de físicas}
-\label{sec:mundo}
+\section{Motor físico}
+\label{sec:motor-fisico}
 
+El simulador representará un mundo con un robot y una serie de obstáculos que interfieren entre ellos. Los obstáculos podrán colisionar entre ellos o con el robot. También será necesario simular lineas en el suelo y la detección de las mismas. Todo ello con un paso del tiempo realista. Para ello, es necesario utilizar un motor físico que simule la creación de cuerpos en el mundo, su movimiento por el mismo y el contacto entre ellos, generando una reacción similar a la producida en el mundo real.
 
-Para la creación del mundo y de las físicas que gestionan las colisiones y la interacción entre todos los elementos del simulador se ha optado por entre dos librerías físicas: PhysicsJS\footnote{Página oficial de la librería PhysicsJS (\url{http://wellcaffeinated.net/PhysicsJS}).} y Box2D\footnote{El manual de uso de Box2D se puede encontrar en \cite{box2d-manual}. La documentación del proyecto se puede encontrar en (\url{http://www.box2dflash.org/docs/2.1a/reference/}).} \cite{box2d}. Dos librerías de software libre y que trabajan sobre entornos web, más en concreto Javascript.
+Para la creación del mundo y de las físicas que gestionan las colisiones y la interacción entre todos los elementos del simulador se han estudiado dos motores físicos: PhysicsJS\footnote{Página oficial de la librería PhysicsJS (\url{http://wellcaffeinated.net/PhysicsJS}).} y Box2D\footnote{El manual de uso de Box2D se puede encontrar en \cite{box2d-manual}. La documentación del proyecto se puede encontrar en (\url{http://www.box2dflash.org/docs/2.1a/reference/}).} \cite{box2d}. Dos librerías muy versátiles y de software libre que trabajan sobre entornos web.
 
-Ambas librerías son muy versátiles pero PhysicsJS tiene está aún en fase beta y, por otra parte, Box2D tiene una gran comunidad de programadores utilizando dicha librería, lo cual siempre es de ayuda para resolver dudas y solucionar problemas.
+PhysicsJS  es una librería escrita enteramente en Javascript por Jasper Palfree que aún está en fase beta. Por otra parte, Box2D es una famosa librería implementada originalmente para Flash\footnote{Página oficial de la librería Box2D para Flash (\url{http://www.box2dflash.org}).} con una gran comunidad de programadores utilizando dicha librería, lo cual siempre es de ayuda para resolver dudas y solucionar problemas. 
 
-Por tanto, se ha elegido la librería Box2D para implementar el simulador de Robode. En realidad, Box2D es una famosa librería implementada originalmente para Flash\footnote{Página oficial de la librería Box2D para Flash (\url{http://www.box2dflash.org}).} que ha sido portada a Javascript dos veces. Una de ellas por Yayushi Ando y se llama Box2Djs\footnote{Página oficial de Box2Djs (\url{http://box2d-js.sourceforge.net}).}. El otro intento de llevar Box2D a Javascript ha culminado en Box2Dweb\footnote{El repositorio de Box2Dweb está alojado en GitHub (\url{https://github.com/hecht-software/box2dweb}).}. Al final se ha escogido Box2Dweb, puesto que tiene una gran comunidad utilizando dicha librería y, en cambio, Box2Djs está desactualizada y es necesario realizar importaciones de muchos ficheros en cada proyecto, al contrario que pasa con Box2Dweb.
+Box2D ha sido portada a Javascript dos veces. Una de ellas por Yayushi Ando y se llama Box2Djs\footnote{Página oficial de Box2Djs (\url{http://box2d-js.sourceforge.net}).} pero el proyecto no ha sido continuado y está desactualizado. El otro intento de llevar Box2D a Javascript ha culminado en Box2Dweb\footnote{El repositorio de Box2Dweb está alojado en GitHub (\url{https://github.com/hecht-software/box2dweb}).}. Como se puede leer en \cite[capítulo 13]{box2d-manual}, Box2D usa una serie de aproximaciones para representar las colisiones de manera eficiente. Principalmente, son dos las limitaciones que podría afectar al simulador del robot: (a) existe un desliz de aproximadamente 0.5 cm entre la forma que tiene un cuerpo y la colisión del mismo y (b) Box2D no maneja correctamente los cuerpos cóncavos. 
 
-Como se puede leer en \cite[capítulo 13]{box2d-manual}, Box2D usa una serie de aproximaciones para representar las colisiones de manera eficiente. En cuanto a las limitaciones que puedan afectar a Robode están: (a) existe un desliz de aproximadamente 0.5 cm entre la forma que tiene un cuerpo y la colisión del mismo y (b) Box2D no maneja correctamente los cuerpos cóncavos.  En cuanto a la limitación (a), ésta es muy pequeña y apenas imperceptible, no teniendo un impacto apreciable en Robode. Con respecto a (b), en el caso de que se quiera construir cuerpos cóncavos, se puede solucionar creando más de un cuerpo convexo que cree una forma \emph{global} cóncava.
+Al final, se ha establecido que la librería a utilizar será Box2Dweb. En cuanto a las limitaciones que puedan afectar a Robode, estas no son un gran problema a la solución del simulador puesto que: el desliz producido en limitación (a) es muy pequeño y en el caso del simulador, impercetible. Con respecto a la limitación (b), en el caso de que se quiera construir cuerpos cóncavos, se puede solucionar creando más de un cuerpo convexo que cree una forma \emph{global} cóncava.
 
 Una vez que se ha aclarado que la librería utilizada es \texttt{Box2Dweb}, por simplicidad, a partir de ahora nos referiremos a ésta simplemente como \texttt{Box2D}.
 
 \subsection{Definición del Mundo}
 
-\texttt{Box2D} tiene una serie de elementos básicos que afectan al diseño y uso de nuestro simulador. Estos son: el Mundo (World), los Cuerpos (Bodies), los Accesorios (Fixtures) y las Articulaciones o elementos constrictores (Joints).
+En \texttt{Box2D} existen una serie de objetos que representan al mundo y los diferentes elementos que lo componen.  Estos son: el Mundo (World), los Cuerpos (Bodies), los Accesorios (Fixtures) y las Articulaciones o elementos constrictores (Joints).
 
-El núcleo del motor de físicas en \texttt{Box2D} es el Mundo (\emph{World}). \emph{World} define los parámetros básicos que regirán la simulación más tarde, como puede ser el ratio de actualización o la gravedad. También contiene y controla el resto de elementos: \emph{Bodies}, \emph{Fixtures} y \emph{Joints} entre otros.
-
-
+El núcleo de Box2D es el objeto \emph{World}, el cual define los parámetros básicos que regirán la simulación más tarde, como puede ser el ratio de actualización o la gravedad. También crea y almacena el resto de objetos de Box2D, como los \emph{Bodies}, las \emph{Fixtures} y los \emph{Joints}, entre otros.
 
 Para la creación de nuestro mundo, hemos decidido que tendrá una vista \emph{top-down}, es decir, una vista del mundo desde arriba, desde el cielo. De esta manera se consigue una vista superior de todo el circuito simplificando la comprensión del movimiento del robot sobre el circuito.
 
 Una de las características más importantes de \texttt{Box2D} es la posibilidad de dotar a la aplicación que se está creando de un efecto gravitatorio de manera nativa al motor. Lo normal sería establecer éste valor con un vector de dirección hacia el suelo (hacia la parte baja de la pantalla) con la fuerza que se quiera simular. Esto provocaría que los cuerpos del mundo estuvieran constantemente sometidos a una fuerza que los mueve en dirección a ese vector, normalmente hacia el suelo.  
 
-En el caso de Robode, al tener una vista superior del circuito, establecer una gravedad provocaría que el robot y el resto de cuerpos del circuito se movieran de forma anómala. Por esto, es necesario crear un mundo sin gravedad. En el código \ref{code:world-gravedad} podemos ver como se ha establecido la gravedad del mundo a un vector con valor 0 en ambos ejes de coordenadas. 
+En el caso de Robode, al tener una vista superior del circuito, establecer una gravedad provocaría que el robot y el resto de cuerpos del circuito se movieran de forma anómala. Por esto, es necesario crear un mundo sin gravedad. En el listado del código \ref{code:world-gravedad} podemos ver como se ha establecido la gravedad del mundo a un vector con valor 0 en ambos ejes de coordenadas. 
 
 \begin{lstlisting}[language={Javascript},label={code:world-gravedad}, caption={Definición del objeto \texttt{World} en Box2D con gravedad 0 y permitiendo que los cuerpos sean capaces de dormir.}]
 Simulator.World = new b2World(
@@ -53,11 +52,11 @@ Simulator.World = new b2World(
 );
 \end{lstlisting}
 
-Otra característica importante en Box2D y que tiene un gran impacto en el rendimiento de la simulación es que los cuerpos puedan \emph{dormir}. Un cuerpo \emph{dormirá} cuando éste esté inactivo, es decir, cuando no esté siendo sometido a ninguna fuerza o sobre el se aplican fuerzas, pero éstas no son capaces de alterar su estado (posición, ángulo de giro, etc)\footnote{Esto ocurre generalmente cuando un objeto está sobre una superficie cuya forma y la del cuerpo hace que éste se mantenga quieto. Un ejemplo de esto puede ser un cuadrado sobre una superficie plana y horizontal con una gravedad hacia el suelo.}. En la línea 3 del código \ref{code:world-gravedad} se puede ver como se ha establecido que los cuerpos del mundo sean capaces de dormir. Así, se consigue que el motor no simule los cuerpos que estén inactivos, mejorando el rendimiento de la aplicación.
+Otra característica importante en Box2D y que tiene un gran impacto en el rendimiento de la simulación es que los cuerpos puedan \emph{dormir}. Un cuerpo \emph{dormirá} cuando éste esté inactivo, es decir, cuando no esté siendo sometido a ninguna fuerza o sobre el se aplican fuerzas, pero éstas no son capaces de alterar su estado (posición, ángulo de giro, etc)\footnote{Esto ocurre generalmente cuando un objeto está sobre una superficie cuya forma y la del cuerpo hace que éste se mantenga quieto. Un ejemplo de esto puede ser un cuadrado sobre una superficie plana y horizontal con una gravedad hacia el suelo.}. En la línea 3 del listado de códigos \ref{code:world-gravedad} se puede ver como se ha establecido que los cuerpos del mundo sean capaces de dormir. Así, se consigue que el motor no simule los cuerpos que estén inactivos, mejorando el rendimiento de la aplicación.
 
 Por último, queda definir el \emph{paso del tiempo} en Box2D. Para ello, es necesario ejecutar la función \texttt{Simulator.World.Step()} cada vez que queramos que se ejecute un \emph{paso} en nuestro mundo (esto es equivalente a un \emph{tic} de reloj). Esta función ordenará al motor que aplique todas las fuerzas necesarias sobre los cuerpos del mundo (gravedad, colisiones, deslizamientos, etc). Obviamente, es en este momento cuando se ejecutará la detección de colisiones por parte del motor de físicas. Justo después de ejecutar un paso se deben eliminar las fuerzas que afectan a los objetos para que se produzca un movimiento y efecto natural de las distintas fuerzas en los cuerpos. Esto se consigue con la función \texttt{Simulator.World.ClearForces()}.
 
-En el código \ref{code:world-step} se puede ver con más detalle las funciones básicas que se deben ejecutar para que se produzca una actualización del mundo en Box2D.
+En el listado del código  \ref{code:world-step} se puede ver con más detalle las funciones básicas que se deben ejecutar para que se produzca una actualización del mundo en Box2D.
 
 \begin{lstlisting}[language={Javascript},label={code:world-step}, caption={Actualización del mundo en \texttt{Box2D}.}]
 // (...)
@@ -76,11 +75,87 @@ Simulator.World.ClearForces();
 \subsubsection{Creación de elementos en Box2D}
 
 
-La creación de elementos (\emph{bodies}, \emph{fixtures}, \emph{joints}, etc) en Box2D utiliza un \emph{patrón factoría}, teniendo que definir primero en un objeto plantilla (definición) las características que tendrá el elemento a crear.
+La creación de elementos (\emph{bodies}, \emph{fixtures}, \emph{joints}, etc) en Box2D utiliza un \emph{patrón factoría}, teniendo que definir primero en un objeto plantilla (definición) las características que tendrá el elemento a crear y luego diciéndole a \texttt{World} que cree dicho elemento a partir de la plantilla.
 
-En el código \ref{code:ejemplo-factoria} se puede ver como se crea el cuerpo principal del robot utilizando una factoría tanto para definir el objeto \emph{Body} como la \emph{Fixture} a partir de \emph{World}, que realizará la creación del mismo. Este código será analizado en profundidad cuando se hable de la creación del cuerpo principal del robot (sección \ref{sec:cuerpo-principal}).
+A continuación se explicarán las características principales de los elementos de Box2D y sus propiedades mas importantes.
 
-\begin{lstlisting}[language={Javascript},label={code:ejemplo-factoria}, caption={Creación del cuerpo principal del robot utilizando la librería Box2dweb.}]
+\subsubsection*{Objeto \texttt{Body}}
+
+Los cuerpos en Box2D pueden ser dinámicos (tipo \texttt{b2\_dynamicBody}) o estáticos (tipo \texttt{b2\_staticBody }). Un cuerpo dinámico podrá moverse y se verá afectado por el entorno y otros cuerpos. Un cuerpo estático será inmune a fuerzas como la gravedad y su posición no cambiará. Robode y todos sus componentes serán cuerpos dinámicos mientras que las fronteras del mundo, serán cuerpos estáticos. También, un cuerpo puede estar inactivo a través de la propiedad \texttt{sleep} del mismo.
+
+Un cuerpo conoce los \emph{fixtures} asociados a él (que puede ser más de uno) y los \emph{joints} a los que está atado.
+
+Es el objeto \texttt{Body} el que contiene todas las propiedades físicas y que afectan al movimiento del mismo, como por ejemplo: la velocidad lineal y angular, el ángulo de rotación o la masa. Por supuesto, también la posición. Para obtener la posición de un cuerpo se utiliza el método \texttt{GetWorldCenter()} para obtener la posición en el mundo del centro de masas del cuerpo.
+
+
+Las propiedades \texttt{linearDamping} y \texttt{angularDamping}\footnote{Aquí, con \emph{damping} se refiere al efecto de suelo mojado y el deslizamiento que un cuerpo tiene sobre una superficie, en especial cuando el cuerpo frena.} sirven para reducir la velocidad lineal y angular respectivamente cuando en el frenado.
+
+%, y no con respecto al origen del mismo. Esto tiene que ver con las \emph{fixtures} que tenga asociadas dicho cuerpo. Por ejemplo, si un cuerpo tiene mas de una \emph{fixture}, la posición origen del cuerpo no representará la del 
+
+ %ya que se puede definir la posición del cuerpo y la de la \emph{fixture} de manera que no coincidan. De esta manera, la función \texttt{GetWorldPosition()} obtendrá la posición correcta del cuerpo con respecto a la del \emph{fixture}.
+
+Adicionalmente, se ha modificado el prototipo de las clases \texttt{b2Body} y \texttt{b2BodyDef} (clase plantilla para crear \emph{bodies}) para añadir una característica más al cuerpo, el nombre del mismo.
+
+
+\subsubsection*{Objeto \texttt{Fixture}}
+
+Los objetos \texttt{b2Fixture} definen la apariencia del objeto al que están asociado y las características físicas que le harán interactuar con el mundo de una u otra manera.
+
+Box2D proporciona dos clases principales para definir la forma de las \emph{fixtures}: \texttt{b2CircleShape} y \texttt{b2PolygonShape}. La primera representa a una forma circular y es necesario indicar el radio del circulo a crear. La segunda forma representa a un polígono. Los polígonos tienen dos formas principales de definirse:
+
+\begin{itemize}
+	\item Con forma de caja definiendo su ancho y largo (con el método \texttt{AsBox()}).
+	\item Con una forma libre. Es necesario indicar los vértices del polígono y su cantidad (con el método \texttt{AsArray()}). Es así como se pueden crear triángulo o trapecios en Box2D, por ejemplo. En este caso es importante no crear formas cóncavas, pues provocarán errores en la simulación.
+\end{itemize}
+
+
+Además, un \emph{fixture} tiene propiedades de densidad, fricción y restitución que definirá la interacción de este con el mundo. La densidad es usada para calcular la masa del cuerpo al que está asociada la \emph{fixture}. La fricción se usa para hacer los cuerpos deslizarse de una manera realista. La restitución de un cuerpo es la elasticidad de este ante un impacto y según su valor, si rebota más o menos contra una superficie. 
+
+Los valores de fricción y restitución oscilan entre 0 y 1. Siendo 0 la anulación de la propiedad y 1 el máximo valor que se le puede dar.
+
+
+\subsubsection*{Objeto \texttt{Joint}}
+
+
+Un \emph{Joint} es un elemento constrictor entre dos cuerpos, que controla el movimiento que hacen los cuerpos pegados por el joint. El punto por el que se une un cuerpo a un joint se denomina \emph{ancla}.
+
+Hay distintos tipos de joints que limitan el movimiento de los cuerpos de diferentes maneras. A continuación se nombrarán los más importantes:
+
+\begin{itemize}
+	\item \texttt{Revolute} es un joint que fuerza a dos cuerpos a compartir el mismo \emph{ancla} con un cierto ángulo de libertad. También se puede configurar un \emph{motor} que hará girar el ancla y por tanto a los cuerpos.
+	\item \texttt{Distance} es un joint que permite ata los cuerpos pero como si estuvieran sujetos a una cuerda. Los cuerpos tendrán una distancia máxima que se pueden separar (la longitud de la cuerda) pero no una mínima, pudiendo incluso chocar.
+	\item \texttt{Prismatic} es un joint que simula el movimiento de un cuerpo unicamente sobre un eje de coordenadas, permitiendo movimientos como los de un ascensor.
+\end{itemize}
+
+En el simulador solo usaremos \emph{Joints} de tipo \emph{Revolute}, definidos por la clase \texttt{b2RevoluteJoint}.  En la inicialización del joint se deben indicar los dos cuerpos y el punto de ancla. También hay que establecer las propiedades relacionadas al motor (propiedad \texttt{enableMotor}), si se quiere que exista un límite de movimiento o no (propiedad \texttt{enableLimit}) y el valor máximo de torsión que se permite (propiedad \texttt{maxMotorTorque}).
+
+\subsection{Construcción del robot}
+\label{sec:contruccion-robot}
+
+Para la creación del robot, un referente importante ha sido el robot de Moway. La forma y disposición de los sensores es similar a la simulada en Robode. Otro objetivo a cumplir era el de crear una simulación que imitara un comportamiento natural del robot a la hora de moverse, de chocar o de detenerse. Por tanto, se han establecido diferentes propiedades en los cuerpos para cumplir este objetivo.
+
+Anteriormente ya se ha mencionado que el robot tendrá 2 ruedas, 2 sensores que detectarán líneas y otros 4 que detectaran colisiones. Todos estos elementos del robot están modelados en cuerpos separados. No obstante, es necesario que se mantengan unidos y se muevan a la vez.
+
+En la figura \ref{fig:robot-skel} se puede ver un esqueleto del Robode.
+
+\begin{figure}[!ht]
+	\begin{centering}
+		\includegraphics[width=0.5\textwidth]{images/robot-skel.png}
+			\caption{Esqueleto del robot que muestra los diferentes \emph{bodies} y \emph{joints} que lo forman.}
+				\label{fig:robot-skel}
+	\end{centering}
+\end{figure}
+
+En las siguientes secciones se explicará más en detalle como se han creado cada una de las partes del robot.
+ 
+\subsubsection*{Cuerpo principal}
+\label{sec:cuerpo-principal}
+
+El cuerpo principal está modelado como un rectángulo. Éste será más largo que ancho y tendrá el resto de cuerpos (sensores y ruedas) \emph{atados} a él con joints. El cuerpo principal de Robode será dinámico, así como los sensores y ruedas.
+
+En el listado de código \ref{code:creacion-cuerpo-principal} se puede ver el código que construye el cuerpo principal de Robode.
+
+\begin{lstlisting}[language={Javascript},label={code:creacion-cuerpo-principal}, caption={Creación del cuerpo principal del robot utilizando la librería Box2dweb.}]
 // Body definition
 var bodyDef = new b2BodyDef(); 
 bodyDef.type = b2Body.b2_dynamicBody;
@@ -106,56 +181,11 @@ robot.CreateFixture(fixDef);
 \end{lstlisting}
 
 
-El elemento \emph{Body} será el que contenga la información básica del objeto, como es su posición, velocidad o ángulo de giro. Será el elemento \emph{Fixture} el que defina la forma (si es un polígono o círculo y de que forma) y sus características (fricción que produce, densidad, etc) del \emph{Body} al que está asociado.
-
-
-\subsection{Construcción del robot}
-\label{sec:contruccion-robot}
-
-Para la creación del robot, un referente importante ha sido el robot de Moway. La forma y disposición de los sensores es similar a la simulada en Robode. Otra objetivo a cumplir era el de crear una simulación que imitara un comportamiento natural del robot a la hora de moverse, de chocar o de detenerse. Por tanto, se han establecido diferentes propiedades en los cuerpos para cumplir este objetivo.
-
-Anteriormente ya se ha mencionado que el robot tendrá 2 ruedas, 2 sensores que detectarán líneas y otros 4 que detectaran colisiones. El cuerpo del robot será modelado con un rectángulo, cuyo ancho es menor que el largo. Las dos ruedas se dispondrán en cada lado del cuerpo principal, un poco retrasadas de la mitad del cuerpo.
-
-Los 4 sensores de colisión serán modelados con triángulos y estarán dispuestos de forma que sobresalgan del cuerpo principal con la base del triángulo hacía el exterior, para así poder detectar colisiones antes de que ocurran. Las posiciones de cada uno de los 4 sensores se han descrito con las posiciones cardinales: noroeste, sureste, noreste y sureste. 
-
-De esta manera, el robot tendrá 2 sensores que detectan colisiones en la parte delantera y otros dos en la trasera. 
-
-Los sensores que detectan líneas serán modelados como círculos simulando dos cámaras mirando al suelo, igual que ocurre en el robot Moway. 
-
-Todos estos elementos del robot están modelados en cuerpos separados. No obstante, es necesario que se mantengan unidos y se muevan a la vez. Es aquí donde entran en juego los \emph{joints} (o articulaciones). Usaremos un joint de tipo \texttt{Revolute} que permite definir una unión entre dos cuerpos como si fuera una cuerda de tamaño fijo, manteniendo la distancia por la que se separan ambos cuerpos. Por tanto, tendremos 8 joints que unen el cuerpo principal con las partes del robot (2 ruedas, 2 sensores de línea y 4 sensores de colisión.).
-
-
-En la figura \ref{fig:robot-skel} se puede ver el esqueleto del robot con todos los elementos juntos. 
-
-\begin{figure}[!ht]
-	\begin{centering}
-		\includegraphics[width=0.5\textwidth]{images/robot-skel.png}
-			\caption{Esqueleto del robot que muestra los diferentes \emph{bodies} y \emph{joints} que lo forman.}
-				\label{fig:robot-skel}
-	\end{centering}
-\end{figure}
-
-En las siguientes secciones explicaremos más en detalle como se han creado cada una de las partes del robot.
- 
-\subsubsection*{Cuerpo principal}
-\label{sec:cuerpo-principal}
-
-El cuerpo principal está modelado como un rectángulo. Éste será más largo que ancho y tendrá el resto de cuerpos (sensores y ruedas) \emph{atados} a él con joints. 
-
-En Box2D, los cuerpos pueden ser dinámicos (propiedad \texttt{b2\_dynamicBody}) o estáticos (propiedad \texttt{b2\_staticBody}). Un cuerpo dinámico es aquel que puede cambiar su posición, ángulo de giro y al que le afectan las fuerzas que se le aplican. Un cuerpo estático no se verá afectado por las fuerzas que se producen contra él. Un ejemplo claro de cuerpo estático en nuestra aplicación serán las fronteras del mundo. En la sección \ref{sec:construccion-circuitos} se hablará más en profundidad de cuerpos estáticos cuando se utilicen para crear el circuito. Por supuesto, el cuerpo principal de Robode será dinámico, así como los sensores y ruedas.
-
-Las propiedades \texttt{linearDamping} y \texttt{angularDamping}\footnote{Aquí, con \emph{damping} se refiere al efecto de suelo mojado y el deslizamiento que un cuerpo tiene sobre el mismo, sobretodo cuando el cuerpo frena.} sirven para reducir la velocidad lineal y angular respectivamente cuando se frena. Con un valor de 8 en ambas propiedades junto a la densidad establecida, se consigue eliminar el deslizamiento del robot cuando se quiere que se detenga.
- 
-Los valores de densidad, fricción y restitución\footnote{La restitución de un cuerpo es la capacidad que tiene el mismo de \emph{rebotar} contra una superficie contra la que choca. Por ejemplo, una pelota cayendo sobre una superficie plana rebotará con una fuerza igual a la velocidad con la que ha golpeado la superficie si el valor es 1. Con valor 0, se desactiva esta propiedad.} serán 40, 1 y 0, respectivamente. Estos valores se mantendrán iguales en todos los cuerpos creados, para dar una sensación de uniformidad en las colisiones. Cuanto mayor sea la densidad de un cuerpo, mayor será su masa. Los valores de fricción y restitución van de 0 a 1, siendo 0 un valor que anula la propiedad. 
- 
-El código Javascript que crea el robot ya se ha visto en el código \ref{code:ejemplo-factoria}. 
-
-
 \subsubsection*{Ruedas}
 
-La característica principal de un \texttt{Revolute Joint} es la posibilidad de establecer  un límite para que los cuerpos puedan rotar en función de las anclas que se establecen en cada cuerpo. Así, se puede establecer un motor que simule entre otros ruedas, cadenas o puertas giratorias. Justo lo que se pretende.
+Las ruedas de Robode se simularan con 
 
-El movimiento de las ruedas del robot se simulará con el giro que permite hacer el joint y la velocidad de giro determinará la velocidad a la que se mueve la rueda. En el código \ref{code:wheel-joint} se puede ver la creación de un del joint que une el coche con la rueda.
+El movimiento de las ruedas del robot se simulará con el giro que permite hacer el joint y la velocidad de giro determinará la velocidad a la que se mueve la rueda. En el listado del código  \ref{code:wheel-joint} se puede ver la creación de un del joint que une el coche con la rueda.
 
 \begin{lstlisting}[language={Javascript},label={code:wheel-joint}, caption={Función que crea el joint que une la rueda al coche.}]
 function addWheelJoint(mybody, mywheel) {
@@ -179,6 +209,18 @@ Se activará la propiedad de motor en las ruedas y se le dará un valor inicial 
 
 \subsubsection*{Sensores}
 
+{\color{green}REVISAR}
+
+%%%%%%
+Los 4 sensores de colisión serán modelados con triángulos y estarán dispuestos de forma que sobresalgan del cuerpo principal con la base del triángulo hacía el exterior, para así poder detectar colisiones antes de que ocurran. Las posiciones de cada uno de los 4 sensores se han descrito con las posiciones cardinales: noroeste, sureste, noreste y sureste. 
+
+De esta manera, el robot tendrá 2 sensores que detectan colisiones en la parte delantera y otros dos en la trasera. 
+
+
+Los sensores que detectan líneas serán modelados como círculos simulando dos cámaras mirando al suelo, igual que ocurre en el robot Moway. 
+%%%%%
+
+
 
 Para los sensores de colisión, se utilizará una forma triangular, mientras que para los sensores de linea, la forma será circular.
 
@@ -191,7 +233,7 @@ En la variable \texttt{points} se tienen los puntos que definen la forma del sen
 
 Box2D provee de manera nativa que los cuerpos (en concreto, la \emph{fixture} que contiene) se definan como un \emph{sensor} en el motor físico. Esto otorga una serie de características que hacen que los sensores de Robode puedan percibir cuerpos con los que colisionan. 
 
-Para definir un cuerpo en Box2D como sensor, se tendrá que establecer la propiedad \texttt{isSensor} a \texttt{true} cuando se construya la \emph{fixture} del cuerpo que lo contendrá. En el código \ref{code:creation-sensor} se puede ver como se crean los sensores. 
+Para definir un cuerpo en Box2D como sensor, se tendrá que establecer la propiedad \texttt{isSensor} a \texttt{true} cuando se construya la \emph{fixture} del cuerpo que lo contendrá. En el listado del código \ref{code:creation-sensor} se puede ver como se crean los sensores. 
 
 \begin{lstlisting}[language={Javascript},label={code:creation-sensor}, caption={Función que construye un sensor de Robode.}]
 function Sensor(points, name, bodyAttached) {
@@ -247,6 +289,66 @@ empty yet
 \subsection{Detectando colisiones}
 \label{detectando-colisiones}
 
+La clase \texttt{b2Contact} de Box2D representa el contacto entre dos cuerpos. Esta contiene los dos cuerpos que se están \emph{tocando} y otra información de interés. Box2D proporciona la clase \texttt{b2ContactListener} que permite la redefinición de 4 funciones clave en la gestión de colisiones. Estas son:
+
+\begin{itemize}
+	\item Función \texttt{PreSolve()}, que se ejecutará antes de que se produzca por parte del motor de Box2D la solución de la colisión. Es útil para realizar cálculos previos al contacto. Útil también para anular un contacto y que la colisión no se produzca, por ejemplo.
+	\item Función \texttt{PostSolve()}, similar a la anterior pero se ejecutará justo después de que la gestión de la colisión haya acabado.
+	\item Función \texttt{BeginContact()} que permite controlar cuando un contacto empieza, es decir, cuando un cuerpo colisiona con otro. 
+	\item Función \texttt{EndContact()} que se ejecutará cuando un contacto termine, es decir, cuando un cuerpo deje de \texttt{tocar} a otro.
+\end{itemize}
+
+Es importante que estas funciones estén lo más optimizadas posible puesto que se ejecutarán cada vez que se produzca un contacto entre dos cuerpos. En el caso del simulador, solo necesitaremos redefinir las funciones \texttt{BeginContact()} y  \texttt{EndContact}. Estas recibirán como parámetro un objeto \texttt{b2Contact} para poder obtener información del contacto que se está produciendo.
+
+En el caso de Robode, puesto que se están simulando sensores muy simples que no distinguen entre detectar uno o más cuerpos, las funciones \texttt{BeginContact()} y \texttt{EndContact} simplemente contarán el número de cuerpos que está sintiendo ese sensor. Por tanto, al comenzar un contacto unicamente se notificará dicha colisión si el sensor no estaba sintiendo nada previamente. De igual manera, cuando un contacto acaba, solo se notificará si el número de cuerpos sentidos por el sensor es 1 (que va a cambiar al 0).
+
+En el listado de código \ref{code:begin-contact} se muestra a modo ilustrativo la función \texttt{BeginContact()}. La función \texttt{EndContact()} sería similar pero decrementando el contador de colisiones.
+
+
+\begin{lstlisting}[language={Javascript},label={code:begin-contact}, caption={Función \texttt{BeginContact()} definida para los sensores.}]
+contactListener.BeginContact = function(contact) {
+
+	if (!running) return;
+
+	var isSensorA = contact.GetFixtureA().IsSensor();
+	var isSensorB = contact.GetFixtureB().IsSensor();
+
+	if (isSensorA != isSensorB) { // a XOR b: is any fixture a sensor?
+		//find who is the sensor and who the body
+		var bodySensed, bodySensor;
+
+		if (isSensorA) {
+			bodySensor = contact.GetFixtureA();
+			bodySensed = contact.GetFixtureB();
+		} else {
+			bodySensor = contact.GetFixtureB();
+			bodySensed = contact.GetFixtureA();
+		}
+
+		// if it's a robot part, do nothing
+		if (isRobotPart(bodySensed.getBodyName(), robotparts))
+			return;
+
+		/*  Here, we got a collision sensor-body.
+			if is the first collision detect by this sensor
+				then send message to sandbox */
+		if (bodySensor.nCollided === 0) {
+			// notify new collision
+			var message = {
+				id: bodySensor.getBodyName(),
+				state: "begin"
+			};
+			sendMessage("sensor", message);
+		}
+		//increment the collision count
+		bodySensor.addcollision();
+	}
+};
+\end{lstlisting}
+
+Como se puede ver en la linea 21, la comprobación acabará si el cuerpo percibido es una parte del coche, como una rueda o el propio cuerpo principal. Si un cuerpo es parte del robot se comprueba con el nombre del mismo. Los nombres de los cuerpos se establecen en la creación de un cuerpo con la función \texttt{setName()} de la clase \texttt{b2Body}\footnote{Se ha redefinido el prototipo de la clase b2Body para añadir la función \texttt{setName()} de manera transparente a cualquier cuerpo de Box2D.}. Un ejemplo de esto se ha podido ver en los listados de código \ref{code:creation-sensor} o \ref{code:ejemplo-factoria}.
+
+También, en las lineas 28 a 33 se notifica la colisión. En secciones posteriores explicaremos el proceso de notificación y la comunicación del simulador con el resto de la aplicación.
 
 
 {\color{green} ===POR AQUI===}.
