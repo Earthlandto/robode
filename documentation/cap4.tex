@@ -8,13 +8,26 @@ Después de estudiar cual es la situación actual de la enseñanza de la program
 
 Como ya se ha mencionado anteriormente, se creará un simulador de un robot, al que hemos denominado \emph{Robode}, y se integrará en la plataforma Descubre la programación. Robode  estará dentro de un mundo del que podrá moverse con libertad y con el que podrá interactuar. El robot tendrá dos ruedas que se mueven independientemente (con un motor para cada una de ellas) y dispondrá de sensores que informarán de posibles colisiones con obstáculos. También, el robot tendrá la capacidad de detectar color en el suelo debajo del mismo. Ésta capacidad se usará para detectar lineas pintadas de negro en el suelo.
 
-Adicionalmente, el robot y el mundo en el que este se encuentra será dibujado en un elemento \emph{canvas} de HTML5, al igual que ocurre en la plataforma Descubre.
+Adicionalmente, el robot y el mundo en el que este se encuentra será dibujado en un elemento \emph{canvas} de HTML5, al igual que ocurre en la plataforma Descubre. El \emph{canvas} es un elemento de HTML5 que establece un \emph{lienzo} en el que se pueden dibujar gráficos\footnote{Los gráficos pueden ser en 2 o 3 dimensiones, pero en el simulador que se desarrollará solo se hará uso de gráficos 2D.}. De igual modo, HTML5 proporciona muchas funciones para dibujar en el \emph{canvas} de manera relativamente sencilla.
 
 
 Como se puede ver, Robode es la unión de varios de los proyectos que se han analizado en el capítulo \ref{estado-arte}. Por una parte, la idea principal de crear un simulador es igual a la que se ha realizado en Robomind (el cual se analiza en la sección \ref{sec:robomind}) pero simulando un robot en un mundo continuo y con características similares a las de Moway (analizado en la sección \ref{sec:moway}). Por último, se ejecutará en un entorno web, como bien puede ser el ejemplo de las herramientas que proporcionan CodeHS (sección \ref{sec:CodeHS}) y Code.org (sección \ref{sec:Code.org}). 
 
 
 En las secciones siguientes se va a estudiar como se ha diseñado y creado Robode, que características tiene y cual ha sido la implementación exacta llevada a cabo.
+
+
+
+
+\section{Integración en Descubre}
+\label{sec:integracion-descubre}
+
+\subsection{Modificación del lenguaje iJava}
+\label{sec:modificacion-ijava}
+
+
+
+
 
 
 
@@ -57,7 +70,15 @@ Otra característica importante en Box2D y que tiene un gran impacto en el rendi
 
 Por último, queda definir el \emph{paso del tiempo} en Box2D. Para ello, es necesario ejecutar la función \texttt{Simulator.World.Step()} cada vez que queramos que se ejecute un \emph{paso} en nuestro mundo (esto es equivalente a un \emph{tic} de reloj). Esta función ordenará al motor que aplique todas las fuerzas necesarias sobre los cuerpos del mundo (gravedad, colisiones, deslizamientos, etc). Obviamente, es en este momento cuando se ejecutará la detección de colisiones por parte del motor de físicas. Justo después de ejecutar un paso se deben eliminar las fuerzas que afectan a los objetos para que se produzca un movimiento y efecto natural de las distintas fuerzas en los cuerpos. Esto se consigue con la función \texttt{Simulator.World.ClearForces()}.
 
-En el listado del código  \ref{code:world-step} se puede ver con más detalle las funciones básicas que se deben ejecutar para que se produzca una actualización del mundo en Box2D.
+En la figura \ref{fig:step-box2d} se muestra una representación de lo que ocurre en el motor de Box2D cada vez que se ejecuta un \emph{step}. En el código  \ref{code:world-step} se puede ver con más detalle las funciones básicas que se deben ejecutar para que se produzca una actualización del mundo en Box2D.
+
+\begin{figure}[!ht]
+	\begin{centering}
+		\includegraphics[width=0.5\textwidth]{images/step-box2d.png}
+			\caption{Representación de lo que ocurre cada vez que se realiza la llamada a la función \texttt{Step()} en Box2D. Obtenido de \cite{box2d}.}
+				\label{fig:step-box2d}
+	\end{centering}
+\end{figure}
 
 \begin{lstlisting}[language={Javascript},label={code:world-step}, caption={Actualización del mundo en \texttt{Box2D}.}]
 // (...)
@@ -72,63 +93,8 @@ Simulator.World.ClearForces();
 // (...)
 \end{lstlisting}
 
+En el apéndice \ref{anexo:creacion-elementos-box2d} se explica en detalle las características básicas y más importantes de los objetos \texttt{Body}, \texttt{Fixture} y \texttt{Joint} de Box2D.
 
-\subsubsection{Creación de elementos en Box2D}
-
-
-La creación de elementos (\emph{bodies}, \emph{fixtures}, \emph{joints}, etc) en Box2D utiliza un \emph{patrón factoría}, teniendo que definir primero en un objeto plantilla (definición) las características que tendrá el elemento a crear y luego diciéndole a \texttt{World} que cree dicho elemento a partir de la plantilla.
-
-A continuación se explicarán las características principales de los elementos de Box2D y sus propiedades mas importantes.
-
-\subsubsection*{Objeto \texttt{Body}}
-
-Los cuerpos en Box2D pueden ser dinámicos (tipo \texttt{b2\_dynamicBody}) o estáticos (tipo \texttt{b2\_staticBody }). Un cuerpo dinámico podrá moverse y se verá afectado por el entorno y otros cuerpos. Un cuerpo estático será inmune a fuerzas como la gravedad y su posición no cambiará. Robode y todos sus componentes serán cuerpos dinámicos mientras que las fronteras del mundo, serán cuerpos estáticos. También, un cuerpo está activo si su propiedad \texttt{sleep} está activa. El efecto de un cuerpo inactivo ya se ha explicado en la sección \ref{sec:definicion-mundo}.
-
-Un cuerpo conoce los \emph{fixtures} asociados a él (que puede ser más de uno) y los \emph{joints} a los que está atado.
-
-Es el objeto \texttt{Body} el que contiene todas las propiedades físicas y que afectan al movimiento del mismo, como por ejemplo: la velocidad lineal y angular, el ángulo de rotación o la masa. Por supuesto, también la posición. Para obtener la posición de un cuerpo se utiliza el método \texttt{GetWorldCenter()} para obtener la posición en el mundo del centro de masas del cuerpo.
-
-
-Las propiedades \texttt{linearDamping} y \texttt{angularDamping}\footnote{Aquí, con \emph{damping} se refiere al efecto de suelo mojado y el deslizamiento que un cuerpo tiene sobre una superficie, en especial cuando el cuerpo frena.} sirven para reducir la velocidad lineal y angular respectivamente cuando en el frenado.
-
-%, y no con respecto al origen del mismo. Esto tiene que ver con las \emph{fixtures} que tenga asociadas dicho cuerpo. Por ejemplo, si un cuerpo tiene mas de una \emph{fixture}, la posición origen del cuerpo no representará la del 
-
- %ya que se puede definir la posición del cuerpo y la de la \emph{fixture} de manera que no coincidan. De esta manera, la función \texttt{GetWorldPosition()} obtendrá la posición correcta del cuerpo con respecto a la del \emph{fixture}.
-
-Adicionalmente, se ha modificado el prototipo de las clases \texttt{b2Body} y \texttt{b2BodyDef} (clase plantilla para crear \emph{bodies}) para añadir una característica más al cuerpo, el nombre que se le asigna al cuerpo. Esto se usará principalmente para poder distinguir estos objetos fácilmente en una colisión.
-
-
-\subsubsection*{Objeto \texttt{Fixture}}
-
-Los objetos \texttt{b2Fixture} definen la apariencia del objeto al que están asociado y las características físicas que le harán interactuar con el mundo de una u otra manera.
-
-Box2D proporciona dos clases principales para definir la forma de las \emph{fixtures}: \texttt{b2CircleShape()} y \texttt{b2PolygonShape()}. La primera representa a una forma circular y es necesario indicar el radio del circulo a crear. La segunda forma representa a un polígono. Los polígonos tienen dos formas principales de definirse:
-
-\begin{itemize}
-	\item Con forma de caja definiendo su ancho y largo (con el método \texttt{SetAsBox()}).
-	\item Con una forma libre. Es necesario indicar los vértices del polígono y su cantidad (con el método \texttt{AsArray()}). Es así como se pueden crear triángulo o trapecios en Box2D, por ejemplo. En este caso es importante no crear formas cóncavas, pues provocarán errores en la simulación.
-\end{itemize}
-
-
-Además, un \emph{fixture} tiene propiedades de densidad, fricción y restitución que definirá la interacción de este con el mundo. La densidad es usada para calcular la masa del cuerpo al que está asociada la \emph{fixture}. La fricción se usa para hacer los cuerpos deslizarse de una manera realista. La restitución de un cuerpo es la elasticidad de este ante un impacto y según su valor, si rebota más o menos contra una superficie. 
-
-Los valores de fricción y restitución oscilan entre 0 y 1. Siendo 0 la anulación de la propiedad y 1 el máximo valor que se le puede dar.
-
-
-\subsubsection*{Objeto \texttt{Joint}}
-
-
-Un \emph{Joint} es un elemento constrictor entre dos cuerpos, que controla el movimiento que hacen los cuerpos pegados por el joint. El punto por el que se une un cuerpo a un joint se denomina \emph{ancla}.
-
-Hay distintos tipos de joints que limitan el movimiento de los cuerpos de diferentes maneras. A continuación se nombrarán los más importantes:
-
-\begin{itemize}
-	\item \texttt{Revolute} es un joint que fuerza a dos cuerpos a compartir el mismo \emph{ancla} con un cierto ángulo de libertad. También se puede configurar un \emph{motor} que hará girar el ancla y por tanto a los cuerpos.
-	\item \texttt{Distance} es un joint que permite ata los cuerpos pero como si estuvieran sujetos a una cuerda. Los cuerpos tendrán una distancia máxima que se pueden separar (la longitud de la cuerda) pero no una mínima, pudiendo incluso chocar.
-	\item \texttt{Prismatic} es un joint que simula el movimiento de un cuerpo unicamente sobre un eje de coordenadas, permitiendo movimientos como los de un ascensor.
-\end{itemize}
-
-En el simulador solo usaremos \emph{Joints} de tipo \emph{Revolute}, definidos por la clase \texttt{b2RevoluteJoint}.  En la inicialización del joint se deben indicar los dos cuerpos y el punto de ancla. También hay que establecer las propiedades relacionadas al motor (propiedad \texttt{enableMotor}), si se quiere que exista un límite de movimiento o no (propiedad \texttt{enableLimit}) y el valor máximo de torsión que se permite (propiedad \texttt{maxMotorTorque}).
 
 \subsection{Construcción del robot}
 \label{sec:contruccion-robot}
@@ -527,6 +493,64 @@ Con respecto al dibujo de las lineas, se explicará más adelante en la sección
 \subsection{Animando a Robode}
 \label{animando-robode}
 
+
+
+Para entender como se ha realizado la animación del simulador, primero es necesario conocer algunos conceptos de Javascript.
+
+Javascript proporciona una serie de funciones para gestionar timers en la ejecución de un programa. Estos son:
+
+\begin{itemize}
+	\item \texttt{setTimeout(function, delay)}: Ejecuta la función \texttt{function} después de un tiempo especificado por \texttt{delay}. Devuelve un \texttt{id} que identifica al timer.
+	\item \texttt{setInterval(function, delay)}: Ejecuta la función \texttt{function} de manera periódicamente cada vez que se cumple el \texttt{delay}. Devuelve un \texttt{id} que identifica al timer.
+	\item \texttt{clearTimeout(id)} y \texttt{clearInterval(id)}: funciones que eliminan el timer asociado a ese \texttt{id}.
+\end{itemize}
+
+El uso normal que se haría en la aplicación (el simulador junto a Descubre) será ejecutar la función \texttt{setInterval(function, delay)} con un \texttt{delay} igual al número de veces por segundo que queremos que se actualice el simulador. Cada vez se ejecutará la función \texttt{function} (que normalmente contendrá \texttt{World.Step()} y la actualización de los gráficos).
+
+Por tanto, cada vez que se produzca un evento (por ejemplo, una interrupción de teclado o ratón), la ejecución de Javascript tratará dichos eventos. 
+
+No obstante, Javascript tiene una limitación: implementa un sistema \emph{monohilo}. Esto implica que si hay una función que aún no ha terminado de ejecutarse cuando ocurre un timer o un evento, estos se verán retrasados hasta que dicha función acabe\footnote{Para mas información al respecto, se puede consultar \cite{js-timers-works}, \cite{event-loop-js} y \cite{resig2013secrets}.}.
+
+{\color{red} ¿¿¿¿¿LE HAGO SUFICIENTE REFERENCIA CON EL PIE DE PÁGINA Y LAS CITAS????}
+
+Si esta situación se diera en el simulador, se detendría toda la aplicación provocando principalmente que Robode deje de moverse (su estado con respecto al mundo no se actualizaría) y que no se pueda escribir en el editor de código (los eventos de teclado y ratón se tratarían tarde).
+
+Y precisamente este es el efecto que produciría la función \texttt{wait(n\_miliseg)} de la API del simulador, descrita en la sección \ref{sec:modificacion-ijava}. Obviamente, este efecto va en contra de correcto funcionamiento que debe tener el simulador y la aplicación por completo.
+
+Para solventar este problema, existen los Web Workers\cite{web-worker-mdn} en Javascript. Básicamente, un Web Worker (o worker para acortar) permite ejecutar tareas en segundo plano separado del hilo principal. Es decir, se consigue un sistema \emph{multihilo} en Javascript. La comunicación del worker con el resto de elementos se hace mediante mensajes, como los que se han visto anteriormente en los códigos \ref{code:deteccion-bezier} o \ref{code:begin-contact}.
+
+{\color{red}
+Aún así, los Workers tienen sus limitaciones. La más importante es que no se puede interactuar con el DOM\footnote{El DOM (Document Object Model o Modelo de Objetos del Documento en español) es un API de programación para documentos de HTML. Parte fundamental de HTML y que contiene toda la información relacionada a la página web} de HTML. Esto hace que no se pueda dibujar en el \emph{canvas}. 
+
+Entonces, la solución radica en convertir el Sandbox en un Web Worker y que sea éste el que controle la ejecución del simulador mediante mensajes. De esta manera se consigue paralelizar la aplicación y que la ejecución de la función \texttt{wait()} esté en un hilo independiente del principal. 
+}
+
+En el hilo principal se ejecutará la función \texttt{setInterval()} con un valor de \texttt{delay} equivalente a 60 FPS (frames por segundo). Cada vez que se ejecute dicha función, se actualizarán las fuerzas del mundo, el movimiento del robot y se dibujará por pantalla el estado actual del mundo. En el código \ref{code:interval-function} se muestra la ejecución de la función \texttt{setInterval()}.
+
+\begin{lstlisting}[language={Javascript},label={code:interval-function}, caption={Función \texttt{setInterval()} que se ejecutara 60 veces por segundo.}]
+idInterval = window.setInterval(function() {
+    Simulator.World.Step(
+        1 / 60, //frame-rate
+        10, //velocity iterations
+        10 //position iterations
+    );
+
+    // Simulator.World.drawLines();
+    Simulator.World.DrawDebugData();
+    Simulator.World.ClearForces();
+
+    updateMovement();
+
+}, 1000 / 60);
+\end{lstlisting}
+
+
+\subsubsection{Dibujando a robode}
+
+Una vez que se ha aclarado como es la actualización del mundo, queda especificar como se dibuja el mismo.
+
+
+
 {\color{green} ===POR AQUI===}.
 
 
@@ -542,13 +566,4 @@ Aquí se habla de como se anima y que tiene que decir JS y su sistema monohilo a
 
 
 %El entorno o circuito por el que se moverá el robot tiene los siguientes elementos: (a) obstáculos, con los que podrá chocar y que se desplazaran por la colisión; (b) fronteras, que no podrán ser desplazadas o atravesadas por el robot y (c) lineas, que no producirán una colisión pero que podrán ser detectadas por el robot. 
-
-
-
-\section{Integración en Descubre}
-\label{sec:integracion-descubre}
-
-\subsection{Modificación del lenguaje iJava}
-\label{sec:modificacion-ijava}
-
 

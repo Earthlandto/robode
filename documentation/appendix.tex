@@ -1,4 +1,3 @@
-
 \appendix
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -52,7 +51,7 @@ En el caso del Sistema Educativo Americano, existen muchas vías en la formació
 A continuación se realizará una revisión de las principales características del lenguaje Logo para tener una visión general de su funcionamiento y sintaxis. Este análisis se basa en el trabajo de \cite[p.274-305]{feurzeig1969programming}. Si el lector quiere ampliar información sobre el lenguaje Logo, puede consultar \cite{friendly2014advanced} o \cite{logo-resources}.
 
 
-\section{\emph{words}, \emph{sentences}, operaciones y comandos}
+\section*{\emph{words}, \emph{sentences}, operaciones y comandos}
 
 Hay dos tipos de datos principales: \emph{words} y \emph{sentences}. \emph{words} está formado por 0 o más caracteres, sin espacios. Algunos ejemplos son: "SUN", "CAT", "5",  "97&!", "" (cadena vacía). El tipo de datos \emph{sentences} se forma por un conjunto de \emph{words} separado por espacios, como por ejemplo "HELLO WORLD" o "3 + 2 = 5". Un numero es una \emph{word} pero conpuesto únicamente por dígitos.
 
@@ -95,7 +94,7 @@ Si se intentara ejecutar la operación \texttt{WORD} "CAT " "DOG", se producirí
 También es posible encadenar varios operadores. De esta manera, la cadena de instrucciones \texttt{FIRST OF BUTFIRST OF "CAT"} devolverá el \emph{word} "A".
 
 
-\section{Variables, comentarios y definiendo nuevas operaciones}
+\section*{Variables, comentarios y definiendo nuevas operaciones}
 \label{sec:logo-variables}
 
 Para definir variables basta con usar el operador \texttt{MAKE} seguido de \emph{"}(comilla doble), el nombre de la variable y el valor que se quiere asignar. Para hacer uso de la variable, utilizamos el símbolo \emph{:}(dos puntos) seguido del nombre de la variable. Para hacer comentarios se utiliza el símbolo \emph{;}(punto y coma). Podemos ver un ejemplo en el código \ref{code:logo-nueva-variable}.
@@ -128,7 +127,7 @@ PRINT PENULTIMO OF "CAT" ;  salida  ->  A
 \end{lstlisting}
 
 
-\section{Operadores aritméticos}
+\section*{Operadores aritméticos}
 
 A parte de los operadores \texttt{SUM} y \texttt{DIFFERENCE} antes mencionados, Logo también otorga la posibilidad de utilizar los operadores aritméticos clásicos. La única condición es que la salida generada debe ser tratada (\texttt{PRINT}) o almacenada (en variables, como veremos en la sección siguiente) de alguna manera. Los operadores más importantes son \texttt{+}, \texttt{-}, \texttt{*}, \texttt{/} y \texttt{sqrt}.
 
@@ -141,7 +140,7 @@ PRINT :RUEDAS ;  salida  -> 4
 \end{lstlisting}
 
 
-\section{Operadores \texttt{IF} y \texttt{REPEAT}}
+\section*{Operadores \texttt{IF} y \texttt{REPEAT}}
 
 Se pueden crear operaciones condicionales utilizando la palabra clave \texttt{IF} seguida de una sentencia y una lista de órdenes a ejecutar si se evalúa dicha sentencia a verdadero. La lista de órdenes se declara entre corchetes (\texttt{[]}) y para la sentencia se pueden utilizar los operadores infijos \texttt{=}, \texttt{>} y \texttt{<}. En el código \ref{code:logo-if} podemos ver un ejemplo de uso.
 
@@ -167,7 +166,7 @@ REPEAT 10 [ PRINT "HOLA MUNDO" ]
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\chapter{Programando el movimiento de Turtle en el lenguaje Logo}
+\chapter{Programando a Turtle de Logo}
 \label{anexo:logo-turtle-lenguaje}
 
 A parte de toda la funcionalidad que ofrece Logo como lenguaje, Turtle aporta una librería para poder controlar a nuestra criatura que pintará la pantalla. Ésta suele ser tradicionalmente representada con una tortuga o una flecha. Principalmente, se podrá controlar el movimiento de nuestra tortuga y el giro de ésta. También se le podrá ordenar que deje de pintar para permitir movimiento por la pantalla sin rastro. La mayoría de estos comandos pueden abreviarse para simplificar la escritura.
@@ -263,7 +262,7 @@ A continuación vamos a enumerar las funciones básicas para controlar el movimi
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Apendice D
+% Apendice E
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Programando con Scratch}
 \label{anexo:scratch-funcionamiento}
@@ -301,3 +300,65 @@ En cuanto a los tipos de bloques, actualmente están divididos en 11 categorías
 	\item \textbf{Bloques propios} y \textbf{Extensiones}: Scratch permite crear tus propios bloques y usar extensiones integradas con la aplicación como \emph{Lego WeDo} y \emph{PicoBoard}. 
 \end{itemize}
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Apendice F
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Creación de elementos en Box2D}
+\label{anexo:creacion-elementos-box2d}
+
+
+La creación de elementos (\emph{bodies}, \emph{fixtures}, \emph{joints}, etc) en Box2D utiliza un \emph{patrón factoría}, teniendo que definir primero en un objeto plantilla (definición) las características que tendrá el elemento a crear y luego diciéndole a \texttt{World} que cree dicho elemento a partir de la plantilla.
+
+A continuación se explicarán las características principales de los elementos de Box2D y sus propiedades mas importantes.
+
+\section*{Objeto \texttt{Body}}
+
+Los cuerpos en Box2D pueden ser dinámicos (tipo \texttt{b2\_dynamicBody}) o estáticos (tipo \texttt{b2\_staticBody }). Un cuerpo dinámico podrá moverse y se verá afectado por el entorno y otros cuerpos. Un cuerpo estático será inmune a fuerzas como la gravedad y su posición no cambiará. Robode y todos sus componentes serán cuerpos dinámicos mientras que las fronteras del mundo, serán cuerpos estáticos. También, un cuerpo está activo si su propiedad \texttt{sleep} está activa. El efecto de un cuerpo inactivo ya se ha explicado en la sección \ref{sec:definicion-mundo}.
+
+Un cuerpo conoce los \emph{fixtures} asociados a él (que puede ser más de uno) y los \emph{joints} a los que está atado.
+
+Es el objeto \texttt{Body} el que contiene todas las propiedades físicas y que afectan al movimiento del mismo, como por ejemplo: la velocidad lineal y angular, el ángulo de rotación o la masa. Por supuesto, también la posición. Para obtener la posición de un cuerpo se utiliza el método \texttt{GetWorldCenter()} para obtener la posición en el mundo del centro de masas del cuerpo.
+
+
+Las propiedades \texttt{linearDamping} y \texttt{angularDamping}\footnote{Aquí, con \emph{damping} se refiere al efecto de suelo mojado y el deslizamiento que un cuerpo tiene sobre una superficie, en especial cuando el cuerpo frena.} sirven para reducir la velocidad lineal y angular respectivamente cuando en el frenado.
+
+%, y no con respecto al origen del mismo. Esto tiene que ver con las \emph{fixtures} que tenga asociadas dicho cuerpo. Por ejemplo, si un cuerpo tiene mas de una \emph{fixture}, la posición origen del cuerpo no representará la del 
+
+ %ya que se puede definir la posición del cuerpo y la de la \emph{fixture} de manera que no coincidan. De esta manera, la función \texttt{GetWorldPosition()} obtendrá la posición correcta del cuerpo con respecto a la del \emph{fixture}.
+
+Adicionalmente, se ha modificado el prototipo de las clases \texttt{b2Body} y \texttt{b2BodyDef} (clase plantilla para crear \emph{bodies}) para añadir una característica más al cuerpo, el nombre que se le asigna al cuerpo. Esto se usará principalmente para poder distinguir estos objetos fácilmente en una colisión.
+
+
+\section*{Objeto \texttt{Fixture}}
+
+Los objetos \texttt{b2Fixture} definen la apariencia del objeto al que están asociado y las características físicas que le harán interactuar con el mundo de una u otra manera.
+
+Box2D proporciona dos clases principales para definir la forma de las \emph{fixtures}: \texttt{b2CircleShape()} y \texttt{b2PolygonShape()}. La primera representa a una forma circular y es necesario indicar el radio del circulo a crear. La segunda forma representa a un polígono. Los polígonos tienen dos formas principales de definirse:
+
+\begin{itemize}
+	\item Con forma de caja definiendo su ancho y largo (con el método \texttt{SetAsBox()}).
+	\item Con una forma libre. Es necesario indicar los vértices del polígono y su cantidad (con el método \texttt{AsArray()}). Es así como se pueden crear triángulo o trapecios en Box2D, por ejemplo. En este caso es importante no crear formas cóncavas, pues provocarán errores en la simulación.
+\end{itemize}
+
+
+Además, un \emph{fixture} tiene propiedades de densidad, fricción y restitución que definirá la interacción de este con el mundo. La densidad es usada para calcular la masa del cuerpo al que está asociada la \emph{fixture}. La fricción se usa para hacer los cuerpos deslizarse de una manera realista. La restitución de un cuerpo es la elasticidad de este ante un impacto y según su valor, si rebota más o menos contra una superficie. 
+
+Los valores de fricción y restitución oscilan entre 0 y 1. Siendo 0 la anulación de la propiedad y 1 el máximo valor que se le puede dar.
+
+
+\section*{Objeto \texttt{Joint}}
+
+
+Un \emph{Joint} es un elemento constrictor entre dos cuerpos, que controla el movimiento que hacen los cuerpos pegados por el joint. El punto por el que se une un cuerpo a un joint se denomina \emph{ancla}.
+
+Hay distintos tipos de joints que limitan el movimiento de los cuerpos de diferentes maneras. A continuación se nombrarán los más importantes:
+
+\begin{itemize}
+	\item \texttt{Revolute} es un joint que fuerza a dos cuerpos a compartir el mismo \emph{ancla} con un cierto ángulo de libertad. También se puede configurar un \emph{motor} que hará girar el ancla y por tanto a los cuerpos.
+	\item \texttt{Distance} es un joint que permite ata los cuerpos pero como si estuvieran sujetos a una cuerda. Los cuerpos tendrán una distancia máxima que se pueden separar (la longitud de la cuerda) pero no una mínima, pudiendo incluso chocar.
+	\item \texttt{Prismatic} es un joint que simula el movimiento de un cuerpo unicamente sobre un eje de coordenadas, permitiendo movimientos como los de un ascensor.
+\end{itemize}
+
+En el simulador solo usaremos \emph{Joints} de tipo \emph{Revolute}, definidos por la clase \texttt{b2RevoluteJoint}.  En la inicialización del joint se deben indicar los dos cuerpos y el punto de ancla. También hay que establecer las propiedades relacionadas al motor (propiedad \texttt{enableMotor}), si se quiere que exista un límite de movimiento o no (propiedad \texttt{enableLimit}) y el valor máximo de torsión que se permite (propiedad \texttt{maxMotorTorque}).
