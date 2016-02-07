@@ -6,7 +6,7 @@
 
 Después de estudiar cual es la situación actual de la enseñanza de la programación a un nivel global y los diferentes proyectos que promueven el \emph{pensamiento computacional}, en este capítulo se analizarán cuales son las necesidades del proyecto Robode y como se han resuelto.
 
-Como ya se ha mencionado anteriormente, se creará un simulador de un robot, al que hemos denominado \emph{Robode}, y se integrará en la plataforma Descubre la programación. Robode  estará dentro de un mundo del que podrá moverse con libertad y con el que podrá interactuar. El robot tendrá dos ruedas que se mueven independientemente (con un motor para cada una de ellas) y dispondrá de sensores que informarán de posibles colisiones con obstáculos. También, el robot tendrá la capacidad de detectar líneas o caminos pintados en el suelo, sabiendo también en que dirección detecta (o no) la linea.
+Como ya se ha mencionado anteriormente, se creará un simulador de un robot, al que hemos denominado \emph{Robode}, y se integrará en la plataforma Descubre la programación. Robode  estará dentro de un mundo del que podrá moverse con libertad y con el que podrá interactuar. El robot tendrá dos ruedas que se mueven independientemente (con un motor para cada una de ellas) y dispondrá de sensores que informarán de posibles colisiones con obstáculos. También, el robot tendrá la capacidad de detectar color en el suelo debajo del mismo. Ésta capacidad se usará para detectar lineas pintadas de negro en el suelo.
 
 Adicionalmente, el robot y el mundo en el que este se encuentra será dibujado en un elemento \emph{canvas} de HTML5, al igual que ocurre en la plataforma Descubre.
 
@@ -211,7 +211,7 @@ function createWheel(x, y) {
 }
 \end{lstlisting}
 
-El movimiento de las ruedas del robot se simulará con el giro que permite hacer el joint y la velocidad de giro determinará la velocidad a la que se mueve la rueda. El método de simulación de movimiento del robot se explicará más adelante. En el listado de código  \ref{code:wheel-joint} se puede ver la creación de un del joint que une el coche con la rueda.
+Además, se creará un joint que mantendrá unidas las ruedas con el cuerpo principal de Robode. En el listado de código  \ref{code:wheel-joint} se puede ver la creación de un del joint que une el coche con la rueda.
 
 \begin{lstlisting}[language={Javascript},label={code:wheel-joint}, caption={Función que crea el joint que une la rueda al coche.}]
 function addWheelJoint(mybody, mywheel) {
@@ -232,6 +232,7 @@ La función \texttt{Initialize()} recibe como parámetros los dos cuerpos que va
 
 Se activará la propiedad de motor en las ruedas y se le dará un valor inicial de 0. También se establecerá el valor máximo de torsión del joint para evitar que ante una fuerza de giro muy grande, el joint se mueva de su sitio. Por último, se activará un límite para que las ruedas no se muevan de su sitio ya que es esta propiedad la que define si el ancla será fija o permitirá movimiento con respecto a la separación de los dos cuerpos.
 
+El movimiento del robot se simulará con el movimiento que se producirá en las ruedas. Este proceso se explicará en la sección \ref{moviendo-robode}.
 
 \subsubsection*{Sensores}
 
@@ -287,7 +288,7 @@ Una vez se ha visto como se crean los sensores, se ve que hay muchas propiedades
 
 Los 4 sensores de colisión tendrán forma de triángulo y estarán dispuestos de forma que sobresalgan del cuerpo principal con la base del triángulo hacía el exterior, para así poder detectar una colisión antes de que ocurra. Las posiciones de cada uno de los 4 sensores se han descrito con las posiciones cardinales: noroeste, sureste, noreste y sureste. De esta manera, el robot tendrá 2 sensores que detectan colisiones en la parte delantera y otros dos en la trasera. 
 
-Los 2 sensores que detectan líneas tendrán forma de círculo simulando dos cámaras que miran al suelo, igual que ocurre en el robot Moway. Para dotar de forma a los sensores que detectan líneas, se puede utilizar la clase \texttt{b2CircleShape} y con un radio de 2 píxeles, se asigna la forma al \emph{fixture} correspondiente.
+Los 2 sensores que detectan líneas tendrán forma de círculo simulando dos cámaras que miran hacia abajo, igual que ocurre en el robot Moway. Para dotar de forma a los sensores que detectan líneas, se puede utilizar la clase \texttt{b2CircleShape} y con un radio de 2 píxeles, se asigna la forma al \emph{fixture} correspondiente.
 
 No obstante, la forma de los sensores de colisión, al ser triangular, requiere que se definan los vértices del polígono previamente.  Para realizar esto, utilizaremos la función \texttt{fixDef.shape.SetAsArray()}\footnote{Hay que tener en cuenta que, como ya se ha mencionado en la sección \ref{sec:motor-fisico}, las formas cóncavas no son soportadas por Box2D.} que recibe como parámetro los vértices del polígono a crear y el número de vértices del mismo. Obviamente, los vértices tendrán que formar un triángulo con la base hacia el exterior de Robode.
 
@@ -313,12 +314,24 @@ var pointsTR = [
 \subsection{Moviendo a Robode}
 \label{moviendo-robode}
 
-%velocidad de las ruedas, cancelación velocidad lateral, movimiento...
-% hablar propiedades de los cuerpos y fixtures 
 
-{\color{green}
-empty yet
-}
+El movimiento de Robode está basado en el movimiento de las ruedas. Al igual que ocurre en un coche, son las ruedas de Robode las que tiran del resto. Por tanto, serán las ruedas las que realicen la fuerza para mover al resto del cuerpo. Además, la fuerza que ejerza cada rueda puede ser diferente. 
+
+Para mover las ruedas, hay que aplicar una fuerza a la rueda con respecto al vector que apunta en dirección frontal a la propia rueda. Esto se hace utilizando la función \texttt{ApplyForce()} que recibe como parámetro el vector con la fuerza a realizar y el punto desde el que se realiza. El punto que se usará para aplicar la fuerza será el centro de la propia rueda. 
+
+Esto hará que la rueda ejerza una fuerza hacia delante y el robot se desplace. Pero esto ocasionará diferentes problemas: 
+
+\begin{enumerate}
+	\item La velocidad angular de las ruedas cambiará y será diferente a la del robot.
+	\item Ocurrirá lo mismo que en el punto anterior, pero esta vez con los sensores detectan colisiones.
+	\item Se creará una velocidad lateral (u ortogonal) que hará que el movimiento del robot no sea recto.
+\end{enumerate} 
+
+Los dos primeros problemas se resuelven fácilmente igualando la velocidad angular del robot y las ruedas o sensores con la función \texttt{SetAngularVelocity()} de la clase \texttt{b2Body}. De esta manera se consigue que las ruedas y el robot miren siempre en la misma dirección. Además, en el caso de los sensores, también será necesario ajustar el ángulo de giro de los mismos para forzar a que se mantengan en la misma posición con respecto al robot.
+
+Para eliminar la velocidad lateral que se produce al mover el robot, basta con aplicar una velocidad lineal que contrarreste esta fuerza, con el método \texttt{SetLinearVelocity()}. 
+
+Ahora ya se tiene un robot desplazándose por el mundo. Para conseguir que sea de manera realista, se dotará a las ruedas de una fricción fuerte (valor de 1) y al cuerpo principal un valor de deslizamiento lineal y angular de 8 (propiedades \texttt{linearDamping} y \texttt{angularDamping} de \texttt{b2Body}).{\color{red} La forma de establecer estos valores ha sido sobretodo experimental. De esta forma se conseguía asegurar una sensación realista basada en la propia experiencia.}
 
 
 \subsection{Detectando colisiones}
