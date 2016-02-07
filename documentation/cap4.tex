@@ -388,26 +388,138 @@ También, se puede ver como en las lineas 28 a 33 se notifica la colisión envia
 \subsection{Detectando lineas}
 \label{detectando-lineas}
 
+Antes de poder hablar de como se detectan lineas, es necesario hablar de las propias lineas.
 
-{\color{green} ===POR AQUI===}.
+Una característica del simulador que estaba clara desde el comienzo del proyecto era la necesidad de que el robot pudiera seguir lineas. Para poder seguir lineas, es necesario poder calcular la distancia del robot a una linea. Esto implica el cálculo de la distancia de un punto a una linea. Pero, ¿qué forma tiene la linea?
 
+Hay dos opciones para la forma de las lineas: líneas rectas o curvas. Las lineas rectas darían una forma muy simple al circuito y no se corresponden con los circuitos que podrían crearse en la realidad. Además, la programación del robot sigue-líneas sería muy simple para el niño (solo tendría que asegurarse de que cuando encuentra una linea, no se tuerce). Así que esto elimina la opción de usar rectas para modelar las líneas. 
 
 
 \subsubsection{Curvas de Bezier}
 \label{bezier}
 
-%Uno de los aspectos más importantes en Robode es la capacidad del mismo de poder detectar lineas. La finalidad de esto es que se pueda programar un comportamiento \emph{sigue-lineas}. Para ello, era necesario responder a una serie de preguntas:
-%\begin{enumerate}
-%	\item ¿Cómo se representan las líneas pintadas en el suelo?
-%	\item ¿Cómo se modelan dichas lineas?
-%\end{enumerate}
+Entonces, una curva. Existen principalmente dos tipos de curvas usadas en computación gráfica: curvas de Catmull-Rom y curvas de Bezier. 
+
+Las curvas de Carmull-Rom\footnote{Para más información sobre las curvas de Catmull-Rom se puede consultar \cite{curves-catmull-rom-introduction} o \cite{catmull-rom-splines}.} se definen con una serie de puntos de control o \emph{splines} que definen la forma de la curva en base a la interpolación de los puntos que la forman. La curva pasará por todos los puntos que la forman y es posible añadir más puntos \emph{sobre la marcha} para alargar la curva. Un ejemplo de curva de Catmull-Rom se puede ver en la figura \ref{fig:curva-catmull}.
+
+
+\begin{figure}[!ht]
+	\begin{centering}
+		\includegraphics[width=0.4\textwidth]{images/curva-catmull.png}
+			\caption{Ejemplo de curva de Catmull-Rom con 4 puntos que definen su forma. Obtenido de \cite{curves-catmull-rom-introduction}.}
+				\label{fig:curva-catmull}
+	\end{centering}
+\end{figure}
+
+
+El otro tipo de curva son las curvas de Bezier\cite{bezier-info}. Las curvas de Bezier se definen por 2 puntos, el origen y el extremo de la curva, y por al menos un punto más de control. Las curvas de Bezier con solo un punto de control se denominan curvas cuadráticas. Si tiene 2 puntos de control, se denomina curva de Bezier cúbica. Un ejemplo de curvas de Bezier cuadrática y cúbica se puede ver en las figuras \ref{fig:bezier-2} y \ref{fig:bezier-3}, respectivamente.
+
+
+\begin{figure}[!ht]
+	\begin{adjustwidth}{\oddsidemargin-1in}{\rightmargin}
+	%	\centering
+			\begin{subfigure}{\paperwidth}
+				\centering
+				\includegraphics[scale=.5]{images/bezier-2.png}
+	\caption{Ejemplo de curvas de Bezier cuadrática. Obtenido de \url{http://pomax.github.io/bezierjs}.}				
+				\label{fig:bezier-2}
+			\end{subfigure}
+			\begin{subfigure}{\paperwidth}
+				\centering
+				\includegraphics[scale=.5]{images/bezier-3.png}
+	\caption{Ejemplo de curvas de Bezier cúbica. Obtenido de \url{http://pomax.github.io/bezierjs}.}				
+				\label{fig:bezier-3}
+			\end{subfigure}
+	\end{adjustwidth}
+\end{figure}
+
+
+Las curvas de bezier se definen en función de t, que se mueve en un intervalo de 0 a 1. Siendo \texttt{t=0} el inicio de la curva, \texttt{t=1} el final y \texttt{t=0.5} el punto intermedio. Una linea recta también puede ser representada mediante curvas de Bezier siempre que los puntos de control estén sobre la linea. No obstante, estas curvas tiene una limitación: no se puede representar un circunferencia con una (única) curva de Bezier. Esto es algo que no afecta a nuestro simulador.
+
+Finalmente, para el modelado de lineas se ha decidido usar las curvas de Bezier, acompañado de la librería BezierJS\footnote{Página oficial del proyecto BezierJS (\url{http://pomax.github.io/bezierjs/}).} para Javascript. Esta librería ofrece una serie de funciones muy útiles para crear y manejar funciones. En el listado de código \ref{code:ejemplo-uso-bezier} se puede ver un ejemplo de las funciones más importantes de la librería. 
+
+\begin{lstlisting}[language={Javascript},label={code:ejemplo-uso-bezier}, caption={Ejemplo de uso de las funciones de la librería BezierJS.}]
+var curve = new Bezier (150,40 , 80,30 , 105,150);
+
+var mid = curve.get(0.5);
+
+var steps = 10;
+var points = curve.getLUT(steps);
+\end{lstlisting}
+
+En la linea 1 del listado \ref{code:ejemplo-uso-bezier} se crea una curva cuadrática con los puntos \texttt{(150, 40)}, \texttt{(80, 30)} y \texttt{(105, 150)}. Concretamente, esta curva toma la forma de la curva de la figura \ref{fig:bezier-2}. El segundo punto es el punto de control. Una curva cubica se definiría de forma similar, pero pasando como argumento un punto de control más. 
+
+En la linea 3 del listado \ref{code:ejemplo-uso-bezier} se obtiene el punto que está justo en la mitad de la curva. La función \texttt{getLUT()} devuelve un array de puntos equidistantes entre ellos dentro de la curva. El número de puntos es el valor de \texttt{steps} más 1.
+
+La función \texttt{getLUT()} de la librería BezierJS será la clave para la detección de lineas en el simulador.
+
+
+\subsubsection{Detectando curvas de Bezier}
+
+Ahora que ya se ha aclarado que se usarán curvas de Bezier para representar las lineas en el simulador, solo queda saber la distancia de un punto (el sensor) al punto más cercano de la curva de Bezier. Este problema consiste en encontrar la proyección de un punto sobre una curva. Dicho problema ya ha sido estudiado anteriormente. Por ejemplo J. Ros en \cite{projection-point-bezier} estudia de manera matemática como resolver este problema. 
+
+Teniendo esto en cuenta, ésta fue la primera aproximación al problema que se realizó. Los resultados no fueron buenos: el punto en la curva no era exacto y con un coste computacional alto.
+
+En el segundo intento de resolución, se utilizaba la función \texttt{getLUT()} de BezierJS para partir la curva en muchas lineas rectas y crear un cuerpo en Box2D con muchas \texttt{fixtures}\footnote{Para crear la forma de linea recta en Box2D se utilizaba la clase \texttt{b2PolygonShape} estableciendo la forma con la función \texttt{SetAsEdge()} que recibe dos puntos y crea una linea entre ellos.}. De esta manera se conseguía formar una curva a partir de muchas lineas rectas. La detección de curvas, entonces, se realizaba igual que para los obstáculos (sección \ref{detectando-colisiones}).
+
+Esto solucionaba el problema, pero la curva tenía una apariencia muy fina y se obtenía un coste alto al mantener una cantidad tan grande de cuerpos pequeños. Aunque se simplificara la curva con un valor de \texttt{step} suficientemente pequeño en la función \texttt{getLUT()}, no se solucionaba el problema de la linea fina.
+
+La tercera aproximación al problema dio resultado. Era volver a proyectar el punto (sensor) sobre la curva, pero aproximando los puntos de ésta con la función \texttt{getLUT()}. De esta manera, se obtenía una cantidad razonable de puntos en la curva y se calculaba la distancia del sensor a cada uno de estos, resultando el problema en el cálculo de distancia entre dos puntos. Algo computacionalmente menos costoso que calcular la proyección de un punto sobre una curva. 
+
+En el listado de código \ref{code:deteccion-bezier} se puede ver el código que detecta y notifica una \emph{colisión} con una linea. 
+
+\begin{lstlisting}[language={Javascript},label={code:deteccion-bezier}, caption={Función que detecta lineas (curvas de Bezier).}]
+function detectLineCollition(sensor) {
+	var lines = Simulator.World.lines;
+	var anysensed = false;
+
+	// (...)
+
+	var minDistance = Simulator.World.getDistanceCollitionLine();
+
+	lines.forEach(function(curve) {
+		var p = pointInBezier(curve, SensorPosition);
+		// if any sensor collided, notify!
+		var dist = distance(p, position);
+		if (dist <= minDistance) {
+			//notify the collision
+			var message = {
+				id: sensor.name,
+				state: "begin"
+			};
+			sendMessage("sensor", message);
+			anysensed = true;
+			return;
+		}
+
+	});
+	//if it detects no collitions, notify end collision
+	if (!anysensed) {
+		var message = {
+			id: sensor.name,
+			state: "end"
+		};
+		sendMessage("sensor", message);
+	}
+}
+\end{lstlisting}
+
+El valor de distancia mínima (variable \texttt{minDistance}) se define con el grosor de la linea más el radio del sensor.
+
+La diferencia de esta última solución a la anterior es que en ningún momento se está creando la curva como objeto en Box2D. Por tanto, se ha modificado el prototipo de \texttt{World} para que almacene las lineas (variable \texttt{lines}). No obstante, siguen sin ser representadas con un objeto \texttt{Body} para ahorra coste y para facilitar el poder pintar distinto grosor de linea según convenga (por ejemplo, si se hace zoom en el circuito).
+
+Con respecto al dibujo de las lineas, se explicará más adelante en la sección \ref{animando-robode}.
 
 
 \subsection{Animando a Robode}
 \label{animando-robode}
 
+{\color{green} ===POR AQUI===}.
+
+
+
 %\subsubsection{Multihilo y esas cosas}
-Aquí se habla de como se anima y que tiene que decir JS y su sistema monohilo al respecto. También temas de zoom y scroll y relación de tamaño del robot con la escala
+Aquí se habla de como se anima y que tiene que decir JS y su sistema monohilo al respecto. También temas de zoom y scroll y relación de tamaño del robot con la escala. Dibujo de las lineas
 
 
 
