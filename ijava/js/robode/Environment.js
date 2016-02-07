@@ -253,7 +253,7 @@ Simulator.Env = {};
         jointdef.Initialize(bodyAttached, this.body, bodyAttached.GetWorldCenter());
         jointdef.collideConnected = false;
         jointdef.enableMotor = false;
-        jointdef.enableLimit = (points.length === 1); //enable limit if it's a line sensor
+        jointdef.enableLimit = (points.length === 1); //enable limit is true if it's a line sensor
         jointdef.maxMotorTorque = Number.MAX_SAFE_INTEGER;
         Simulator.World.CreateJoint(jointdef);
     }

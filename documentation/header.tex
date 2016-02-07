@@ -61,6 +61,7 @@
 \definecolor{gray97}{gray}{0.97}
 \definecolor{gray75}{gray}{.75}
 \definecolor{gray45}{gray}{.65}
+\definecolor{darkgray}{rgb}{.4,.4,.4}
 
 \definecolor{javared}{rgb}{0.25,0.35,0.55} % for strings
 \definecolor{javagreen}{rgb}{0.15,0.6,0.35} % comments
@@ -103,5 +104,21 @@
 }
 \renewcommand{\lstlistingname}{Código}
 
-
 \bibliographystyle{plain}
+
+
+
+\lstdefinelanguage{Javascript}{
+  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+  keywordstyle=\color{javadocblue}\bfseries,
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  ndkeywordstyle=\color{darkgray}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{javapurple}\ttfamily,
+  stringstyle=\color{javared}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
