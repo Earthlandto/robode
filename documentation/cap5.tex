@@ -1,4 +1,3 @@
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 5: Conclusiones y vías futuras
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -6,6 +5,45 @@
 \label{conslusiones}
 
 
+En el presente Trabajo Fin de Grado se ha abordado la creación de un simulador de un robot para integrarlo en la plataforma Descubre la programación. 
+
+La meta de este trabajo es clara: ayudar a expandir el pensamiento computacional entre los alumnos de Educacion Primaria y Secundaria de la Región de Murcia. Esto se consigue realizando una aplicación que ofrece una herramienta más para aprender a programar. Y además intentando ser atractiva. 
+
+En la creación del simulador hay claros {\color{red}precedentes}, como son los robot Moway y Arduino y la plataforma CodeHS. Se ha creado un robot que comparte características con Moway, que se programa en cierta forma como Arduino y en una plataforma similar a CodeHS. 
+
+Se puede decir que se han cumplido en su totalidad los objetivos que se planteaban en la sección \ref{sec:objetivos}. Se ha creado un robot de dos ruedas que se mueve por un mundo continuo, que tiene sensores que detectan colisiones y que ofrece la lógica para que se hagan programas sigue-lineas. 
+
+Se ha creado una librería que permite controlar el robot y así programar el comportamiento del mismo. El Modelo de programación creado ofrece a los alumnos una nueva forma de programar, como se hace en los robots de Arduino. De esta manera, el alumno podrá desarrollar nuevos tipos de programas, enfrentándose a retos nuevos. 
+
+No obstante, este trabajo planteaba cuatro grandes dificultades a resolver: (a) la comprensión y modificación de la plataforma Descubre y su compilador; (b) la representación de lineas mediante curvas de Bezier y la detección de las mismas por parte del robot; (c) la creación de un modelo de programación diferente al que proporciona la plataforma Descubre y (d) la creación del simulador que modelará el mundo donde se encuentra el robot y, por supuesto, su comportamiento.
+
+La plataforma Descubre la programación permite programar y ejecutar código iJava. Por tanto, es necesario comprender su funcionamiento y ser capaz de ampliar la librería de funciones para poder controlar al robot. También, con la creación de un modelo de programación, se ha modificado Descubre para crear una \emph{cola de instrucciones} virtual. Esta \emph{cola de instrucciones} va alimentándose de las instrucciones que se ejecutan en un bucle infinito. Para poder crear este modelo, ha sido necesario implementar una forma de hacer que la \emph{cola de instrucciones} deje de tomar instrucciones, a discreción del programador. Esto bloquea la ejecución del programa y se ha necesitado crear un sistema \emph{multihilo} en la aplicación para permitir dos hilos de ejecución separados, que trabajan a velocidades diferentes. El primero, el programa principal con la simulación del robot. El segundo hilo, el \emph{sandbox} de la aplicación que ejecuta la cola de instrucciones y que controla la ejecución del simulador, en función de las instrucciones que se estén ejecutando. 
+
+En cuanto a la simulación del robot, se ha usado una librería física, \texttt{Box2D}, que realizará el trabajo de calcular y resolver las colisiones que se produzcan en el mundo. También nos permite dibujar el mundo sobre el \texttt{canvas} de HTML5. La creación y configuración de elementos en \texttt{Box2D} para que se creara un mundo realista también ha sido un punto a tener en cuenta y que se ha resuelto satisfactoriamente. 
+
+Por último, la representación de lineas mediante curvas de Bezier es un problema bastante complejo. Era necesario calcular la distancia de un punto al punto más cercano dentro de la curva. O lo que es lo mismo, la proyección de un punto sobre la curva. Esta dificultad se ha resuelto gracias a la librería \texttt{BezierJS}, que ha simplificado los cálculos para obtener la distancia a la curva de forma computacionalmente barata. 
+
+
+En comparación a los sistemas que hay actualmente, {\color{red}opino} que se ha creado una opción bastante interesante y atractiva. Mediante la robótica, se puede programar un robot en un lenguaje imperativo y con sintaxis moderna, especial para aprender. 
+
+Si lo comparamos con proyectos como Lego Mindstorm EV3 o Arduino, Robode permite iniciarse en la robótica sin necesidad de hacer una inversión de dinero ni tener conceptos de electrónica o circuitos.
+
+En el caso de Moway o Scratch, la programación se hace mediante bloques. Este sistema puede ser bueno como iniciación y para aprender ciertos conceptos básicos (como las condiciones y el flujo de instrucciones) pero se vuelve complejo en aplicaciones grandes. 
+
+Por otra parte, el robot Robomind simula un robot en un mundo discreto. La programación en este simulador puede ser al principio interesante, pero se termina volviendo repetitiva y con una libertar y complejidad limitada a la hora de crear programas. Robomind no deja de ser una unión entre Turtle de Logo y Karel the robot. 
+
+En cambio, con \emph{Robode}, se puede crear una gran variedad de programas. Desde programas que solo eviten obstáculos, hasta programas que simulen movimientos complejos con un respaldo en las matemáticas y físicas de movimiento que lo apoye. Además, al estar integrado con Descubre, su uso es gratuito y libre para cualquier niño que quiera iniciarse en la programación. Esto es especialmente importante, y más si se compara con alternativas actuales como CodeHS, que requiere de una suscripción para poder usar los servicios que tiene disponible en su totalidad.
+
+
+
 %explicar en que se diferencia robode con el resto y porque es mejor o que ventajas tiene
 %explicar como resuelvo los problemas que se encuentra un estudiante cuando programa (intro-3º parrafo)
 
+%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%
+%\section{Vías futuras}
+%\label{vias-futuras}
+
+De cara al futuro se plantean diferentes vías futuras con la finalidad de extender la aplicación y dotarla de cierta funcionalidad que produzca una mejora en la aplicación.
+
+Una vía futura clara es la mejora de la apariencia del simulador. Se podría dibujar el simulador con un conjunto de sprites que lo hagan más atractivo. También, una mejora útil sería la de crear un editor de circuitos que permita de manera visual y sencilla crear circuitos para luego importarlos en Descubre y que se pueda programar el comportamiento del robot en entornos diferentes. 
