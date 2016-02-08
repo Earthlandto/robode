@@ -362,3 +362,53 @@ Hay distintos tipos de joints que limitan el movimiento de los cuerpos de difere
 \end{itemize}
 
 En el simulador solo usaremos \emph{Joints} de tipo \emph{Revolute}, definidos por la clase \texttt{b2RevoluteJoint}.  En la inicialización del joint se deben indicar los dos cuerpos y el punto de ancla. También hay que establecer las propiedades relacionadas al motor (propiedad \texttt{enableMotor}), si se quiere que exista un límite de movimiento o no (propiedad \texttt{enableLimit}) y el valor máximo de torsión que se permite (propiedad \texttt{maxMotorTorque}).
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Apendice G
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{{\color{red}Construcción de circuitos}}
+\label{sec:construccion-circuitos}
+
+El circuito estará limitado por fronteras para prevenir que el robot se salga del mismo. La creación de las fronteras se puede ver en el código \ref{code:creacion-fronteras}.
+
+\begin{lstlisting}[language={Javascript},label={code:creacion-fronteras}, caption={Función que crea las fronteras del mundo.}]
+var scale = Simulator.config.scaleWorldIni;
+
+var bodyDef = new Simulator.Env.b2BodyDef();
+bodyDef.type = Simulator.Env.b2Body.b2_staticBody;
+bodyDef.setName("border");
+
+var fixDef = new Simulator.Env.b2FixtureDef();
+fixDef.shape = new Simulator.Env.b2PolygonShape();
+
+// lower border
+fixDef.shape.SetAsBox(this.width / scale, 0.01);
+bodyDef.position.Set((this.width / scale) / 2, this.height / scale);
+Simulator.World.CreateBody(bodyDef).CreateFixture(fixDef);
+
+// top border
+bodyDef.position.Set((this.width / scale) / 2, 0);
+Simulator.World.CreateBody(bodyDef).CreateFixture(fixDef);
+
+// right border
+fixDef.shape.SetAsBox(0.01, this.height / scale);
+bodyDef.position.Set(this.width / scale, (this.height / scale) / 2);
+Simulator.World.CreateBody(bodyDef).CreateFixture(fixDef);
+
+// left border
+bodyDef.position.Set(0, (this.height / scale) / 2);
+Simulator.World.CreateBody(bodyDef).CreateFixture(fixDef);
+\end{lstlisting}
+
+La posición y tamaño de las fronteras se crearán en función de la escala inicial del mundo. Por otra parte, las fronteras se definirán como objetos \texttt{b2\_staticBody} para que permanezcan inmutables en nuestro mundo.
+
+Hay que tener en cuenta que los obstáculos se crearían de manera similar a como se han creado el resto del mundo.
+
+{\color{green} ===CREAR UN CIRCUITO===}.
+
+
