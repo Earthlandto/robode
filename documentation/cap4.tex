@@ -156,7 +156,7 @@ Adicionalmente a estos cambios, también se han eliminado las funciones de libre
 
 Descubre la programación\cite{descubre} es una plataforma online que está enfocada en enseñar a programar a alumnos de Educación Primaria y Secundaria. Para ello, se provee de un entorno que permite programar en iJava\cite{sanchez2009ijava} y compilar el código ejecutado. La salida se muestra por una pantalla dispuesta para ello.
 
-Esto se realiza gracias a un compilador que implementa Descubre. Dicho compilador obtendrá el código escrito en iJava y lo analizará en busca de errores. Si el análisis sintáctico y semántico no produce ningún problema, entonces realizará una traducción de iJava a Javascript para ejecutar dicho código en el navegador. La salida se mostrará por el elemento \texttt{canvas} de HTML5.
+Esto se realiza gracias al compilador que implementa Descubre. Dicho compilador obtendrá el código escrito en iJava y lo analizará en busca de errores. Si el análisis sintáctico y semántico no encuentra ningún problema, entonces realizará una traducción de iJava a Javascript para ejecutar dicho código en el navegador. La salida se mostrará por el elemento \texttt{canvas} de HTML5.
 
 Para explicar como está creada la plataforma Descubre, se muestra el diagrama de clases de Descubre en la figura \ref{fig:diagram-ijava}. La clase principal de Descubre es \texttt{(index)}, que representará al fichero HTML principal.
 
@@ -168,7 +168,7 @@ Para explicar como está creada la plataforma Descubre, se muestra el diagrama d
 	\end{centering}
 \end{figure}
 
-Para entender como se relacionan todas estas clases y cual es la comunicación entre ellas, en la figura \ref{fig:comunication-ijava} se puede ver un simple diagrama de comunicación que se produciría cuando un usuario hace click en el botón \texttt{run} de Descubre.
+Para entender como se relacionan todas estas clases y cual es la comunicación entre ellas, en la figura \ref{fig:comunication-ijava} se puede ver un diagrama de comunicación simple que se produciría cuando un usuario hace click en el botón \texttt{run} de Descubre.
 
 \begin{figure}[!ht]
 	\begin{centering}
@@ -178,28 +178,43 @@ Para entender como se relacionan todas estas clases y cual es la comunicación e
 	\end{centering}
 \end{figure}
 
-En resumen, el diagrama de comunicación muestra como se compila y ejecuta un código escrito en Javascript. También hay que tener en cuenta que el \emph{canvas} no es una clase al uso. Aún así, se ha decidido incluirlo de esta manera para poder representar el método \texttt{draw()} y la acción de pintar. Esto cambiará cuando entre en juego el simulador.
+En resumen, el diagrama de comunicación muestra cuales son los pasos que se llevan a cabo para ejecutar un código escrito en Javascript. También hay que tener en cuenta que el \emph{canvas} no es una clase al uso. Aún así, se ha decidido incluirlo de esta manera para poder representar quién realiza la acción de pintar (método \texttt{draw()}). Esto cambiará cuando entre en juego el simulador.
 
-Es la clase \texttt{iJavaSandbox} la que ejecuta el código convertido a Javascript con la función \texttt{eval()} de Javascript. En esta clase estará la implementación de toda la función de librería que ofrece iJava en el lenguaje: funciones matemáticas, para pintar el \emph{canvas}, entrada y salida, etc. 
+Es la clase \texttt{iJavaSandbox} la que ejecuta el código convertido a Javascript con la función \texttt{eval()} de Javascript. En esta clase estará la implementación de toda la función de librería que ofrece iJava en el lenguaje: funciones matemáticas, para pintar el \emph{canvas}, entrada y salida, etc.
 
-En las secciones siguientes se analizará como se ha integrado el simulador del robot en Descubre.
+En las secciones siguientes se analizará que cambios se han realizado para integrar el simulador del robot en Descubre.
 
 \subsection{Modificación de la plataforma Descubre}
 \label{sec:modificacion-descubre}
 
-Para crear
+
+En la sección \ref{sec:modificacion-ijava} se ha hablado de los pasos necesarios para modificar el compilador de iJava para añadir nuevas librerías. Pero para añadir el simulador, es necesario añadir toda la lógica de la simulación al compilador. El control del robot y del mundo se implementa en la clase \texttt{Robode}.
+
+La clase \texttt{Robode} recibirá los mensajes del \emph{Sandbox} que le dirá como tiene que mover el robot (potencia de las ruedas, detenerse por completo, etc) y, a la misma vez, \texttt{Robode} le comunicará al \emph{Sandbox} cuando un sensor está detectando colisiones. \texttt{Simulator} encapsula detalles de la simulación, como puede ser la configuración inicial del robot (posición, tamaño, etc) o del mundo (ancho y alto por ejemplo). 
+
+Además, se han representado elementos básicos del motor físico que se ha utilizado para la simulación. Esto es importante ya que otorga una visión general del funcionamiento del motor físico y su relación con el simulador y Robode.
+
+En la figura \ref{fig:diagram-ijava-robode} se puede ver el nuevo diagrama de clases con la inserción del simulador a iJava. También, en la figura \ref{fig:comunication-run-robode}, se pueden ver los pasos que se producirían al ejecutar un código iJava que ejecuta funciones del robot. 
+
+Como se puede ver, el  \emph{Sandbox} envía un mensaje para comunicarse con \texttt{Robode} indicando el \emph{canvas} y que ejecute cierta orden, en diferentes momentos. También, es ahora \texttt{Robode} quien dibujará en el \texttt{canvas} y no Robode. La razón de esto se explica más adelante, en la sección \ref{animando-robode}.
+
+\begin{figure}[!ht]
+	\begin{centering}
+		\includegraphics[width=0.8\textwidth]{images/comunication-run-robode.png}
+			\caption{Diagrama de comunicación que se produce cuando se ejecuta un código Java después de integral el simulador con Descubre.}
+				\label{fig:comunication-run-robode}
+	\end{centering}
+\end{figure}
+
+\begin{figure}[!ht]
+	\begin{centering}
+		\includegraphics[width=1.2\textwidth]{images/diagram-ijava-robode.png}
+			\caption{Diagrama de clases de la aplicación después de integrar el simulador con Descubre.}
+				\label{fig:diagram-ijava-robode}
+	\end{centering}
+\end{figure}
 
 
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\\
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\\
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\\
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\\
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 \section{Motor físico}
