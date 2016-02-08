@@ -19,42 +19,8 @@ En las secciones siguientes se va a estudiar como se ha diseñado y creado Robod
 
 
 
-\section{Integración en Descubre del simulador}
-\label{sec:integracion-descubre}
 
-
-Descubre la programación\cite{descubre} es una plataforma online que está enfocada en enseñar a programar a alumnos de Educación Primaria y Secundaria. Para ello, provee de un entorno que permite programar en iJava\cite{sanchez2009ijava} y compilar el código ejecutado. La salida se muestra por una pantalla dispuesta para ello.
-
-Esto se realiza gracias a un compilador que implementa Descubre. Dicho compilador obtendrá el código escrito en iJava y lo analizará en busca de errores. Si el análisis sintáctico y semántico no produce ningún problema, entonces realizará una traducción de iJava a Javascript para ejecutar dicho código en el navegador. La salida se mostrará por el elemento \texttt{canvas} de HTML5.
-
-Para explicar como está creada la plataforma Descubre, se muestra el diagrama de clases de Descubre en la figura \ref{fig:diagram-ijava}. La clase principal de Descubre es \texttt{(index)}, que representará al fichero HTML principal.
-
-\begin{figure}[!ht]
-	\begin{centering}
-		\includegraphics[width=1\textwidth]{images/diagram-ijava.png}
-			\caption{Diagrama de clases de la plataforma Descubre: punto de partida.}
-				\label{fig:diagram-ijava}
-	\end{centering}
-\end{figure}
-
-Para entender como se relacionan todas estas clases y cual es la comunicación entre ellas, en la figura \ref{fig:comunication-ijava} se puede ver un simple diagrama de comunicación que se produciría cuando un usuario hace click en el botón \texttt{run} de Descubre.
-
-\begin{figure}[!ht]
-	\begin{centering}
-		\includegraphics[width=1\textwidth]{images/comunication-run-ijava.png}
-			\caption{Diagrama de comunicación de la función \texttt{run()}.}
-				\label{fig:comunication-ijava}
-	\end{centering}
-\end{figure}
-
-En resumen, el diagrama de comunicación muestra como se compila y ejecuta un código escrito en Javascript. También hay que tener en cuenta que el \emph{canvas} no es una clase al uso. Aún así, se ha decidido incluirlo de esta manera para poder representar el método \texttt{draw()} y la acción de pintar. Esto cambiará cuando entre en juego el simulador.
-
-Es la clase \texttt{iJavaSandbox} la que ejecuta el código convertido a Javascript con la función \texttt{eval()} de Javascript. En esta clase estará la implementación de toda la función de librería que ofrece iJava en el lenguaje: funciones matemáticas, para pintar el \emph{canvas}, entrada y salida, etc. 
-
-En las secciones siguientes se analizará como se ha integrado el simulador en Descubre y como es el modelo de programación que se usará para programar el simulador con iJava.
-
-
-\subsection{Modelo de programación del simulador}
+\section{Modelo de programación del simulador}
 \label{sec:modelo-programacion}
 
 El modelo actual de programación consiste en crear una función principal \texttt{main} sin parámetros y que devuelve el tipo \texttt{void}. También, se puede usar la función \texttt{animate()}, tomando como argumento una función y ejecutándola en bucle. El resto es similar a un lenguaje imperativo. Un programa de ejemplo en iJava se puede encontrar en el código \ref{code:circulos-color-raton}.
@@ -65,21 +31,31 @@ El modelo consistirá en la creación de una \emph{cola de instrucciones} que co
 
 Para las instrucciones que pintan la pantalla, muestran salida estándar o que realizan cálculos matemáticos, no hay problema. Pero para mover el robot sí. Si se le diera una orden al robot que dice que debe moverse hacia delante, y justo después, se ejecutara otra que ordenara al robot a detenerse, el efecto de la primera instrucción se anularía.
 
-Por esto, es necesario insertar una instrucción que se ejecute ente las dos anteriores órdenes, y que detenga la cola de instrucciones de aceptar más instrucciones al robot.
+Por esto, es necesario insertar una instrucción que se ejecute ente las dos anteriores y que haga que la cola de instrucciones deje de aceptar más instrucciones.
 
+En cuanto a la funcionalidad que ofrece la API del simulador para poder controlar al robot, se busca que las funciones ofrecidas sean lo más básicas posibles. La intención es que el programador tenga los elementos básicos y suficientes para manejar el robot. Si quisiera funciones más complejas, tendría que programarlas él mismo, contribuyendo así a su aprendizaje. 
 
+A continuación vamos a listar todas las funciones que ofrece la API para controlar el robot. Ademas, la API también ofrece un conjunto de variables de tipo \texttt{boolean} que permitirán saber si los sensores están detectando colisiones o no.
 
+\begin{itemize}
+	\item \texttt{initRobot()}: Inicia, muestra y coloca el robot en su posición inicial.
+	\item \texttt{power(potenciaIzq, potenciaDer)}: Establece la potencia con la que se moverá cada rueda. El primer argumento es para la rueda izquierda mientras que el segundo para la derecha. El valor de potencia estará entre 40 y -40. Un valor positivo moverá la rueda en dirección frontal y un valor negativo, posterior.
+	\item \texttt{stop()}: Detiene el robot.
+	\item \texttt{left()}: Gira el robot 90º en dirección contraria al sentido de las agujas del reloj.
+	\item \texttt{sensorNW}: Sensor en al posición Noroeste.
+		\item \texttt{sensorNE}: Sensor en al posición Noreste.
+			\item \texttt{sensorSW}: Sensor en al posición Suroeste.
+				\item \texttt{sensorSE}: Sensor en al posición Sureste.
+		\item \texttt{collisioning}: Devuelve \texttt{true} si alguno de los sensores anteriores está detectando una colisión.
+			\item \texttt{sensorLL}: Sensor inferior izquierdo que detectará si está sobre una linea.
+						\item \texttt{sensorLR}: Sensor inferior derecho que detectará si está sobre una linea.
+\end{itemize}
 
+Se ha decidido establecer las variables en inglés por similitud a iJava (que también está en inglés) y al resto de lenguajes modernos. No obstante, se han realizado ciertos cambios con respecto a iJava.
 
+La función principal de la aplicación ya no será la función \texttt{main} y no se usará la función \texttt{animate} para ejecutar en bucle una función. Al igual que pasa en Arduino, la función \texttt{setup} establecerá los valores iniciales del robot y una función \texttt{loop} ejecutará en bucle las instrucciones que en ella se contengan. Alimentando así, la \emph{cola de instrucciones}.
 
-
-El modelo se basará en la idea dejada por iJava, por supuesto, y se añadirá el estilo de programación de Arduino. En éste, se establece una función principal \texttt{setup()} que normalmente se usará para definir los parámetros del robot que se está programando y, después, se usará una función \texttt{loop()} que ejecutará en bucle las instrucciones que contenga. El uso de la función \texttt{loop()} es opcional, pudiendo meter todas las instrucciones en \texttt{setup()} y que este se ejecute una única vez.
-
-Éste es el modelo que se seguirá.
-
-La diferencia con iJava, es que no se debe usar la función \texttt{animate()} para indicar que cierta función se debe repetir en bucle. Ahora, se ejecutará la función \texttt{setup()} (que sustituirá a la función \texttt{main()} de iJava) y si la función \texttt{loop()} ha sido definida, se ejecutará en bucle automáticamente y de manera \emph{transparente} para el programador. 
-
-Además, 
+Aún así, el uso de la función \texttt{loop()} es opcional, pudiendo usar únicamente la función \texttt{setup()} sin que se produzca el bucle infinito de la función \texttt{loop}.
 
 Un ejemplo que muestra el nuevo modelo de programación se puede ver en el código \ref{code:nuevo-modelo}.
 
@@ -126,13 +102,76 @@ Los pasos descritos del funcionamiento del programa se enumeran a continuación:
 	\item Se repite el paso 3.
 \end{enumerate}
 
-Como se puede ver, esto producirá un bucle infinito que ejecutará la función \texttt{loop()}. 
+Como se puede ver, esto producirá un bucle infinito que ejecutará la función \texttt{loop()}. Con respecto a esta función, puesto que ya existe un bucle infinito en el programa, se establece que no es una buena práctica crear bucles. A excepción si es para realizar cálculos o recorrer listas. Por ejemplo, una forma de reaccionar a las colisiones sería la que se muestra en el código \ref{code:ejemplo-colisiones-robode}, en vez de utilizar un bucle \emph{while} que espere hasta que se produzca una colisión.
+
+\begin{lstlisting}[language={Java},label={code:ejemplo-colisiones-robode}, caption={Ejemplo de buenas prácticas en el uso de la API del simulador.}]
+void setup() {
+    initRobot();
+}
+
+void loop() {
+	//por defecto, hacia delante
+    power(10, 10);
+	// Si colision delante, retrocedo hacia la izquierda
+    if (sensorNW || sensorNE) {
+        power(-10, -20);
+    }
+  	//si colision detras avanzo torciendo
+    if (sensorSW) {
+        power(20, 10);
+    }
+    
+    if (sensorSE) {
+        power(10, 20);
+    }
+}
+\end{lstlisting}
+
 
 
 \subsection{Modificación del lenguaje iJava}
 \label{sec:modificacion-ijava}
 
+Para poder conseguir lo que se ha descrito anteriormente, es imprescindible realizar ciertos cambios en el compilador de iJava para que reconozca y ejecute las nuevas funciones de la API del robot.
 
+
+
+
+
+
+\section{Integración en Descubre del simulador}
+\label{sec:integracion-descubre}
+
+
+Descubre la programación\cite{descubre} es una plataforma online que está enfocada en enseñar a programar a alumnos de Educación Primaria y Secundaria. Para ello, se provee de un entorno que permite programar en iJava\cite{sanchez2009ijava} y compilar el código ejecutado. La salida se muestra por una pantalla dispuesta para ello.
+
+Esto se realiza gracias a un compilador que implementa Descubre. Dicho compilador obtendrá el código escrito en iJava y lo analizará en busca de errores. Si el análisis sintáctico y semántico no produce ningún problema, entonces realizará una traducción de iJava a Javascript para ejecutar dicho código en el navegador. La salida se mostrará por el elemento \texttt{canvas} de HTML5.
+
+Para explicar como está creada la plataforma Descubre, se muestra el diagrama de clases de Descubre en la figura \ref{fig:diagram-ijava}. La clase principal de Descubre es \texttt{(index)}, que representará al fichero HTML principal.
+
+\begin{figure}[!ht]
+	\begin{centering}
+		\includegraphics[width=1\textwidth]{images/diagram-ijava.png}
+			\caption{Diagrama de clases de la plataforma Descubre: punto de partida.}
+				\label{fig:diagram-ijava}
+	\end{centering}
+\end{figure}
+
+Para entender como se relacionan todas estas clases y cual es la comunicación entre ellas, en la figura \ref{fig:comunication-ijava} se puede ver un simple diagrama de comunicación que se produciría cuando un usuario hace click en el botón \texttt{run} de Descubre.
+
+\begin{figure}[!ht]
+	\begin{centering}
+		\includegraphics[width=1\textwidth]{images/comunication-run-ijava.png}
+			\caption{Diagrama de comunicación de la función \texttt{run()}.}
+				\label{fig:comunication-ijava}
+	\end{centering}
+\end{figure}
+
+En resumen, el diagrama de comunicación muestra como se compila y ejecuta un código escrito en Javascript. También hay que tener en cuenta que el \emph{canvas} no es una clase al uso. Aún así, se ha decidido incluirlo de esta manera para poder representar el método \texttt{draw()} y la acción de pintar. Esto cambiará cuando entre en juego el simulador.
+
+Es la clase \texttt{iJavaSandbox} la que ejecuta el código convertido a Javascript con la función \texttt{eval()} de Javascript. En esta clase estará la implementación de toda la función de librería que ofrece iJava en el lenguaje: funciones matemáticas, para pintar el \emph{canvas}, entrada y salida, etc. 
+
+En las secciones siguientes se analizará como se ha integrado el simulador del robot en Descubre.
 
 \subsection{Modificación de la plataforma Descubre}
 \label{sec:modificacion-descubre}

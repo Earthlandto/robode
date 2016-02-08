@@ -24,7 +24,15 @@ El robot, denominado \emph{Robode}, será simulado como un robot real, con movim
 \end{itemize}
 
 
-El simulador se integrará con Descubre, una plataforma para aprender programación utilizando el lenguaje iJava\footnote{Para más información sobre la plataforma Descubre y el lenguaje iJava se puede consultar la sección \ref{sec:descubre}.}. Por tanto, será necesario entender el funcionamiento interno de la plataforma y modificarla apropiadamente para poder integrar Robode con Descubre. De está manera, se añadirán las funciones necesarias para poder crear programas en iJava y controlar el robot.
+El simulador se integrará con Descubre, una plataforma para aprender programación utilizando el lenguaje iJava\footnote{Para más información sobre la plataforma Descubre y el lenguaje iJava se puede consultar la sección \ref{sec:descubre}.}. Por tanto, será necesario entender el funcionamiento interno de la plataforma y modificarla apropiadamente para poder integrar Robode con Descubre. De está manera, se añadirán las funciones necesarias para poder crear programas en iJava y controlar el robot. Los objetivos relativos a la creación del lenguaje que controlan el robot son:
+
+\begin{itemize}
+	\item Se proporcionará un conjunto de funciones que permitan controlar el robot.
+	\item Se podrá mover el robot definiendo una fuerza para cada rueda.
+	\item Se podrá conocer el estado de cada sensor, es decir, si está detectando un objeto o no.
+	\item Se dotará únicamente de las funciones básicas del lenguaje, para favorecer que los alumnos realicen funciones más complejas por ellos mismo.
+	\item Se simulará una cola de instrucciones que ejecuta por orden las instrucciones con la que se va alimentando.
+\end{itemize}
 
 
 \section{{\color{green}Metodología}}
@@ -37,7 +45,7 @@ Empty yet.
 }
 
 
-\subsection{Tecnologías}
+\section{Tecnologías}
 \label{sec:tecnologias}
 
 
