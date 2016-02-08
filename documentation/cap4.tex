@@ -14,20 +14,7 @@ Adicionalmente, el robot y el mundo en el que este se encuentra será dibujado e
 Como se puede ver, Robode es la unión de varios de los proyectos que se han analizado en el capítulo \ref{estado-arte}. Por una parte, la idea principal de crear un simulador es igual a la que se ha realizado en Robomind (el cual se analiza en la sección \ref{sec:robomind}) pero simulando un robot en un mundo continuo y con características similares a las de Moway (analizado en la sección \ref{sec:moway}). Por último, se ejecutará en un entorno web, como bien puede ser el ejemplo de las herramientas que proporcionan CodeHS (sección \ref{sec:CodeHS}) y Code.org (sección \ref{sec:Code.org}). 
 
 
-En las secciones siguientes se va a estudiar como se ha diseñado y creado Robode, que características tiene y cual ha sido la implementación exacta llevada a cabo.
-
-
-
-
-\section{Integración en Descubre}
-\label{sec:integracion-descubre}
-
-\subsection{Modificación del lenguaje iJava}
-\label{sec:modificacion-ijava}
-
-
-
-
+En las secciones siguientes se va a estudiar como se ha diseñado y creado Robode, que características tiene y cual ha sido la implementación exacta llevada a cabo. También como se ha modificado la plataforma Descubre la programación para integrar el simulador en ella.
 
 
 
@@ -281,23 +268,23 @@ var pointsTR = [
 \label{moviendo-robode}
 
 
-El movimiento de Robode está basado en el movimiento de las ruedas. Al igual que ocurre en un coche, son las ruedas de Robode las que tiran del resto. Por tanto, serán las ruedas las que realicen la fuerza para mover al resto del cuerpo. Además, la fuerza que ejerza cada rueda puede ser diferente. 
+El movimiento de Robode está basado en el movimiento de las ruedas. Al igual que ocurre en un coche, son las ruedas de Robode las que tiran del resto del cuerpo. Por tanto, serán las ruedas las que realicen y controlen el movimiento. Además, la fuerza que ejerza cada rueda es independiente. 
 
-Para mover las ruedas, hay que aplicar una fuerza a la rueda con respecto al vector que apunta en dirección frontal a la propia rueda. Esto se hace utilizando la función \texttt{ApplyForce()} que recibe como parámetro el vector con la fuerza a realizar y el punto desde el que se realiza. El punto que se usará para aplicar la fuerza será el centro de la propia rueda. Una fuerza con valor positivo hará que el robot se mueva hacia delante. Mientras que una fuera negativa hará que este se mueva hacia atrás.
+Para mover una rueda, hay que aplicar una fuerza con respecto al vector que apunta en la dirección frontal a la propia rueda. Esto se hace utilizando la función \texttt{ApplyForce()} que recibe como parámetro el vector con la fuerza a realizar y el punto desde el que se realiza. El punto que se usará para aplicar la fuerza será el centro de la propia rueda. Una fuerza con valor positivo hará que el robot se mueva hacia delante. Mientras que una fuera negativa hará que este se mueva hacia atrás.
 
-La fuerza que se aplicará se mide en Newtons y la potencia máxima y mínima será de 4K Newtons y -4K Newtons, respectivamente. Por defecto, la velocidad aplicada al motor se multiplicará por 100, siempre y cuando no se mantenga en los máximos y mínimos ya mencionados.
+La fuerza que se aplicará a la rueda se mide en Newtons y la potencia máxima y mínima establecida será de 4K y -4K Newtons, respectivamente. Por defecto, la velocidad aplicada al motor se multiplicará por 100, siempre y cuando no se mantenga en los máximos y mínimos ya mencionados.
 
 De esta manera se consigue que la rueda ejerza una fuerza hacia delante (o atrás) y el robot se desplace. Pero esto ocasionará tres problemas: 
 
 \begin{enumerate}
-	\item La velocidad angular de las ruedas cambiará y será diferente a la del robot.
-	\item Ocurrirá lo mismo que en el punto anterior, pero esta vez con los sensores que detectan colisiones.
+	\item La velocidad angular de las ruedas cambiará y será diferente a la de cuerpo principal.
+	\item La velocidad angular de los sensores que detectan colisiones también se diferenciará a la del cuerpo principal.
 	\item Se creará una velocidad lateral (u ortogonal) que hará que el movimiento del robot no sea recto.
 \end{enumerate} 
 
-Los dos primeros problemas se resuelven fácilmente igualando la velocidad angular del robot y las ruedas o sensores con la función \texttt{SetAngularVelocity()} de la clase \texttt{b2Body}. De esta manera se consigue que las ruedas y el robot miren siempre en la misma dirección. Además, en el caso de los sensores, también será necesario ajustar el ángulo de giro de los mismos para forzar a que se mantengan en la misma posición con respecto al robot.
+Los dos primeros problemas se resuelven fácilmente igualando la velocidad angular del cuerpo principal y las ruedas o sensores. Esto se hace con la función \texttt{SetAngularVelocity()} de la clase \texttt{b2Body}. De esta manera se consigue que las ruedas y el robot la misma velocidad angular, impidiendo giros. Además, en el caso de los sensores, también es necesario ajustar el ángulo de giro de los mismos para forzar a que se mantengan en la misma posición con respecto al robot.
 
-Para eliminar la velocidad lateral que se produce al mover el robot, basta con aplicar una velocidad lineal que contrarreste esta fuerza, con el método \texttt{SetLinearVelocity()}. 
+Para eliminar la velocidad lateral que se produce al mover el robot, basta con aplicar una velocidad lineal que contrarreste esta fuerza ortogonal, con el método \texttt{SetLinearVelocity()}  de la clase \texttt{b2Body}. 
 
 Ahora ya se tiene un robot desplazándose por el mundo. Para conseguir que sea de manera realista, se dotará a las ruedas de una fricción fuerte (valor de 1) y al cuerpo principal un valor de deslizamiento lineal y angular de 8 (propiedades \texttt{linearDamping} y \texttt{angularDamping} de \texttt{b2Body}).{\color{red} La forma de establecer estos valores ha sido sobretodo experimental. De esta forma se conseguía asegurar una sensación realista basada en la propia experiencia.}
 
@@ -507,7 +494,7 @@ Javascript proporciona una serie de funciones para gestionar timers en la ejecuc
 	\item \texttt{clearTimeout(id)} y \texttt{clearInterval(id)}: funciones que eliminan el timer asociado a ese \texttt{id}.
 \end{itemize}
 
-El uso normal que se haría en la aplicación (el simulador junto a Descubre) será ejecutar la función \texttt{setInterval(function, delay)} con un \texttt{delay} igual al número de veces por segundo que queremos que se actualice el simulador. Cada vez se ejecutará la función \texttt{function} (que normalmente contendrá \texttt{World.Step()} y la actualización de los gráficos).
+El uso normal que se haría en la aplicación (el simulador junto a Descubre) será ejecutar la función \texttt{setInterval(function, delay)} con un \texttt{delay} igual al número de veces por segundo que queremos que se actualice el simulador. Cada vez que salte el timer, se ejecutará la función \texttt{function} (que normalmente contendrá \texttt{World.Step()} y la actualización de los gráficos).
 
 Por tanto, cada vez que se produzca un evento (por ejemplo, una interrupción de teclado o ratón), la ejecución de Javascript tratará dichos eventos. 
 
@@ -517,9 +504,9 @@ No obstante, Javascript tiene una limitación: implementa un sistema \emph{monoh
 
 Si esta situación se diera en el simulador, se detendría toda la aplicación provocando principalmente que Robode deje de moverse (su estado con respecto al mundo no se actualizaría) y que no se pueda escribir en el editor de código (los eventos de teclado y ratón se tratarían tarde).
 
-Y precisamente este es el efecto que produciría la función \texttt{wait(n\_miliseg)} de la API del simulador, descrita en la sección \ref{sec:modificacion-ijava}. Obviamente, este efecto va en contra de correcto funcionamiento que debe tener el simulador y la aplicación por completo.
+Y precisamente este es el efecto que produciría la función \texttt{wait(n\_miliseg)}\footnote{La función \texttt{wait(n\_miliseg)} de la API simula una espera entre instrucciones escritas en iJava. Por tanto, se producirá un bloqueo de la aplicación de tiempo igual a la variable \texttt{n\_miliseg}.} de la API del simulador, descrita en la sección \ref{sec:modificacion-ijava}. Obviamente, este efecto va en contra de correcto funcionamiento que debe tener el simulador y la aplicación por completo.
 
-Para solventar este problema, existen los Web Workers\cite{web-worker-mdn} en Javascript. Básicamente, un Web Worker (o worker para acortar) permite ejecutar tareas en segundo plano separado del hilo principal. Es decir, se consigue un sistema \emph{multihilo} en Javascript. La comunicación del worker con el resto de elementos se hace mediante mensajes, como los que se han visto anteriormente en los códigos \ref{code:deteccion-bezier} o \ref{code:begin-contact}.
+Para solventar este problema, en Javascript existen los Web Workers\cite{web-worker-mdn}. Básicamente, un Web Worker (o worker para acortar) permite ejecutar tareas en segundo plano separado del hilo principal. Es decir, se consigue un sistema \emph{multihilo} en Javascript. La comunicación del worker con el resto de elementos se hace mediante mensajes, como los que se han visto anteriormente en los códigos \ref{code:begin-contact} o \ref{code:deteccion-bezier}.
 
 {\color{red}
 Aún así, los Workers tienen sus limitaciones. La más importante es que no se puede interactuar con el DOM\footnote{El DOM (Document Object Model o Modelo de Objetos del Documento en español) es un API de programación para documentos de HTML. Parte fundamental de HTML y que contiene toda la información relacionada a la página web} de HTML. Esto hace que no se pueda dibujar en el \emph{canvas}. 
@@ -551,7 +538,7 @@ idInterval = window.setInterval(function() {
 
 Una vez que se ha aclarado como es la actualización del mundo, queda especificar como se dibuja el mismo.
 
-Box2D provee un elemento para dibujar los objetos del mundo en el \emph{canvas} de HTML5, \texttt{b2DebugData}. Este pinta la forma de los cuerpos sobre el \emph{canvas} automáticamente. 
+Box2D provee un elemento para dibujar los objetos del mundo en el \emph{canvas} de HTML5, el objeto \texttt{b2DebugData}. Este pinta la forma de los cuerpos sobre el \emph{canvas} automáticamente. 
 
 Pero como ya se ha mencionado anteriormente, las lineas no han sido representadas como elementos de Box2D, por tanto, se usarán las funciones nativas de \emph{canvas} para realizar esto. En el código \ref{code:dibujar-curvas} se puede ver el código que dibuja lineas implementado en el prototipo de la clase \texttt{World}.
 
@@ -577,9 +564,9 @@ Simulator.Env.b2World.prototype.drawLines = function() {
 };
 \end{lstlisting}
 
-Para poder conseguir que esta función se ejecute, y ademas se pinte lo primero, para que esté en un plano inferior al robot y el resto de elementos, ha sido necesario modificar levemente la librería de Box2D. Esto era necesario porque Box2D limpia el \emph{canvas} antes de dibujar nada (borrando las lineas si se pintan antes de llamar a esta función).
+Para poder conseguir que esta función se ejecute, y ademas se pinten las lineas lo primero (para que esté en un plano inferior al robot y el resto de elementos) ha sido necesario modificar levemente la librería de Box2D. Esto era necesario porque Box2D limpia el \emph{canvas} antes de dibujar nada (borrando las lineas si se pintan antes de llamar a esta función y dibujando las lineas sobre el robot si se llama después). 
 
-Esto se ha realizado añadiendo la llamada a la función \texttt{drawLines()} (si ésta está definida) en la implementación de la clase \texttt{b2DebugDraw}. El código \ref{code:redefinir-debug-draw} muestra esta modificación.
+Esto se ha realizado añadiendo la llamada a la función \texttt{drawLines()} (si ésta está definida) en la implementación de la clase \texttt{b2DebugDraw}. La función \texttt{drawLines()} se ha definido como un prototipo del objeto \texttt{World}. El código \ref{code:redefinir-debug-draw} muestra esta modificación.
 
 \begin{lstlisting}[language={Javascript},label={code:redefinir-debug-draw}, caption={Modificación de la librería de Box2D para poder dibujar de manera correcta las lineas.}]
 // Draw function 
@@ -640,4 +627,44 @@ La posición y tamaño de las fronteras se crearán en función de la escala ini
 Hay que tener en cuenta que los obstáculos se crearían de manera similar a como se han creado el resto del mundo.
 
 {\color{green} ===CREAR UN CIRCUITO===}.
+
+
+
+
+
+
+\section{Integración en Descubre del simulador}
+\label{sec:integracion-descubre}
+
+
+Descubre la programación\cite{descubre} es una plataforma online que está enfocada en enseñar a programar a alumnos de Educación Primaria y Secundaria. Para ello, provee de un entorno que permite programar en iJava\cite{sanchez2009ijava} y compilar el código ejecutado. La salida se muestra por una pantalla dispuesta para ello.
+
+Esto se realiza gracias a un compilador que implementa Descubre. Dicho compilador obtendrá el código escrito en iJava y lo analizará en busca de errores. Si el análisis sintáctico y semántico no produce ningún problema, entonces realizará una traducción de iJava a Javascript para ejecutar dicho código en el navegador. La salida se mostrará por el elemento \texttt{canvas} de HTML5.
+
+Para explicar como está creada la plataforma Descubre, se muestra el diagrama de clases de Descubre en la figura \ref{fig:diagram-ijava}. La clase principal de Descubre es \texttt{(index)}, que representará al fichero HTML principal.
+
+\begin{figure}[!ht]
+	\begin{centering}
+		\includegraphics[width=1\textwidth]{images/diagram-ijava.png}
+			\caption{Diagrama de clases de la plataforma Descubre: punto de partida.}
+				\label{fig:diagram-ijava}
+	\end{centering}
+\end{figure}
+
+Para entender como se relacionan todas estas clases y cual es la comunicación entre ellas, en la figura \ref{dif:comunication-ijava} se puede ver un simple diagrama de comunicación que se produciría cuando un usuario hace click en el botón \texttt{run} de Descubre.
+
+\begin{figure}[!ht]
+	\begin{centering}
+		\includegraphics[width=1\textwidth]{images/comunication-run-ijava.png}
+			\caption{Diagrama de comunicación de la función \texttt{run()}.}
+				\label{fig:comunication-ijava}
+	\end{centering}
+\end{figure}
+
+Como se puede ver, la aplicación principal es el fichero \texttt{index.html}. Este recibirá el evento de click del ratón en el botón \texttt{run} y obtendrá el código fuente escrito en iJava para pasarselo al compilador con la función \texttt{run()}. Está analizará el código (clase \texttt{iJavaParser}) y si no hay ningún error, lo traducirá a Javascript (clase \texttt{iJava2Javascript}) para poder ejecutarlo con la función \texttt{eval()} de Javascript.
+
+
+\subsection{Modificación del lenguaje iJava}
+\label{sec:modificacion-ijava}
+
 
