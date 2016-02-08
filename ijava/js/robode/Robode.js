@@ -321,7 +321,6 @@ function Robode(worker) {
 
         lspeed = myleftspeed.clamp(Simulator.config.minPower, Simulator.config.maxPower);
         rspeed = myrightspeed.clamp(Simulator.config.minPower, Simulator.config.maxPower);
-        console.log(lspeed, rspeed);
     };
 
     this.stop = function() {

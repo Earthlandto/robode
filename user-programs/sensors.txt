@@ -17,3 +17,28 @@ void loop(){
   if(sensorSE)
     motors(1000,2000);
 }
+
+
+-----
+
+
+void setup(){
+  initRobot();
+}
+
+void loop(){
+  if(collisioning){
+    print("Colision!");
+  }
+  power(10,10);
+
+  if(sensorNW || sensorNE){
+    power(-10,-20);
+  }
+  if (sensorSW){
+    power(20,10);
+  }
+  if(sensorSE){
+    power(10,20);
+  }
+}
