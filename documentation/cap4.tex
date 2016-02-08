@@ -651,7 +651,7 @@ Para explicar como está creada la plataforma Descubre, se muestra el diagrama d
 	\end{centering}
 \end{figure}
 
-Para entender como se relacionan todas estas clases y cual es la comunicación entre ellas, en la figura \ref{dif:comunication-ijava} se puede ver un simple diagrama de comunicación que se produciría cuando un usuario hace click en el botón \texttt{run} de Descubre.
+Para entender como se relacionan todas estas clases y cual es la comunicación entre ellas, en la figura \ref{fig:comunication-ijava} se puede ver un simple diagrama de comunicación que se produciría cuando un usuario hace click en el botón \texttt{run} de Descubre.
 
 \begin{figure}[!ht]
 	\begin{centering}
@@ -662,8 +662,6 @@ Para entender como se relacionan todas estas clases y cual es la comunicación e
 \end{figure}
 
 En resumen, el diagrama de comunicación muestra como se compila y ejecuta un código escrito en Javascript. También hay que tener en cuenta que el \emph{canvas} no es una clase al uso. Pero se ha decidido incluirlo de esta manera para poder representar el método \texttt{draw()} y la acción de pintar. Esto cambiará cuando entre en juego el simulador.
-
-Como se puede ver, la aplicación principal es el fichero \texttt{index.html}. Este recibirá el evento de click del ratón en el botón \texttt{run} y obtendrá el código fuente escrito en iJava para pasarselo al compilador con la función \texttt{run()}. Está analizará el código (clase \texttt{iJavaParser}) y si no hay ningún error, lo traducirá a Javascript (clase \texttt{iJava2Javascript}) para poder ejecutarlo con la función \texttt{eval()} de Javascript.
 
 
 \subsection{Modificación de la plataforma Descubre}
