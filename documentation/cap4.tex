@@ -551,21 +551,90 @@ idInterval = window.setInterval(function() {
 
 Una vez que se ha aclarado como es la actualización del mundo, queda especificar como se dibuja el mismo.
 
-Box2D provee de un elemento para dibujar 
+Box2D provee un elemento para dibujar los objetos del mundo en el \emph{canvas} de HTML5, \texttt{b2DebugData}. Este pinta la forma de los cuerpos sobre el canvas automáticamente. 
 
+Pero como ya se ha mencionado anteriormente, las lineas no han sido representadas como elementos de Box2D, por tanto, se usarán las funciones nativas de \emph{canvas} para realizar esto. En el código \ref{code:dibujar-curvas} se puede ver el código que dibuja lineas implementado en el prototipo de la clase \texttt{World}.
 
+\begin{lstlisting}[language={Javascript},label={code:dibujar-curvas}, caption={Función que dibuja las curvas de bezier en el \emph{canvas}.}]
+Simulator.Env.b2World.prototype.drawLines = function() {
+	var ctx = this.m_debugDraw.m_ctx;
+	var scale = this.getWorldScale();
+	ctx.save(); //save the current context
+	ctx.lineWidth = this.lineThickness * scale;
+	ctx.strokeStyle = "black";
+	this.lines.forEach(function(l) {
+		var points = l.points;
+		ctx.beginPath();
+		ctx.moveTo(points[0].x, points[0].y);
+		if (points.length > 3) {
+			ctx.bezierCurveTo(points[1].x, points[1].y, points[2].x, points[2].y, points[3].x, points[3].y);
+		} else  {
+			ctx.quadraticCurveTo(points[1].x, points[1].y, points[2].x, points[2].y);
+		}
+		ctx.stroke();
+	});
+	ctx.restore(); // restore the saved context
+};
+\end{lstlisting}
 
-%\subsubsection{Multihilo y esas cosas}
-Aquí se habla de como se anima y que tiene que decir JS y su sistema monohilo al respecto. También temas de zoom y scroll y relación de tamaño del robot con la escala. Dibujo de las lineas
+Para poder conseguir que esta función se ejecute, y ademas se pinte lo primero, para que esté en un plano inferior al robot y el resto de elementos, ha sido necesario modificar levemente la librería de Box2D. Esto era necesario porque Box2D limpia el canvas antes de dibujar nada (borrando las lineas si se pintan antes de llamar a esta función).
 
+Esto se ha realizado añadiendo la llamada a la función \texttt{drawLines()} (si ésta está definida) en la implementación de la clase \texttt{b2DebugDraw}. El código \ref{code:redefinir-debug-draw} muestra esta modificación.
+
+\begin{lstlisting}[language={Javascript},label={code:redefinir-debug-draw}, caption={Modificación de la librería de Box2D para poder dibujar de manera correcta las lineas.}]
+// Draw function 
+h.prototype.DrawDebugData = function(){ 
+	   if(this.m_debugDraw!=null){
+	   			//CLEAR THE CANVAS!
+			   this.m_debugDraw.m_sprite.graphics.clear(); 
+			   // my draw lines function (if it's defined)
+			   if(this.drawLines){
+					   this.drawLines();
+			   }
+			   // end re-defination
+			   //(...)
+\end{lstlisting}
+
+Adicionalmente se ha añadido un efecto de \emph{zoom}\footnote{Esto se ha realizado modificando la propiedad \emph{scale} del objeto \texttt{b2DebugDraw}.} que modifica el tamaño de todos los elemenos, permitiendo crear circuitos más grandes y que se vea todo independientemente del tamaño del \emph{canvas}. Junto a esto, también se ha añadido un \emph{scroll} tanto vertical como horizontal por la pantalla para facilitar la visión del circuito cuando se realiza \emph{zoom}.
 
 
 \subsection{Construcción de circuitos}
 \label{sec:construccion-circuitos}
 
+El circuito estará limitado por fronteras para prevenir que el robot se salga del mismo. La creación de las fronteras se puede ver en el código \ref{code:creacion-fronteras}.
 
-{\color{green} ===POR AQUI===}.
+\begin{lstlisting}[language={Javascript},label={code:creacion-fronteras}, caption={Función que crea las fronteras del mundo.}]
+var scale = Simulator.config.scaleWorldIni;
 
+var bodyDef = new Simulator.Env.b2BodyDef();
+bodyDef.type = Simulator.Env.b2Body.b2_staticBody;
+bodyDef.setName("border");
 
-%El entorno o circuito por el que se moverá el robot tiene los siguientes elementos: (a) obstáculos, con los que podrá chocar y que se desplazaran por la colisión; (b) fronteras, que no podrán ser desplazadas o atravesadas por el robot y (c) lineas, que no producirán una colisión pero que podrán ser detectadas por el robot. 
+var fixDef = new Simulator.Env.b2FixtureDef();
+fixDef.shape = new Simulator.Env.b2PolygonShape();
+
+// lower border
+fixDef.shape.SetAsBox(this.width / scale, 0.01);
+bodyDef.position.Set((this.width / scale) / 2, this.height / scale);
+Simulator.World.CreateBody(bodyDef).CreateFixture(fixDef);
+
+// top border
+bodyDef.position.Set((this.width / scale) / 2, 0);
+Simulator.World.CreateBody(bodyDef).CreateFixture(fixDef);
+
+// right border
+fixDef.shape.SetAsBox(0.01, this.height / scale);
+bodyDef.position.Set(this.width / scale, (this.height / scale) / 2);
+Simulator.World.CreateBody(bodyDef).CreateFixture(fixDef);
+
+// left border
+bodyDef.position.Set(0, (this.height / scale) / 2);
+Simulator.World.CreateBody(bodyDef).CreateFixture(fixDef);
+\end{lstlisting}
+
+La posición y tamaño de las fronteras se crearán en función de la escala inicial del mundo. Por otra parte, las fronteras se definirán como objetos \texttt{b2\_staticBody} para que permanezcan inmutables en nuestro mundo.
+
+Hay que tener en cuenta que los obstáculos se crearían de manera similar a como se han creado el resto del mundo.
+
+{\color{green} ===CREAR UN CIRCUITO===}.
 
