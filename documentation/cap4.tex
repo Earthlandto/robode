@@ -65,7 +65,7 @@ int potenciaDer;
 int potenciaIzq;
 void setup(){
 	delay = 1000; // 1 segundo en milisegundos
-	poternciaDer = 10;
+	potenciaDer = 10;
 	potenciaIzq = 10;
 	//iniciamos el robot
 	initRobot();
@@ -134,10 +134,20 @@ void loop() {
 
 Para poder conseguir lo que se ha descrito anteriormente, es imprescindible realizar ciertos cambios en el compilador de iJava para que reconozca y ejecute las nuevas funciones de la API del robot.
 
-Para que las funciones sean parte del lenguaje y se ejecuten como una más de iJava, hay que realizar tres grandes cambios. Estos son: (a) añadir la definición de las funciones al analizados sintáctico; (b) añadir la implementación de las funciones al \emph{sandbox} y (c) modificar el analizador semántico para cambiar la función principal \texttt{main} por \texttt{setup}.
+El funcionamiento de iJava cuando se ejecuta un código fuente desde el editor se puede ver en la figura \ref{fig:comunication-ijava}. El diagrama de clases, con las clases más relevantes se puede ver en la figura \ref{fig:diagram-ijava}.
 
-En la sección \ref{sec:integracion-descubre} se analizan las clases con funciones
+Para que las funciones de la API sean parte del lenguaje y se ejecuten como una más de iJava, hay que realizar tres grandes cambios. Estos son: (a)modificar el analizador semántico para cambiar la función principal \texttt{main} por \texttt{setup}; (b) añadir la definición de las funciones al analizados sintáctico y (c) añadir la implementación de las funciones al \emph{sandbox}.
 
+Para el cambio (a), hay que modificar el analizador semántico de iJava (clase \texttt{iJavaSemantic}). El analizador semántico busca si la función \texttt{main} se ha definido y, si no la encuentra, devolverá un error que se mostrará por pantalla. Además, en el código Javascript que se genera como ejecución del programa del usuario (función \texttt{eval()}), se ha definido que la función \texttt{loop()} se ejecute en un bucle infinito siempre y cuando se haya definido en el programa del usuario.
+
+Para añadir las definiciones de nuevas funciones (cambio (b) ), hay que añadir al analizador sintáctico (clase \texttt{iJavaParser}) la definición de dichas funciones, así como el número y tipo de parámetros que obtendrán las funciones. Para el caso de las variables de los sensores, también hay que añadirlas como variables del sistema (de iJava) de tipo \texttt{boolean}.
+
+Por último, el cambio (c) se consigue implementando las funciones de la API en el sandbox de iJava (clase \texttt{iJavaSandbox}). Las funciones y variables tienen que tener el mismo nombre, tipo y argumentos que las definidas en el analizador sintáctico para que se puedan ejecutar y el compilador las detecte. 
+
+En el apéndice \ref{anexo:ampliacion-ijava-API} se incluye las secciones más importantes del código que implica los cambios arriba mencionados.
+
+
+Adicionalmente a estos cambios, también se han eliminado las funciones de librería de gráficos y de entrada estándar (teclado y ratón) puesto que no aportaban interés a la programación con un robot y además podría desvirtuar el modelo de programación del simulador.
 
 
 \section{Integración en Descubre del simulador}
@@ -463,7 +473,9 @@ Los dos primeros problemas se resuelven fácilmente igualando la velocidad angul
 
 Para eliminar la velocidad lateral que se produce al mover el robot, basta con aplicar una velocidad lineal que contrarreste esta fuerza ortogonal, con el método \texttt{SetLinearVelocity()}  de la clase \texttt{b2Body}. 
 
-Ahora ya se tiene un robot desplazándose por el mundo. Para conseguir que sea de manera realista, se dotará a las ruedas de una fricción fuerte (valor de 1) y al cuerpo principal un valor de deslizamiento lineal y angular de 8 (propiedades \texttt{linearDamping} y \texttt{angularDamping} de \texttt{b2Body}).{\color{red} La forma de establecer estos valores ha sido sobretodo experimental. De esta forma se conseguía asegurar una sensación realista basada en la propia experiencia.}
+Ahora ya se tiene un robot desplazándose por el mundo. Para conseguir que sea de manera realista, se dotará a las ruedas de una fricción fuerte (valor de 1) y al cuerpo principal un valor de deslizamiento lineal y angular de 8 (propiedades \texttt{linearDamping} y \texttt{angularDamping} de \texttt{b2Body}).
+
+%{\color{red} La forma de establecer estos valores ha sido sobretodo experimental. De esta forma se conseguía asegurar una sensación realista basada en la propia experiencia.}
 
 
 \subsection{Detectando colisiones}

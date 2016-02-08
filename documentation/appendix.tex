@@ -305,6 +305,197 @@ En cuanto a los tipos de bloques, actualmente están divididos en 11 categorías
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Apendice F
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Modificación de iJava para el simulador}
+\label{anexo:ampliacion-ijava-API}
+
+\section*{Cambio en el analizador semántico}
+
+Estos cambios se han realizado en la clase \texttt{iJavaSemantic}. 
+
+\begin{lstlisting}[language={Javascript},label={code:cambios-ijava-semantico}, caption={Código que muestra los cambios que se han realizado en la clase \texttt{iJavaSemantic} para cambiar la función principal \texttt{main} por \texttt{setup}.}]
+function checkDeclaredFunctions() {
+	var mainFound = false;
+	for (var i = 0; i < declaredFunctions.length; i++) {
+		//cambio la palabra clave "main" por "setup"
+		if (declaredFunctions[i].id === "setup") {
+			mainFound = true;
+		}
+		// (...)
+	}
+}
+\end{lstlisting}
+
+En el código \ref{code:ejemplo-eval-javascript} se muestra el código Javascript que se genera de la ejecución del código Javascript \ref{code:nuevo-modelo}
+
+
+\begin{lstlisting}[language={Java},label={code:ejemplo-eval-javascript}, caption={Ejemplo de código Javascript que se genera cuando se ejecuta el código iJava \ref{code:nuevo-modelo}.}]
+running = true;
+var __setup = null;
+var __loop = null;
+var __delay = 0;
+var __potenciaDer = 0;
+var __potenciaIzq = 0;
+var __setup = function() {
+    __delay = 1000;
+    __potenciaDer = 10;
+    __potenciaIzq = 10;
+    initRobot();
+}
+var __loop = function() {
+    power(__potenciaIzq, __potenciaDer);
+    wait(__delay);
+    power(0, 0);
+    wait(__delay * 2);
+}
+
+try {
+    if (__setup) {
+        __setup();
+        if (__loop)
+            animate(__loop);
+    } else stop();
+} catch (e) {
+    error(e);
+}
+\end{lstlisting}
+
+\section*{Cambios en el analizador sintáctico}
+
+Los cambios en el analizador sintáctico corresponden a la clase \texttt{iJavaParser} y se muestran el el siguiente código.
+
+
+\begin{lstlisting}[language={Javascript},label={code:cambios-ijava-sintactico}, caption={Definición de las funciones y variables de la  API del simulador.}]
+// Sensores de colisiones indivuduales
+system_variable("sensorNW", BooleanDatatype, false);
+system_variable("sensorNE", BooleanDatatype, false);
+system_variable("sensorSW", BooleanDatatype, false);
+system_variable("sensorSE", BooleanDatatype, false);
+
+//sensores de lineas individuales
+system_variable("sensorLR", BooleanDatatype, false);
+system_variable("sensorLL", BooleanDatatype, false);
+
+//sensores de colisión y lineas grupales
+system_variable("collisioning", BooleanDatatype, false);
+
+// wait (n_millisec)
+library_function("wait", new FunctionDatatype(VoidDatatype, [{
+	datatype: IntegerDatatype
+}]));
+//initRobot ()
+library_function("initRobot", new FunctionDatatype(VoidDatatype, []));
+//stopRobot()
+library_function("stop", new FunctionDatatype(VoidDatatype, []));
+//motors(vel_motor_izq, vel_motor_der)
+library_function("power", new FunctionDatatype(VoidDatatype, [{
+	datatype: IntegerDatatype
+}, {
+	datatype: IntegerDatatype
+}]));
+// left()
+library_function("left", new FunctionDatatype(VoidDatatype, []));
+\end{lstlisting}
+
+
+
+\section*{Cambios en el Sandbox}
+
+
+La implementación de las funciones y variables de la API se realizan en la clase \texttt{iJavaSandbox} y se pueden ver en el código siguiente:
+
+\begin{lstlisting}[language={Javascript},label={code:cambios-ijava-sandbox}, caption={Implementación de las funciones y variables de la API en el Sandbox de iJava.}]
+var roboderunning = false;
+
+// sensors
+var sensorNE = false,
+    sensorNW = false,
+    sensorSE = false,
+    sensorSW = false;
+var sensorLR = false,
+    sensorLL = false;
+var collisioning = false;
+
+
+function wait(millis) {
+    //Add delay time to runtime.timeLimit
+    if (runtime) {
+        if (runtime.deep > -1) {
+            runtime.timeLimit[runtime.deep] += millis;
+        }
+    }
+
+    var timestamp = (new Date()).getTime() + millis;
+    while ((new Date()).getTime() < timestamp) {
+        //do nothing
+    }
+}
+
+function power(lspeed, rspeed) {
+
+    if (!roboderunning) {
+        var msg = {
+            message: "Error: Primero es necesario iniciar el robot con la función: 'iniciarRobot()'."
+        };
+        error(msg);
+        return;
+    }
+
+    var message = {
+        fn: "move",
+        params: [lspeed, rspeed]
+    };
+    sendMessage("robode", message);
+}
+
+function stop() {
+    if (!roboderunning) {
+        var msg = {
+            message: "Error: Primero es necesario iniciar el robot con la función: 'iniciarRobot()'."
+        };
+        error(msg);
+        return;
+    }
+
+    var message = {
+        fn: "stop",
+        params: []
+    };
+    sendMessage("robode", message);
+}
+
+function manageSensors(message) {
+    switch (message.id) {
+        case "sensorNW":
+            sensorNW = (message.state === "begin");
+            break;
+        case "sensorNE":
+            sensorNE = (message.state === "begin");
+            break;
+        case "sensorSW":
+            sensorSW = (message.state === "begin");
+            break;
+        case "sensorSE":
+            sensorSE = (message.state === "begin");
+            break;
+        case "sensorLR":
+            sensorLR = (message.state === "begin");
+            break;
+        case "sensorLL":
+            sensorLL = (message.state === "begin");
+            break;
+    }
+    collisioning = sensorNW || sensorNE ||  sensorSW || sensorSE;
+}
+\end{lstlisting}
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Apendice G
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Creación de elementos en Box2D}
 \label{anexo:creacion-elementos-box2d}
 
@@ -369,9 +560,9 @@ En el simulador solo usaremos \emph{Joints} de tipo \emph{Revolute}, definidos p
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Apendice G
+% Apendice H
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{{\color{red}Construcción de circuitos}}
+\chapter{Construcción de circuitos}
 \label{sec:construccion-circuitos}
 
 El circuito estará limitado por fronteras para prevenir que el robot se salga del mismo. La creación de las fronteras se puede ver en el código \ref{code:creacion-fronteras}.
@@ -410,5 +601,3 @@ La posición y tamaño de las fronteras se crearán en función de la escala ini
 Un obstáculo se crearía de manera similar a como se han creado los ruedas o el cuerpo principal.
 
 %\color{green} ===CREAR UN CIRCUITO===}.
-
-
