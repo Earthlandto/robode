@@ -551,7 +551,7 @@ idInterval = window.setInterval(function() {
 
 Una vez que se ha aclarado como es la actualización del mundo, queda especificar como se dibuja el mismo.
 
-Box2D provee un elemento para dibujar los objetos del mundo en el \emph{canvas} de HTML5, \texttt{b2DebugData}. Este pinta la forma de los cuerpos sobre el canvas automáticamente. 
+Box2D provee un elemento para dibujar los objetos del mundo en el \emph{canvas} de HTML5, \texttt{b2DebugData}. Este pinta la forma de los cuerpos sobre el \emph{canvas} automáticamente. 
 
 Pero como ya se ha mencionado anteriormente, las lineas no han sido representadas como elementos de Box2D, por tanto, se usarán las funciones nativas de \emph{canvas} para realizar esto. En el código \ref{code:dibujar-curvas} se puede ver el código que dibuja lineas implementado en el prototipo de la clase \texttt{World}.
 
@@ -577,7 +577,7 @@ Simulator.Env.b2World.prototype.drawLines = function() {
 };
 \end{lstlisting}
 
-Para poder conseguir que esta función se ejecute, y ademas se pinte lo primero, para que esté en un plano inferior al robot y el resto de elementos, ha sido necesario modificar levemente la librería de Box2D. Esto era necesario porque Box2D limpia el canvas antes de dibujar nada (borrando las lineas si se pintan antes de llamar a esta función).
+Para poder conseguir que esta función se ejecute, y ademas se pinte lo primero, para que esté en un plano inferior al robot y el resto de elementos, ha sido necesario modificar levemente la librería de Box2D. Esto era necesario porque Box2D limpia el \emph{canvas} antes de dibujar nada (borrando las lineas si se pintan antes de llamar a esta función).
 
 Esto se ha realizado añadiendo la llamada a la función \texttt{drawLines()} (si ésta está definida) en la implementación de la clase \texttt{b2DebugDraw}. El código \ref{code:redefinir-debug-draw} muestra esta modificación.
 
@@ -593,9 +593,12 @@ h.prototype.DrawDebugData = function(){
 			   }
 			   // end re-defination
 			   //(...)
+		}
+}
 \end{lstlisting}
 
-Adicionalmente se ha añadido un efecto de \emph{zoom}\footnote{Esto se ha realizado modificando la propiedad \emph{scale} del objeto \texttt{b2DebugDraw}.} que modifica el tamaño de todos los elemenos, permitiendo crear circuitos más grandes y que se vea todo independientemente del tamaño del \emph{canvas}. Junto a esto, también se ha añadido un \emph{scroll} tanto vertical como horizontal por la pantalla para facilitar la visión del circuito cuando se realiza \emph{zoom}.
+Adicionalmente se ha añadido un efecto de \emph{zoom}\footnote{Esto se ha realizado modificando la propiedad \emph{scale} del objeto \texttt{b2DebugDraw}.} que modifica el tamaño de todos los elementos, permitiendo crear circuitos más grandes y que se vea todo independientemente del tamaño del \emph{canvas}. Junto a esto, también se ha añadido un \emph{scroll} tanto vertical como horizontal por la pantalla para facilitar la visión del circuito cuando se realiza \emph{zoom}.
+
 
 
 \subsection{Construcción de circuitos}
