@@ -316,8 +316,12 @@ function Robode(worker) {
     this.move = function(myleftspeed, myrightspeed) {
         if (!running) return;
 
-        lspeed = myleftspeed ||  0;
-        rspeed = myrightspeed ||  0;
+        myleftspeed = myleftspeed * 100 ||  0;
+        myrightspeed = myrightspeed * 100 ||  0;
+
+        lspeed = myleftspeed.clamp(Simulator.config.minPower, Simulator.config.maxPower);
+        rspeed = myrightspeed.clamp(Simulator.config.minPower, Simulator.config.maxPower);
+        console.log(lspeed, rspeed);
     };
 
     this.stop = function() {

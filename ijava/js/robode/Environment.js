@@ -14,13 +14,16 @@ Simulator.Env = {};
         robodeW: 0.6,
         robodeH: 1,
         //world init config
-        worldWidth: 640,
-        worldHeight: 640,
+        worldWidth: 700,
+        worldHeight: 700,
         scaleWorldIni: 10,
         //sensor line config
         radiusInitSensorLine: 0.2,
         //line config
-        lineThickness: 0.5
+        lineThickness: 0.5,
+        //power robot config
+        maxPower: 4000,
+        minPower: -4000
     };
     // Simulator.Robode = null;
     Simulator.Circuit = null;
@@ -325,7 +328,7 @@ Simulator.Env = {};
 
         //Create circuit...
 
-        Simulator.World.addLine(new Bezier(0, 0, 100, 400, 320, 320));
+        Simulator.World.addLine(new Bezier(80,100, 40,100, 40,200, 100, 200));
         Simulator.World.addLine(new Bezier(0, 0, 320, 100, 0, 320));
 
         // ...end create circuit.
