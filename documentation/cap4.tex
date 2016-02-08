@@ -283,13 +283,15 @@ var pointsTR = [
 
 El movimiento de Robode está basado en el movimiento de las ruedas. Al igual que ocurre en un coche, son las ruedas de Robode las que tiran del resto. Por tanto, serán las ruedas las que realicen la fuerza para mover al resto del cuerpo. Además, la fuerza que ejerza cada rueda puede ser diferente. 
 
-Para mover las ruedas, hay que aplicar una fuerza a la rueda con respecto al vector que apunta en dirección frontal a la propia rueda. Esto se hace utilizando la función \texttt{ApplyForce()} que recibe como parámetro el vector con la fuerza a realizar y el punto desde el que se realiza. El punto que se usará para aplicar la fuerza será el centro de la propia rueda. 
+Para mover las ruedas, hay que aplicar una fuerza a la rueda con respecto al vector que apunta en dirección frontal a la propia rueda. Esto se hace utilizando la función \texttt{ApplyForce()} que recibe como parámetro el vector con la fuerza a realizar y el punto desde el que se realiza. El punto que se usará para aplicar la fuerza será el centro de la propia rueda. Una fuerza con valor positivo hará que el robot se mueva hacia delante. Mientras que una fuera negativa hará que este se mueva hacia atrás.
 
-Esto hará que la rueda ejerza una fuerza hacia delante y el robot se desplace. Pero esto ocasionará diferentes problemas: 
+La fuerza que se aplicará se mide en Newtons y la potencia máxima y mínima será de 4K Newtons y -4K Newtons, respectivamente. Por defecto, la velocidad aplicada al motor se multiplicará por 100, siempre y cuando no se mantenga en los máximos y mínimos ya mencionados.
+
+De esta manera se consigue que la rueda ejerza una fuerza hacia delante (o atrás) y el robot se desplace. Pero esto ocasionará tres problemas: 
 
 \begin{enumerate}
 	\item La velocidad angular de las ruedas cambiará y será diferente a la del robot.
-	\item Ocurrirá lo mismo que en el punto anterior, pero esta vez con los sensores detectan colisiones.
+	\item Ocurrirá lo mismo que en el punto anterior, pero esta vez con los sensores que detectan colisiones.
 	\item Se creará una velocidad lateral (u ortogonal) que hará que el movimiento del robot no sea recto.
 \end{enumerate} 
 
