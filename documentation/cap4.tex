@@ -6,7 +6,7 @@
 
 Después de estudiar cual es la situación actual de la enseñanza de la programación a un nivel global y los diferentes proyectos que promueven el \emph{pensamiento computacional}, en este capítulo se analizarán cuales son las necesidades del proyecto Robode y como se han resuelto.
 
-Como ya se ha mencionado anteriormente, se creará un simulador de un robot, al que hemos denominado \emph{Robode}, y se integrará en la plataforma Descubre la programación. Robode  estará dentro de un mundo del que podrá moverse con libertad y con el que podrá interactuar. El robot tendrá dos ruedas que se mueven independientemente (con un motor para cada una de ellas) y dispondrá de sensores que informarán de posibles colisiones con obstáculos. También, el robot tendrá la capacidad de detectar color en el suelo debajo del mismo. Ésta capacidad se usará para detectar lineas pintadas de negro en el suelo.
+Como ya se ha mencionado anteriormente, se creará un simulador de un robot, al que hemos denominado \emph{Robode}, y se integrará en la plataforma Descubre la programación. Robode se encuentra dentro de un mundo en el que puede moverse con libertad y con el que interactua. El robot posee dos ruedas que se mueven independientemente (con un motor para cada una de ellas) y dispone de sensores que informarán de posibles colisiones con obstáculos. También, el robot puede detectar color en el suelo debajo del mismo. Ésta capacidad se usará para detectar lineas pintadas de negro en el suelo.
 
 Adicionalmente, el robot y el mundo en el que este se encuentra será dibujado en un elemento \emph{canvas} de HTML5, al igual que ocurre en la plataforma Descubre. El \emph{canvas} es un elemento de HTML5 que establece un \emph{lienzo} en el que se pueden dibujar gráficos\footnote{Los gráficos pueden ser en 2 o 3 dimensiones, pero en el simulador que se desarrollará solo se hará uso de gráficos 2D.}. De igual modo, HTML5 proporciona muchas funciones para dibujar en el \emph{canvas} de manera relativamente sencilla.
 
@@ -134,8 +134,9 @@ void loop() {
 
 Para poder conseguir lo que se ha descrito anteriormente, es imprescindible realizar ciertos cambios en el compilador de iJava para que reconozca y ejecute las nuevas funciones de la API del robot.
 
+Para que las funciones sean parte del lenguaje y se ejecuten como una más de iJava, hay que realizar tres grandes cambios. Estos son: (a) añadir la definición de las funciones al analizados sintáctico; (b) añadir la implementación de las funciones al \emph{sandbox} y (c) modificar el analizador semántico para cambiar la función principal \texttt{main} por \texttt{setup}.
 
-
+En la sección \ref{sec:integracion-descubre} se analizan las clases con funciones
 
 
 
@@ -194,7 +195,7 @@ Para crear
 \section{Motor físico}
 \label{sec:motor-fisico}
 
-El simulador representará un mundo con un robot y una serie de obstáculos que interfieren entre ellos. Los obstáculos podrán colisionar entre ellos o con el robot. También será necesario simular lineas en el suelo y la detección de las mismas. Todo ello con un paso del tiempo realista. Para ello, es necesario utilizar un motor físico que simule la creación de cuerpos en el mundo, su movimiento por el mismo y el contacto entre ellos, generando una reacción similar a la producida en el mundo real.
+El simulador representa un mundo con un robot y una serie de obstáculos que interfieren entre ellos. Los obstáculos pueden colisionar entre ellos o con el robot. También es necesario simular lineas en el suelo y la detección de las mismas. Todo ello con un paso del tiempo realista. Para ello, se necesita utilizar un motor físico que simule la creación de cuerpos en el mundo, su movimiento por el mismo y el contacto entre ellos, generando una reacción similar a la producida en el mundo real.
 
 Para la creación del mundo y de las físicas que gestionan las colisiones y la interacción entre todos los elementos del simulador se han estudiado dos motores físicos: PhysicsJS\footnote{Página oficial de la librería PhysicsJS (\url{http://wellcaffeinated.net/PhysicsJS}).} y Box2D\footnote{El manual de uso de Box2D se puede encontrar en \cite{box2d-manual}. La documentación del proyecto se puede encontrar en (\url{http://www.box2dflash.org/docs/2.1a/reference/}).} \cite{box2d}. Dos librerías muy versátiles y de software libre que trabajan sobre entornos web.
 
@@ -263,7 +264,7 @@ En el apéndice \ref{anexo:creacion-elementos-box2d} se analizará en detalle la
 
 Para la creación del robot, un referente importante ha sido el robot de Moway. La forma y disposición de los sensores es similar a la simulada en Robode. Otro objetivo a cumplir era el de crear una simulación que imitara un comportamiento natural del robot a la hora de moverse, de chocar o de detenerse. Por tanto, se han establecido diferentes propiedades en los cuerpos para cumplir este objetivo.
 
-Anteriormente ya se ha mencionado que el robot tendrá 2 ruedas, 2 sensores que detectarán líneas y otros 4 que detectaran colisiones. Todos estos elementos del robot están modelados en cuerpos separados. No obstante, será necesario que se mantengan unidos y se muevan a la vez. En la figura \ref{fig:robot-skel} se puede ver un esqueleto del robot con las partes diferenciadas y los elementos que unen a las diferentes partes (en azul).
+Anteriormente ya se ha mencionado que el robot tendrá 2 ruedas, 2 sensores inferiores (que se usaran para detectar lineas) y otros 4 que detectan colisiones. Todos estos elementos del robot están modelados en cuerpos separados. No obstante, será necesario que se mantengan unidos y se muevan a la vez. En la figura \ref{fig:robot-skel} se puede ver un esqueleto del robot con las partes diferenciadas y los elementos que unen a las diferentes partes (en azul).
 
 La creación de cada una de las partes se explicará en las secciones siguientes.
 
