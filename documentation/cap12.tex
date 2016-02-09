@@ -19,7 +19,7 @@ Pero aprender a programar es mencionado como uno de los 7 grandes retos de la ed
 
 Aunque a primera vista aprender a programar pueda parecer una tarea ardua y compleja, tiene sus ventajas. En el estudio realizado por J. Siegmund y otros en \cite{siegmund2014understanding}, se puede ver como los participantes mientras comprendían, analizaban y buscaban errores en pequeños trozos de código, daban claras muestras de estar desarrollando actividad cerebral en regiones del cerebro relacionadas con el procesado del lenguaje, la atención y la memoria de trabajo.
 
-De la misma manera, estudios realizados en niños \cite{clements1986effects} de entre 6 y 8 años, muestran que estos demostraron mayor capacidad de atención, más autonomía y un mayor placer por el descubrimiento de nuevos conceptos. En la misma linea, un estudio en niños de infantil \cite{logo-geometry} que utilizaban el \Gls{logo} demostró que los mismos obtuvieron mejores resultados en pruebas de razonamiento, matemáticas o resolución de problemas. Otro estudio más reciernte \cite{liao1991effects} demuestra que aprender a programar (independientemente del lenguaje) a una corta edad, potencia la creatividad y la habilidad de aprendizaje.
+De la misma manera, estudios realizados en niños \cite{clements1986effects} de entre 6 y 8 años, muestran que estos demostraron mayor capacidad de atención, más autonomía y un mayor placer por el descubrimiento de nuevos conceptos. En la misma línea, un estudio en niños de infantil \cite{logo-geometry} que utilizaban el \Gls{logo} demostró que los mismos obtuvieron mejores resultados en pruebas de razonamiento, matemáticas o resolución de problemas. Otro estudio más reciernte \cite{liao1991effects} demuestra que aprender a programar (independientemente del lenguaje) a una corta edad, potencia la creatividad y la habilidad de aprendizaje.
 
 
 
@@ -59,7 +59,7 @@ Existen proyectos como Arduino\cite{arduino} y Raspberry Pi\cite{raspberry-pi} q
 En concreto, una de las meta originales de Raspberry Pi es conseguir que los niños aprendan a programar y conozcan como funciona realmente un ordenador. Tanto Arduino como Raspberry Pi pueden adquirirse a un bajo precio, lo que facilita que las instituciones de enseñanza introduzcan estas tecnologías en las aulas como parte de su currículo.
 
 
-Otro proyecto que también está muy extendido en las aulas es Lego Mindstorm EV3 y NXT\cite{lego-mindstorm}. Dos kits de iniciación a la robótica con Lego. Permite al estudiante crear con piezas de lego un robot y programar su comportamiento. Los robots suelen tomar forma de brazo robótico o de vehículo capaz de seguir lineas pintadas en el suelo haciendo uso de sensores. Toda este material robótico viene acompañado de un software para programar el comportamiento de los diferentes componentes del robot y un estilo de programación con bloques\cite{lego-mindstorm-programar}, similar al usado en Scratch.
+Otro proyecto que también está muy extendido en las aulas es Lego Mindstorm EV3 y NXT\cite{lego-mindstorm}. Dos kits de iniciación a la robótica con Lego. Permite al estudiante crear con piezas de lego un robot y programar su comportamiento. Los robots suelen tomar forma de brazo robótico o de vehículo capaz de seguir líneas pintadas en el suelo haciendo uso de sensores. Toda este material robótico viene acompañado de un software para programar el comportamiento de los diferentes componentes del robot y un estilo de programación con bloques\cite{lego-mindstorm-programar}, similar al usado en Scratch.
 
 En la sección \ref{sec:aprendiendo-robots} se hablará más del uso de la electrónica y la robótica como elementos de enseñanza.
 
@@ -193,7 +193,7 @@ Igualmente, los estudiantes que ya están usando la plataforma Descubre, podrán
 
 
 %% Último párrafo: explicar de que van las siguientes secciones.
-En el capítulo \ref{estado-arte} se analizaran cuales son las alternativas que existen actualmente que trabajan en esta linea. En el capítulo \ref{diseno} se verá como se ha desarrollado la idea principal y que resultados se han obtenido. Por último, en el capítulo \ref{conslusiones} se analizarán los objetivos conseguidos y que ofrece mi propuesta en comparación a los proyectos actuales.
+En el capítulo \ref{estado-arte} se analizaran cuales son las alternativas que existen actualmente que trabajan en esta línea. En el capítulo \ref{diseno} se verá como se ha desarrollado la idea principal y que resultados se han obtenido. Por último, en el capítulo \ref{conslusiones} se analizarán los objetivos conseguidos y que ofrece mi propuesta en comparación a los proyectos actuales.
 
 
 
@@ -305,7 +305,7 @@ Los actuadores de los que dispone el robot Moway son: dos ruedas, luces LEDs y u
  
 \begin{itemize}
 	\item Un sensor de luz que le permite detectar el nivel de luz ambiente. 
-	\item 2 sensores de linea, mirando hacia el suelo, que detectan diferencias de color.
+	\item 2 sensores de línea, mirando hacia el suelo, que detectan diferencias de color.
 	\item 4 sensores de obstáculos en la parte frontal del robot que detectan la distancia a los mismos.
 	\item Un micrófono para detectar el nivel de ruido.
 	\item Un sensor de temperatura. 
@@ -317,7 +317,7 @@ La aplicación gratuita Moway World permite crear diagramas de flujo para progra
 Moway tiene varios módulos que pueden ser añadidos para ampliar su funcionalidad o manejo, como son: módulos de radiofrecuencia, placas Raspberry Pi, tarjetas wifi o una cámara para captar imágenes en tiempo real. También se ofrece una alternativa a Moway de código abierto, llamada Mowayduino. Mowayduino está basado en Arduino y tiene toda la funcionalidad y potencia que ofrece Arduino. Los kits que se disponen inicialmente para Mowaiduino son los mismos que para Moway. Para programar un Mowayduino se proporciona el entorno de programación oficial de Arduino.
 
 
-Un uso común de Moway es como robot \emph{sigue-lineas}. Los sensores de linea de los que dispone proporcionan información para poder conocer el estado del robot con respecto a una linea, es decir, si está sobre una linea o no. Al tener 2 sensores, puede conocer si se está saliendo de la linea (quizás porque esta realiza una curva) y en la dirección en la que esto ocurre. Por ejemplo, si el sensor derecho deja de detectar la linea, quiere decir que: o la linea está realizando una curva hacia la izquierda o que el robot Moway está moviéndose hacia la derecha fuera de la linea (lo cual ocurre en ambos casos, si se analiza la situación desde el punto de vista de la linea). Por tanto, al estar saliéndose de la linea por la derecha, el robot Moway tendrá que moverse hacia la izquierda para mantenerse dentro del la misma. 
+Un uso común de Moway es como robot \emph{sigue-líneas}. Los sensores de línea de los que dispone proporcionan información para poder conocer el estado del robot con respecto a una línea, es decir, si está sobre una línea o no. Al tener 2 sensores, puede conocer si se está saliendo de la línea (quizás porque esta realiza una curva) y en la dirección en la que esto ocurre. Por ejemplo, si el sensor derecho deja de detectar la línea, quiere decir que: o la línea está realizando una curva hacia la izquierda o que el robot Moway está moviéndose hacia la derecha fuera de la línea (lo cual ocurre en ambos casos, si se analiza la situación desde el punto de vista de la línea). Por tanto, al estar saliéndose de la línea por la derecha, el robot Moway tendrá que moverse hacia la izquierda para mantenerse dentro del la misma. 
 
 
 En general, Moway ofrece un robot para programarlo y configurarlo junto a un entorno de programación, como puede ser Scratch. Es un buen inicio en la robótica pero su software privativo deja las opciones de ampliación y de creación de complementos y terceras partes un poco limitadas.
@@ -377,7 +377,7 @@ Como se puede ver, Robomind está formado por elementos de \emph{Karel the robot
 
 En la sección anterior se han analizado diferentes alternativas para aprender a través de la robótica. Algunas de estas alternativas tienen una gran componente Hardware, como puede ser Lego Minstorm. Por otra parte, Robomind, como simulador de un robot, permite al alumno iniciarse en la robótica sin necesidad  de un robot. 
 
-Aunque es una práctica bastante utilizada, usar un robot no es la única alternativa para aprender a programar. Usar un entorno online para enseñar a programar es una alternativa que ha obtenido notable popularidad últimamente. Como se vio en la sección \ref{sec:scratch}, Scratch es un gran exponente del \emph{Computational Thinking} que utiliza un entorno principalmente online para que niños de todo el mundo aprenda a programar. Aunque éste no es el único proyecto que existe en esta linea. CodeHS y CodeSchool son algunos de los proyectos con más repercusión que buscan extender la cultura del \emph{Computational Thinking}, especialmente ente niños. En las siguientes secciones se estudiaran estas alternativas.
+Aunque es una práctica bastante utilizada, usar un robot no es la única alternativa para aprender a programar. Usar un entorno online para enseñar a programar es una alternativa que ha obtenido notable popularidad últimamente. Como se vio en la sección \ref{sec:scratch}, Scratch es un gran exponente del \emph{Computational Thinking} que utiliza un entorno principalmente online para que niños de todo el mundo aprenda a programar. Aunque éste no es el único proyecto que existe en esta línea. CodeHS y CodeSchool son algunos de los proyectos con más repercusión que buscan extender la cultura del \emph{Computational Thinking}, especialmente ente niños. En las siguientes secciones se estudiaran estas alternativas.
 
 \subsection{CodeHS}
 \label{sec:CodeHS}

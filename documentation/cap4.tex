@@ -4,17 +4,17 @@
 \chapter{Diseño y resolución del trabajo realizado}
 \label{diseno}
 
-Después de estudiar cual es la situación actual de la enseñanza de la programación a un nivel global y los diferentes proyectos que promueven el \emph{pensamiento computacional}, en este capítulo se analizarán cuales son las necesidades del proyecto Robode y como se han resuelto.
+Después de estudiar cual es la situación actual de la enseñanza de la programación a un nivel global y los diferentes proyectos que promueven el \emph{pensamiento computacional}, en éste capítulo se analizarán cuales son las necesidades del proyecto Robode y como se han resuelto.
 
-Como ya se ha mencionado anteriormente, se ha creado un simulador de un robot, al que hemos denominado \emph{Robode}, que se integrará en la plataforma Descubre la programación. Robode se encuentra dentro de un mundo en el que puede moverse con libertad y con el que interactua. El robot posee dos ruedas que se mueven independientemente (con un motor para cada una de ellas) y dispone de sensores que informarán de posibles colisiones con obstáculos. También, el robot puede detectar color en el suelo debajo del mismo. Ésta capacidad se usará para detectar lineas pintadas de negro en el suelo.
+Como ya se ha mencionado anteriormente, se ha creado el simulador de un robot, al que hemos denominado \emph{Robode}, que se integrará en la plataforma Descubre la programación. Robode se encuentra dentro de un mundo en el que puede moverse con libertad y con el que interactua. El robot posee dos ruedas que se mueven independientemente (con un motor para cada una de ellas) y dispone de sensores que informarán de posibles colisiones con obstáculos. También, el robot puede detectar color en el suelo debajo del mismo. Ésta capacidad se usará para detectar líneas pintadas de negro en el suelo.
 
-Adicionalmente, el robot y el mundo en el que este se encuentra será dibujado en un elemento \emph{canvas} de HTML5, al igual que ocurre en la plataforma Descubre. El \emph{canvas} establece un \emph{lienzo} en el que se pueden dibujar gráficos\footnote{Los gráficos pueden ser en 2 o 3 dimensiones, pero en el simulador que se desarrollará solo se hará uso de gráficos 2D.}. De igual modo, HTML5 proporciona muchas funciones para dibujar en el \emph{canvas} de manera relativamente sencilla.
-
-
-Como se puede ver, Robode es la unión de varios de los proyectos que se han analizado en el capítulo \ref{estado-arte}. Por una parte, la idea principal de crear un simulador es igual a la que se ha realizado en Robomind (el cual se analiza en la sección \ref{sec:robomind}) pero simulando un robot en un mundo continuo. El robot comparte características físicas con el robot Moway (analizado en la sección \ref{sec:moway}), como es la disposición de sensores (tanto externos como inferiores) y la cantidad y disposición de las ruedas. Por último, se ejecutará en un entorno web, como bien puede ser el ejemplo de las plataformas CodeHS (sección \ref{sec:CodeHS}) y Code.org (sección \ref{sec:Code.org}). 
+Adicionalmente, el robot y el mundo en el que este se encuentra será dibujado en el elemento \emph{canvas} de HTML5, al igual que ocurre en la plataforma Descubre. El \emph{canvas} establece un \emph{lienzo} en el que se pueden dibujar gráficos\footnote{Los gráficos pueden ser en 2 o 3 dimensiones, pero en el simulador que se desarrollará solo se hará uso de gráficos 2D.}. De igual modo, HTML5 proporciona muchas funciones para dibujar en el \emph{canvas} de manera relativamente sencilla.
 
 
-En las secciones siguientes se va a estudiar como se ha diseñado y creado Robode, que características tiene y cual ha sido la implementación llevada a cabo. También se verá como se ha modificado la plataforma Descubre la programación para integrar el simulador en ella. Pero antes, se analizará el nuevo modelo de programación que se ha creado y en el que se basa el simulador.
+Como se puede ver, Robode es la unión de varios de los proyectos que se han analizado en el capítulo \ref{estado-arte}. Por una parte, la idea principal de crear un simulador es igual a la que se ha realizado en Robomind (el cual se analiza en la sección \ref{sec:robomind}) pero simulando un robot en un mundo continuo. El robot comparte características físicas con el robot Moway (analizado en la sección \ref{sec:moway}), como es la disposición de sensores (tanto externos como inferiores) y el funcionamiento y disposición de las ruedas. Por último, se ejecutará en un entorno web, como bien puede ser el ejemplo de las plataformas CodeHS (sección \ref{sec:CodeHS}) y Code.org (sección \ref{sec:Code.org}). 
+
+
+En las secciones siguientes se va a estudiar como se ha diseñado y creado Robode, que características tiene y cual ha sido la implementación llevada a cabo. También se verá como se ha modificado la plataforma Descubre para integrar el simulador en ella. Pero antes, se analizará el nuevo modelo de programación que se ha creado y en el que se basa el simulador.
 
 
 
@@ -26,46 +26,36 @@ El modelo de programación que presenta iJava actualmente consiste en crear una 
 El modelo de programación que se plantea para usar el simulador no es muy diferente. Para definirlo, se han estudiado los lenguajes de programación que usan Moway, Turtle, Scratch y Arduino y que ya se han mencionado anteriormente en este documento.
 
 
-Primeramente se tiene una función principal, que se llamara \texttt{setup} y que no recibirá parámetros y devuelve el tipo \texttt{void}. Esta función cumple el mismo papel que la función \texttt{main} de iJava, pero se ha cambiado el nombrado para adecuarlo al estándar de Arduino y darle el significado de establecer los parámetros del robot y su comportamiento inicial. 
+Primeramente se tiene una función principal, que se llamara \texttt{setup()} y que no recibirá parámetros y devuelve el tipo \texttt{void}. Esta función cumple el mismo papel que la función \texttt{main()} de iJava, pero se ha cambiado el nombrado para adecuarlo al estándar de Arduino y darle el significado de establecer los parámetros del robot y su comportamiento inicial. 
 
-Por ejemplo, en la función \texttt{setup} se podría programar el robot de manera cuando inicia el programa, éste gire 180º y el programa termine. En \texttt{setup} se puede programar un comportamiento estándar del robot. Pero también es necesario permitir que el robot reaccione al entorno y a posibles cambios que en este se producen. Por tanto, es necesario añadir otro elemento al modelo.
+Por ejemplo, en la función \texttt{setup()} se podría programar el robot de manera que cuando inicia el programa, éste gire 180º y el programa termine. En \texttt{setup()} se puede programar un comportamiento estándar del robot. Pero también es necesario permitir que el robot reaccione al entorno y a posibles cambios que en este se producen. Por tanto, es necesario añadir otro elemento al modelo.
 
-La función \texttt{loop} ejecutará en bucle todas las instrucciones que en ella se encuentren. De esta manera, se permite una ejecución infinita que permita reaccionar a cambios del entorno. Esto se hará con la información que le llegue al robot a través de los sensores. 
-
-
-No es necesario indicar que la función \texttt{loop} se ejecute en bucle, a diferente de iJava. En iJava se usaba la función \texttt{animate} que recibe una función como argumento y esta es ejecutada en bucle. La función \texttt{loop} se comportará automáticamente de esta manera. En realidad, lo que hará el motor de iJava será llamar por debajo a la función \texttt{loop} en bucle.
+La función \texttt{loop()} ejecutará en bucle todas las instrucciones que en ella se encuentren. De esta manera, se permite una ejecución infinita que permita reaccionar a cambios del entorno. Esto se hará con la información que le llegue al robot a través de los sensores. 
 
 
+No es necesario indicar que la función \texttt{loop()} se ejecute en bucle, a diferencia de iJava. En iJava se usaba la función \texttt{animate} que recibe una función como argumento y esta es ejecutada en bucle. La función \texttt{loop()} se comportará automáticamente de esta manera. En realidad, lo que hará el motor de iJava será llamar a la función \texttt{loop()} usando \texttt{animate(loop)} de manera transparente al programador. Esto ocurre solo si la función \texttt{loop()} ha sido definida en el código iJava.
 
 
+En cuanto a la funcionalidad que ofrece la API del simulador para poder controlar al robot, se busca que las funciones ofrecidas sean lo más básicas posibles. La intención es que el programador tenga los elementos básicos y suficientes para manejar el robot. Si éste quisiera funciones más complejas, tendría que programarlas él mismo, contribuyendo así a su aprendizaje. 
 
-
-En cuanto a la funcionalidad que ofrece la API del simulador para poder controlar al robot, se busca que las funciones ofrecidas sean lo más básicas posibles. La intención es que el programador tenga los elementos básicos y suficientes para manejar el robot. Si quisiera funciones más complejas, tendría que programarlas él mismo, contribuyendo así a su aprendizaje. 
-
-A continuación vamos a listar todas las funciones que ofrece la API para controlar el robot. Ademas, la API también ofrece un conjunto de variables de tipo \texttt{boolean} que permitirán saber si los sensores están detectando colisiones o no.
+A continuación vamos a listar todas las funciones que ofrece la librería del robot. Ademas, la API también ofrece un conjunto de variables de tipo \texttt{boolean} que permitirán conocer si los sensores están detectando colisiones o no.
 
 \begin{itemize}
 	\item \texttt{initRobot()}: Inicia, muestra y coloca el robot en su posición inicial.
-	\item \texttt{power(potenciaIzq, potenciaDer)}: Establece la potencia con la que se moverá cada rueda. El primer argumento es para la rueda izquierda mientras que el segundo para la derecha. El valor de potencia estará entre 40 y -40. Un valor positivo moverá la rueda en dirección frontal y un valor negativo, posterior.
+	\item \texttt{power(potenciaIzq, potenciaDer)}: Establece la potencia con la que se moverá cada rueda. El primer argumento es para la rueda izquierda mientras que el segundo para la derecha. El valor de potencia estará entre 40 y -40. Un valor positivo moverá la rueda en dirección frontal y un valor negativo, posterior. Un valor de 0 hará que esa rueda deje de ejercer fuerza.
 	\item \texttt{stop()}: Detiene el robot.
 	\item \texttt{left()}: Gira el robot 90º en dirección contraria al sentido de las agujas del reloj.
-	\item \texttt{wait(n\_milisegundos)}: Crea una espera igual al número de milisegundos que se le pasan como argumento a la función. 
-	\item \texttt{sensorNW}: Sensor en la posición Noroeste.
-		\item \texttt{sensorNE}: Sensor en la posición Noreste.
-			\item \texttt{sensorSW}: Sensor en la posición Suroeste.
-				\item \texttt{sensorSE}: Sensor en la posición Sureste.
-		\item \texttt{collisioning}: Devuelve \texttt{true} si alguno de los sensores anteriores está detectando una colisión.
-			\item \texttt{sensorLL}: Sensor inferior izquierdo que detectará si está sobre una linea.
-						\item \texttt{sensorLR}: Sensor inferior derecho que detectará si está sobre una linea.
+	\item \texttt{wait(n\_milisegundos)}: Crea una espera de tiempo igual al número de milisegundos que se le pasan como argumento a la función. 
+	\item \texttt{sensorNW}: Sensor de colisiones en la posición Noroeste. Un valor de \texttt{true} indica que está detectando colisiones.
+	\item \texttt{sensorNE}: Sensor de colisiones en la posición Noreste. Un valor de \texttt{true} indica que está detectando colisiones.
+	\item \texttt{sensorSW}: Sensor de colisiones en la posición Suroeste. Un valor de \texttt{true} indica que está detectando colisiones.
+	\item \texttt{sensorSE}: Sensor de colisiones en la posición Sureste. Un valor de \texttt{true} indica que está detectando colisiones.
+	\item \texttt{collisioning}: Devuelve \texttt{true} si alguno de los sensores anteriores está detectando una colisión.
+	\item \texttt{sensorLL}: Sensor inferior izquierdo que detectará si Robode está sobre una línea.
+	\item \texttt{sensorLR}: Sensor inferior derecho que detectará si Robode está sobre una línea.
 \end{itemize}
 
-Como se puede ver, se ofrecen diferentes variables de tipo \texttt{boolean} para saber si el robot está detectando una colisión o si está sobre una linea con alguno de los sensores. Por otra parte, se ofrece la función \texttt{wait} que produce una espera de tiempo\footnote{En la sección \ref{animando-robode} se explica en detalle como se ha conseguido este efecto en el sistema \emph{monohilo} que implementa Javascript.} en la que no se ejecutarán nuevas instrucciones.
-
-%Se ha decidido establecer las variables en inglés por similitud a iJava (que también está en inglés) y al resto de lenguajes modernos. No obstante, se han realizado ciertos cambios con respecto a iJava.
-%
-%La función principal de la aplicación ya no será la función \texttt{main} y no se usará la función \texttt{animate} para ejecutar en bucle una función. Al igual que pasa en Arduino, la función \texttt{setup} establecerá los valores iniciales del robot y una función \texttt{loop} ejecutará en bucle las instrucciones que en ella se contengan. Alimentando así, la \emph{cola de instrucciones}.
-%
-%Aún así, el uso de la función \texttt{loop()} es opcional, pudiendo usar únicamente la función \texttt{setup()} sin que se produzca el bucle infinito de la función \texttt{loop}.
+Como se puede ver, se ofrecen diferentes variables de tipo \texttt{boolean} para saber si el robot está detectando con alguno de los sensores una colisión o si está sobre una linea. Por otra parte, se ofrece la función \texttt{wait()} que produce una espera de tiempo\footnote{En la sección \ref{animando-robode} se explica en detalle como se ha conseguido este efecto en el sistema \emph{monohilo} que implementa Javascript.} en la que no se ejecutarán nuevas instrucciones.
 
 Un ejemplo que muestra el nuevo modelo de programación se puede ver en el código \ref{code:nuevo-modelo}.
 
@@ -112,7 +102,7 @@ Los pasos descritos del funcionamiento del programa se enumeran a continuación:
 	\item Se repite el paso 3.
 \end{enumerate}
 
-Con respecto a función \texttt{loop}, puesto que ya existe un bucle infinito en el programa, no es una buena práctica crear bucles infinitos\footnote{Obviamente, no hay ningún problema en definir bucles que recorran variables o realicen cálculos, por ejemplo.} en el simulador.
+Con respecto a función \texttt{loop()}, puesto que ya existe un bucle infinito en el programa, no es una buena práctica crear bucles infinitos\footnote{Obviamente, no hay ningún problema en definir bucles que recorran variables o realicen cálculos, por ejemplo.} en el simulador.
 
 Por ejemplo, la forma de reaccionar a las colisiones sería la que se muestra en el código \ref{code:ejemplo-colisiones-robode}. En lugar de utilizar un bucle \emph{while} que espere hasta que se produzca una colisión, se comprueban con condiciones \texttt{if} o \texttt{if-else}.
 
@@ -139,7 +129,7 @@ void loop() {
 }
 \end{lstlisting}
 
-Recapitulando, tenemos una función principal \texttt{setup} que puede ser complementada con la función \texttt{loop}, la cual ejecutará en bucle infinito que permitirá reaccionar al entorno según pasa el tiempo.
+Recapitulando, tenemos una función principal \texttt{setup()} que puede ser complementada con la función \texttt{loop()}, la cual ejecutará en bucle infinito que permitirá reaccionar al entorno según pasa el tiempo.
 
 En la sección siguiente se estudiará como se ha modificado iJava para implementar este nuevo modelo de programación.
 
@@ -148,27 +138,27 @@ En la sección siguiente se estudiará como se ha modificado iJava para implemen
 
 Para poder conseguir lo que se ha descrito anteriormente, es imprescindible realizar ciertos cambios en el compilador de iJava para que reconozca y ejecute las nuevas funciones de la API del robot.
 
-Principalmente, el compilador de iJava consta de tres partes: el analizador sintáctico, el analizador semántico y el \emph{sandbox}. El \texttt{sandbox} contiene la implementación de las funciones de librería descritas en el analizador sintáctico y ejecuta (en un entorno seguro) el código Javascript que se genera a partir del código fuente en iJava si todo el proceso de compilación se ha realizado con éxito. 
+Principalmente, el compilador de iJava consta de tres partes: el analizador sintáctico, el analizador semántico y el \emph{sandbox}. El \texttt{sandbox} contiene la implementación de las funciones de librería descritas en el analizador sintáctico. Éste ejecuta (en un entorno seguro) el código Javascript que se genera a partir del código fuente en iJava. Siempre y cuando todo el proceso de compilación se haya realizado con éxito. 
 
-Para que las funciones de la API sean parte del lenguaje y se ejecuten como una más de iJava, hay que realizar tres grandes cambios. Estos son: (a)modificar el analizador semántico para cambiar la función principal \texttt{main} por \texttt{setup}; (b) añadir la definición de las funciones al analizados sintáctico y (c) añadir la implementación de las funciones al \emph{sandbox}.
+Para que las funciones de la API sean parte del lenguaje y se ejecuten como una más de iJava, hay que realizar tres grandes cambios. Estos son: (a) modificar el analizador semántico para cambiar la función principal \texttt{main} por \texttt{setup}; (b) añadir la definición de las funciones al analizados sintáctico y (c) añadir la implementación de las funciones al \emph{sandbox}.
 
-Para el cambio (a), hay que modificar el analizador semántico de iJava (clase \texttt{iJavaSemantic}). El analizador semántico busca si la función \texttt{main} se ha definido y, si no la encuentra, devolverá un error que se mostrará por pantalla. Además, en el código Javascript que se genera como ejecución del programa del usuario (función \texttt{eval()}), se ha definido que la función \texttt{loop()} se ejecute en un bucle infinito siempre y cuando se haya definido en el programa del usuario.
+Para el cambio (a), hay que modificar el analizador semántico de iJava (clase \texttt{iJavaSemantic}). El analizador semántico busca si la función \texttt{setup} (antes \texttt{main}) se ha definido y, si no la encuentra, devolverá un error que se mostrará por pantalla. Además, en el código Javascript que se genera como ejecución del programa del usuario (función \texttt{eval()}), se ha definido que la función \texttt{loop()} se ejecute en un bucle infinito siempre y cuando ésta se haya definido en el programa del usuario.
 
-Para añadir las definiciones de nuevas funciones (cambio (b) ), hay que añadir al analizador sintáctico (clase \texttt{iJavaParser}) la definición de dichas funciones, así como el número y tipo de parámetros que obtendrán las funciones. Para el caso de las variables de los sensores, también hay que añadirlas como variables del sistema (de iJava) de tipo \texttt{boolean}.
+Para añadir las definiciones de nuevas funciones (cambio (b) ), hay que añadir al analizador sintáctico (clase \texttt{iJavaParser}) la definición de dichas funciones. También hay que indicar el número y tipo de parámetros de las funciones. Para el caso de las variables de los sensores, también hay que añadirlas como variables del sistema (de iJava) de tipo \texttt{boolean}.
 
-Por último, el cambio (c) se consigue implementando las funciones de la API en el sandbox de iJava (clase \texttt{iJavaSandbox}). Las funciones y variables tienen que tener el mismo nombre, tipo y argumentos que las definidas en el analizador sintáctico para que se puedan ejecutar y el compilador las detecte. 
+Por último, el cambio (c) se consigue implementando las funciones de la API en el sandbox de iJava (clase \texttt{iJavaSandbox}). Las funciones y variables tienen que tener el mismo nombre, tipo y argumentos que las definidas en el analizador sintáctico para que el compilador las detecte y se puedan ejecutar.
 
 En el apéndice \ref{anexo:ampliacion-ijava-API} se incluye las secciones más importantes del código que implica los cambios arriba mencionados.
 
 
-Adicionalmente a estos cambios, también se han eliminado las funciones de librería de gráficos y de entrada estándar (teclado y ratón) puesto que no aportaban interés a la programación con un robot y además podría desvirtuar el modelo de programación del simulador.
+Adicionalmente a estos cambios, también se han eliminado las funciones de librería de gráficos y de entrada estándar (teclado y ratón) puesto que no aportaban interés a la programación con un robot. 
 
 
 \section{Integración en Descubre del simulador}
 \label{sec:integracion-descubre}
 
 
-Descubre la programación\cite{descubre} es una plataforma online que está enfocada en enseñar a programar a alumnos de Educación Primaria y Secundaria. Para ello, se provee de un entorno que permite programar en iJava\cite{sanchez2009ijava} y compilar el código ejecutado. La salida se muestra por una pantalla dispuesta para ello.
+Descubre la programación\cite{descubre} es una plataforma online que se enfoca en enseñar a programar a alumnos de Educación Primaria y Secundaria. Para ello, se provee de un entorno que permite programar en iJava\cite{sanchez2009ijava} y compilar el código ejecutado. La salida se muestra por una pantalla dispuesta para ello.
 
 Esto se realiza gracias al compilador que implementa Descubre. Dicho compilador obtendrá el código escrito en iJava y lo analizará en busca de errores. Si el análisis sintáctico y semántico no encuentra ningún problema, entonces realizará una traducción de iJava a Javascript para ejecutar dicho código en el navegador. La salida se mostrará por el elemento \texttt{canvas} de HTML5.
 
@@ -194,7 +184,7 @@ Para entender como se relacionan todas estas clases y cual es la comunicación e
 
 En resumen, el diagrama de comunicación muestra cuales son los pasos que se llevan a cabo para ejecutar un código escrito en Javascript. También hay que tener en cuenta que el \emph{canvas} no es una clase al uso. Aún así, se ha decidido incluirlo de esta manera para poder representar quién realiza la acción de pintar (método \texttt{draw()}). Esto cambiará cuando entre en juego el simulador.
 
-Es la clase \texttt{iJavaSandbox} la que ejecuta el código convertido a Javascript con la función \texttt{eval()} de Javascript. En esta clase estará la implementación de toda la función de librería que ofrece iJava en el lenguaje: funciones matemáticas, para pintar el \emph{canvas}, entrada y salida, etc.
+Es la clase \texttt{iJavaSandbox} la que ejecuta el código convertido a Javascript con la función \texttt{eval()} de Javascript. En esta clase estará la implementación de todas las funciones de librería que ofrece iJava en el lenguaje: funciones matemáticas, funciones para pintar el \emph{canvas}, entrada y salida, etc.
 
 En las secciones siguientes se analizará que cambios se han realizado para integrar el simulador del robot en Descubre.
 
@@ -204,7 +194,7 @@ En las secciones siguientes se analizará que cambios se han realizado para inte
 
 En la sección \ref{sec:modificacion-ijava} se ha hablado de los pasos necesarios para modificar el compilador de iJava para añadir nuevas librerías. Pero para añadir el simulador, es necesario añadir toda la lógica de la simulación al compilador. El control del robot y del mundo se implementa en la clase \texttt{Robode}.
 
-La clase \texttt{Robode} recibirá los mensajes del \emph{Sandbox} que le dirá como tiene que mover el robot (potencia de las ruedas, detenerse por completo, etc) y, a la misma vez, \texttt{Robode} le comunicará al \emph{Sandbox} cuando un sensor está detectando colisiones. \texttt{Simulator} encapsula detalles de la simulación, como puede ser la configuración inicial del robot (posición, tamaño, etc) o del mundo (ancho y alto por ejemplo). 
+La clase \texttt{Robode} recibirá los mensajes del \emph{Sandbox} que le dirá como tiene que mover el robot (potencia de las ruedas, detenerse por completo, etc) y, a la misma vez, \texttt{Robode} le comunicará al \emph{Sandbox} cuando un sensor está detectando colisiones. La clase\texttt{Simulator} encapsula detalles de la simulación, como puede ser la configuración inicial del robot (posición, tamaño, etc) o del mundo (ancho, alto, etc). 
 
 Además, se han representado elementos básicos del motor físico que se ha utilizado para la simulación. Esto es importante ya que otorga una visión general del funcionamiento del motor físico y su relación con el simulador y Robode. Ésto último será útil cuando se vea el uso e implementación del motor físico en la sección \ref{sec:motor-fisico}.
 
@@ -234,7 +224,7 @@ Como se puede ver, el  \emph{Sandbox} envía dos mensajes diferentes para comuni
 \section{Motor físico}
 \label{sec:motor-fisico}
 
-El simulador representa un mundo con un robot y una serie de obstáculos que interfieren entre ellos. Los obstáculos pueden colisionar entre ellos o con el robot. También es necesario simular lineas en el suelo y la detección de las mismas. Todo ello con un paso del tiempo realista. Para ello, se necesita utilizar un motor físico que simule la creación de cuerpos en el mundo, su movimiento por el mismo y el contacto entre ellos, generando una reacción similar a la producida en el mundo real.
+El simulador representa un mundo con un robot y una serie de obstáculos que interfieren entre ellos. Los obstáculos pueden colisionar entre ellos o con el robot. También es necesario simular líneas en el suelo y la detección de las mismas. Todo ello con un paso del tiempo realista. Para ello, se necesita utilizar un motor físico que simule la creación de cuerpos en el mundo, su movimiento por el mismo y el contacto entre ellos, generando una reacción similar a la producida en el mundo real.
 
 Para la creación del mundo y de las físicas que gestionan las colisiones y la interacción entre todos los elementos del simulador se han estudiado dos motores físicos: PhysicsJS\footnote{Página oficial de la librería PhysicsJS (\url{http://wellcaffeinated.net/PhysicsJS}).} y Box2D\footnote{El manual de uso de Box2D se puede encontrar en \cite{box2d-manual}. La documentación del proyecto se puede encontrar en (\url{http://www.box2dflash.org/docs/2.1a/reference/}).} \cite{box2d}. Dos librerías muy versátiles y de software libre que trabajan sobre entornos web.
 
@@ -251,9 +241,9 @@ Una vez que se ha aclarado que la librería utilizada es \texttt{Box2Dweb}, por 
 
 En \texttt{Box2D} existen una serie de objetos que representan al mundo y los diferentes elementos que lo componen.  Estos son: el Mundo (World), los Cuerpos (Bodies), los Accesorios (Fixtures) y las Articulaciones o elementos constrictores (Joints).
 
-El núcleo de Box2D es el objeto \emph{World}, el cual define los parámetros básicos que regirán la simulación más tarde, como puede ser el ratio de actualización o la gravedad. También crea y almacena el resto de objetos de Box2D, como los \emph{Bodies}, las \emph{Fixtures} y los \emph{Joints}, entre otros.
+El núcleo de Box2D es el objeto \emph{World}, el cual define los parámetros básicos que regirán la simulación más tarde. Estos parámetros pueden ser el ratio de actualización o la gravedad. También crea y almacena el resto de objetos de Box2D, como los \emph{Bodies}, las \emph{Fixtures} y los \emph{Joints}, entre otros.
 
-Para la creación de nuestro mundo, hemos decidido que tendrá una vista \emph{top-down}, es decir, una vista del mundo desde arriba, desde el cielo. De esta manera se consigue una vista superior de todo el circuito simplificando la comprensión del movimiento del robot sobre el circuito.
+Para la creación de nuestro mundo, se ha decidido que tendrá una vista \emph{top-down}, es decir, una vista del mundo desde arriba, desde el cielo. De esta manera se consigue una vista superior de todo el circuito simplificando la comprensión del movimiento del robot sobre el circuito.
 
 Una de las características más importantes de \texttt{Box2D} es la posibilidad de dotar a la aplicación que se está creando de un efecto gravitatorio de manera nativa al motor. Lo normal sería establecer éste valor con un vector de dirección hacia el suelo (hacia la parte baja de la pantalla) con la fuerza que se quiera simular. Esto provocaría que los cuerpos del mundo estuvieran constantemente sometidos a una fuerza que los mueve en dirección a ese vector, normalmente hacia el suelo.  
 
@@ -301,9 +291,9 @@ En el apéndice \ref{anexo:creacion-elementos-box2d} se analizará en detalle la
 \subsection{Construcción del robot}
 \label{sec:contruccion-robot}
 
-Para la creación del robot, un referente importante ha sido el robot de Moway. La forma y disposición de los sensores es similar a la simulada en Robode. Otro objetivo a cumplir era el de crear una simulación que imitara un comportamiento natural del robot a la hora de moverse, de chocar o de detenerse. Por tanto, se han establecido diferentes propiedades en los cuerpos para cumplir este objetivo.
+Para la creación del robot, un referente importante ha sido el robot Moway. La forma y disposición de los sensores es similar a la simulada en Robode. Otro objetivo a cumplir era el de crear una simulación que imitara un comportamiento natural del robot a la hora de moverse, de chocar o de detenerse. Por tanto, se han establecido diferentes propiedades en los cuerpos para cumplir este objetivo.
 
-Anteriormente ya se ha mencionado que el robot tendrá 2 ruedas, 2 sensores inferiores (que se usaran para detectar lineas) y otros 4 que detectan colisiones. Todos estos elementos del robot están modelados en cuerpos separados. No obstante, será necesario que se mantengan unidos y se muevan a la vez. En la figura \ref{fig:robot-skel} se puede ver un esqueleto del robot con las partes diferenciadas y los elementos que unen a las diferentes partes (en azul).
+Anteriormente ya se ha mencionado que el robot tendrá 2 ruedas, 2 sensores inferiores (que se usaran para detectar líneas) y otros 4 que detectan colisiones. Todos estos elementos del robot están modelados en cuerpos separados. No obstante, será necesario que se mantengan unidos y se muevan a la vez. En la figura \ref{fig:robot-skel} se puede ver un esqueleto del robot con las partes diferenciadas y los elementos que unen a las diferentes partes (en azul).
 
 La creación de cada una de las partes se explicará en las secciones siguientes.
 
@@ -319,9 +309,9 @@ La creación de cada una de las partes se explicará en las secciones siguientes
 \subsubsection*{Cuerpo principal}
 \label{sec:cuerpo-principal}
 
-El cuerpo principal está modelado como un rectángulo. Éste será más largo que ancho y tendrá el resto de cuerpos (sensores y ruedas) \emph{atados} a él con joints. El cuerpo principal de Robode será dinámico, así como los sensores y ruedas.
+El cuerpo principal está modelado como un rectángulo. Éste será más largo que ancho y tendrá el resto de cuerpos (sensores y ruedas) \emph{atados} a él con \emph{joints}. El cuerpo principal de Robode será dinámico, así como los sensores y ruedas.
 
-La forma se ha creado creando una fixture con forma poligonal. Se ha utilizado la función \texttt{SetAsBox()} que permite definir el ancho y alto del polígono, creándolo con forma rectangular. El ancho del robot será de 6 píxeles mientras que su largo medirá 10 píxeles.
+La forma se ha creado usando una fixture con forma poligonal. Se ha utilizado la función \texttt{SetAsBox()} que permite definir el ancho y alto del polígono, creándolo con forma rectangular. El ancho del robot será de 6 píxeles mientras que su largo medirá 10 píxeles.
 
 En el listado de código \ref{code:creacion-cuerpo-principal} se puede ver el código que construye el cuerpo principal de Robode.
 
@@ -353,7 +343,7 @@ robot.CreateFixture(fixDef);
 
 \subsubsection*{Ruedas}
 
-Las ruedas de Robode se simularan con dos polígonos con forma rectangular  (método \texttt{SetAsBox()} de la clase \texttt{b2PolygonShape}). Su posición está retrasada con respecto al centro del cuerpo principal y su ancho es de 2 píxeles mientras que su alto mide 4 píxeles. En el listado de código \ref{code:creation-wheel} se puede ver como se han construido las ruedas. Como se puede ver, se ha mantenido los valores de densidad, fricción y restitución del cuerpo principal, reduciendo así la posibilidad de comportamientos anómalos en colisiones.
+Las ruedas de Robode se simularan con dos polígonos con forma rectangular (método \texttt{SetAsBox()} de la clase \texttt{b2PolygonShape}). Su posición está retrasada con respecto al centro del cuerpo principal y su ancho es de 2 píxeles mientras que su alto mide 4 píxeles. En el listado de código \ref{code:creation-wheel} se puede ver como se han construido las ruedas. También se han mantenido los valores de densidad, fricción y restitución del cuerpo principal, reduciendo así la posibilidad de comportamientos anómalos durante una colisión.
 
 \begin{lstlisting}[language={Javascript},label={code:creation-wheel}, caption={Función que crea las ruedas de Robode.}]
 function createWheel(x, y) {
@@ -378,7 +368,7 @@ function createWheel(x, y) {
 }
 \end{lstlisting}
 
-Además, se creará un joint que mantendrá unidas las ruedas con el cuerpo principal de Robode. En el listado de código  \ref{code:wheel-joint} se puede ver la creación de un del joint que une el coche con la rueda.
+Además, se creará un \emph{joint} que mantendrá unidas las ruedas con el cuerpo principal de Robode. En el listado de código  \ref{code:wheel-joint} se puede ver la creación del joint que une el coche con la rueda.
 
 \begin{lstlisting}[language={Javascript},label={code:wheel-joint}, caption={Función que crea el joint que une la rueda al coche.}]
 function addWheelJoint(mybody, mywheel) {
@@ -567,18 +557,18 @@ contactListener.BeginContact = function(contact) {
 };
 \end{lstlisting}
 
-Como se puede ver en la linea 21, la comprobación acabará si el cuerpo percibido es una parte del coche, como una rueda o el propio cuerpo principal. La forma de comprobar si un cuerpo es parte del robot es con el nombre del cuerpo. Este se ha establecido en la creación de los cuerpos con la función \texttt{setName()} de la clase \texttt{Body}.
+Como se puede ver en la línea 21, la comprobación acabará si el cuerpo percibido es una parte del coche, como una rueda o el propio cuerpo principal. La forma de comprobar si un cuerpo es parte del robot es con el nombre del cuerpo. Este se ha establecido en la creación de los cuerpos con la función \texttt{setName()} de la clase \texttt{Body}.
 
-También, se puede ver como en las lineas 28 a 33 se notifica la colisión enviando un mensaje. En secciones posteriores se explicará el proceso de notificación y la comunicación del simulador con el resto de la aplicación.
+También, se puede ver como en las líneas 28 a 33 se notifica la colisión enviando un mensaje. En secciones posteriores se explicará el proceso de notificación y la comunicación del simulador con el resto de la aplicación.
 
-\subsection{Detectando lineas}
+\subsection{Detectando líneas}
 \label{detectando-lineas}
 
-Antes de poder hablar de como se detectan lineas, es necesario hablar de las propias lineas.
+Antes de poder hablar de como se detectan líneas, es necesario hablar de las propias líneas.
 
-Una característica del simulador que estaba clara desde el comienzo del proyecto era la necesidad de que el robot pudiera seguir lineas. Para poder seguir lineas, es necesario poder calcular la distancia del robot a una linea. Esto implica el cálculo de la distancia de un punto a una linea. Pero, ¿qué forma tiene la linea?
+Una característica del simulador que estaba clara desde el comienzo del proyecto era la necesidad de que el robot pudiera seguir líneas. Para poder seguir líneas, es necesario poder calcular la distancia del robot a una línea. Esto implica el cálculo de la distancia de un punto a una línea. Pero, ¿qué forma tiene la línea?
 
-Hay dos opciones para la forma de las lineas: líneas rectas o curvas. Las lineas rectas darían una forma muy simple al circuito y no se corresponden con los circuitos que podrían crearse en la realidad. Además, la programación del robot sigue-líneas sería muy simple para el niño (solo tendría que asegurarse de que cuando encuentra una linea, no se tuerce). Así que esto elimina la opción de usar rectas para modelar las líneas. 
+Hay dos opciones para la forma de las líneas: líneas rectas o curvas. Las líneas rectas darían una forma muy simple al circuito y no se corresponden con los circuitos que podrían crearse en la realidad. Además, la programación del robot sigue-líneas sería muy simple para el niño (solo tendría que asegurarse de que cuando encuentra una línea, no se tuerce). Así que esto elimina la opción de usar rectas para modelar las líneas. 
 
 
 \subsubsection{Curvas de Bezier}
@@ -620,9 +610,9 @@ El otro tipo de curva son las curvas de Bezier\cite{bezier-info}. Las curvas de 
 \end{figure}
 
 
-Las curvas de bezier se definen en función de t, que se mueve en un intervalo de 0 a 1. Siendo \texttt{t=0} el inicio de la curva, \texttt{t=1} el final y \texttt{t=0.5} el punto intermedio. Una linea recta también puede ser representada mediante curvas de Bezier siempre que los puntos de control estén sobre la linea. No obstante, estas curvas tiene una limitación: no se puede representar un circunferencia con una (única) curva de Bezier. Esto es algo que no afecta a nuestro simulador.
+Las curvas de bezier se definen en función de t, que se mueve en un intervalo de 0 a 1. Siendo \texttt{t=0} el inicio de la curva, \texttt{t=1} el final y \texttt{t=0.5} el punto intermedio. Una línea recta también puede ser representada mediante curvas de Bezier siempre que los puntos de control estén sobre la línea. No obstante, estas curvas tiene una limitación: no se puede representar un circunferencia con una (única) curva de Bezier. Esto es algo que no afecta a nuestro simulador.
 
-Finalmente, para el modelado de lineas se ha decidido usar las curvas de Bezier, acompañado de la librería BezierJS\footnote{Página oficial del proyecto BezierJS (\url{http://pomax.github.io/bezierjs/}).} para Javascript. Esta librería ofrece una serie de funciones muy útiles para crear y manejar funciones. En el listado de código \ref{code:ejemplo-uso-bezier} se puede ver un ejemplo de las funciones más importantes de la librería. 
+Finalmente, para el modelado de líneas se ha decidido usar las curvas de Bezier, acompañado de la librería BezierJS\footnote{Página oficial del proyecto BezierJS (\url{http://pomax.github.io/bezierjs/}).} para Javascript. Esta librería ofrece una serie de funciones muy útiles para crear y manejar funciones. En el listado de código \ref{code:ejemplo-uso-bezier} se puede ver un ejemplo de las funciones más importantes de la librería. 
 
 \begin{lstlisting}[language={Javascript},label={code:ejemplo-uso-bezier}, caption={Ejemplo de uso de las funciones de la librería BezierJS.}]
 var curve = new Bezier (150,40 , 80,30 , 105,150);
@@ -633,28 +623,28 @@ var steps = 10;
 var points = curve.getLUT(steps);
 \end{lstlisting}
 
-En la linea 1 del listado \ref{code:ejemplo-uso-bezier} se crea una curva cuadrática con los puntos \texttt{(150, 40)}, \texttt{(80, 30)} y \texttt{(105, 150)}. Concretamente, esta curva toma la forma de la curva de la figura \ref{fig:bezier-2}. El segundo punto es el punto de control. Una curva cubica se definiría de forma similar, pero pasando como argumento un punto de control más. 
+En la línea 1 del listado \ref{code:ejemplo-uso-bezier} se crea una curva cuadrática con los puntos \texttt{(150, 40)}, \texttt{(80, 30)} y \texttt{(105, 150)}. Concretamente, esta curva toma la forma de la curva de la figura \ref{fig:bezier-2}. El segundo punto es el punto de control. Una curva cubica se definiría de forma similar, pero pasando como argumento un punto de control más. 
 
-En la linea 3 del listado \ref{code:ejemplo-uso-bezier} se obtiene el punto que está justo en la mitad de la curva. La función \texttt{getLUT()} devuelve un array de puntos equidistantes entre ellos dentro de la curva. El número de puntos es el valor de \texttt{steps} más 1.
+En la línea 3 del listado \ref{code:ejemplo-uso-bezier} se obtiene el punto que está justo en la mitad de la curva. La función \texttt{getLUT()} devuelve un array de puntos equidistantes entre ellos dentro de la curva. El número de puntos es el valor de \texttt{steps} más 1.
 
-La función \texttt{getLUT()} de la librería BezierJS será la clave para la detección de lineas en el simulador.
+La función \texttt{getLUT()} de la librería BezierJS será la clave para la detección de líneas en el simulador.
 
 
 \subsubsection{Detectando curvas de Bezier}
 
-Ahora que ya se ha aclarado que se usarán curvas de Bezier para representar las lineas en el simulador, solo queda saber la distancia de un punto (el sensor) al punto más cercano de la curva de Bezier. Este problema consiste en encontrar la proyección de un punto sobre una curva. Dicho problema ya ha sido estudiado anteriormente. Por ejemplo J. Ros en \cite{projection-point-bezier} estudia de manera matemática como resolver este problema. 
+Ahora que ya se ha aclarado que se usarán curvas de Bezier para representar las líneas en el simulador, solo queda saber la distancia de un punto (el sensor) al punto más cercano de la curva de Bezier. Este problema consiste en encontrar la proyección de un punto sobre una curva. Dicho problema ya ha sido estudiado anteriormente. Por ejemplo J. Ros en \cite{projection-point-bezier} estudia de manera matemática como resolver este problema. 
 
 Teniendo esto en cuenta, ésta fue la primera aproximación al problema que se realizó. Los resultados no fueron buenos: el punto en la curva no era exacto y con un coste computacional alto.
 
-En el segundo intento de resolución, se utilizaba la función \texttt{getLUT()} de BezierJS para partir la curva en muchas lineas rectas y crear un cuerpo en Box2D con muchas \texttt{fixtures}\footnote{Para crear la forma de linea recta en Box2D se utilizaba la clase \texttt{b2PolygonShape} estableciendo la forma con la función \texttt{SetAsEdge()} que recibe dos puntos y crea una linea entre ellos.}. De esta manera se conseguía formar una curva a partir de muchas lineas rectas. La detección de curvas, entonces, se realizaba igual que para los obstáculos (sección \ref{detectando-colisiones}).
+En el segundo intento de resolución, se utilizaba la función \texttt{getLUT()} de BezierJS para partir la curva en muchas líneas rectas y crear un cuerpo en Box2D con muchas \texttt{fixtures}\footnote{Para crear la forma de línea recta en Box2D se utilizaba la clase \texttt{b2PolygonShape} estableciendo la forma con la función \texttt{SetAsEdge()} que recibe dos puntos y crea una línea entre ellos.}. De esta manera se conseguía formar una curva a partir de muchas líneas rectas. La detección de curvas, entonces, se realizaba igual que para los obstáculos (sección \ref{detectando-colisiones}).
 
-Esto solucionaba el problema, pero la curva tenía una apariencia muy fina y se obtenía un coste alto al mantener una cantidad tan grande de cuerpos pequeños. Aunque se simplificara la curva con un valor de \texttt{step} suficientemente pequeño en la función \texttt{getLUT()}, no se solucionaba el problema de la linea fina.
+Esto solucionaba el problema, pero la curva tenía una apariencia muy fina y se obtenía un coste alto al mantener una cantidad tan grande de cuerpos pequeños. Aunque se simplificara la curva con un valor de \texttt{step} suficientemente pequeño en la función \texttt{getLUT()}, no se solucionaba el problema de la línea fina.
 
 La tercera aproximación al problema dio resultado. Era volver a proyectar el punto (sensor) sobre la curva, pero aproximando los puntos de ésta con la función \texttt{getLUT()}. De esta manera, se obtenía una cantidad razonable de puntos en la curva y se calculaba la distancia del sensor a cada uno de estos, resultando el problema en el cálculo de distancia entre dos puntos. Algo computacionalmente menos costoso que calcular la proyección de un punto sobre una curva. 
 
-En el listado de código \ref{code:deteccion-bezier} se puede ver el código que detecta y notifica una \emph{colisión} con una linea. 
+En el listado de código \ref{code:deteccion-bezier} se puede ver el código que detecta y notifica una \emph{colisión} con una línea. 
 
-\begin{lstlisting}[language={Javascript},label={code:deteccion-bezier}, caption={Función que detecta lineas (curvas de Bezier).}]
+\begin{lstlisting}[language={Javascript},label={code:deteccion-bezier}, caption={Función que detecta líneas (curvas de Bezier).}]
 function detectLineCollition(sensor) {
 	var lines = Simulator.World.lines;
 	var anysensed = false;
@@ -690,11 +680,11 @@ function detectLineCollition(sensor) {
 }
 \end{lstlisting}
 
-El valor de distancia mínima (variable \texttt{minDistance}) se define con el grosor de la linea más el radio del sensor.
+El valor de distancia mínima (variable \texttt{minDistance}) se define con el grosor de la línea más el radio del sensor.
 
-La diferencia de esta última solución a la anterior es que en ningún momento se está creando la curva como objeto en Box2D. Por tanto, se ha modificado el prototipo de \texttt{World} para que almacene las lineas (variable \texttt{lines}). No obstante, siguen sin ser representadas con un objeto \texttt{Body} para ahorra coste y para facilitar el poder pintar distinto grosor de linea según convenga (por ejemplo, si se hace zoom en el circuito).
+La diferencia de esta última solución a la anterior es que en ningún momento se está creando la curva como objeto en Box2D. Por tanto, se ha modificado el prototipo de \texttt{World} para que almacene las líneas (variable \texttt{lines}). No obstante, siguen sin ser representadas con un objeto \texttt{Body} para ahorra coste y para facilitar el poder pintar distinto grosor de línea según convenga (por ejemplo, si se hace zoom en el circuito).
 
-Con respecto al dibujo de las lineas, se explicará más adelante en la sección \ref{animando-robode}.
+Con respecto al dibujo de las líneas, se explicará más adelante en la sección \ref{animando-robode}.
 
 
 \subsection{Animando a Robode}
@@ -758,7 +748,7 @@ Una vez que se ha aclarado como es la actualización del mundo, queda especifica
 
 Box2D provee un elemento para dibujar los objetos del mundo en el \emph{canvas} de HTML5, el objeto \texttt{b2DebugData}. Este pinta la forma de los cuerpos sobre el \emph{canvas} automáticamente. 
 
-Pero como ya se ha mencionado anteriormente, las lineas no han sido representadas como elementos de Box2D, por tanto, se usarán las funciones nativas de \emph{canvas} para realizar esto. En el código \ref{code:dibujar-curvas} se puede ver el código que dibuja lineas implementado en el prototipo de la clase \texttt{World}.
+Pero como ya se ha mencionado anteriormente, las líneas no han sido representadas como elementos de Box2D, por tanto, se usarán las funciones nativas de \emph{canvas} para realizar esto. En el código \ref{code:dibujar-curvas} se puede ver el código que dibuja líneas implementado en el prototipo de la clase \texttt{World}.
 
 \begin{lstlisting}[language={Javascript},label={code:dibujar-curvas}, caption={Función que dibuja las curvas de bezier en el \emph{canvas}.}]
 Simulator.Env.b2World.prototype.drawLines = function() {
@@ -782,11 +772,11 @@ Simulator.Env.b2World.prototype.drawLines = function() {
 };
 \end{lstlisting}
 
-Para poder conseguir que esta función se ejecute, y ademas se pinten las lineas lo primero (para que esté en un plano inferior al robot y el resto de elementos) ha sido necesario modificar levemente la librería de Box2D. Esto era necesario porque Box2D limpia el \emph{canvas} antes de dibujar nada (borrando las lineas si se pintan antes de llamar a esta función y dibujando las lineas sobre el robot si se llama después). 
+Para poder conseguir que esta función se ejecute, y ademas se pinten las líneas lo primero (para que esté en un plano inferior al robot y el resto de elementos) ha sido necesario modificar levemente la librería de Box2D. Esto era necesario porque Box2D limpia el \emph{canvas} antes de dibujar nada (borrando las líneas si se pintan antes de llamar a esta función y dibujando las líneas sobre el robot si se llama después). 
 
 Esto se ha realizado añadiendo la llamada a la función \texttt{drawLines()} (si ésta está definida) en la implementación de la clase \texttt{b2DebugDraw}. La función \texttt{drawLines()} se ha definido como un prototipo del objeto \texttt{World}. El código \ref{code:redefinir-debug-draw} muestra esta modificación.
 
-\begin{lstlisting}[language={Javascript},label={code:redefinir-debug-draw}, caption={Modificación de la librería de Box2D para poder dibujar de manera correcta las lineas.}]
+\begin{lstlisting}[language={Javascript},label={code:redefinir-debug-draw}, caption={Modificación de la librería de Box2D para poder dibujar de manera correcta las líneas.}]
 // Draw function 
 h.prototype.DrawDebugData = function(){ 
 	   if(this.m_debugDraw!=null){

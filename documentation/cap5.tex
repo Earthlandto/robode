@@ -13,11 +13,11 @@ Para ello, se ha construido una herramienta para aprender a programar sobre una 
 
 En la creación del simulador hay claros precedentes, como son los robot Moway y Arduino y la plataforma CodeHS. Se ha creado un robot que comparte características con Moway, que se programa en cierta forma como Arduino y en una plataforma similar a CodeHS. 
 
-Se puede decir que se han cumplido en su totalidad los objetivos que se planteaban en la sección \ref{sec:objetivos}. Se ha creado un robot de dos ruedas que se mueve por un mundo continuo, que tiene sensores que detectan colisiones y que ofrece la lógica para que se hagan programas sigue-lineas. 
+Se puede decir que se han cumplido en su totalidad los objetivos que se planteaban en la sección \ref{sec:objetivos}. Se ha creado un robot de dos ruedas que se mueve por un mundo continuo, que tiene sensores que detectan colisiones y que ofrece la lógica para que se hagan programas sigue-líneas. 
 
 Además, se proporciona una librería que permite controlar el robot y programar el comportamiento del mismo. El Modelo de programación creado ofrece a los alumnos una nueva forma de programar, como se hace en los robots de Arduino. Así, el alumno podrá desarrollar nuevos tipos de programas, enfrentándose a retos nuevos. 
 
-No obstante, este trabajo planteaba cuatro grandes dificultades a resolver: (a) la comprensión y modificación de la plataforma Descubre y su compilador; (b) la representación de lineas mediante curvas de Bezier y la detección de las mismas por parte del robot; (c) la creación de un modelo de programación diferente al que proporciona la plataforma Descubre y (d) la creación del simulador que modelará el mundo donde se encuentra el robot y, por supuesto, su comportamiento.
+No obstante, este trabajo planteaba cuatro grandes dificultades a resolver: (a) la comprensión y modificación de la plataforma Descubre y su compilador; (b) la representación de líneas mediante curvas de Bezier y la detección de las mismas por parte del robot; (c) la creación de un modelo de programación diferente al que proporciona la plataforma Descubre y (d) la creación del simulador que modelará el mundo donde se encuentra el robot y, por supuesto, su comportamiento.
 
 La plataforma Descubre la programación permite programar y ejecutar código iJava. Por tanto, es necesario comprender su funcionamiento y ser capaz de ampliar la librería de funciones para poder controlar al robot. También, con la creación de un modelo de programación, se ha modificado Descubre para poder soportar este tipo de programas. Esto se ha realizado mediante la creación de un sistema \emph{multihilo} en iJava que ha permitido el correcto funcionamiento de la plataforma y del simulador. 
 
@@ -25,7 +25,7 @@ La plataforma Descubre la programación permite programar y ejecutar código iJa
 
 En cuanto a la simulación del robot, se ha usado una librería física, \texttt{Box2D}, que realizará el trabajo de calcular y resolver las colisiones que se produzcan en el mundo. También nos permite dibujar el mundo sobre el \texttt{canvas} de HTML5. La creación y configuración de elementos en \texttt{Box2D} para que se creara un mundo realista también ha sido un punto a tener en cuenta y que se ha resuelto satisfactoriamente. 
 
-Por último, la representación de lineas mediante curvas de Bezier es un problema bastante complejo. Era necesario calcular la distancia de un punto al punto más cercano dentro de la curva. O lo que es lo mismo, la proyección de un punto sobre la curva. Esta dificultad se ha resuelto gracias a la librería \texttt{BezierJS}, que ha simplificado los cálculos para obtener la distancia a la curva de forma computacionalmente barata. 
+Por último, la representación de líneas mediante curvas de Bezier es un problema bastante complejo. Era necesario calcular la distancia de un punto al punto más cercano dentro de la curva. O lo que es lo mismo, la proyección de un punto sobre la curva. Esta dificultad se ha resuelto gracias a la librería \texttt{BezierJS}, que ha simplificado los cálculos para obtener la distancia a la curva de forma computacionalmente barata. 
 
 
 En comparación a los sistemas que hay actualmente, opino que se ha creado una opción bastante interesante y atractiva. Mediante la robótica, se puede programar un robot en un lenguaje imperativo y con sintaxis moderna, especial para aprender. 

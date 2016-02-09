@@ -7,30 +7,30 @@
 %\section{Análisis de objetivos}
 \label{sec:objetivos}
 
-Este Trabajo Fin de Grado consiste en desarrollar un módulo de simulación de un robot para integrarlo en la plataforma \Gls{descubre}(\url{descubre.inf.um.es}).
+Este Trabajo Fin de Grado consiste en desarrollar un módulo de simulación de un robot para integrarlo en la plataforma \Gls{descubre} (\url{descubre.inf.um.es}).
 
 El robot, denominado \emph{Robode}, será simulado como un robot real, con movimientos y reacciones realistas y en un entorno continuo. El simulador dispondrá de una serie de características básicas:
 \begin{itemize}
 	\item Robode será un robot de dos ruedas que se moverá simulando el máximo realismo posible.
 	\item Cada rueda de Robode se moverá de manera independiente, simulando un motor para cada rueda. 
 	\item Robode se encontrará en un circuito finito limitado por \emph{fronteras}.
-	\item El circuito podrá tener \emph{lineas} pintadas en el suelo y \emph{obstáculos}.
-	\item Las lineas pintadas el suelo no colisionarán con Robode.
+	\item El circuito podrá tener \emph{líneas} pintadas en el suelo y \emph{obstáculos}.
+	\item Las líneas pintadas el suelo no colisionarán con Robode.
 	\item Los obstáculos podrán colisionar con Robode, produciendo un efecto en el contacto de ambos cuerpos, desplazándolos según la velocidad y características físicas de cada uno.
 %	\item Las fronteras serán elementos estáticos del circuito, impidiendo su movimiento o el de Robode a través de las mismas.
-	\item Dispondrá de 2 sensores orientados hacia abajo que detectan diferencias de color. Esta capacidad se usará para detectar lineas pintadas en el suelo de color negro.
+	\item Dispondrá de 2 sensores inferiores que detectan diferencias de color. Esta capacidad se usará para detectar líneas pintadas en el suelo de color negro.
 	\item Dispondrá de sensores de proximidad delanteros y traseros, que detectarán si se va a producir una colisión con un obstáculo o una frontera.
-	\item Los sensores serán ajenos al número de cuerpos que están detectando. Solo distinguirán si se esta detectando colisiones o no.
+	\item Los sensores serán ajenos al número de cuerpos que están detectando. Solo distinguirán si se están detectando colisiones  o no.
 \end{itemize}
 
 
-El simulador se integrará con Descubre, una plataforma para aprender programación utilizando el lenguaje iJava\footnote{Para más información sobre la plataforma Descubre y el lenguaje iJava se puede consultar la sección \ref{sec:descubre}.}. Por tanto, será necesario entender el funcionamiento interno de la plataforma y modificarla apropiadamente para poder integrar Robode con Descubre. De está manera, se añadirán las funciones necesarias para poder crear programas en iJava y controlar el robot. Los objetivos relativos a la creación del lenguaje que controlan el robot son:
+El simulador se integrará con Descubre, una plataforma para aprender programación utilizando el lenguaje iJava\footnote{Para más información sobre la plataforma Descubre y el lenguaje iJava se puede consultar la sección \ref{sec:descubre}.}. Por tanto, será necesario entender el funcionamiento interno de la plataforma y modificarla apropiadamente para poder integrar el simulador con Descubre. De está manera, se añadirán las funciones necesarias para poder crear programas en iJava y a la vez controlar el robot. Los objetivos relativos a la creación del lenguaje del simulador son:
 
 \begin{itemize}
 	\item Se proporcionará un conjunto de funciones que permitan controlar el robot.
-	\item Se podrá mover el robot definiendo una fuerza para cada rueda.
-	\item Se podrá conocer el estado de cada sensor, es decir, si está detectando un objeto o no.
-	\item Se dotará únicamente de las funciones básicas del lenguaje, para favorecer que los alumnos realicen funciones más complejas por ellos mismo.
+	\item Se podrá mover el robot definiendo una fuerza diferente para cada rueda.
+	\item Se podrá conocer el estado de cada sensor, es decir, si cierto sensor está detectando algo o no.
+	\item Se dotará únicamente de las funciones básicas del lenguaje para favorecer que los alumnos realicen funciones más complejas por ellos mismo.
 \end{itemize}
 
 
@@ -47,8 +47,7 @@ El simulador se integrará con Descubre, una plataforma para aprender programaci
 \section{Tecnologías usadas}
 \label{sec:tecnologias}
 
-
-Robode utiliza una serie de tecnologías web sobre las que trabaja para poder integrarse en el entorno de Descubre y crear un simulador en un entorno online. A continuación se describirán brevemente estas tecnologías.
+Para poder crear el simulador de Robode e integrarlo en la plataforma Descubre se han utilizado una serie de tecnologías web. A continuación se describirán brevemente estas tecnologías.
 
 \begin{itemize}
 	
