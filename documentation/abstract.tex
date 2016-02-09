@@ -15,11 +15,17 @@ Jeannette M. Wing explains in \cite{Wing3717} "Computational thinking is taking 
 
 It is imperative that computational thinking among younger members of society extends. It has been shown in several studies to learn programming at early ages improves concentration and abstraction, greater autonomy and a notable increase in creativity is achieved. So it is important to enhance computational thinking at an early age so that children develop these skills since childhood.
 
+Although at first glance to learn to code it may seem a daunting and complex task, it has its advantages. In the study by J. Siegmund and others in \cite{siegmund2014understanding}, we can see how the participants while they understood, analyzed and looked for errors in small pieces of code, they gave clear evidence to be developing brain activity in brain regions related to language processing, attention and working memory.
+
 It exists global projects as Scratch or RoboMind Academy that they are seeking just this goal. Computational thinking training among students in middle school and high school. There are also projects like robot Moway or the Lego Mindstorm NXT and EV3 robotics kits, that they are using robotics to attract youngsters to learn by playing. 
 
 In addition, online platform as CodeHS or Code.org have set a goal to extend the programming among school students. They teach teachers to code for later, they can teach their students how make a program since the beginning and how to code. In short, CodeHS and Code.org are extending computational thinking.
 
 The platform Descubre la programación (it means Discover the programming) is an online platform which aims to teach programming to students in middle school and hifh school at Murcia (Región de Murcia). Descubre la programación provides an online editor to code, challenges and a social network to share programs that are created and learn from peers. It also aims to use the platform to expand programming in schools, providing different tools to track student progress by teachers.
+
+
+Also, middle school and high school students who are already using the Descubre la programación platform can work programming concepts  like loops, if conditions and if-else conditions, definition and use of variables and functions, etc. All of this in a different environment, renewing interest in other activities and learning experiences.
+
 
 The Descubre la programación language is iJava. iJava is a Java based language with the same sintax but iJava allows imperative programming. iJava gives to developer library functions such as drawing functions, math functions and input and output functions.
 
@@ -28,61 +34,104 @@ In this final degree project we try to bring together all the ideas into a tool 
 So, it joins the idea of teaching programming in an online environment and to use robotics as a way to children entertainment. Improve the childrens computational thinking by learning to code playing. Also, Descubre la programación is an online and free environment. This allows to get anyone to learn programming, anytime and anywhere. This simulator helps people take up robotics without making an investment of money or have concepts in electronic or  circuits.
 
 
+
+
 The simulated robot have similar physical characteristics with robot Moway: two wheels that move independently, a set of external sensors detecting collisions and a lower set of visual sensors to be used for detecting lines painted on ground. In addition, the robot world is finite but the robot movement is not. The simulated robot will be able to move freely around the world.
 
-%rollo explicar como se ha hecho todo
-%simulación en box2d, se mueve por un mundo blabla
 
-La creación del simulador tiene dos partes principales: el desarrollo del robot y del mundo en el que se encuentra y la integración del simulador en la plataforma descubre. 
+The creation of the simulator has two main parts: the development of the robot and the world in which the robot is located and the integration between the simulator and the Descubre la programación platform.
 
-Para la primera parte, se han estudiado diferentes alternativas para poder crear el simulador. Al final, se ha seleccionado la librería Box2Dweb, que ofrece un motor físico. Usando Box2Dweb se ha podido crear fácilmente un mundo con una vista top-down que muestra el mundo del simulador con una vista superior del mismo. 
+For the first part, we studied different alternatives to create the simulator. In the end, the box2Dweb library was selected. Box2Dweb library provides a physics engine. By using Box2Dweb, we are able to create easily a world with a top-down view, showing the world simulator with a top view.
 
-El mundo tendrá tres tipos de elementos: el robot, los obstáculos y las fronteras.
-
-Para crear el robot, se ha construido a partir de una forma rectangular que forma el cuerpo principal. También se han añadido dos ruedas en los extremos del cuerpo principal. Las ruedas serán las que ejerzan la fuerza para poder mover el coche. Las ruedas podrán ejercer fuerzas diferentes. El coche podrá avanzar hacia delante y hacia atrás. Por último, se han creado los sensores. Hay dos tipos de sensores: externos e inferiores. Los sensores externos detectan colisiones y tienen forma de triangulo. Los sensores inferiores los usaremos para detectar lineas pintadas en el suelo y tienen forma circular. 
-
-Los obstáculos se crean a partir de formas cuadradas o circulares. El robot podrá chocarse con los obstáculos e interacturar con ellos. Las fronteras son elementos estáticos, como paredes. El coche podrá chocar con los obstáculos, pero no podrá atravesar ni mover las fronteras.
-
-%detectar colisiones y lineas
-
-Los sensores pueden detectar obstáculos y lineas. Los sensores están configurados como un tipo de objeto especial en Box2D. De esta manera, se pueden controlar las colisiones con los sensores. Así se puede saber cuando un objeto está colisionando con otro. Los sensores externos podrán detectar colisiones antes de que los obstáculos golpeen el coche. Para los sensores inferiores, estos detectaran lineas pintadas en el suelo. Para representar las lineas del suelo, se han usado curvas de Bezier. Las curvas de bezier se definen por 4 puntos: el origen, el extremo y dos puntos de control. Para saber si un sensor inferior está detectando una linea, se crea la proyección de un punto sobre una curva de bezier. Este problema se ha resuelto gracias a la ayuda de la librería BezierJS. Usando la librería BezierJS se divide la curva de Bezier obteniendo puntos en la misma. Así, se obtiene la distancia desde el sensor inferior a los puntos conseguidos por la librería BezierJS. Sabremos si un sensor inferior está detectando una linea cuando la distancia entre el sensor inferior y los puntos de la curva estén a una distancia mínima, establecida de antemano.
-
-A pesar de todo el sistema de detecciones que hemos implementado con los sensores, no se podrá saber cuantos obstáculos o lineas está detectando cada sensor. Solo se sabrá que está detectando colisiones o lineas, respectivamente. 
-
-% modificacion descubre
-
-Para poder integrar el simulador del robot en la plataforma Descubre la programación se tienen que hacer
-
-%hilos
+The world will have three types of elements: the robot, obstacles and borders.
 
 
-%lenguaje
+%La creación del simulador tiene dos partes principales: el desarrollo del robot y del mundo en el que se encuentra y la integración del simulador en la plataforma descubre. 
+%
+%Para la primera parte, se han estudiado diferentes alternativas para poder crear el simulador. Al final, se ha seleccionado la librería Box2Dweb, que ofrece un motor físico. Usando Box2Dweb se ha podido crear fácilmente un mundo con una vista top-down que muestra el mundo del simulador con una vista superior del mismo. 
+%
+%El mundo tendrá tres tipos de elementos: el robot, los obstáculos y las fronteras.
 
-Thus, it is intended that the student invent programs that move the robot randomly, avoiding collisions or following lines. For this purpose, a library of functions that control the behavior of the robot in a transparent way the child is provided. Basic functionality is provided, thereby seeking students to develop within Descubre la programación more complex behaviors themselves. 
+To create the robot, it has been constructed with a rectangular shape to form the main body. Also they added two wheels at the ends of the main body. The wheels are identified to have the strength to move the car. The wheels may exert different forces. The car can move forward and backward. In addition, we have created sensors. There are two types of sensors: external and lower. External sensors detect collisions and they have a triangle as shape. We use the lower sensors to detect painted lines on the floor and they have a circular shape.
 
-%funciones
-A continuación vamos a listar todas las funciones que ofrece la API para controlar el robot. Ademas, la API también ofrece un conjunto de variables de tipo \texttt{boolean} que permitirán saber si los sensores están detectando colisiones o no.
+Obstacles are created from square or circular shapes. The robot can collide with obstacles and interact with them. Borders are static elements such as walls. The car may collide with obstacles, but can not cross borders or move.
 
+
+%Para crear el robot, se ha construido a partir de una forma rectangular que forma el cuerpo principal. También se han añadido dos ruedas en los extremos del cuerpo principal. Las ruedas serán las que ejerzan la fuerza para poder mover el coche. Las ruedas podrán ejercer fuerzas diferentes. El coche podrá avanzar hacia delante y hacia atrás. Por último, se han creado los sensores. Hay dos tipos de sensores: externos e inferiores. Los sensores externos detectan colisiones y tienen forma de triangulo. Los sensores inferiores los usaremos para detectar lineas pintadas en el suelo y tienen forma circular. 
+%
+%Los obstáculos se crean a partir de formas cuadradas o circulares. El robot podrá chocarse con los obstáculos e interacturar con ellos. Las fronteras son elementos estáticos, como paredes. El coche podrá chocar con los obstáculos, pero no podrá atravesar ni mover las fronteras.
+
+
+The sensors can detect obstacles or lines, depending of sensor type. The sensors are designed as a special type of object in Box2Dweb library. In this way, you can handle collisions with sensors. So can you tell when an object is colliding with another. External sensors can detect collisions before the car hit the obstacles. 
+
+For the lower sensors, they detect lines painted on the ground. To represent ground lines, we have used Bezier curves. Bezier curves are defined by 4 points: the origin point, the end point and two control points. To know if a lower sensor is detecting a line, We have to solve the projection of a point on a bezier curve. This problem has been solved with the help of BezierJS library. BezierJS library can divide a Bezier curve into points easily. Thus, the distance is obtained from the minimun distance curve point to lower sensor position. In this way, the projection point on a Bezier curve problem is a lot of simplified. We know whether a lower line sensor is detecting when the distance between the lower sensor and curve points are a minimum distance, set in advance.
+
+Yet detection system that we have implemented with the sensors, you can onlyknow if a sensor detects a obstacle or a line, but you can not know how many obstacles or lines the sensors are detecting.
+
+%Los sensores pueden detectar obstáculos y lineas. Los sensores están configurados como un tipo de objeto especial en Box2D. De esta manera, se pueden controlar las colisiones con los sensores. Así se puede saber cuando un objeto está colisionando con otro. Los sensores externos podrán detectar colisiones antes de que los obstáculos golpeen el coche. Para los sensores inferiores, estos detectaran lineas pintadas en el suelo. Para representar las lineas del suelo, se han usado curvas de Bezier. Las curvas de bezier se definen por 4 puntos: el origen, el extremo y dos puntos de control. Para saber si un sensor inferior está detectando una linea, se crea la proyección de un punto sobre una curva de bezier. Este problema se ha resuelto gracias a la ayuda de la librería BezierJS. Usando la librería BezierJS se divide la curva de Bezier obteniendo puntos en la misma. Así, se obtiene la distancia desde el sensor inferior a los puntos conseguidos por la librería BezierJS. Sabremos si un sensor inferior está detectando una linea cuando la distancia entre el sensor inferior y los puntos de la curva estén a una distancia mínima, establecida de antemano.
+%
+%A pesar de todo el sistema de detecciones que hemos implementado con los sensores, no se podrá saber cuantos obstáculos o lineas está detectando cada sensor. Solo se sabrá que está detectando colisiones o lineas, respectivamente. 
+
+
+In order to integrate the robot simulator  into Descubre la programación platform, it is necessary that some changes are made to the Descubre la programación platform. You have to add the definition of the functions in the parser. You also have to modify the semantic analyzer to allow changing the main function and the loop function. Finally, we must modify the sandbox to add the implementation of the functions that correspond to the simulator library.
+
+In the parser, we add the function definition. The function definition is: their name, the return data type, the arguments count and the data type of each argument.
+
+
+%Para poder integrar el simulador del robot en la plataforma Descubre la programación es necesario que se realicen algunos cambios en la plataforma Descubre la programación. Hay que añadir la definición de las funciones en el analizador sintáctico. También hay que modificar el analizador semántico para permitir cambiar la función principal y el bucle loop. Por último, hay que modificar el sandbox para añadir la implementación de las funciones que se corresponden a la librería del simulador. 
+%
+%En el analizador sintáctico se añaden la definición de las función es: su nombre, el tipo de datos que devuelve, los argumentos y el tipo de datos de cada argumento.
+
+
+Below we will list all the features offered by the API to control the robot. In addition, the API also provides a set of variables of type \texttt{boolean} to let you know if the sensors are detecting collisions or not.
+
+%A continuación vamos a listar todas las funciones que ofrece la API para controlar el robot. Ademas, la API también ofrece un conjunto de variables de tipo \texttt{boolean} que permitirán saber si los sensores están detectando colisiones o no.
 \begin{itemize}
-	\item \texttt{initRobot()}: Inicia, muestra y coloca el robot en su posición inicial.
-	\item \texttt{power(potenciaIzq, potenciaDer)}: Establece la potencia con la que se moverá cada rueda. El primer argumento es para la rueda izquierda mientras que el segundo para la derecha. El valor de potencia estará entre 40 y -40. Un valor positivo moverá la rueda en dirección frontal y un valor negativo, posterior.
-	\item \texttt{stop()}: Detiene el robot.
-	\item \texttt{left()}: Gira el robot 90º en dirección contraria al sentido de las agujas del reloj.
-	\item \texttt{wait(n\_milisegundos)}: Crea una espera igual al número de milisegundos que se le pasan como argumento a la función. 
-	\item \texttt{sensorNW}: Sensor en al posición Noroeste.
-		\item \texttt{sensorNE}: Sensor en al posición Noreste.
-			\item \texttt{sensorSW}: Sensor en al posición Suroeste.
-				\item \texttt{sensorSE}: Sensor en al posición Sureste.
-		\item \texttt{collisioning}: Devuelve \texttt{true} si alguno de los sensores anteriores está detectando una colisión.
-			\item \texttt{sensorLL}: Sensor inferior izquierdo que detectará si está sobre una linea.
-						\item \texttt{sensorLR}: Sensor inferior derecho que detectará si está sobre una linea.
+	\item \texttt{initRobot()}: This function inits, shows and set the robot on his initial position.
+	\item \texttt{power(powerLeft, powerRight)}:It sets the power with which each wheel will move. The first argument is to the left wheel and the second to the right. The power value is between 40 and -40. A positive value will move the front wheel steering and a negative value to backward.
+	\item \texttt{stop()}: This function stop the robot.
+	\item \texttt{left()}: Turn the robot 90 in the opposite direction to the direction of clockwise.
+	\item \texttt{wait(n\_milliseconds)}: This function stop the program until the time it is finished.
+	\item \texttt{sensorNW}: Sensor position in the Northwest.
+		\item \texttt{sensorNE}: Sensor position in the Southeast.
+			\item \texttt{sensorSW}: Sensor position in the Southwest.
+				\item \texttt{sensorSE}: Sensor position in the Southeast.
+		\item \texttt{collisioning}: Return \texttt{true} if any of the above sensors are detecting a collision.
+			\item \texttt{sensorLL}: Left lower sensor that detects if it is on a line.
+						\item \texttt{sensorLR}: Right lower sensor that detects if it is on a line.
 \end{itemize}
 
-% setup loop
+
+Also it has changed slightly programming model as is done in iJava. The programming model is similar to the Arduino programs. Arduino has a main function called setup running at the beginning of program execution. Arduino also has a function called loop which will be executed in a infinite loop.
+
+In addition to all the above changes. The programming model that will be used is slightly different to that used in iJava language within the Descubre la programación platform. In iJava it has a main function called main that runs by default at the beginning of the code. In addition, you can use a special fucntion called animate. The animate function receives a parameter, the function to be executed in a infinite loop.
+
+In the case of the simulator, the main function will be called setup function. Also, the animate function is deleted. Instead, the programmer can use the loop function, that is executed in a loop, only if the function has been defined previusly.
 
 
+%También se ha cambiado el modelo de programación ligeramente diferente a como se hace en iJava. El modelo de programación será similar a como se programan los de Arduino. Arduino tiene una función principal llamada setup que se ejecuta al principio de la ejecución del programa. Arduino también tiene una función llamada loop  que se ejecutará en bucle. 
+%
+%Además de todos los cambios anteriores. El modelo de programación que se va a usar es ligeramente diferente al usado en el lenguaje iJava, dentro de la plataforma Descubre la Programación. En iJava se tiene una función principal llamada main que se ejecuta por defecto al principio del código. Además, se puede utilizar una función especial llamada animate. La función animate recibe un parámetro, la función que va a ejecutar en bucle. 
+%
+%En el caso del simulador, se cambiará función principal llamada main por la función setup. También se eliminará la función animate. En su lugar, el programador podrá usar la función loop, que se ejecutará en bucle automáticamente, solo si la función ha sido definida.
+
+But by integrating the robot simulator into Descubre la programación platform, we have a major problem. Javascript is a system with a single thread. It is necessary that the threads of the main application and the simulator running separate from the sandbox thread. This is mainly because the sandbox can stop execution by performing a standby. This is due to the wait function. Then, you need to parallelize the application. This is achieved by providing the Web Workers of Javascript.
+
+Web Workers will create a thread that will run the sandbox. This thread will send messages to the main execution thread formed by the application and the robot simulator. The sandbox will order the simulator, using messages, when the robot needs to move or needs to stop. The main application and the simulator will contact the sandbox also sending messages.
+
+
+
+%Pero al integrar el simulador con la plataforma Descubre la programación, nos encontramos con un problema importante. Javascript es un sistema con un único hilo. Es necesario que se separen los hilos de ejecución de la aplicación principal y el simulador del hilo que ejecuta el sandbox. Esto ocurre principalmente por que el sandbox podrá detener su ejecución realizando una espera activa debido a la función wait. Entonces, es necesario paralelizar la aplicación. Esto se consigue con los Web Workers que proporciona Javascript. 
+%
+%Crearemos un Web Worker que ejecutará el hilo del sandbox. Este hilo se comunicará con el hilo de ejecución principal formado por la aplicación junto al simulador. El sandbox le ordenará al simulador, mediante el uso de mensajes, cuando tiene que avanzar o parar. La aplicación principal y el simulador se comunicarán con el sandbox enviándole también mensajes.
 
 %conclusiones
+
+
 The key point of this project is to get the student interested in programming from a different point of view that already exists in Descubre la programación. In addition, children will develop its computational thinking and learn to code playing with robots.
 
+
+
 In comparison to current options and alternatives, I think that it has been created a very interesting and attractive option. By using robotics, you can code a robot behaviour in an imperative and modern language with special syntax to learn.
+
+Thus, it is intended that the student invent programs that move the robot randomly, avoiding collisions or following lines. For this purpose, a library of functions that control the behavior of the robot in a transparent way the child is provided. Basic functionality is provided, thereby seeking students to develop within Descubre la programación more complex behaviors themselves. 
