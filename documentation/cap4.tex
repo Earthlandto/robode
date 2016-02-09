@@ -6,32 +6,39 @@
 
 Después de estudiar cual es la situación actual de la enseñanza de la programación a un nivel global y los diferentes proyectos que promueven el \emph{pensamiento computacional}, en este capítulo se analizarán cuales son las necesidades del proyecto Robode y como se han resuelto.
 
-Como ya se ha mencionado anteriormente, se creará un simulador de un robot, al que hemos denominado \emph{Robode}, y se integrará en la plataforma Descubre la programación. Robode se encuentra dentro de un mundo en el que puede moverse con libertad y con el que interactua. El robot posee dos ruedas que se mueven independientemente (con un motor para cada una de ellas) y dispone de sensores que informarán de posibles colisiones con obstáculos. También, el robot puede detectar color en el suelo debajo del mismo. Ésta capacidad se usará para detectar lineas pintadas de negro en el suelo.
+Como ya se ha mencionado anteriormente, se ha creado un simulador de un robot, al que hemos denominado \emph{Robode}, que se integrará en la plataforma Descubre la programación. Robode se encuentra dentro de un mundo en el que puede moverse con libertad y con el que interactua. El robot posee dos ruedas que se mueven independientemente (con un motor para cada una de ellas) y dispone de sensores que informarán de posibles colisiones con obstáculos. También, el robot puede detectar color en el suelo debajo del mismo. Ésta capacidad se usará para detectar lineas pintadas de negro en el suelo.
 
-Adicionalmente, el robot y el mundo en el que este se encuentra será dibujado en un elemento \emph{canvas} de HTML5, al igual que ocurre en la plataforma Descubre. El \emph{canvas} es un elemento de HTML5 que establece un \emph{lienzo} en el que se pueden dibujar gráficos\footnote{Los gráficos pueden ser en 2 o 3 dimensiones, pero en el simulador que se desarrollará solo se hará uso de gráficos 2D.}. De igual modo, HTML5 proporciona muchas funciones para dibujar en el \emph{canvas} de manera relativamente sencilla.
-
-
-Como se puede ver, Robode es la unión de varios de los proyectos que se han analizado en el capítulo \ref{estado-arte}. Por una parte, la idea principal de crear un simulador es igual a la que se ha realizado en Robomind (el cual se analiza en la sección \ref{sec:robomind}) pero simulando un robot en un mundo continuo y con características similares a las de Moway (analizado en la sección \ref{sec:moway}). Por último, se ejecutará en un entorno web, como bien puede ser el ejemplo de las herramientas que proporcionan CodeHS (sección \ref{sec:CodeHS}) y Code.org (sección \ref{sec:Code.org}). 
+Adicionalmente, el robot y el mundo en el que este se encuentra será dibujado en un elemento \emph{canvas} de HTML5, al igual que ocurre en la plataforma Descubre. El \emph{canvas} establece un \emph{lienzo} en el que se pueden dibujar gráficos\footnote{Los gráficos pueden ser en 2 o 3 dimensiones, pero en el simulador que se desarrollará solo se hará uso de gráficos 2D.}. De igual modo, HTML5 proporciona muchas funciones para dibujar en el \emph{canvas} de manera relativamente sencilla.
 
 
-En las secciones siguientes se va a estudiar como se ha diseñado y creado Robode, que características tiene y cual ha sido la implementación exacta llevada a cabo. También como se ha modificado la plataforma Descubre la programación para integrar el simulador en ella.
+Como se puede ver, Robode es la unión de varios de los proyectos que se han analizado en el capítulo \ref{estado-arte}. Por una parte, la idea principal de crear un simulador es igual a la que se ha realizado en Robomind (el cual se analiza en la sección \ref{sec:robomind}) pero simulando un robot en un mundo continuo. El robot comparte características físicas con el robot Moway (analizado en la sección \ref{sec:moway}), como es la disposición de sensores (tanto externos como inferiores) y la cantidad y disposición de las ruedas. Por último, se ejecutará en un entorno web, como bien puede ser el ejemplo de las plataformas CodeHS (sección \ref{sec:CodeHS}) y Code.org (sección \ref{sec:Code.org}). 
 
 
+En las secciones siguientes se va a estudiar como se ha diseñado y creado Robode, que características tiene y cual ha sido la implementación llevada a cabo. También se verá como se ha modificado la plataforma Descubre la programación para integrar el simulador en ella. Pero antes, se analizará el nuevo modelo de programación que se ha creado y en el que se basa el simulador.
 
 
 
 \section{Modelo de programación del simulador}
 \label{sec:modelo-programacion}
 
-El modelo actual de programación consiste en crear una función principal \texttt{main} sin parámetros y que devuelve el tipo \texttt{void}. También, se puede usar la función \texttt{animate()}, tomando como argumento una función y ejecutándola en bucle. El resto es similar a un lenguaje imperativo. Un programa de ejemplo en iJava se puede encontrar en el código \ref{code:circulos-color-raton}.
+El modelo de programación que presenta iJava actualmente consiste en crear una función principal \texttt{main} sin parámetros y que devuelve el tipo \texttt{void}. También, se puede usar la función \texttt{animate()}, tomando como argumento una función y ejecutándola en bucle. El resto es similar a un lenguaje imperativo. Un programa de ejemplo en iJava se puede encontrar en el código \ref{code:circulos-color-raton}.
 
 El modelo de programación que se plantea para usar el simulador no es muy diferente. Para definirlo, se han estudiado los lenguajes de programación que usan Moway, Turtle, Scratch y Arduino y que ya se han mencionado anteriormente en este documento.
 
-El modelo consistirá en la creación de una \emph{cola de instrucciones} que controlarán el flujo del programa. Estas instrucciones pueden ser del simulador, de entrada salida o matemáticas. La \emph{cola} se alimentará de instrucciones e irá ejecutándolas según vayan llegando. 
 
-Para las instrucciones que pintan la pantalla, muestran salida estándar o que realizan cálculos matemáticos, no hay problema. Pero para mover el robot sí. Si se le diera una orden al robot que dice que debe moverse hacia delante, y justo después, se ejecutara otra que ordenara al robot a detenerse, el efecto de la primera instrucción se anularía.
+Primeramente se tiene una función principal, que se llamara \texttt{setup} y que no recibirá parámetros y devuelve el tipo \texttt{void}. Esta función cumple el mismo papel que la función \texttt{main} de iJava, pero se ha cambiado el nombrado para adecuarlo al estándar de Arduino y darle el significado de establecer los parámetros del robot y su comportamiento inicial. 
 
-Por esto, es necesario insertar una instrucción que se ejecute ente las dos anteriores y que haga que la cola de instrucciones deje de aceptar más instrucciones.
+Por ejemplo, en la función \texttt{setup} se podría programar el robot de manera cuando inicia el programa, éste gire 180º y el programa termine. En \texttt{setup} se puede programar un comportamiento estándar del robot. Pero también es necesario permitir que el robot reaccione al entorno y a posibles cambios que en este se producen. Por tanto, es necesario añadir otro elemento al modelo.
+
+La función \texttt{loop} ejecutará en bucle todas las instrucciones que en ella se encuentren. De esta manera, se permite una ejecución infinita que permita reaccionar a cambios del entorno. Esto se hará con la información que le llegue al robot a través de los sensores. 
+
+
+No es necesario indicar que la función \texttt{loop} se ejecute en bucle, a diferente de iJava. En iJava se usaba la función \texttt{animate} que recibe una función como argumento y esta es ejecutada en bucle. La función \texttt{loop} se comportará automáticamente de esta manera. En realidad, lo que hará el motor de iJava será llamar por debajo a la función \texttt{loop} en bucle.
+
+
+
+
+
 
 En cuanto a la funcionalidad que ofrece la API del simulador para poder controlar al robot, se busca que las funciones ofrecidas sean lo más básicas posibles. La intención es que el programador tenga los elementos básicos y suficientes para manejar el robot. Si quisiera funciones más complejas, tendría que programarlas él mismo, contribuyendo así a su aprendizaje. 
 
@@ -42,6 +49,7 @@ A continuación vamos a listar todas las funciones que ofrece la API para contro
 	\item \texttt{power(potenciaIzq, potenciaDer)}: Establece la potencia con la que se moverá cada rueda. El primer argumento es para la rueda izquierda mientras que el segundo para la derecha. El valor de potencia estará entre 40 y -40. Un valor positivo moverá la rueda en dirección frontal y un valor negativo, posterior.
 	\item \texttt{stop()}: Detiene el robot.
 	\item \texttt{left()}: Gira el robot 90º en dirección contraria al sentido de las agujas del reloj.
+	\item \texttt{wait(n\_milisegundos)}: Crea una espera igual al número de milisegundos que se le pasan como argumento a la función. 
 	\item \texttt{sensorNW}: Sensor en al posición Noroeste.
 		\item \texttt{sensorNE}: Sensor en al posición Noreste.
 			\item \texttt{sensorSW}: Sensor en al posición Suroeste.
@@ -51,11 +59,13 @@ A continuación vamos a listar todas las funciones que ofrece la API para contro
 						\item \texttt{sensorLR}: Sensor inferior derecho que detectará si está sobre una linea.
 \end{itemize}
 
-Se ha decidido establecer las variables en inglés por similitud a iJava (que también está en inglés) y al resto de lenguajes modernos. No obstante, se han realizado ciertos cambios con respecto a iJava.
+Como se puede ver, se ofrecen diferentes variables de tipo \texttt{boolean} para saber si el robot está detectando una colisión o si está sobre una linea con alguno de los sensores. Por otra parte, se ofrece la función \texttt{wait} que produce una espera de tiempo\footnote{En la sección \ref{animando-robode} se explica en detalle como se ha conseguido este efecto en el sistema \emph{monohilo} que implementa Javascript.} en la que no se ejecutarán nuevas instrucciones.
 
-La función principal de la aplicación ya no será la función \texttt{main} y no se usará la función \texttt{animate} para ejecutar en bucle una función. Al igual que pasa en Arduino, la función \texttt{setup} establecerá los valores iniciales del robot y una función \texttt{loop} ejecutará en bucle las instrucciones que en ella se contengan. Alimentando así, la \emph{cola de instrucciones}.
-
-Aún así, el uso de la función \texttt{loop()} es opcional, pudiendo usar únicamente la función \texttt{setup()} sin que se produzca el bucle infinito de la función \texttt{loop}.
+%Se ha decidido establecer las variables en inglés por similitud a iJava (que también está en inglés) y al resto de lenguajes modernos. No obstante, se han realizado ciertos cambios con respecto a iJava.
+%
+%La función principal de la aplicación ya no será la función \texttt{main} y no se usará la función \texttt{animate} para ejecutar en bucle una función. Al igual que pasa en Arduino, la función \texttt{setup} establecerá los valores iniciales del robot y una función \texttt{loop} ejecutará en bucle las instrucciones que en ella se contengan. Alimentando así, la \emph{cola de instrucciones}.
+%
+%Aún así, el uso de la función \texttt{loop()} es opcional, pudiendo usar únicamente la función \texttt{setup()} sin que se produzca el bucle infinito de la función \texttt{loop}.
 
 Un ejemplo que muestra el nuevo modelo de programación se puede ver en el código \ref{code:nuevo-modelo}.
 
@@ -102,7 +112,9 @@ Los pasos descritos del funcionamiento del programa se enumeran a continuación:
 	\item Se repite el paso 3.
 \end{enumerate}
 
-Como se puede ver, esto producirá un bucle infinito que ejecutará la función \texttt{loop()}. Con respecto a esta función, puesto que ya existe un bucle infinito en el programa, se establece que no es una buena práctica crear bucles. A excepción si es para realizar cálculos o recorrer listas. Por ejemplo, una forma de reaccionar a las colisiones sería la que se muestra en el código \ref{code:ejemplo-colisiones-robode}, en vez de utilizar un bucle \emph{while} que espere hasta que se produzca una colisión.
+Con respecto a función \texttt{loop}, puesto que ya existe un bucle infinito en el programa, no es una buena práctica crear bucles infinitos\footnote{Obviamente, no hay ningún problema en definir bucles que recorran variables o realicen cálculos, por ejemplo.} en el simulador.
+
+Por ejemplo, la forma de reaccionar a las colisiones sería la que se muestra en el código \ref{code:ejemplo-colisiones-robode}. En lugar de utilizar un bucle \emph{while} que espere hasta que se produzca una colisión, se comprueban con condiciones \texttt{if} o \texttt{if-else}.
 
 \begin{lstlisting}[language={Java},label={code:ejemplo-colisiones-robode}, caption={Ejemplo de buenas prácticas en el uso de la API del simulador.}]
 void setup() {
@@ -127,14 +139,16 @@ void loop() {
 }
 \end{lstlisting}
 
+Recapitulando, tenemos una función principal \texttt{setup} que puede ser complementada con la función \texttt{loop}, la cual ejecutará en bucle infinito que permitirá reaccionar al entorno según pasa el tiempo.
 
+En la sección siguiente se estudiará como se ha modificado iJava para implementar este nuevo modelo de programación.
 
 \subsection{Modificación del lenguaje iJava}
 \label{sec:modificacion-ijava}
 
 Para poder conseguir lo que se ha descrito anteriormente, es imprescindible realizar ciertos cambios en el compilador de iJava para que reconozca y ejecute las nuevas funciones de la API del robot.
 
-El funcionamiento de iJava cuando se ejecuta un código fuente desde el editor se puede ver en la figura \ref{fig:comunication-ijava}. El diagrama de clases, con las clases más relevantes se puede ver en la figura \ref{fig:diagram-ijava}.
+Principalmente, el compilador de iJava consta de tres partes: el analizador sintáctico, el analizador semántico y el \emph{sandbox}. El \texttt{sandbox} contiene la implementación de las funciones de librería descritas en el analizador sintáctico y ejecuta (en un entorno seguro) el código Javascript que se genera a partir del código fuente en iJava si todo el proceso de compilación se ha realizado con éxito. 
 
 Para que las funciones de la API sean parte del lenguaje y se ejecuten como una más de iJava, hay que realizar tres grandes cambios. Estos son: (a)modificar el analizador semántico para cambiar la función principal \texttt{main} por \texttt{setup}; (b) añadir la definición de las funciones al analizados sintáctico y (c) añadir la implementación de las funciones al \emph{sandbox}.
 
@@ -192,11 +206,11 @@ En la sección \ref{sec:modificacion-ijava} se ha hablado de los pasos necesario
 
 La clase \texttt{Robode} recibirá los mensajes del \emph{Sandbox} que le dirá como tiene que mover el robot (potencia de las ruedas, detenerse por completo, etc) y, a la misma vez, \texttt{Robode} le comunicará al \emph{Sandbox} cuando un sensor está detectando colisiones. \texttt{Simulator} encapsula detalles de la simulación, como puede ser la configuración inicial del robot (posición, tamaño, etc) o del mundo (ancho y alto por ejemplo). 
 
-Además, se han representado elementos básicos del motor físico que se ha utilizado para la simulación. Esto es importante ya que otorga una visión general del funcionamiento del motor físico y su relación con el simulador y Robode.
+Además, se han representado elementos básicos del motor físico que se ha utilizado para la simulación. Esto es importante ya que otorga una visión general del funcionamiento del motor físico y su relación con el simulador y Robode. Ésto último será útil cuando se vea el uso e implementación del motor físico en la sección \ref{sec:motor-fisico}.
 
 En la figura \ref{fig:diagram-ijava-robode} se puede ver el nuevo diagrama de clases con la inserción del simulador a iJava. También, en la figura \ref{fig:comunication-run-robode}, se pueden ver los pasos que se producirían al ejecutar un código iJava que ejecuta funciones del robot. 
 
-Como se puede ver, el  \emph{Sandbox} envía un mensaje para comunicarse con \texttt{Robode} indicando el \emph{canvas} y que ejecute cierta orden, en diferentes momentos. También, es ahora \texttt{Robode} quien dibujará en el \texttt{canvas} y no Robode. La razón de esto se explica más adelante, en la sección \ref{animando-robode}.
+Como se puede ver, el  \emph{Sandbox} envía dos mensajes diferentes para comunicarse con \texttt{Robode} indicando el \emph{canvas} y que tiene que ejecutar cierta orden. Ahora, es la clase \texttt{Robode} la que dibujará en el \texttt{canvas} y no el \emph{Sandbox}. La razón de esto se explica más adelante, en la sección \ref{animando-robode}.
 
 \begin{figure}[!ht]
 	\begin{centering}
@@ -697,7 +711,7 @@ Javascript proporciona una serie de funciones para gestionar timers en la ejecuc
 	\item \texttt{clearTimeout(id)} y \texttt{clearInterval(id)}: funciones que eliminan el timer asociado a ese \texttt{id}.
 \end{itemize}
 
-El uso normal que se haría en la aplicación (el simulador junto a Descubre) será ejecutar la función \texttt{setInterval(function, delay)} con un \texttt{delay} igual al número de veces por segundo que queremos que se actualice el simulador. Cada vez que salte el timer, se ejecutará la función \texttt{function} (que normalmente contendrá \texttt{World.Step()} y la actualización de los gráficos).
+El uso normal que se haría en la aplicación (el simulador junto a Descubre) será ejecutar la función \texttt{setInterval(function, delay)} con un \texttt{delay} indicando cada cuanto tiempo se quiere ejecutar la función \texttt{function} (que en nuestro caso contendrá \texttt{World.Step()} y la actualización de los gráficos).
 
 Por tanto, cada vez que se produzca un evento (por ejemplo, una interrupción de teclado o ratón), la ejecución de Javascript tratará dichos eventos. 
 
@@ -708,15 +722,13 @@ Además, hay que tener en cuenta el diseño de la aplicación (descrito en la se
 A parte de todo esto, el Modelo de programación que se usará en el simulador (sección \ref{sec:modelo-programacion}) permitirá detener la recepción de instrucciones con la función \texttt{wait(n\_miliseg)} (API del simulador). Esto hará que la ejecución del \emph{sandbox} se bloquee un determinado tiempo. Pero esto no debe de ocurrir con el resto de la aplicación.
 
 
-Se hace necesario separar ambas ejecuciones para que cada una puede llevar su propio ritmo de ejecución. Una con la ejecución del \emph{sandbox}, que podrá detenerse durante un periodo de tiempo definido para evitar que se sigan añadiendo instrucciones en la cola de instrucciones que crea la función \texttt{loop()} (de la API del simulador). Y la otra ejecución contendrá el hilo principal de la aplicación, el cual no detendrá su ejecución.
+Se hace necesario separar ambas ejecuciones en dos hilos de ejecución diferentes. Un hilo ejecutaría la aplicación principal junto al simulador. El otro hilo ejecutaría el \texttt{Sandbox}, el cual podría detenerse y realizar una \emph{espera activa} cuando se ejecute la función \texttt{wait()}. De esta manera se consigue que el simulador se ejecute y sea controlado por el \emph{Sandbox} y las instrucciones que en éste se ejecutan.
 
-Si todo esto ocurriera en un unico hilo y no se separaran las ejecución del \emph{sandbox} del resto de la aplicación, toda la aplicación se detendría. No se conseguiría el efecto que se define en el Modelo de programación.
-
-Para solventar este problema, en Javascript existen los Web Workers\cite{web-worker-mdn}. Básicamente, un Web Worker (o worker para acortar) permite ejecutar tareas en segundo plano separado del hilo principal. Es decir, se consigue un sistema \emph{multihilo} en Javascript. La comunicación del worker con el resto de elementos se hace mediante mensajes, como los que se han visto anteriormente en los códigos \ref{code:begin-contact} o \ref{code:deteccion-bezier}.
+Para conseguir esto, en Javascript existen los Web Workers\cite{web-worker-mdn}. Básicamente, un Web Worker permite ejecutar tareas en segundo plano separado del hilo principal. Es decir, se consigue un sistema \emph{multihilo} en Javascript. La comunicación del Web Worker con el resto de elementos se hace mediante mensajes, como los que se han visto anteriormente en los códigos \ref{code:begin-contact} o \ref{code:deteccion-bezier} y que vienen reflejados en el diagrama de clases de la figura \ref{fig:diagram-ijava-robode}.
 
 Aún así, los Web Workers tienen sus limitaciones. La más importante es que no se puede interactuar con el DOM\footnote{El DOM (Document Object Model o Modelo de Objetos del Documento en español) es un API de programación para documentos de HTML. Parte fundamental de HTML y que contiene toda la información relacionada a la página web} de HTML. Esto hace que no se pueda dibujar en el \emph{canvas}. 
 
-Entonces, la solución radica en convertir el Sandbox en un Web Worker y que sea éste el que controle la ejecución del simulador mediante mensajes. De esta manera se consiguen separar los hilos de ejecución de la aplicación principal del hilo que ejecutará las instrucciones de iJava, y que podrá detenerse.
+Entonces, la solución radica en convertir el \emph{Sandbox} en un Web Worker y que sea éste el que controle la ejecución del simulador mediante mensajes. De esta manera se consiguen separar el hilo de ejecución de la aplicación principal y el hilo que ejecutará las instrucciones de iJava.
 
 En el hilo principal se ejecutará la función \texttt{setInterval()} con un valor de \texttt{delay} equivalente a 60 FPS (frames por segundo). Cada vez que se ejecute dicha función, se actualizarán las fuerzas del mundo, el movimiento del robot y se dibujará por pantalla el estado actual del mundo. En el código \ref{code:interval-function} se muestra la ejecución de la función \texttt{setInterval()}.
 
