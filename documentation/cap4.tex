@@ -447,7 +447,7 @@ Una vez se ha visto como se crean los sensores, se ve que hay muchas propiedades
 
 Los 4 sensores de colisión tendrán forma de triángulo y estarán dispuestos de forma que sobresalgan del cuerpo principal con la base del triángulo hacía el exterior, para así poder detectar una colisión antes de que ocurra. Las posiciones de cada uno de los 4 sensores se han descrito con las posiciones cardinales: noroeste, sureste, noreste y sureste. De esta manera, el robot tendrá 2 sensores que detectan colisiones en la parte delantera y otros dos en la trasera. 
 
-Los 2 sensores que detectan líneas tendrán forma de círculo simulando dos cámaras que miran hacia abajo, igual que ocurre en el robot Moway. Para dotar de forma a los sensores que detectan líneas, se puede utilizar la clase \texttt{b2CircleShape} y con un radio de 2 píxeles, se asigna la forma al \emph{fixture} correspondiente.
+Los 2 sensores inferiores tendrán forma de círculo simulando dos cámaras que miran hacia abajo, igual que ocurre en el robot Moway. Para dotar de forma a los sensores que detectan líneas, se puede utilizar la clase \texttt{b2CircleShape} y con un radio de 2 píxeles, se asigna la forma al \emph{fixture} correspondiente.
 
 No obstante, la forma de los sensores de colisión, al ser triangular, requiere que se definan los vértices del polígono previamente.  Para realizar esto, utilizaremos la función \texttt{fixDef.shape.SetAsArray()}\footnote{Hay que tener en cuenta que, como ya se ha mencionado en la sección \ref{sec:motor-fisico}, las formas cóncavas no son soportadas por Box2D.} que recibe como parámetro los vértices del polígono a crear y el número de vértices del mismo. Obviamente, los vértices tendrán que formar un triángulo con la base hacia el exterior de Robode.
 
@@ -478,7 +478,7 @@ El movimiento de Robode está basado en el movimiento de las ruedas. Al igual qu
 
 Para mover una rueda, hay que aplicar una fuerza con respecto al vector que apunta en la dirección frontal a la propia rueda. Esto se hace utilizando la función \texttt{ApplyForce()} que recibe como parámetro el vector con la fuerza a realizar y el punto desde el que se realiza. El punto que se usará para aplicar la fuerza será el centro de la propia rueda. Una fuerza con valor positivo hará que el robot se mueva hacia delante. Mientras que una fuera negativa hará que este se mueva hacia atrás.
 
-La fuerza que se aplicará a la rueda se mide en Newtons y la potencia máxima y mínima establecida será de 4K y -4K Newtons, respectivamente. Por defecto, la velocidad aplicada al motor se multiplicará por 100, siempre y cuando no se mantenga en los máximos y mínimos ya mencionados.
+La fuerza que se aplicará a la rueda se mide en Newtons y la potencia máxima y mínima establecida será de 4K y -4K Newtons, respectivamente. Por defecto, la velocidad aplicada al motor se multiplicará por 100, manteniendo siempre la potencia en los máximos y mínimos ya mencionados.
 
 De esta manera se consigue que la rueda ejerza una fuerza hacia delante (o atrás) y el robot se desplace. Pero esto ocasionará tres problemas: 
 
@@ -488,19 +488,18 @@ De esta manera se consigue que la rueda ejerza una fuerza hacia delante (o atrá
 	\item Se creará una velocidad lateral (u ortogonal) que hará que el movimiento del robot no sea recto.
 \end{enumerate} 
 
-Los dos primeros problemas se resuelven fácilmente igualando la velocidad angular del cuerpo principal y las ruedas o sensores. Esto se hace con la función \texttt{SetAngularVelocity()} de la clase \texttt{b2Body}. De esta manera se consigue que las ruedas y el robot la misma velocidad angular, impidiendo giros. Además, en el caso de los sensores, también es necesario ajustar el ángulo de giro de los mismos para forzar a que se mantengan en la misma posición con respecto al robot.
+Los dos primeros problemas se resuelven fácilmente igualando la velocidad angular del cuerpo principal y las ruedas o sensores. Esto se hace con la función \texttt{SetAngularVelocity()} de la clase \texttt{b2Body}. De esta manera se consigue que las ruedas y el robot tengan la misma velocidad angular. Además, en el caso de los sensores, también es necesario ajustar el ángulo de giro de los mismos para forzar a que se mantengan en la misma posición con respecto al robot.
 
 Para eliminar la velocidad lateral que se produce al mover el robot, basta con aplicar una velocidad lineal que contrarreste esta fuerza ortogonal, con el método \texttt{SetLinearVelocity()}  de la clase \texttt{b2Body}. 
 
-Ahora ya se tiene un robot desplazándose por el mundo. Para conseguir que sea de manera realista, se dotará a las ruedas de una fricción fuerte (valor de 1) y al cuerpo principal un valor de deslizamiento lineal y angular de 8 (propiedades \texttt{linearDamping} y \texttt{angularDamping} de \texttt{b2Body}).
+Ahora ya se tiene un robot desplazándose por el mundo. Para conseguir que sea de manera realista, se dotará a las ruedas de una fricción fuerte (valor de 1) y al cuerpo principal de un valor de deslizamiento lineal y angular de 8 (propiedades \texttt{linearDamping} y \texttt{angularDamping}, respectivamente, de \texttt{b2Body}).
 
-%{\color{red} La forma de establecer estos valores ha sido sobretodo experimental. De esta forma se conseguía asegurar una sensación realista basada en la propia experiencia.}
 
 
 \subsection{Detectando colisiones}
 \label{detectando-colisiones}
 
-La clase \texttt{b2Contact} de Box2D representa el contacto entre dos cuerpos. Esta contiene los dos cuerpos que se están \emph{tocando} y otra información de interés. Box2D proporciona la clase \texttt{b2ContactListener} que permite la redefinición de 4 funciones clave en la gestión de colisiones. Estas son:
+La clase \texttt{b2Contact} de Box2D representa el contacto entre dos cuerpos. Esta clase contiene los dos cuerpos que se están \emph{tocando} y otra información de interés. Box2D proporciona la clase \texttt{b2ContactListener} que permite la redefinición de 4 funciones clave en la gestión de colisiones. Estas son:
 
 \begin{itemize}
 	\item Función \texttt{PreSolve()}, que se ejecutará antes de que se produzca por parte del motor de Box2D la solución de la colisión. Es útil para realizar cálculos previos al contacto. Útil también para anular un contacto y que la colisión no se produzca, por ejemplo.
@@ -509,11 +508,11 @@ La clase \texttt{b2Contact} de Box2D representa el contacto entre dos cuerpos. E
 	\item Función \texttt{EndContact()} que se ejecutará cuando un contacto termine, es decir, cuando un cuerpo deje de \texttt{tocar} a otro.
 \end{itemize}
 
-Es importante que estas funciones estén lo más optimizadas posible puesto que se ejecutarán cada vez que se produzca un contacto entre dos cuerpos. En el caso del simulador, solo necesitaremos redefinir las funciones \texttt{BeginContact()} y  \texttt{EndContact}. Estas recibirán como parámetro un objeto \texttt{b2Contact} para poder obtener información del contacto que se está produciendo.
+Es importante que estas funciones estén lo más optimizadas posible puesto que se ejecutarán cada vez que se produzca un contacto entre dos cuerpos. En el caso del simulador, solo necesitaremos redefinir las funciones \texttt{BeginContact()} y  \texttt{EndContact()}. Estas recibirán como parámetro un objeto \texttt{b2Contact} para poder obtener información del contacto que se está produciendo.
 
-En el caso de Robode, puesto que se están simulando sensores muy simples que no distinguen entre detectar uno o más cuerpos, las funciones \texttt{BeginContact()} y \texttt{EndContact} simplemente contarán el número de cuerpos que está sintiendo ese sensor. Por tanto, al comenzar un contacto unicamente se notificará dicha colisión si el sensor no estaba sintiendo nada previamente. De igual manera, cuando un contacto acaba, solo se notificará si el número de cuerpos sentidos por el sensor es 1 (que va a cambiar al 0).
+En el caso de Robode, puesto que se están simulando sensores muy simples que no distinguen entre detectar uno o más cuerpos, las funciones \texttt{BeginContact()} y \texttt{EndContact} simplemente contarán el número de cuerpos que está sintiendo ese sensor. Por tanto, al comenzar un contacto unicamente se notificará dicha colisión si el sensor no estaba sintiendo nada previamente. De igual manera, cuando un contacto acaba, solo se notificará si el número de cuerpos sentidos por el sensor es 1 (que va a cambiar a 0).
 
-En el listado de código \ref{code:begin-contact} se muestra a modo ilustrativo la función \texttt{BeginContact()}. La función \texttt{EndContact()} sería similar pero decrementando el contador de colisiones.
+En el código \ref{code:begin-contact} se muestra a modo ilustrativo la función \texttt{BeginContact()}. La función \texttt{EndContact()} sería similar pero decrementando el contador de colisiones.
 
 
 \begin{lstlisting}[language={Javascript},label={code:begin-contact}, caption={Función \texttt{BeginContact()} definida para los sensores.}]
@@ -566,9 +565,9 @@ También, se puede ver como en las líneas 28 a 33 se notifica la colisión envi
 
 Antes de poder hablar de como se detectan líneas, es necesario hablar de las propias líneas.
 
-Una característica del simulador que estaba clara desde el comienzo del proyecto era la necesidad de que el robot pudiera seguir líneas. Para poder seguir líneas, es necesario poder calcular la distancia del robot a una línea. Esto implica el cálculo de la distancia de un punto a una línea. Pero, ¿qué forma tiene la línea?
+Una característica del simulador que estaba clara desde el comienzo del proyecto era la necesidad de que el robot pudiera seguir líneas, como hace Moway. Para poder seguir líneas, es necesario poder calcular la distancia del robot a una línea. Esto implica el cálculo de la distancia de un punto a una línea. Pero, ¿qué forma tiene la línea?
 
-Hay dos opciones para la forma de las líneas: líneas rectas o curvas. Las líneas rectas darían una forma muy simple al circuito y no se corresponden con los circuitos que podrían crearse en la realidad. Además, la programación del robot sigue-líneas sería muy simple para el niño (solo tendría que asegurarse de que cuando encuentra una línea, no se tuerce). Así que esto elimina la opción de usar rectas para modelar las líneas. 
+Hay dos opciones para la forma de las líneas: líneas rectas o curvas. Las líneas rectas darían una forma muy simple al circuito y no se corresponden con los circuitos que podrían crearse en la realidad. Además, la programación del robot sigue-líneas sería muy simple para el usuario (solo tendría que asegurarse de que cuando encuentra una línea, no se tuerce). Así que esto elimina la opción de usar rectas para modelar las líneas. 
 
 
 \subsubsection{Curvas de Bezier}

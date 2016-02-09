@@ -187,7 +187,7 @@ Otra función muy importante de Turtle, es la opción de girarla. Podemos decidi
 
 \section*{Pintando con Turtle}
 
-Hasta ahora, cualquier desplazamiento de Turtle por la pantalla dejaba una linea o rastro. Con la orden \texttt{penup}, la tortuga dejará de pintar hasta que se ejecute la orden \texttt{pendown}. También se puede ejecutar la instrucción \texttt{clearscreen} que limpiará la pantalla de cualquier rastro dejado por la tortuga.
+Hasta ahora, cualquier desplazamiento de Turtle por la pantalla dejaba una línea o rastro. Con la orden \texttt{penup}, la tortuga dejará de pintar hasta que se ejecute la orden \texttt{pendown}. También se puede ejecutar la instrucción \texttt{clearscreen} que limpiará la pantalla de cualquier rastro dejado por la tortuga.
 
 La instrucción \texttt{label} acepta un argumento y mostrará por pantalla su contenido. El argumento debe ser de tipo \emph{word} o \emph{sentence}\footnote{Para más información sobre los tipos de datos \emph{words} y \emph{sentences}, como se formar y cual es su funcionamiento, se puede consultar la sección \ref{sec:logo-variables}.}.
 
@@ -514,10 +514,6 @@ Es el objeto \texttt{Body} el que contiene todas las propiedades físicas y que 
 
 
 Las propiedades \texttt{linearDamping} y \texttt{angularDamping}\footnote{Aquí, con \emph{damping} se refiere al efecto de suelo mojado y el deslizamiento que un cuerpo tiene sobre una superficie, en especial cuando el cuerpo frena.} sirven para reducir la velocidad lineal y angular respectivamente cuando en el frenado.
-
-%, y no con respecto al origen del mismo. Esto tiene que ver con las \emph{fixtures} que tenga asociadas dicho cuerpo. Por ejemplo, si un cuerpo tiene mas de una \emph{fixture}, la posición origen del cuerpo no representará la del 
-
- %ya que se puede definir la posición del cuerpo y la de la \emph{fixture} de manera que no coincidan. De esta manera, la función \texttt{GetWorldPosition()} obtendrá la posición correcta del cuerpo con respecto a la del \emph{fixture}.
 
 Adicionalmente, se ha modificado el prototipo de las clases \texttt{b2Body} y \texttt{b2BodyDef} (clase plantilla para crear \emph{bodies}) para añadir una característica más al cuerpo, el nombre que se le asigna al cuerpo. Esto se usará principalmente para poder distinguir estos objetos fácilmente en una colisión.
 
