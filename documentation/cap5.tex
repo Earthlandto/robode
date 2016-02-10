@@ -7,7 +7,7 @@
 
 En el presente Trabajo Fin de Grado se ha abordado la creación de un simulador de un robot para integrarlo en la plataforma Descubre la programación. 
 
-La meta de este trabajo es clara: ayudar a expandir el pensamiento computacional entre los alumnos de Educacion Primaria y Secundaria de la Región de Murcia.
+La meta de este trabajo es clara: ayudar a expandir el pensamiento computacional entre los alumnos de Educación Primaria y Secundaria de la Región de Murcia.
 
 Para ello, se ha construido una herramienta para aprender a programar sobre una plataforma online con recorrido en la Región de Murcia. 
 
@@ -19,22 +19,22 @@ Además, se proporciona una librería que permite controlar el robot y programar
 
 No obstante, este trabajo planteaba cuatro grandes dificultades a resolver: (a) la comprensión y modificación de la plataforma Descubre y su compilador; (b) la representación de líneas mediante curvas de Bezier y la detección de las mismas por parte del robot; (c) la creación de un modelo de programación diferente al que proporciona la plataforma Descubre y (d) la creación del simulador que modelará el mundo donde se encuentra el robot y, por supuesto, su comportamiento.
 
-La plataforma Descubre la programación permite programar y ejecutar código iJava. Por tanto, es necesario comprender su funcionamiento y ser capaz de ampliar la librería de funciones para poder controlar al robot. También, con la creación de un modelo de programación, se ha modificado Descubre para poder soportar este tipo de programas. Esto se ha realizado mediante la creación de un sistema \emph{multihilo} en iJava que ha permitido el correcto funcionamiento de la plataforma y del simulador. 
+La plataforma Descubre la programación permite programar y ejecutar código iJava. Por tanto, es necesario comprender su funcionamiento y ser capaz de ampliar la librería de funciones para poder controlar al robot. También, con la creación de un modelo de programación, se ha modificado Descubre para poder soportar este tipo de programas. Esto se ha realizado mediante la creación de un sistema \emph{multihilo} en Javascript que ha permitido el correcto funcionamiento de la plataforma y del simulador. 
 
 % crear un sistema \emph{multihilo} en la aplicación para permitir dos hilos de ejecución separados, que trabajan a velocidades diferentes. El primero, el programa principal con la simulación del robot. El segundo hilo, el \emph{sandbox} de la aplicación que ejecuta la cola de instrucciones y que controla la ejecución del simulador, en función de las instrucciones que se estén ejecutando. 
 
 En cuanto a la simulación del robot, se ha usado una librería física, \texttt{Box2D}, que realizará el trabajo de calcular y resolver las colisiones que se produzcan en el mundo. También nos permite dibujar el mundo sobre el \texttt{canvas} de HTML5. La creación y configuración de elementos en \texttt{Box2D} para que se creara un mundo realista también ha sido un punto a tener en cuenta y que se ha resuelto satisfactoriamente. 
 
-Por último, la representación de líneas mediante curvas de Bezier es un problema bastante complejo. Era necesario calcular la distancia de un punto al punto más cercano dentro de la curva. O lo que es lo mismo, la proyección de un punto sobre la curva. Esta dificultad se ha resuelto gracias a la librería \texttt{BezierJS}, que ha simplificado los cálculos para obtener la distancia a la curva de forma computacionalmente barata. 
+Por último, la representación de líneas mediante curvas de Bezier es un problema bastante complejo. Era necesario calcular la distancia de un punto al punto más cercano dentro de la curva. O lo que es lo mismo, la proyección de un punto sobre la curva. Esta dificultad se ha resuelto gracias a la librería \texttt{BezierJS}, que ha simplificado los cálculos para obtener la distancia a la curva de una manera eficiente. 
 
 
 En comparación a los sistemas que hay actualmente, opino que se ha creado una opción bastante interesante y atractiva. Mediante la robótica, se puede programar un robot en un lenguaje imperativo y con sintaxis moderna, especial para aprender. 
 
-Si lo comparamos con proyectos como Lego Mindstorm EV3 o Arduino, Robode permite iniciarse en la robótica sin necesidad de hacer una inversión de dinero ni tener conceptos de electrónica o circuitos.
+Si lo comparamos con proyectos como Lego Mindstorm EV3 o Arduino, Robode permite iniciarse en la robótica sin necesidad de hacer una inversión de dinero ni tener conocimientos previos de electrónica o circuitos.
 
 En el caso de Moway o Scratch, la programación se hace mediante bloques. Este sistema puede ser bueno como iniciación y para aprender ciertos conceptos básicos (como las condiciones y el flujo de instrucciones) pero se vuelve complejo en aplicaciones grandes. 
 
-Por otra parte, el robot Robomind simula un robot en un mundo discreto. La programación en este simulador puede ser al principio interesante, pero se termina volviendo repetitiva y con una libertar y complejidad limitada a la hora de crear programas. Robomind no deja de ser una unión entre Turtle de Logo y Karel the robot. 
+Por otra parte, el robot Robomind simula un robot en un mundo discreto. La programación en este simulador puede ser al principio interesante, pero se termina volviendo repetitiva y con una libertad y complejidad limitada a la hora de crear programas. Robomind no deja de ser una unión entre Turtle de Logo y Karel the robot. 
 
 En cambio, con \emph{Robode}, se puede crear una gran variedad de programas. Desde programas que solo eviten obstáculos, hasta programas que simulen movimientos complejos con un respaldo en las matemáticas y físicas de movimiento. Además, al estar integrado con Descubre, su uso es gratuito y libre para cualquier niño que quiera iniciarse en la programación. Esto es especialmente importante, y más si se compara con alternativas actuales como CodeHS, que requiere de una suscripción para poder usar en su totalidad los servicios que tiene disponible.
 
