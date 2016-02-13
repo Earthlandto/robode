@@ -216,8 +216,7 @@ function iJavaSandbox() {
         sensorSW = false;
     var sensorLR = false,
         sensorLL = false;
-    var isCollision = false,
-        isLine = false;
+    var collisioning = false;
 
 
     function initRobot() {
@@ -255,7 +254,7 @@ function iJavaSandbox() {
         sensorSW = false;
         sensorLR = false;
         sensorLL = false;
-        isCollision = false;
+        collisioning = false;
     }
 
     function wait(millis) {
@@ -272,7 +271,7 @@ function iJavaSandbox() {
         }
     }
 
-    function motors(lspeed, rspeed) {
+    function power(lspeed, rspeed) {
 
         if (!roboderunning) {
             var msg = {
@@ -330,8 +329,7 @@ function iJavaSandbox() {
                 sensorLL = (message.state === "begin");
                 break;
         }
-        isCollision = sensorLL || sensorLR || sensorNW || sensorNE ||  sensorSW || sensorSE;
-        isLine = sensorLL ||  sensorLR;
+        collisioning = sensorNW || sensorNE ||  sensorSW || sensorSE;
     }
 
 

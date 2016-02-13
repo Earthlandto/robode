@@ -1635,8 +1635,7 @@ function iJavaParser() {
         system_variable("sensorLL", BooleanDatatype, false);
 
         //sensores de colisión y lineas grupales
-        system_variable("isCollision", BooleanDatatype, false);
-        system_variable("isLine", BooleanDatatype, false);
+        system_variable("collisioning", BooleanDatatype, false);
 
         // wait (n_millisec)
         library_function("wait", new FunctionDatatype(VoidDatatype, [{
@@ -1647,7 +1646,7 @@ function iJavaParser() {
         //stopRobot()
         library_function("stop", new FunctionDatatype(VoidDatatype, []));
         //motors(vel_motor_izq, vel_motor_der)
-        library_function("motors", new FunctionDatatype(VoidDatatype, [{
+        library_function("power", new FunctionDatatype(VoidDatatype, [{
             datatype: IntegerDatatype
         }, {
             datatype: IntegerDatatype
