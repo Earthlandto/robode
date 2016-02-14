@@ -328,7 +328,7 @@ Simulator.Env = {};
 
         //Create circuit...
 
-        Simulator.World.addLine(new Bezier(80,100, 40,100, 40,200, 100, 200));
+        Simulator.World.addLine(new Bezier(80, 100, 40, 100, 40, 200, 100, 200));
         Simulator.World.addLine(new Bezier(0, 0, 320, 100, 0, 320));
 
         // ...end create circuit.
