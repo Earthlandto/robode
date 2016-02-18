@@ -263,8 +263,8 @@ function Robode(worker) {
             x: Simulator.config.robodeIniX,
             y: Simulator.config.robodeIniY
         }];
-        sensorLL = new Simulator.Sensor(posIniAux, "LL", robot, -0.21, -0.2);
-        sensorLR = new Simulator.Sensor(posIniAux, "LR", robot, 0.21, -0.2);
+        sensorLL = new Simulator.Sensor(posIniAux, "LL", robot, -0.25, -0.2);
+        sensorLR = new Simulator.Sensor(posIniAux, "LR", robot, 0.25, -0.2);
 
 
         // Create circuit

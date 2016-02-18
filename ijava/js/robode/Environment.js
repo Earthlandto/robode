@@ -20,7 +20,7 @@ Simulator.Env = {};
         //sensor line config
         radiusInitSensorLine: 0.2,
         //line config
-        lineThickness: 0.5,
+        lineThickness: 0.35,
         //power robot config
         maxPower: 4000,
         minPower: -4000
