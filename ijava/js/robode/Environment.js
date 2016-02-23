@@ -9,13 +9,13 @@ Simulator.Env = {};
     // Simulator.ScaleWorld = 10; //initial
     Simulator.config = {
         //robode init config
-        robodeIniX: 16,
-        robodeIniY: 32,
+        robodeIniX: 40,
+        robodeIniY: 35,
         robodeW: 0.6,
         robodeH: 1,
         //world init config
         worldWidth: 700,
-        worldHeight: 700,
+        worldHeight: 900,
         scaleWorldIni: 10,
         //sensor line config
         radiusInitSensorLine: 0.2,
@@ -86,7 +86,7 @@ Simulator.Env = {};
 
         myDebugDraw.SetSprite(document.getElementById(myCanvas).getContext("2d"));
         myDebugDraw.SetDrawScale(Simulator.config.scaleWorldIni);
-        myDebugDraw.SetFillAlpha(0.3);
+        myDebugDraw.SetFillAlpha(0.5);
         myDebugDraw.SetLineThickness(this.lineThickness);
         myDebugDraw.SetFlags(Simulator.Env.b2DebugDraw.e_shapeBit); // | Simulator.Env.b2DebugDraw.e_jointBit);
         Simulator.World.SetDebugDraw(myDebugDraw);
@@ -328,8 +328,38 @@ Simulator.Env = {};
 
         //Create circuit...
 
-        Simulator.World.addLine(new Bezier(80, 100, 40, 100, 40, 200, 100, 200));
-        Simulator.World.addLine(new Bezier(0, 0, 320, 100, 0, 320));
+        Simulator.World.addLine(new Bezier(302, 105, 175, 133, 133, 231, 171, 266));
+        Simulator.World.addLine(new Bezier(171, 266, 213, 286, 213, 286));
+        Simulator.World.addLine(new Bezier(213, 286, 230, 293, 230, 298, 230, 306));
+        Simulator.World.addLine(new Bezier(230, 306, 224, 329, 224, 337, 245, 345));
+        Simulator.World.addLine(new Bezier(301, 106, 333, 110, 334, 128, 316, 146));
+        Simulator.World.addLine(new Bezier(316, 146, 285, 172, 281, 193, 303, 210));
+        Simulator.World.addLine(new Bezier(303, 210, 375, 215, 375, 215));
+        Simulator.World.addLine(new Bezier(375, 215, 395, 214, 398, 198, 398, 177));
+        Simulator.World.addLine(new Bezier(398, 177, 488, 94, 488, 94));
+        Simulator.World.addLine(new Bezier(488, 94, 492, 84, 511, 84, 521, 101));
+        Simulator.World.addLine(new Bezier(245, 345, 261, 352, 272, 351));
+        Simulator.World.addLine(new Bezier(272, 351, 272, 351, 550, 351));
+        Simulator.World.addLine(new Bezier(550, 351, 565, 335, 560, 320));
+        Simulator.World.addLine(new Bezier(560, 320, 560, 320, 521, 101));
+
+
+        var bdo = new Simulator.Env.b2BodyDef();
+        bdo.type = Simulator.Env.b2Body.b2_dynamicBody;
+
+        var fdo = new Simulator.Env.b2FixtureDef();
+        fdo.shape = new Simulator.Env.b2CircleShape(0.5);
+
+        bdo.position.Set(50,10);
+        Simulator.World.CreateBody(bdo).CreateFixture(fdo);
+
+        bdo.position.Set(51,10.5);
+        Simulator.World.CreateBody(bdo).CreateFixture(fdo);
+
+        bdo.position.Set(50,11);
+        Simulator.World.CreateBody(bdo).CreateFixture(fdo);
+
+
 
         // ...end create circuit.
     };

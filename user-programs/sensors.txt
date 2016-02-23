@@ -3,30 +3,6 @@ void setup(){
 }
 
 void loop(){
-  if(isCollision)
-    print(".");
-  if(isLine)
-    print("-");
-
-  motors(1000,1000);
-
-  if(sensorNW || sensorNE)
-    motors(-1000,-2000);
-  if (sensorSW)
-    motors(2000,1000);
-  if(sensorSE)
-    motors(1000,2000);
-}
-
-
------
-
-
-void setup(){
-  initRobot();
-}
-
-void loop(){
   if(collisioning){
     print("Colision!");
   }
@@ -40,5 +16,37 @@ void loop(){
   }
   if(sensorSE){
     power(10,20);
+  }
+}
+
+
+----
+
+int delay;
+int potenciaDer;
+int potenciaIzq;
+
+void setup(){
+
+  delay = 1000; // 1 segundo en milisegundos
+
+  potenciaDer = 10;
+	potenciaIzq = 10;
+
+	initRobot(); // iniciamos el robot
+}
+
+void loop(){
+	// avanzamos
+	power(potenciaIzq, potenciaDer);
+
+  // si colisión por delante...
+  if (sensorNW || sensorNE){
+    power(0, -potenciaDer); // ...retrocedemos con un pequeño giro
+  }
+
+  // si colisión por detras...
+  if (sensorSW || sensorSE){
+    power(potenciaIzq, 0); // ...avanzamos con un pequeño giro
   }
 }
